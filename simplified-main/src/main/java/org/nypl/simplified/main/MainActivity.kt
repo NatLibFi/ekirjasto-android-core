@@ -189,12 +189,14 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     val appCache =
       AppCache(this)
 
-    if (appCache.isTutorialSeen()) {
+    // TODO: Tutorial screen disabled by Ellibs
+    this.onTutorialFinished()
+    /*if (appCache.isTutorialSeen()) {
       this.onTutorialFinished()
     } else {
       this.openTutorial()
       appCache.setTutorialSeen(true)
-    }
+    }*/
   }
 
   private fun handleTutorialEvent(event: TutorialEvent) {
