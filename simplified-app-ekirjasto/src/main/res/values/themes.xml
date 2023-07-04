@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="VanillaTheme_NoActionBar" parent="SimplifiedTheme.NoActionBar">
+  <style name="EKirjastoTheme_NoActionBar" parent="NeutralTheme.NoActionBar">
     <item name="simplifiedColorPrimary">@color/colorPrimary</item>
     <item name="simplifiedColorPrimaryLight">@color/colorPrimaryLight</item>
     <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>
   </style>
 
-  <style name="VanillaTheme_ActionBar" parent="SimplifiedTheme.ActionBar">
+  <style name="EKirjastoTheme_ActionBar" parent="NeutralTheme.ActionBar">
     <item name="simplifiedColorPrimary">@color/colorPrimary</item>
     <item name="simplifiedColorPrimaryLight">@color/colorPrimaryLight</item>
     <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>
