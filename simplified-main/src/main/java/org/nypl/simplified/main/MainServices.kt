@@ -559,6 +559,8 @@ internal object MainServices {
       val service = serviceConstructor.invoke()
       if (service != null) {
         services.addService(interfaceType, service)
+      } else {
+        logger.warn("Adding Serivce Failed! {}", interfaceType.name)
       }
       return service
     }

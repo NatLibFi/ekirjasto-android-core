@@ -30,6 +30,16 @@ configurations.all {
   exclude group: 'com.google.code.findbugs', module: 'annotations'
 }
 
+repositories {
+  ivy {
+    url "https://liblcp.dita.digital"
+    patternLayout{
+      artifact "/[organisation]/[module]/android/aar/test/[revision].[ext]"
+    }
+    metadataSources { artifact()}
+  }
+}
+
 dependencies {
   implementation project(":simplified-main")
   implementation project(":simplified-accounts-source-nyplregistry")
@@ -39,4 +49,6 @@ dependencies {
   implementation libs.nypl.theme
 
   vanillaWithProfilesImplementation project(":simplified-accounts-source-filebased")
+
+  implementation "readium:liblcp:1.0.0@aar"
 }

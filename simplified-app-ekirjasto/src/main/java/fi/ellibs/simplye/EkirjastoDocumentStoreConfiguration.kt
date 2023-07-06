@@ -4,7 +4,7 @@ import org.librarysimplified.documents.DocumentConfiguration
 import org.librarysimplified.documents.DocumentConfigurationServiceType
 import java.net.URI
 
-class VanillaDocumentStoreConfiguration : DocumentConfigurationServiceType {
+class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
 
   override val privacyPolicy: DocumentConfiguration? =
     null

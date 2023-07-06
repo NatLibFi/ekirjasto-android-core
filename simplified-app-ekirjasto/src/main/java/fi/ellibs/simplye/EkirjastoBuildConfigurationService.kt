@@ -6,7 +6,7 @@ import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.main.BuildConfig
 import java.net.URI
 
-class VanillaBuildConfigurationService : BuildConfigurationServiceType {
+class EkirjastoBuildConfigurationService : BuildConfigurationServiceType {
   override val libraryRegistry: BuildConfigurationAccountsRegistryURIs
     get() = BuildConfigurationAccountsRegistryURIs(
       registry = URI(""),
