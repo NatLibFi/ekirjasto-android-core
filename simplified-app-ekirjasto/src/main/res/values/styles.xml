@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Simplified.Button" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/ekirjasto_button</item>
+        <item name="android:textColor">@color/colorEkirjastoButtonText</item>
+        <item name="android:textSize">12sp</item>
+
+        <!--
+          The scroll indicator will briefly appear on programmatically created buttons unless the
+          'scrollbars' attribute is set to 'none'.
+        -->
+        <item name="android:scrollbars">none</item>
+    </style>
+</resources>
