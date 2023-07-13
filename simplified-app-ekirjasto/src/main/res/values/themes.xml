@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <style name="EKirjastoTheme_NoActionBar" parent="NeutralTheme.NoActionBar">
+    <item name="android:fontFamily">@font/asap_regular</item>
     <item name="simplifiedColorPrimary">@color/colorPrimary</item>
     <item name="simplifiedColorPrimaryLight">@color/colorPrimaryLight</item>
     <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="simplifiedButtonCornerRadius">@dimen/ekirjastoButtonCornerRadius</item>
+    <item name="simplifiedColorItemStroke">@color/transparent_black</item>
   </style>
 
   <style name="EKirjastoTheme_ActionBar" parent="NeutralTheme.ActionBar">
+    <item name="android:fontFamily">@font/asap_regular</item>
     <item name="simplifiedColorPrimary">@color/colorPrimary</item>
     <item name="simplifiedColorPrimaryLight">@color/colorPrimaryLight</item>
     <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>
+
   </style>
+
+  <dimen name="ekirjastoButtonCornerRadius">0dp</dimen>
 </resources>
