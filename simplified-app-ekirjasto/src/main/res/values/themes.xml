@@ -6,6 +6,9 @@
     <item name="simplifiedColorPrimaryLight">@color/colorPrimaryLight</item>
     <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="simplifiedButtonCornerRadius">@dimen/ekirjastoButtonCornerRadius</item>
+    <item name="simplifiedColorBookStatus">@color/colorEkirjastoYellow</item>
+    <item name="simplifiedColorText">@color/colorEkirjastoBlack</item>
+    <item name="simplifiedColorTextBody">@color/colorEkirjastoBlack</item>
   </style>
 
   <style name="EKirjastoTheme_ActionBar" parent="NeutralTheme.ActionBar">

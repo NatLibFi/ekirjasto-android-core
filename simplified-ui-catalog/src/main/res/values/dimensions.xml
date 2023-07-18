@@ -3,6 +3,7 @@
 <resources>
   <dimen name="catalogBookDetailStatusHeight">64dp</dimen>
   <dimen name="catalogBookDetailButtonsHeight">64dp</dimen>
+  <dimen name="catalogBookDetailStatusMargin">16dp</dimen>
   <dimen name="catalogFeedCoversSpace">8dp</dimen>
   <dimen name="catalogFeedCellImageWidth">80dp</dimen>
   <dimen name="catalogFeedCellHeight">128dp</dimen>
@@ -10,4 +11,5 @@
   <dimen name="catalogFacetTabStroke">4dp</dimen>
   <dimen name="catalogFacetTabCornerRadius">8dp</dimen>
   <dimen name="catalogFacetTabStandardHeight">36dp</dimen>
+  <dimen name="catalogBookDetailDescriptionFontSize">12sp</dimen>
 </resources>

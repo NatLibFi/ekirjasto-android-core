@@ -126,11 +126,13 @@
             layout="@layout/book_detail_status"
             android:layout_width="match_parent"
             android:layout_height="@dimen/catalogBookDetailStatusHeight"
+            android:layout_marginStart="@dimen/catalogBookDetailStatusMargin"
+            android:layout_marginEnd="@dimen/catalogBookDetailStatusMargin"
             android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/bookDetailDescriptionTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
@@ -138,8 +140,9 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/catalogDescription"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/catalogBookDetailDescriptionFontSize"
+            android:background="@drawable/description_heading_background"
+            />
 
         <TextView
             android:id="@+id/bookDetailDescriptionText"
@@ -168,7 +171,7 @@
 
         <TextView
             android:id="@+id/bookDetailMetadataTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
@@ -176,8 +179,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/catalogInformation"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/catalogBookDetailDescriptionFontSize"
+            android:background="@drawable/description_heading_background"/>
 
         <LinearLayout
             android:id="@+id/bookDetailMetadataTable"
