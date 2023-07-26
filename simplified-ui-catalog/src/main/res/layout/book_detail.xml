@@ -155,13 +155,12 @@
 
         <TextView
             android:id="@+id/seeMoreText"
+            style="@style/MoreTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginEnd="16dp"
-            android:padding="8dp"
             android:text="@string/catalogMore"
-            android:textSize="12sp" />
+            />
 
         <View
             android:layout_width="match_parent"

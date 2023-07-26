@@ -11,4 +11,11 @@
         -->
         <item name="android:scrollbars">none</item>
     </style>
+    <style name="MoreTextStyle">
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:drawableEnd">@drawable/ic_caret_right</item>
+        <item name="android:drawablePadding">@dimen/catalogFacetButtonIconPadding</item>
+    </style>
 </resources>

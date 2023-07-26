@@ -16,6 +16,6 @@
     android:gravity="center"
     android:maxLines="2"
     android:textAlignment="center"
-    android:textColor="@color/white"
+    android:textColor="@color/simplifiedColorBookStatusText"
     tools:text="@string/catalogPlaceholder" />
 </FrameLayout>

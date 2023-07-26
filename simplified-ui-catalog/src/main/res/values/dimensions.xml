@@ -12,4 +12,5 @@
   <dimen name="catalogFacetTabCornerRadius">8dp</dimen>
   <dimen name="catalogFacetTabStandardHeight">36dp</dimen>
   <dimen name="catalogBookDetailDescriptionFontSize">12sp</dimen>
+  <dimen name="catalogFacetButtonIconPadding">8sp</dimen>
 </resources>

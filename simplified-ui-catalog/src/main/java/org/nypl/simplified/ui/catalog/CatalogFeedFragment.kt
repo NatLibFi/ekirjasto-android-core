@@ -66,6 +66,7 @@ import org.nypl.simplified.ui.images.ImageLoaderType
 import org.nypl.simplified.ui.neutrality.NeutralToolbar
 import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 import org.slf4j.LoggerFactory
+import kotlin.math.roundToInt
 
 /**
  * A fragment displaying an OPDS feed.
@@ -757,6 +758,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
           ?: group.firstOrNull()
 
       button.id = View.generateViewId()
+      button.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.catalog_facet_button_icon,0)
+      button.compoundDrawablePadding = resources.getDimension(R.dimen.catalogFacetButtonIconPadding).roundToInt();
       button.layoutParams = buttonLayoutParams
       button.text = active?.title
       button.ellipsize = TextUtils.TruncateAt.END
