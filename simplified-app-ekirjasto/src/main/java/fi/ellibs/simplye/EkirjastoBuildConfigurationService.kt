@@ -31,7 +31,7 @@ class EkirjastoBuildConfigurationService : BuildConfigurationServiceType {
   override val simplifiedVersion: String
     get() = BuildConfig.SIMPLIFIED_VERSION
   override val supportErrorReportEmailAddress: String
-    get() = "logs@thepalaceproject.org"
+    get() = "support@ellibs.com"
   override val supportErrorReportSubject: String
     get() = "[palace-error]"
   override val oauthCallbackScheme: BuildConfigOAuthScheme
