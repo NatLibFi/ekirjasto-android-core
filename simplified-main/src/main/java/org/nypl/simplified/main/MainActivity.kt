@@ -23,6 +23,8 @@ import org.nypl.simplified.profiles.api.ProfilesDatabaseType.AnonymousProfileEna
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryComplete
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.ui.branding.BrandingSplashServiceType
+import org.nypl.simplified.ui.login.LoginEvent
+import org.nypl.simplified.ui.login.LoginFragment
 import org.nypl.simplified.ui.onboarding.OnboardingEvent
 import org.nypl.simplified.ui.onboarding.OnboardingFragment
 import org.nypl.simplified.ui.profiles.ProfileModificationDefaultFragment
@@ -165,6 +167,8 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
         this.handleSplashEvent(event.event)
       is MainActivityListenedEvent.TutorialEvent ->
         this.handleTutorialEvent(event.event)
+      is MainActivityListenedEvent.LoginEvent ->
+        this.handleLoginEvent(event.event)
       is MainActivityListenedEvent.OnboardingEvent ->
         this.handleOnboardingEvent(event.event)
       is MainActivityListenedEvent.MainFragmentEvent ->
@@ -173,6 +177,13 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
         this.handleProfileSelectionEvent(event.event)
       is MainActivityListenedEvent.ProfileModificationEvent ->
         this.handleProfileModificationEvent(event.event)
+    }
+  }
+
+  private fun handleLoginEvent(event: LoginEvent) {
+    return when (event) {
+      LoginEvent.StartLogin ->
+        this.onOnboardingFinished()
     }
   }
 
@@ -189,14 +200,13 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     val appCache =
       AppCache(this)
 
-    // TODO: Tutorial screen disabled by Ellibs
     this.onTutorialFinished()
-    /*if (appCache.isTutorialSeen()) {
+    if (appCache.isTutorialSeen()) {
       this.onTutorialFinished()
     } else {
       this.openTutorial()
       appCache.setTutorialSeen(true)
-    }*/
+    }
   }
 
   private fun handleTutorialEvent(event: TutorialEvent) {
@@ -240,6 +250,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
         this.openProfileSelection()
       }
     }
+    this.openLogin()
   }
 
   private fun handleOnboardingEvent(event: OnboardingEvent) {
@@ -362,6 +373,14 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     this.supportFragmentManager.commit {
       replace(R.id.mainFragmentHolder, tutorialFragment)
+    }
+  }
+
+  private fun openLogin() {
+    val loginFragment = LoginFragment()
+    this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    this.supportFragmentManager.commit {
+      replace(R.id.mainFragmentHolder, loginFragment)
     }
   }
 

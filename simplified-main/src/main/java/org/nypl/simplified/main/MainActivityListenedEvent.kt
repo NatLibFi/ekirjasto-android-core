@@ -25,4 +25,8 @@ sealed class MainActivityListenedEvent {
   data class ProfileModificationEvent(
     val event: org.nypl.simplified.ui.profiles.ProfileModificationEvent
   ) : MainActivityListenedEvent()
+
+  data class LoginEvent(
+    val event: org.nypl.simplified.ui.login.LoginEvent
+  ) : MainActivityListenedEvent()
 }

@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 class TutorialPageAdapter : RecyclerView.Adapter<TutorialPageAdapter.TutorialPageViewHolder>() {
 
   private val images = arrayOf(
-    R.drawable.background_image_tutorial1,
-    R.drawable.background_image_tutorial2,
-    R.drawable.background_image_tutorial3
+    R.drawable.e_kirjasto_intro1,
+    R.drawable.e_kirjasto_intro2,
+    R.drawable.e_kirjasto_intro3,
+    R.drawable.e_kirjasto_intro4
   )
 
   override fun getItemCount(): Int {

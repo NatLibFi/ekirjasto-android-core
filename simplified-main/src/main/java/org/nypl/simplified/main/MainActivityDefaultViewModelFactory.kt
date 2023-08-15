@@ -3,6 +3,7 @@ package org.nypl.simplified.main
 import androidx.lifecycle.ViewModelProvider
 import org.nypl.simplified.listeners.api.ListenerRepositoryFactory
 import org.nypl.simplified.listeners.api.ListenerRepository
+import org.nypl.simplified.ui.login.LoginEvent
 import org.nypl.simplified.ui.onboarding.OnboardingEvent
 import org.nypl.simplified.ui.profiles.ProfileModificationEvent
 import org.nypl.simplified.ui.profiles.ProfileSelectionEvent
@@ -18,6 +19,7 @@ class MainActivityDefaultViewModelFactory(fallbackFactory: ViewModelProvider.Fac
     repository.registerListener(SplashEvent::class, MainActivityListenedEvent::SplashEvent)
     repository.registerListener(OnboardingEvent::class, MainActivityListenedEvent::OnboardingEvent)
     repository.registerListener(TutorialEvent::class, MainActivityListenedEvent::TutorialEvent)
+    repository.registerListener(LoginEvent::class, MainActivityListenedEvent::LoginEvent)
     repository.registerListener(MainFragmentEvent::class, MainActivityListenedEvent::MainFragmentEvent)
     repository.registerListener(ProfileSelectionEvent::class, MainActivityListenedEvent::ProfileSelectionEvent)
     repository.registerListener(ProfileModificationEvent::class, MainActivityListenedEvent::ProfileModificationEvent)
