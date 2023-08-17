@@ -10,10 +10,7 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
     null
 
   override val about: DocumentConfiguration? =
-    DocumentConfiguration(
-      name = "about.html",
-      remoteURI = URI.create("http://localhost/about.html")
-    )
+    null
 
   override val acknowledgements: DocumentConfiguration? =
     null

@@ -1,6 +1,7 @@
 package org.nypl.simplified.main
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import hu.akarnokd.rxjava2.subjects.UnicastWorkSubject
 import io.reactivex.Observable
@@ -134,18 +135,22 @@ class MainFragmentViewModel(
             uri = booksUri
           )
 
-        val numberOfHolds = this.profilesController.profileFeed(request)
-          .get()
-          .entriesInOrder
-          .filter { feedEntry ->
-            feedEntry is FeedEntry.FeedEntryOPDS &&
-              feedEntry.feedEntry.availability is OPDSAvailabilityHeldReady
-          }
-          .size
+        try {
+          val numberOfHolds = this.profilesController.profileFeed(request)
+            .get()
+            .entriesInOrder
+            .filter { feedEntry ->
+              feedEntry is FeedEntry.FeedEntryOPDS &&
+                feedEntry.feedEntry.availability is OPDSAvailabilityHeldReady
+            }
+            .size
 
-        bookRegistry.updateHolds(
-          numberOfHolds = numberOfHolds
-        )
+          bookRegistry.updateHolds(
+            numberOfHolds = numberOfHolds
+          )
+        } catch (e: Exception) {
+          Log.d("reservations error: ", e.toString())
+        }
       }
       .subscribeOn(Schedulers.io())
       .subscribe()
