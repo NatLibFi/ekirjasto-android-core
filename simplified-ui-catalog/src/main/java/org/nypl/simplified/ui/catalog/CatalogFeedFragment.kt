@@ -518,7 +518,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
           iconView = feedContentLogoImage
         )
 
-        feedContentLogoText.text = account.provider.displayName
+        feedContentLogoText.text = ""
       } catch (e: Exception) {
         this.logger.debug("error configuring header: ", e)
       }
