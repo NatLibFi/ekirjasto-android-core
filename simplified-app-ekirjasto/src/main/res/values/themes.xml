@@ -9,6 +9,8 @@
     <item name="simplifiedColorBookStatus">@color/colorEkirjastoYellow</item>
     <item name="simplifiedColorText">@color/colorEkirjastoBlack</item>
     <item name="simplifiedColorTextBody">@color/colorEkirjastoBlack</item>
+    <item name="simplifiedColorNavigationSelected">@color/colorEkirjastoGreen</item>
+    <item name="simplifiedColorNavigationUnselected">@color/colorEkirjastoLightestGreen</item>
   </style>
 
   <style name="EKirjastoTheme_ActionBar" parent="NeutralTheme.ActionBar">

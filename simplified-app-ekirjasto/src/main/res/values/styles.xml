@@ -4,13 +4,13 @@
         <item name="android:background">@drawable/ekirjasto_button</item>
         <item name="android:textColor">@color/colorEkirjastoButtonText</item>
         <item name="android:textSize">12sp</item>
-
         <!--
           The scroll indicator will briefly appear on programmatically created buttons unless the
           'scrollbars' attribute is set to 'none'.
         -->
         <item name="android:scrollbars">none</item>
     </style>
+
     <style name="MoreTextStyle">
         <item name="android:layout_marginEnd">16dp</item>
         <item name="android:padding">8dp</item>
@@ -18,4 +18,13 @@
         <item name="android:drawableEnd">@drawable/ic_caret_right</item>
         <item name="android:drawablePadding">@dimen/catalogFacetButtonIconPadding</item>
     </style>
+
+    <style name="Simplified.BottomNav">
+        <item name="itemTextAppearanceActive">@style/Simplified.BottomNav.TextAppearance.Active</item>
+        <item name="itemTextAppearanceInactive">@style/Simplified.BottomNav.TextAppearance.Inactive</item>
+        <item name="itemIconTint">@color/simplified_bottom_navigation</item>
+        <item name="itemTextColor">@color/colorEkirjastoBlack</item>
+    </style>
+
+
 </resources>

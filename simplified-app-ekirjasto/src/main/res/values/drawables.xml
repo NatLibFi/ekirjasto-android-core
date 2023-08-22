@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="tab_catalog">@drawable/ic_elibrary_catalog_active</drawable>
+    <drawable name="tab_books">@drawable/ic_elibrary_mybooks_active</drawable>
+    <drawable name="tab_holds">@drawable/ic_elibrary_reservation_active</drawable>
+    <drawable name="tab_settings">@drawable/ic_elibrary_settings_active</drawable>
+</resources>
