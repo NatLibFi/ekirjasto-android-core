@@ -26,5 +26,12 @@
         <item name="itemTextColor">@color/colorEkirjastoBlack</item>
     </style>
 
+    <style name="FacetButton">
+        <item name="android:background">@color/transparent_black</item>
+    </style>
+    <style name="FacetButtonText">
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
 </resources>

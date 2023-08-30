@@ -747,7 +747,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         return@forEach
       }
 
-      val button = AppCompatButton(context)
+      val button = AppCompatButton(context, null, R.style.FacetButton)
+      button.setTextAppearance(R.style.FacetButtonText)
       val buttonLabel = AppCompatTextView(context)
       val spaceStart = Space(context)
       val spaceMiddle = Space(context)

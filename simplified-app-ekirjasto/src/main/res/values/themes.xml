@@ -22,4 +22,5 @@
   </style>
 
   <dimen name="ekirjastoButtonCornerRadius">0dp</dimen>
+
 </resources>
