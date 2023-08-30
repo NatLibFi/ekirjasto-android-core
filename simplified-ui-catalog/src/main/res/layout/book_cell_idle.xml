@@ -78,10 +78,10 @@
         android:layout_height="@dimen/catalogFeedCellButtonsHeight"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:weightSum="2"
         android:layout_marginBottom="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bookCellIdleCover">
@@ -126,5 +126,19 @@
             android:visibility="gone"
             tools:text="@string/catalogRetry"
             tools:visibility="visible" />
+
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
