@@ -5,9 +5,12 @@
         <item name="android:padding">8dp</item>
         <item name="android:textSize">12sp</item>
     </style>
-    <style name="FacetButton" parent="Widget.AppCompat.Button">
+    <style name="FacetButton" parent="Simplified.Button">
     </style>
 
     <style name="FacetButtonText" parent="TextAppearance.AppCompat.Widget.Button">
+    </style>
+
+    <style name="ReturnBookButton" parent="Simplified.Button">
     </style>
 </resources>

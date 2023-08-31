@@ -10,6 +10,9 @@
         -->
         <item name="android:scrollbars">none</item>
     </style>
+    <style name="ReturnBookButton" parent="Simplified.Button">
+        <item name="android:background">@drawable/ekirjasto_button_secondary</item>
+    </style>
 
     <style name="MoreTextStyle">
         <item name="android:layout_marginEnd">16dp</item>
@@ -31,6 +34,7 @@
     </style>
     <style name="FacetButtonText">
         <item name="android:textStyle">bold</item>
+
     </style>
 
 

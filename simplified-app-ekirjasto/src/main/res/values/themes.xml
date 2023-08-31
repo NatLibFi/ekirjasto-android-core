@@ -21,6 +21,7 @@
 
   </style>
 
-  <dimen name="ekirjastoButtonCornerRadius">0dp</dimen>
+  <dimen name="ekirjastoButtonCornerRadius">3dp</dimen>
+  <dimen name="ekirjastoButtonStrokeWidth">1dp</dimen>
 
 </resources>

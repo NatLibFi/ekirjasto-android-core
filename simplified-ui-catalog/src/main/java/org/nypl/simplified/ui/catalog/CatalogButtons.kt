@@ -12,6 +12,7 @@ import android.widget.Space
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.annotation.UiThread
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
@@ -68,6 +69,28 @@ class CatalogButtons(
     onClick: (Button) -> Unit
   ): Button {
     val button = AppCompatButton(this.context)
+    button.text = context.getString(text)
+    button.contentDescription = context.getString(description)
+    button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
+    button.setOnClickListener {
+      button.isEnabled = false
+      onClick.invoke(button)
+      button.isEnabled = true
+    }
+    return button
+  }
+
+  @UiThread
+  fun createButtonWithStyle(
+    context: Context,
+    text: Int,
+    description: Int,
+    style: Int,
+    heightMatchParent: Boolean = false,
+    onClick: (Button) -> Unit
+  ) : Button {
+    val button = AppCompatButton(ContextThemeWrapper(this.context, style), null, style)
+    //val button = AppCompatButton(this.context, null, style)
     button.text = context.getString(text)
     button.contentDescription = context.getString(description)
     button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
@@ -251,10 +274,11 @@ class CatalogButtons(
     onClick: (Button) -> Unit,
     heightMatchParent: Boolean = false
   ): Button {
-    return this.createButton(
+    return this.createButtonWithStyle(
       context = this.context,
       text = R.string.catalogReturn,
       description = R.string.catalogAccessibilityBookRevokeLoan,
+      R.style.ReturnBookButton,
       heightMatchParent = heightMatchParent,
       onClick = onClick
     )

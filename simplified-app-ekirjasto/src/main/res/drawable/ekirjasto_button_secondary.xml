@@ -8,7 +8,7 @@
         android:right="?attr/simplifiedButtonHorizontalPadding"
         android:bottom="?attr/simplifiedButtonVerticalPadding" />
     <corners android:radius="?attr/simplifiedButtonCornerRadius" />
-    <solid android:color="@color/colorEkirjastoButtonBackground" />
+<!--    <solid android:color="@color/transparent_black" />-->
     <stroke
         android:width="@dimen/ekirjastoButtonStrokeWidth"
         android:color="@color/colorEkirjastoGreen" />
