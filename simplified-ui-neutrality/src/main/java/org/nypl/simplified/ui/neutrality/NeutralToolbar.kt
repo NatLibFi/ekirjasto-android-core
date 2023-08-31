@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.ActionMenuView
@@ -43,6 +44,7 @@ class NeutralToolbar(
   private var iconKind: IconKind
   private val titleView: TextView = TextView(this.context)
   private val iconView: ImageView = ImageView(this.context)
+  private val backTextView: TextView = TextView(this.context)
 
   private enum class IconKind {
     ICON_IS_NAVIGATION,
@@ -65,6 +67,7 @@ class NeutralToolbar(
     }
     this.addView(this.titleView)
     this.addView(this.iconView, LayoutParams(iconDimension, iconDimension))
+    this.addView(this.backTextView, LayoutParams(iconDimension*2, iconDimension))
     this.tag = neutralToolbarName
   }
 
@@ -76,6 +79,8 @@ class NeutralToolbar(
         val iconHeight = this.dpToPixelsReal(24).toFloat()
         this.iconView.x = this.dpToPixelsReal(16).toFloat()
         this.iconView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
+        this.backTextView.x = this.dpToPixelsReal(36).toFloat()
+        this.backTextView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
       }
       ICON_IS_LOGO -> {
         this.iconView.x = 0.0f
@@ -101,10 +106,15 @@ class NeutralToolbar(
       this.iconView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
       this.iconView.layoutParams = LayoutParams(iconWidth.toInt(), iconHeight.toInt())
       this.iconView.contentDescription = context.getString(R.string.contentDescriptionBack)
+      // configure back text
+      this.backTextView.text = iconView.contentDescription
+      this.backTextView.setPadding(32,0,0,0)
+      this.backTextView.visibility = View.VISIBLE
     } else {
       this.iconKind = ICON_IS_LOGO
       this.setLogo(this.iconLogoLast)
       this.iconView.contentDescription = context.getString(R.string.contentDescriptionLogo)
+      this.backTextView.visibility = View.INVISIBLE
     }
   }
 
