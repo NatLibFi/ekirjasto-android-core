@@ -136,13 +136,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/description_heading_background"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/catalogDescription"
-            android:textSize="@dimen/catalogBookDetailDescriptionFontSize"
-            android:background="@drawable/description_heading_background"
-            />
+            android:textSize="@dimen/catalogBookDetailDescriptionFontSize" />
 
         <TextView
             android:id="@+id/bookDetailDescriptionText"
@@ -150,7 +149,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:text="@string/catalogPlaceholder" />
 
         <TextView
@@ -159,8 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="@string/catalogMore"
-            />
+            android:text="@string/catalogMore" />
 
         <View
             android:layout_width="match_parent"
@@ -175,11 +172,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:background="@drawable/description_heading_background"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/catalogInformation"
-            android:textSize="@dimen/catalogBookDetailDescriptionFontSize"
-            android:background="@drawable/description_heading_background"/>
+            android:textSize="@dimen/catalogBookDetailDescriptionFontSize" />
 
         <LinearLayout
             android:id="@+id/bookDetailMetadataTable"
@@ -187,7 +184,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:orientation="vertical" />
 
         <View
