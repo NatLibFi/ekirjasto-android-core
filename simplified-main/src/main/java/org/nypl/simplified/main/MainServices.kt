@@ -450,7 +450,7 @@ internal object MainServices {
   ): BookCoverBadgeLookupType {
     return CatalogCoverBadgeImages.create(
       context.resources,
-      { Color.RED },
+      {context.getColor(R.color.colorPrimary)},
       screenSize
     )
   }
