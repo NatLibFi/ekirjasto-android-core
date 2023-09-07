@@ -10,12 +10,12 @@
     <ImageView
         android:id="@+id/bookCellIdleCover"
         android:layout_width="@dimen/catalogFeedCellImageWidth"
-        android:layout_height="@dimen/catalogFeedCellHeight"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:contentDescription="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/bookCellIdleButtons"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/bookCellIdleTitle" />
 
     <ProgressBar
         android:id="@+id/bookCellIdleCoverProgress"
@@ -137,8 +137,6 @@
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
