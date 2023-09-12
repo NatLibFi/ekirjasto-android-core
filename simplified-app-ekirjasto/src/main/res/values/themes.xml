@@ -11,6 +11,8 @@
     <item name="simplifiedColorTextBody">@color/colorEkirjastoBlack</item>
     <item name="simplifiedColorNavigationSelected">@color/colorEkirjastoGreen</item>
     <item name="simplifiedColorNavigationUnselected">@color/colorEkirjastoLightestGreen</item>
+    <item name="actionBarSize">64dp</item>
+
   </style>
 
   <style name="EKirjastoTheme_ActionBar" parent="NeutralTheme.ActionBar">
