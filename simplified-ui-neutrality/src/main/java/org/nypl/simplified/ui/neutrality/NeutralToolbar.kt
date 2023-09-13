@@ -67,7 +67,7 @@ class NeutralToolbar(
     }
     this.addView(this.titleView)
     this.addView(this.iconView, LayoutParams(iconDimension, iconDimension))
-    this.addView(this.backTextView, LayoutParams(iconDimension*2, iconDimension))
+    this.addView(this.backTextView, LayoutParams(iconDimension, iconDimension/2))
     this.tag = neutralToolbarName
   }
 
