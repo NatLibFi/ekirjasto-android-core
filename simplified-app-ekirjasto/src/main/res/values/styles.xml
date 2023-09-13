@@ -16,7 +16,7 @@
 
     <style name="MoreTextStyle">
         <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:drawableEnd">@drawable/ic_caret_right</item>
