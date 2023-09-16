@@ -14,6 +14,10 @@ import androidx.core.widget.TextViewCompat
 import org.nypl.simplified.ui.neutrality.NeutralToolbar.IconKind.ICON_IS_LOGO
 import org.nypl.simplified.ui.neutrality.NeutralToolbar.IconKind.ICON_IS_NAVIGATION
 
+private const val ICON_SIZE = 16
+
+private const val BACK_TEXT_POS = 32
+
 /**
  * A toolbar with very neutral styling.
  */
@@ -52,7 +56,7 @@ class NeutralToolbar(
   }
 
   init {
-    val iconDimension = this.dpToPixelsIntegral(64)
+    val iconDimension = this.dpToPixelsIntegral(ICON_SIZE)
 
     this.iconKind = ICON_IS_LOGO
     TextViewCompat.setTextAppearance(this.titleView, R.style.Neutral_ActionBarTitle)
@@ -67,7 +71,7 @@ class NeutralToolbar(
     }
     this.addView(this.titleView)
     this.addView(this.iconView, LayoutParams(iconDimension, iconDimension))
-    this.addView(this.backTextView, LayoutParams(iconDimension, iconDimension/2))
+    this.addView(this.backTextView, LayoutParams(iconDimension*4, iconDimension*2))
     this.tag = neutralToolbarName
   }
 
@@ -76,10 +80,10 @@ class NeutralToolbar(
 
     when (this.iconKind) {
       ICON_IS_NAVIGATION -> {
-        val iconHeight = this.dpToPixelsReal(24).toFloat()
-        this.iconView.x = this.dpToPixelsReal(16).toFloat()
+        val iconHeight = this.dpToPixelsReal(ICON_SIZE).toFloat()
+        this.iconView.x = this.dpToPixelsReal(ICON_SIZE).toFloat()
         this.iconView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
-        this.backTextView.x = this.dpToPixelsReal(36).toFloat()
+        this.backTextView.x = this.dpToPixelsReal(BACK_TEXT_POS).toFloat()
         this.backTextView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
       }
       ICON_IS_LOGO -> {
@@ -100,16 +104,16 @@ class NeutralToolbar(
     if (drawable != null) {
       this.iconKind = ICON_IS_NAVIGATION
       this.iconView.setImageResource(R.drawable.ic_baseline_arrow_back_24)
-      val iconWidth = this.dpToPixelsReal(24).toFloat()
-      val iconHeight = this.dpToPixelsReal(24).toFloat()
-      this.iconView.x = this.dpToPixelsReal(16).toFloat()
-      this.iconView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
-      this.iconView.layoutParams = LayoutParams(iconWidth.toInt(), iconHeight.toInt())
+      val iconSizePixels = this.dpToPixelsReal(ICON_SIZE).toFloat()
+      this.iconView.x = iconSizePixels
+      this.iconView.y = (this.height / 2.0f) - (iconSizePixels / 2.0f)
+      this.iconView.layoutParams = LayoutParams(iconSizePixels.toInt(), iconSizePixels.toInt())
       this.iconView.contentDescription = context.getString(R.string.contentDescriptionBack)
       // configure back text
       this.backTextView.text = iconView.contentDescription
-      this.backTextView.setPadding(32,0,0,0)
+      this.backTextView.setPadding(BACK_TEXT_POS,0,0,0)
       this.backTextView.visibility = View.VISIBLE
+      backTextView.layoutParams = LayoutParams( iconSizePixels.toInt()*4, iconSizePixels.toInt())
     } else {
       this.iconKind = ICON_IS_LOGO
       this.setLogo(this.iconLogoLast)

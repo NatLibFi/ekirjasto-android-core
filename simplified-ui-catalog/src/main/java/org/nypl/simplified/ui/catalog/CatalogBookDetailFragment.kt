@@ -631,11 +631,11 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
     val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
 
-    if (createPreviewButton) {
-      this.buttons.addView(this.buttonCreator.createButtonSpace())
-    } else {
-      this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
-    }
+//    if (createPreviewButton) {
+//      this.buttons.addView(this.buttonCreator.createButtonSpace())
+//    } else {
+//      this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
+//    }
 
     this.buttons.addView(
       this.buttonCreator.createGetButton(

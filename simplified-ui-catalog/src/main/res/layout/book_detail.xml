@@ -67,60 +67,58 @@
                 app:layout_constraintTop_toBottomOf="@id/bookDetailTitle"
                 tools:text="Mary Shelley" />
 
+            <LinearLayout
+                android:id="@+id/bookDetailButtons"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/catalogBookDetailButtonsHeight"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="start|bottom"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/bookDetailCover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bookDetailCover">
+
+                <!-- These views are removed at runtime and are just present for the sake of the UI editor preview -->
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    tools:text="@string/catalogGet"
+                    tools:visibility="visible" />
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    tools:text="@string/catalogGet"
+                    tools:visibility="visible" />
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/catalogGet"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
-
-        <LinearLayout
-            android:id="@+id/bookDetailButtons"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/catalogBookDetailButtonsHeight"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="center|center_horizontal"
-            android:orientation="horizontal">
-
-            <!-- These views are removed at runtime and are just present for the sake of the UI editor preview -->
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:visibility="gone"
-                tools:text="@string/catalogGet"
-                tools:visibility="visible" />
-
-            <Space
-                android:layout_width="16dp"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:visibility="gone"
-                tools:text="@string/catalogGet"
-                tools:visibility="visible" />
-
-            <Space
-                android:layout_width="16dp"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/catalogGet"
-                android:visibility="gone"
-                tools:visibility="visible" />
-        </LinearLayout>
 
         <include
             layout="@layout/book_detail_status"
