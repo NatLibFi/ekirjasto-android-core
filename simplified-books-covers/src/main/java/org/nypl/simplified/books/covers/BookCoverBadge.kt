@@ -10,10 +10,13 @@ data class BookCoverBadge(
   val bitmap: Bitmap,
   val width: Int,
   val height: Int,
+  val borderWidth: Int,
+  val offsetSize: Int,
 
   /**
    * A function that, when evaluated, returns an RGB color.
    */
 
-  val backgroundColorRGBA: () -> Int
+  val backgroundColorRGBA: () -> Int,
+  val borderColorRGBA: () -> Int
 )

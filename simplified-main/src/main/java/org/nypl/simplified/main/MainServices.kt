@@ -451,6 +451,7 @@ internal object MainServices {
     return CatalogCoverBadgeImages.create(
       context.resources,
       {context.getColor(R.color.colorPrimary)},
+      {context.getColor(R.color.white)},
       screenSize
     )
   }

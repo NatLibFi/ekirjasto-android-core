@@ -53,6 +53,7 @@ class BookCoverProvider private constructor(
     entry: FeedEntry.FeedEntryOPDS,
     imageView: ImageView,
     hasBadge: Boolean,
+    badgeOffset: BookCoverBadgeOffset,
     width: Int,
     height: Int,
     tag: String,
@@ -85,7 +86,7 @@ class BookCoverProvider private constructor(
       }
     }
 
-    val badgePainter = BookCoverBadgePainter(entry, this.badgeLookup)
+    val badgePainter = BookCoverBadgePainter(entry, this.badgeLookup, badgeOffset)
     if (uriSpecified != null) {
       this.logger.debug("{}: {}: loading specified uri {}", tag, entry.bookID, uriSpecified)
 
@@ -193,12 +194,14 @@ class BookCoverProvider private constructor(
     entry: FeedEntry.FeedEntryOPDS,
     imageView: ImageView,
     width: Int,
-    height: Int
+    height: Int,
+    isVerticalList : Boolean
   ): FluentFuture<Unit> {
     return doLoad(
       entry = entry,
       imageView = imageView,
       hasBadge = true,
+      badgeOffset = if (isVerticalList) BookCoverBadgeOffset.OFFSET_VERTICAL else BookCoverBadgeOffset.OFFSET_HORIZONTAL,
       width = width,
       height = height,
       tag = thumbnailTag,
@@ -217,6 +220,7 @@ class BookCoverProvider private constructor(
       entry = entry,
       imageView = imageView,
       hasBadge = hasBadge,
+      badgeOffset = BookCoverBadgeOffset.OFFSET_DEFAULT,
       width = width,
       height = height,
       tag = coverTag,

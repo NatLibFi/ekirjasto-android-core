@@ -13,7 +13,8 @@ import org.nypl.simplified.feeds.api.FeedEntry
 
 class BookCoverBadgePainter(
   val entry: FeedEntry.FeedEntryOPDS,
-  val badges: BookCoverBadgeLookupType
+  val badges: BookCoverBadgeLookupType,
+  val badgeOffset: BookCoverBadgeOffset
 ) : Transformation {
 
   override fun key(): String {
@@ -30,11 +31,13 @@ class BookCoverBadgePainter(
     val result = workingBitmap.copy(source.config, true)
     val canvas = Canvas(result)
 
-    val left = source.width - badge.width
-    val right = source.width
-    val top = source.height - badge.height
-    val bottom = source.height
+    val left = source.width - badge.width + badgeOffset.x*badge.offsetSize
+    val right = source.width + badgeOffset.x*badge.offsetSize
+    val top = source.height - badge.height + badgeOffset.y*badge.offsetSize
+    val bottom = source.height + badgeOffset.y*badge.offsetSize
     val targetRect = Rect(left, top, right, bottom)
+
+    drawBorder(canvas, badge, targetRect)
 
     val colorBackground = badge.backgroundColorRGBA()
     if (colorBackground != 0x00_00_00_00) {
@@ -51,5 +54,16 @@ class BookCoverBadgePainter(
 
     source.recycle()
     return result
+  }
+
+  private fun drawBorder(canvas: Canvas, badge: BookCoverBadge, badgeRect: Rect ) {
+    val borderRect = Rect(badgeRect.left-badge.borderWidth,
+      badgeRect.top - badge.borderWidth,
+      badgeRect.right + badge.borderWidth,
+      badgeRect.bottom + badge.borderWidth)
+    val paint = Paint()
+    paint.color = badge.borderColorRGBA()
+    paint.isAntiAlias = false
+    canvas.drawRect(borderRect, paint)
   }
 }
