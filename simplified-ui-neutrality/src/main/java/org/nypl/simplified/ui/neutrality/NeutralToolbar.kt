@@ -84,7 +84,7 @@ class NeutralToolbar(
         this.iconView.x = this.dpToPixelsReal(ICON_SIZE).toFloat()
         this.iconView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
         this.backTextView.x = this.dpToPixelsReal(BACK_TEXT_POS).toFloat()
-        this.backTextView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
+        this.backTextView.gravity = Gravity.CENTER_VERTICAL
       }
       ICON_IS_LOGO -> {
         this.iconView.x = 0.0f
@@ -113,7 +113,8 @@ class NeutralToolbar(
       this.backTextView.text = iconView.contentDescription
       this.backTextView.setPadding(BACK_TEXT_POS,0,0,0)
       this.backTextView.visibility = View.VISIBLE
-      backTextView.layoutParams = LayoutParams( iconSizePixels.toInt()*4, iconSizePixels.toInt())
+      backTextView.layoutParams = LayoutParams( iconSizePixels.toInt()*4, LayoutParams.MATCH_PARENT)
+      this.backTextView.gravity = Gravity.CENTER_VERTICAL
     } else {
       this.iconKind = ICON_IS_LOGO
       this.setLogo(this.iconLogoLast)
