@@ -401,6 +401,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     this.toolbar.inflateMenu(R.menu.top_toolbar_menu)
     this.bottomToolbar.inflateMenu(R.menu.bottom_toolbar_menu)
     this.toolbar.setNavigationOnClickListener { this.onToolbarNavigationSelected() }
+    this.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
 
     this.menuPlaybackRate = this.bottomToolbar.menu.findItem(R.id.player_menu_playback_rate)
 

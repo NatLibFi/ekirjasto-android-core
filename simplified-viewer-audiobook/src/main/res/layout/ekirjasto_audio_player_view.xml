@@ -18,6 +18,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/back"
         app:titleTextColor="?attr/simplifiedColorText"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:title="Back"
         tools:title="Back" />
 
     <TextView
@@ -185,14 +187,14 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
-            android:gravity="center"
+            android:gravity="start"
             android:importantForAccessibility="no"
-            android:text="@string/audiobook_player_seek_15"
+            android:text="15 sec."
             android:textColor="?attr/simplifiedColorControlIcon"
             android:textSize="14sp"
-            android:layout_marginStart="85dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/player_play_pause_text"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/player_play_pause_text"
@@ -200,14 +202,14 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
-            android:gravity="center"
+            android:gravity="start"
             android:importantForAccessibility="no"
             android:text="Play"
             android:textColor="?attr/simplifiedColorControlIcon"
             android:textSize="14sp"
-            android:layout_marginStart="91dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/player_jump_backwards_text" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/player_jump_forwards_text"
@@ -215,13 +217,14 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
+            android:gravity="start"
             android:importantForAccessibility="no"
-            android:text="@string/audiobook_player_seek_15"
+            android:text="15 sec."
             android:textColor="?attr/simplifiedColorControlIcon"
             android:textSize="14sp"
-            android:layout_marginEnd="95dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/player_play_pause_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
