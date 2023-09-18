@@ -1,3 +1,6 @@
+plugins {
+    id 'org.jetbrains.kotlin.android'
+}
 dependencies {
   implementation project(":simplified-accounts-api")
   implementation project(":simplified-bookmarks-api")
@@ -28,6 +31,7 @@ dependencies {
   api libs.palace.audiobook.open.access
   api libs.palace.audiobook.rbdigital
   api libs.palace.audiobook.views
+  api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
   implementation libs.androidx.activity
   implementation libs.androidx.app.compat
@@ -35,4 +39,6 @@ dependencies {
   implementation libs.kotlin.reflect
   implementation libs.palace.drm.core
   implementation libs.palace.readium2.api
+  implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+  implementation 'com.google.android.material:material:1.9.0'
 }

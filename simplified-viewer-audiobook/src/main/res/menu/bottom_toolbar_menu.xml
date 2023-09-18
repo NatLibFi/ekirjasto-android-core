@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/player_menu_playback_rate"
+        android:title="Speed"
+        android:icon="@drawable/ic_speed_48"
+        app:iconTint="?attr/simplifiedColorControlActionBar"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/player_menu_add_bookmark"
+        android:icon="@drawable/ic_bookmark"
+        android:title="Bookmark"
+        app:iconTint="?attr/simplifiedColorControlActionBar"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/player_menu_sleep"
+        android:icon="@drawable/ic_sleep"
+        android:title="Sleep timer"
+        app:iconTint="?attr/simplifiedColorControlActionBar"
+        app:showAsAction="always|withText" />
+
+</menu>
