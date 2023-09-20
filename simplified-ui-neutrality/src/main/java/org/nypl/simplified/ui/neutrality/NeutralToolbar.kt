@@ -3,6 +3,7 @@ package org.nypl.simplified.ui.neutrality
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -27,6 +28,7 @@ class NeutralToolbar(
   attrs: AttributeSet?,
   defStyleAttr: Int
 ) : Toolbar(context, attrs, defStyleAttr) {
+
 
   companion object {
     const val neutralToolbarName = "NeutralToolbar"
@@ -65,7 +67,7 @@ class NeutralToolbar(
         LayoutParams.MATCH_PARENT,
         LayoutParams.MATCH_PARENT
       ).apply {
-        marginStart = iconDimension
+        marginStart = iconDimension*2
       }
       gravity = Gravity.CENTER
     }
@@ -77,6 +79,12 @@ class NeutralToolbar(
 
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     super.onLayout(changed, l, t, r, b)
+    val searchView = getSearchViewFromToolbar()
+    Log.d(javaClass.simpleName, "OnLayout searchIconified=${searchView?.isIconified}")
+
+    searchView?.let {
+      titleView.visibility = if (it.isIconified) View.VISIBLE else View.GONE
+    }
 
     when (this.iconKind) {
       ICON_IS_NAVIGATION -> {
@@ -85,6 +93,9 @@ class NeutralToolbar(
         this.iconView.y = (this.height / 2.0f) - (iconHeight / 2.0f)
         this.backTextView.x = this.dpToPixelsReal(BACK_TEXT_POS).toFloat()
         this.backTextView.gravity = Gravity.CENTER_VERTICAL
+        searchView?.let {
+          backTextView.visibility = if (it.isIconified) View.VISIBLE else View.GONE
+        }
       }
       ICON_IS_LOGO -> {
         this.iconView.x = 0.0f
@@ -183,6 +194,6 @@ class NeutralToolbar(
 
     // the available width for the SearchView can be calculated from the entire screen's width minus
     // the existing number of toolbar items + 1 corresponding to the icon/logo on the left
-    return fullWidth - (menu.size() + 1) * this.dpToPixelsReal(24).toInt()
+    return fullWidth - (menu.size() + if (this.iconKind == ICON_IS_LOGO ) 1 else 0) * this.dpToPixelsReal(24).toInt()
   }
 }
