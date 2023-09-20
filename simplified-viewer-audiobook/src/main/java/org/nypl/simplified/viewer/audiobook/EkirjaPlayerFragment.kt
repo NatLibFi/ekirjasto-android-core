@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
@@ -401,8 +402,11 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     this.toolbar.inflateMenu(R.menu.top_toolbar_menu)
     this.bottomToolbar.inflateMenu(R.menu.bottom_toolbar_menu)
     this.toolbar.setNavigationOnClickListener { this.onToolbarNavigationSelected() }
-    this.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
 
+    val backbutton:LinearLayout = this.toolbar.findViewById(R.id.backButton)
+    backbutton.setOnClickListener{
+      requireActivity().finish()
+    }
     this.menuPlaybackRate = this.bottomToolbar.menu.findItem(R.id.player_menu_playback_rate)
 
     /*
