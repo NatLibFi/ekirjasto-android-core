@@ -123,7 +123,7 @@
         <include
             layout="@layout/book_detail_status"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/catalogBookDetailStatusHeight"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/catalogBookDetailStatusMargin"
             android:layout_marginEnd="@dimen/catalogBookDetailStatusMargin"
             android:layout_marginBottom="16dp" />

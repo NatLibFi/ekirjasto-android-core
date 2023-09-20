@@ -6,7 +6,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/bookDetailStatusInProgress"
   android:layout_width="match_parent"
-  android:layout_height="@dimen/catalogBookDetailStatusHeight"
+  android:layout_height="wrap_content"
   tools:background="?attr/simplifiedColorBookStatus">
 
   <TextView
