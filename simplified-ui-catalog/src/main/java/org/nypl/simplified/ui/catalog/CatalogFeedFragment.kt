@@ -218,6 +218,11 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       this.feedContent.findViewById(R.id.feedContentLogoHeader)
     this.feedContentLogoImage =
       this.feedContent.findViewById(R.id.feedLibraryLogo)
+
+    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks) {
+      feedContentLogoImage.visibility = View.GONE
+    }
+
     this.feedContentLogoText =
       this.feedContent.findViewById(R.id.feedLibraryText)
 
