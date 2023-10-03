@@ -14,9 +14,11 @@ import org.nypl.simplified.accounts.api.AccountProvider
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Anonymous
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Basic
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.BasicToken
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.COPPAAgeGate
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.ANONYMOUS_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.BASIC_TYPE
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.BASIC_TOKEN_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.COPPA_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.OAUTH_INTERMEDIARY_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.SAML_2_0_TYPE
@@ -144,7 +146,27 @@ object AccountProvidersJSON {
       is Basic -> {
         val authObject = mapper.createObjectNode()
         authObject.put("type", BASIC_TYPE)
-        this.putConditionally(authObject, "barcodeFormat", authentication.barcodeFormat?.toUpperCase(Locale.ROOT))
+        this.putConditionally(
+          authObject,
+          "barcodeFormat",
+          authentication.barcodeFormat?.uppercase(Locale.ROOT)
+        )
+        this.putConditionally(authObject, "description", authentication.description)
+        this.putConditionally(authObject, "keyboard", authentication.keyboard.name)
+        this.putConditionally(authObject, "passwordKeyboard", authentication.passwordKeyboard.name)
+        authObject.put("passwordMaximumLength", authentication.passwordMaximumLength)
+        authObject.set<ObjectNode>("labels", this.mapToObject(mapper, authentication.labels))
+        val logo = authentication.logoURI
+        if (logo != null) {
+          authObject.put("logo", logo.toString())
+        }
+        authObject
+      }
+      is BasicToken -> {
+        val authObject = mapper.createObjectNode()
+        authObject.put("type", BASIC_TOKEN_TYPE)
+        this.putConditionally(authObject, "authenticationURI", authentication.authenticationURI.toString())
+        this.putConditionally(authObject, "barcodeFormat", authentication.barcodeFormat?.uppercase(Locale.ROOT))
         this.putConditionally(authObject, "description", authentication.description)
         this.putConditionally(authObject, "keyboard", authentication.keyboard.name)
         this.putConditionally(authObject, "passwordKeyboard", authentication.passwordKeyboard.name)
@@ -414,7 +436,7 @@ object AccountProvidersJSON {
           this.toStringMap(JSONParserUtilities.getObject(container, "labels"))
         val barcodeFormat =
           JSONParserUtilities.getStringOrNull(container, "barcodeFormat")
-            ?.toUpperCase(Locale.ROOT)
+            ?.uppercase(Locale.ROOT)
         val keyboard =
           this.parseKeyboardType(JSONParserUtilities.getStringOrNull(container, "keyboard"))
         val passwordMaximumLength =
@@ -441,12 +463,49 @@ object AccountProvidersJSON {
           passwordMaximumLength = passwordMaximumLength
         )
       }
+
+      BASIC_TOKEN_TYPE -> {
+        val labels =
+          this.toStringMap(JSONParserUtilities.getObject(container, "labels"))
+        val barcodeFormat =
+          JSONParserUtilities.getStringOrNull(container, "barcodeFormat")
+            ?.uppercase(Locale.ROOT)
+        val keyboard =
+          this.parseKeyboardType(JSONParserUtilities.getStringOrNull(container, "keyboard"))
+        val passwordMaximumLength =
+          JSONParserUtilities.getIntegerDefault(container, "passwordMaximumLength", 0)
+        val passwordKeyboard =
+          this.parseKeyboardType(
+            JSONParserUtilities.getStringOrNull(
+              container,
+              "passwordKeyboard"
+            )
+          )
+        val description =
+          JSONParserUtilities.getString(container, "description")
+        val logoURI =
+          JSONParserUtilities.getURIOrNull(container, "logo")
+        val authenticationURI =
+          JSONParserUtilities.getURIOrNull(container, "authenticationURI")
+
+        BasicToken(
+          authenticationURI = authenticationURI,
+          barcodeFormat = barcodeFormat,
+          description = description,
+          keyboard = keyboard,
+          labels = labels,
+          logoURI = logoURI,
+          passwordKeyboard = passwordKeyboard,
+          passwordMaximumLength = passwordMaximumLength
+        )
+      }
+
       COPPA_TYPE -> {
         COPPAAgeGate(
           greaterEqual13 =
-            JSONParserUtilities.getURIOrNull(container, "greaterEqual13"),
+          JSONParserUtilities.getURIOrNull(container, "greaterEqual13"),
           under13 =
-            JSONParserUtilities.getURIOrNull(container, "under13")
+          JSONParserUtilities.getURIOrNull(container, "under13")
         )
       }
       else -> {
@@ -466,20 +525,25 @@ object AccountProvidersJSON {
   private fun parseKeyboardType(
     text: String?
   ): KeyboardInput {
-    return when (val keyboardText = text?.toUpperCase(Locale.ROOT)) {
+    return when (val keyboardText = text?.uppercase(Locale.ROOT)) {
       null ->
         KeyboardInput.DEFAULT
+
       "NO_INPUT",
       "NO INPUT" ->
         KeyboardInput.NO_INPUT
+
       "DEFAULT" ->
         KeyboardInput.DEFAULT
+
       "NUMBER_PAD",
       "NUMBER PAD" ->
         KeyboardInput.NUMBER_PAD
+
       "EMAIL_ADDRESS",
       "EMAIL ADDRESS" ->
         KeyboardInput.EMAIL_ADDRESS
+
       else -> {
         this.logger.warn("encountered unrecognized keyboard type: {}", keyboardText)
         return KeyboardInput.DEFAULT
@@ -490,7 +554,7 @@ object AccountProvidersJSON {
   private fun toStringMap(objectNode: ObjectNode): Map<String, String> {
     val map = mutableMapOf<String, String>()
     for (key in objectNode.fieldNames()) {
-      map[key.toUpperCase()] = JSONParserUtilities.getString(objectNode, key)
+      map[key.uppercase(Locale.ROOT)] = JSONParserUtilities.getString(objectNode, key)
     }
     return map.toMap()
   }

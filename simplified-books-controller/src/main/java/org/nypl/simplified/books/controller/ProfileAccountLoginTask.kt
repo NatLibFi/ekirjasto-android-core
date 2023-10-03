@@ -1,15 +1,22 @@
 package org.nypl.simplified.books.controller
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.base.Preconditions
+import one.irradia.mime.api.MIMECompatibility
 import one.irradia.mime.api.MIMEType
+import org.librarysimplified.http.api.LSHTTPAuthorizationBasic
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Post
+import org.librarysimplified.http.api.LSHTTPResponseStatus
+import org.librarysimplified.mdc.MDCKeys
 import org.nypl.drm.core.AdobeAdeptExecutorType
 import org.nypl.drm.core.AdobeVendorID
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP
 import org.nypl.simplified.accounts.api.AccountAuthenticationAdobeClientToken
 import org.nypl.simplified.accounts.api.AccountAuthenticationAdobePreActivationCredentials
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
+import org.nypl.simplified.accounts.api.AccountAuthenticationTokenInfo
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoggedIn
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoggingIn
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoggingInWaitingForExternalAuthentication
@@ -23,12 +30,14 @@ import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.SAML2_0
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.adobe.extensions.AdobeDRMExtensions
+import org.nypl.simplified.notifications.NotificationTokenHTTPCallsType
 import org.nypl.simplified.patron.api.PatronDRM
 import org.nypl.simplified.patron.api.PatronDRMAdobe
 import org.nypl.simplified.patron.api.PatronUserProfileParsersType
 import org.nypl.simplified.profiles.api.ProfileReadableType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.Basic
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.BasicToken
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryCancel
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryComplete
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryInitiate
@@ -40,6 +49,8 @@ import org.nypl.simplified.taskrecorder.api.TaskRecorderType
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.taskrecorder.api.TaskStep
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
+import java.net.HttpURLConnection
 import java.net.URI
 import java.nio.charset.Charset
 import java.util.concurrent.Callable
@@ -55,6 +66,7 @@ class ProfileAccountLoginTask(
   private val adeptExecutor: AdobeAdeptExecutorType?,
   private val http: LSHTTPClientType,
   private val loginStrings: AccountLoginStringResourcesType,
+  private val notificationTokenHttpCalls: NotificationTokenHTTPCallsType,
   private val patronParsers: PatronUserProfileParsersType,
   private val profile: ProfileReadableType,
   private val request: ProfileAccountLoginRequest
@@ -92,6 +104,10 @@ class ProfileAccountLoginTask(
     this.logger.warn("[{}][{}] $message", this.profile.id.uuid, this.account.id, *arguments)
 
   private fun run(): TaskResult<Unit> {
+    MDC.put(MDCKeys.ACCOUNT_INTERNAL_ID, this.account.id.uuid.toString())
+    MDC.put(MDCKeys.ACCOUNT_PROVIDER_NAME, this.account.provider.displayName)
+    MDC.put(MDCKeys.ACCOUNT_PROVIDER_ID, this.account.provider.id.toString())
+
     return try {
       if (!this.updateLoggingInState(
           this.steps.beginNewStep(this.loginStrings.loginCheckAuthRequired)
@@ -110,20 +126,37 @@ class ProfileAccountLoginTask(
       this.steps.currentStepSucceeded(this.loginStrings.loginAuthRequired)
 
       when (this.request) {
-        is Basic ->
+        is Basic -> {
           this.runBasicLogin(this.request)
-        is OAuthWithIntermediaryInitiate ->
+        }
+
+        is BasicToken -> {
+          this.runBasicTokenLogin(this.request)
+        }
+
+        is OAuthWithIntermediaryInitiate -> {
           this.runOAuthWithIntermediaryInitiate(this.request)
-        is OAuthWithIntermediaryComplete ->
+        }
+
+        is OAuthWithIntermediaryComplete -> {
           this.runOAuthWithIntermediaryComplete(this.request)
-        is OAuthWithIntermediaryCancel ->
+        }
+
+        is OAuthWithIntermediaryCancel -> {
           this.runOAuthWithIntermediaryCancel(this.request)
-        is SAML20Initiate ->
+        }
+
+        is SAML20Initiate -> {
           this.runSAML20Initiate(this.request)
-        is SAML20Complete ->
+        }
+
+        is SAML20Complete -> {
           this.runSAML20Complete(this.request)
-        is SAML20Cancel ->
+        }
+
+        is SAML20Cancel -> {
           this.runSAML20Cancel(this.request)
+        }
       }
     } catch (e: Throwable) {
       this.logger.error("error during login process: ", e)
@@ -133,6 +166,36 @@ class ProfileAccountLoginTask(
       val failure = this.steps.finishFailure<Unit>()
       this.account.setLoginState(AccountLoginFailed(failure))
       failure
+    }
+  }
+
+  private fun handleProfileAccountLoginError(
+    uri: URI,
+    result: LSHTTPResponseStatus.Responded.Error
+  ) {
+    this.logger.error(
+      "received http error: {}: {}: {}",
+      uri,
+      result.properties.message,
+      result.properties.status
+    )
+
+    val exception = Exception()
+    when (result.properties.status) {
+      HttpURLConnection.HTTP_UNAUTHORIZED -> {
+        this.steps.currentStepFailed("Invalid credentials!", "invalidCredentials", exception)
+        throw exception
+      }
+
+      else -> {
+        this.steps.addAttributesIfPresent(result.properties.problemReport?.toMap())
+        this.steps.currentStepFailed(
+          "Server error: ${result.properties.status} ${result.properties.message}",
+          "httpError ${result.properties.status} $uri",
+          exception
+        )
+        throw exception
+      }
     }
   }
 
@@ -180,6 +243,10 @@ class ProfileAccountLoginTask(
         this.handlePatronUserProfile()
         this.runDeviceActivation()
         this.account.setLoginState(AccountLoggedIn(this.credentials))
+        notificationTokenHttpCalls.registerFCMTokenForProfileAccount(
+          account = account,
+          areNotificationsEnabled = profile.preferences().areNotificationsEnabled
+        )
         this.steps.finishSuccess(Unit)
       }
 
@@ -250,6 +317,10 @@ class ProfileAccountLoginTask(
         this.handlePatronUserProfile()
         this.runDeviceActivation()
         this.account.setLoginState(AccountLoggedIn(this.credentials))
+        notificationTokenHttpCalls.registerFCMTokenForProfileAccount(
+          account = account,
+          areNotificationsEnabled = profile.preferences().areNotificationsEnabled
+        )
         this.steps.finishSuccess(Unit)
       }
 
@@ -293,7 +364,79 @@ class ProfileAccountLoginTask(
     this.handlePatronUserProfile()
     this.runDeviceActivation()
     this.account.setLoginState(AccountLoggedIn(this.credentials))
+    notificationTokenHttpCalls.registerFCMTokenForProfileAccount(
+      account = account,
+      areNotificationsEnabled = profile.preferences().areNotificationsEnabled
+    )
     return this.steps.finishSuccess(Unit)
+  }
+
+  private fun runBasicTokenLogin(
+    request: BasicToken
+  ): TaskResult<Unit> {
+    val authenticationURI = request.description.authenticationURI
+
+    val httpRequest = this.http.newRequest(authenticationURI)
+      .setAuthorization(
+        LSHTTPAuthorizationBasic.ofUsernamePassword(
+          request.username.value,
+          request.password.value
+        )
+      )
+      .setMethod(Post(ByteArray(0), MIMECompatibility.applicationOctetStream))
+      .build()
+
+    httpRequest.execute().use { response ->
+      when (val status = response.status) {
+        is LSHTTPResponseStatus.Responded.OK -> {
+          this.credentials = AccountAuthenticationCredentials.BasicToken(
+            userName = request.username,
+            password = request.password,
+            authenticationTokenInfo = AccountAuthenticationTokenInfo(
+              accessToken = getAccessTokenFromBasicTokenResponse(
+                node = ObjectMapper().readTree(status.bodyStream)
+              ),
+              authURI = authenticationURI
+            ),
+            adobeCredentials = null,
+            authenticationDescription = request.description.description,
+            annotationsURI = null
+          )
+
+          this.handlePatronUserProfile()
+          this.runDeviceActivation()
+          this.account.setLoginState(AccountLoggedIn(this.credentials))
+          notificationTokenHttpCalls.registerFCMTokenForProfileAccount(
+            account = account,
+            areNotificationsEnabled = profile.preferences().areNotificationsEnabled
+          )
+          return this.steps.finishSuccess(Unit)
+        }
+
+        is LSHTTPResponseStatus.Responded.Error -> {
+          handleProfileAccountLoginError(authenticationURI, status)
+          return this.steps.finishFailure()
+        }
+
+        is LSHTTPResponseStatus.Failed -> {
+          this.steps.currentStepFailed(
+            "Connection failed when fetching authentication token.",
+            "connectionFailed",
+            status.exception
+          )
+          throw status.exception
+        }
+      }
+    }
+  }
+
+  private fun getAccessTokenFromBasicTokenResponse(node: JsonNode): String {
+    return try {
+      node.get("accessToken").asText()
+    } catch (e: Exception) {
+      this.logger.error("Error getting access token from basic token response: ", e)
+      throw e
+    }
   }
 
   private fun handlePatronUserProfile() {
@@ -312,12 +455,21 @@ class ProfileAccountLoginTask(
      */
 
     this.credentials = when (val currentCredentials = this.credentials) {
-      is AccountAuthenticationCredentials.Basic ->
+      is AccountAuthenticationCredentials.Basic -> {
         currentCredentials.copy(annotationsURI = patronProfile.annotationsURI)
-      is AccountAuthenticationCredentials.OAuthWithIntermediary ->
+      }
+
+      is AccountAuthenticationCredentials.BasicToken -> {
         currentCredentials.copy(annotationsURI = patronProfile.annotationsURI)
-      is AccountAuthenticationCredentials.SAML2_0 ->
+      }
+
+      is AccountAuthenticationCredentials.OAuthWithIntermediary -> {
         currentCredentials.copy(annotationsURI = patronProfile.annotationsURI)
+      }
+
+      is AccountAuthenticationCredentials.SAML2_0 -> {
+        currentCredentials.copy(annotationsURI = patronProfile.annotationsURI)
+      }
     }
   }
 
@@ -330,10 +482,16 @@ class ProfileAccountLoginTask(
           (this.account.provider.authenticationAlternatives.any { it == this.request.description })
       }
 
+      is BasicToken -> {
+        (this.account.provider.authentication == this.request.description) ||
+          (this.account.provider.authenticationAlternatives.any { it == this.request.description })
+      }
+
       is OAuthWithIntermediaryInitiate -> {
         (this.account.provider.authentication == this.request.description) ||
           (this.account.provider.authenticationAlternatives.any { it == this.request.description })
       }
+
       is OAuthWithIntermediaryCancel,
       is OAuthWithIntermediaryComplete -> {
         this.account.provider.authentication is OAuthWithIntermediary ||
@@ -344,6 +502,7 @@ class ProfileAccountLoginTask(
         (this.account.provider.authentication == this.request.description) ||
           (this.account.provider.authenticationAlternatives.any { it == this.request.description })
       }
+
       is SAML20Cancel,
       is SAML20Complete -> {
         this.account.provider.authentication is SAML2_0 ||
@@ -446,9 +605,11 @@ class ProfileAccountLoginTask(
       is AdobeDRMExtensions.AdobeDRMLoginNoActivationsException -> {
         this.steps.currentStepFailed(text, "Adobe ACS: drmNoAvailableActivations", ex)
       }
+
       is AdobeDRMExtensions.AdobeDRMLoginConnectorException -> {
         this.steps.currentStepFailed(text, "Adobe ACS: ${ex.errorCode}", ex)
       }
+
       else -> {
         this.steps.currentStepFailed(text, "Adobe ACS: drmUnspecifiedError", ex)
       }
@@ -520,6 +681,7 @@ class ProfileAccountLoginTask(
   private fun updateLoggingInState(step: TaskStep): Boolean {
     return when (this.request) {
       is Basic,
+      is BasicToken,
       is SAML20Initiate,
       is OAuthWithIntermediaryInitiate -> {
         this.account.setLoginState(
@@ -566,42 +728,69 @@ class ProfileAccountLoginTask(
 
   private fun findCurrentDescription(): AccountProviderAuthenticationDescription {
     return when (this.request) {
-      is Basic ->
+      is Basic -> {
         this.request.description
-      is OAuthWithIntermediaryInitiate ->
+      }
+
+      is BasicToken -> {
         this.request.description
-      is OAuthWithIntermediaryCancel ->
+      }
+
+      is OAuthWithIntermediaryInitiate -> {
         this.request.description
-      is OAuthWithIntermediaryComplete ->
+      }
+
+      is OAuthWithIntermediaryCancel -> {
+        this.request.description
+      }
+
+      is OAuthWithIntermediaryComplete -> {
         when (val loginState = this.account.loginState) {
-          is AccountLoggingIn ->
+          is AccountLoggingIn -> {
             loginState.description
-          is AccountLoggingInWaitingForExternalAuthentication ->
+          }
+
+          is AccountLoggingInWaitingForExternalAuthentication -> {
             loginState.description
+          }
+
           AccountNotLoggedIn,
           is AccountLoginFailed,
           is AccountLoggedIn,
           is AccountLoggingOut,
-          is AccountLogoutFailed ->
+          is AccountLogoutFailed -> {
             throw NoCurrentDescription()
+          }
         }
-      is SAML20Initiate ->
+      }
+
+      is SAML20Initiate -> {
         this.request.description
-      is SAML20Cancel ->
+      }
+
+      is SAML20Cancel -> {
         this.request.description
-      is SAML20Complete ->
+      }
+
+      is SAML20Complete -> {
         when (val loginState = this.account.loginState) {
-          is AccountLoggingIn ->
+          is AccountLoggingIn -> {
             loginState.description
-          is AccountLoggingInWaitingForExternalAuthentication ->
+          }
+
+          is AccountLoggingInWaitingForExternalAuthentication -> {
             loginState.description
+          }
+
           AccountNotLoggedIn,
           is AccountLoginFailed,
           is AccountLoggedIn,
           is AccountLoggingOut,
-          is AccountLogoutFailed ->
+          is AccountLogoutFailed -> {
             throw NoCurrentDescription()
+          }
         }
+      }
     }
   }
 }

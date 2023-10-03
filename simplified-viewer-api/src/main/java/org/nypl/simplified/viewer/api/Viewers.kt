@@ -2,6 +2,7 @@ package org.nypl.simplified.viewer.api
 
 import android.app.Activity
 import org.joda.time.LocalDateTime
+import org.librarysimplified.mdc.MDCKeys
 import org.librarysimplified.services.api.Services
 import org.nypl.simplified.analytics.api.AnalyticsEvent
 import org.nypl.simplified.analytics.api.AnalyticsType
@@ -12,6 +13,7 @@ import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.viewer.spi.ViewerPreferences
 import org.nypl.simplified.viewer.spi.ViewerProviderType
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import java.util.ServiceLoader
 
 /**
@@ -44,6 +46,12 @@ object Viewers {
     book: Book,
     format: BookFormat
   ) {
+    MDC.put(MDCKeys.BOOK_DRM, format.drmInformation.kind.name)
+    MDC.put(MDCKeys.BOOK_FORMAT, format.contentType.toString())
+    MDC.put(MDCKeys.BOOK_INTERNAL_ID, book.id.value())
+    MDC.put(MDCKeys.BOOK_TITLE, book.entry.title)
+    MDCKeys.put(MDCKeys.BOOK_PUBLISHER, book.entry.publisher)
+
     this.logger.debug("attempting to open: {} ({})", book.id, book.entry.title)
     val providers =
       ServiceLoader.load(ViewerProviderType::class.java)
@@ -65,27 +73,27 @@ object Viewers {
           "[{}] viewer provider {} supports the book, using it!", index, viewerProvider.name
         )
 
-        /* Publish 'BookOpened' event. */
+        val profile = this.profilesController.profileCurrent()
+        val account = profile.account(book.account)
 
-        this.analyticsService?.let { service ->
-          val profile = this.profilesController.profileCurrent()
-          val account = profile.account(book.account)
-
-          service.publishEvent(
-            AnalyticsEvent.BookOpened(
-              timestamp = LocalDateTime.now(),
-              credentials = account.loginState.credentials,
-              profileUUID = profile.id.uuid,
-              profileDisplayName = profile.displayName,
-              accountProvider = account.provider.id,
-              accountUUID = account.id.uuid,
-              opdsEntry = book.entry,
-              targetURI = book.entry.analytics.getOrNull()
-            )
+        // Publish 'BookOpened' event.
+        this.analyticsService?.publishEvent(
+          AnalyticsEvent.BookOpened(
+            timestamp = LocalDateTime.now(),
+            credentials = account.loginState.credentials,
+            profileUUID = profile.id.uuid,
+            profileDisplayName = profile.displayName,
+            accountProvider = account.provider.id,
+            accountUUID = account.id.uuid,
+            opdsEntry = book.entry,
+            targetURI = book.entry.analytics.getOrNull(),
+            onAccessTokenUpdated = { accessToken ->
+              account.updateBasicTokenCredentials(accessToken)
+            }
           )
-        }
+        )
 
-        viewerProvider.open(activity, preferences, book, format)
+        viewerProvider.open(activity, preferences, book, format, account.provider.id)
         return
       } else {
         this.logger.debug(

@@ -26,6 +26,7 @@ import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import org.nypl.simplified.ui.images.ImageLoaderType
 import org.nypl.simplified.ui.neutrality.NeutralToolbar
+import org.librarysimplified.ui.accounts.R
 
 /**
  * A fragment that shows the set of accounts in the current profile.
@@ -82,7 +83,7 @@ class AccountListFragment : Fragment(R.layout.account_list) {
           account.provider.displayName
         )
       )
-      .setNegativeButton(R.string.cancel) { dialog, _ ->
+      .setNegativeButton(R.string.accountCancel) { dialog, _ ->
         dialog.dismiss()
       }
       .setPositiveButton(R.string.accountsDelete) { dialog, _ ->
@@ -94,7 +95,13 @@ class AccountListFragment : Fragment(R.layout.account_list) {
   }
 
   private fun onAccountClicked(account: AccountType) {
-    this.listener.post(AccountListEvent.AccountSelected(account.id))
+    this.listener.post(
+      AccountListEvent.AccountSelected(
+        accountID = account.id,
+        comingFromDeepLink = false,
+        barcode = null
+      )
+    )
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -129,6 +136,16 @@ class AccountListFragment : Fragment(R.layout.account_list) {
     this.viewModel.accountEvents
       .subscribe(this::onAccountEvent)
       .let { subscriptions.add(it) }
+
+    if (this.parameters.comingFromDeepLink!!) {
+      this.listener.post(
+        AccountListEvent.AccountSelected(
+          accountID = this.parameters.accountID!!,
+          barcode = this.parameters.barcode,
+          comingFromDeepLink = true
+        )
+      )
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -144,6 +161,7 @@ class AccountListFragment : Fragment(R.layout.account_list) {
         this.listener.post(AccountListEvent.AddAccount)
         true
       }
+
       else -> super.onOptionsItemSelected(item)
     }
   }
@@ -169,6 +187,7 @@ class AccountListFragment : Fragment(R.layout.account_list) {
       is AccountEventDeletionFailed -> {
         this.showAccountDeletionFailedDialog(accountEvent)
       }
+
       is AccountEventCreation.AccountEventCreationSucceeded,
       is AccountEventDeletion.AccountEventDeletionSucceeded,
       is AccountEventUpdated -> {

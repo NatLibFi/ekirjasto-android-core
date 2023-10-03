@@ -3,6 +3,7 @@ package org.nypl.simplified.books.book_database
 import android.content.Context
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.base.Preconditions
+import net.jcip.annotations.GuardedBy
 import one.irradia.mime.api.MIMEType
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookFormat
@@ -23,7 +24,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.EnumMap
-import javax.annotation.concurrent.GuardedBy
 
 /**
  * The database entry implementation.
@@ -67,7 +67,7 @@ internal class BookDatabaseEntry internal constructor(
 
   private val formatHandleConstructors:
     EnumMap<BookFormats.BookFormatDefinition, DatabaseBookFormatHandleConstructor> =
-      EnumMap(BookFormats.BookFormatDefinition::class.java)
+    EnumMap(BookFormats.BookFormatDefinition::class.java)
 
   init {
     for (format in BookFormats.BookFormatDefinition.values()) {

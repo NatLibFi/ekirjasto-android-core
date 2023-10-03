@@ -36,7 +36,9 @@ class MockProfile(
         readerPreferences = ReaderPreferences.builder().build(),
         mostRecentAccount = this.accounts.firstKey(),
         playbackRates = hashMapOf(),
-        sleepTimers = hashMapOf()
+        sleepTimers = hashMapOf(),
+        areNotificationsEnabled = false,
+        isManualLCPPassphraseEnabled = false
       ),
       attributes = ProfileAttributes(sortedMapOf())
     )

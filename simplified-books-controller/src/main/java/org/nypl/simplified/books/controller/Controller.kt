@@ -9,6 +9,7 @@ import com.io7m.jfunctional.Some
 import com.io7m.junreachable.UnreachableCodeException
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import org.joda.time.Instant
 import org.librarysimplified.http.api.LSHTTPClientType
@@ -22,6 +23,9 @@ import org.nypl.simplified.accounts.api.AccountLogoutStringResourcesType
 import org.nypl.simplified.accounts.api.AccountProviderType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.accounts.database.api.AccountsDatabaseNonexistentException
+import org.nypl.simplified.deeplinks.controller.api.DeepLinkEvent
+import org.nypl.simplified.deeplinks.controller.api.DeepLinksControllerType
+import org.nypl.simplified.deeplinks.controller.api.ScreenID
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryEvent
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryType
 import org.nypl.simplified.analytics.api.AnalyticsType
@@ -49,6 +53,7 @@ import org.nypl.simplified.futures.FluentFutureExtensions
 import org.nypl.simplified.futures.FluentFutureExtensions.flatMap
 import org.nypl.simplified.futures.FluentFutureExtensions.map
 import org.nypl.simplified.metrics.api.MetricServiceType
+import org.nypl.simplified.notifications.NotificationTokenHTTPCallsType
 import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
 import org.nypl.simplified.opds.core.OPDSFeedParserType
 import org.nypl.simplified.patron.api.PatronUserProfileParsersType
@@ -91,7 +96,13 @@ class Controller private constructor(
   private val profileEvents: Subject<ProfileEvent>,
   private val services: ServiceDirectoryType,
   private val taskExecutor: ListeningExecutorService
-) : BooksControllerType, BooksPreviewControllerType, ProfilesControllerType {
+) : BooksControllerType,
+  BooksPreviewControllerType,
+  ProfilesControllerType,
+  DeepLinksControllerType {
+
+  private val deepLinkEventsObservable: BehaviorSubject<DeepLinkEvent> =
+    BehaviorSubject.create()
 
   private val borrows: ConcurrentHashMap<BookID, BorrowTaskType>
 
@@ -118,6 +129,8 @@ class Controller private constructor(
     this.services.requireService(OPDSFeedParserType::class.java)
   private val lsHttp =
     this.services.requireService(LSHTTPClientType::class.java)
+  private val notificationTokenHttpCalls =
+    this.services.requireService(NotificationTokenHTTPCallsType::class.java)
   private val patronUserProfileParsers =
     this.services.requireService(PatronUserProfileParsersType::class.java)
   private val profileAccountCreationStringResources =
@@ -294,6 +307,20 @@ class Controller private constructor(
     return FluentFuture.from(future)
   }
 
+  override fun deepLinkEvents(): Observable<DeepLinkEvent> {
+    return this.deepLinkEventsObservable
+  }
+
+  override fun publishDeepLinkEvent(accountID: AccountID, screenID: ScreenID, barcode: String?) {
+    this.deepLinkEventsObservable.onNext(
+      DeepLinkEvent.DeepLinkIntercepted(
+        accountID = accountID,
+        screenID = screenID,
+        barcode = barcode
+      )
+    )
+  }
+
   override fun profiles(): SortedMap<ProfileID, ProfileReadableType> {
     return this.castMap(this.profiles.profiles())
   }
@@ -370,6 +397,7 @@ class Controller private constructor(
       http = this.lsHttp,
       profile = profile,
       account = account,
+      notificationTokenHttpCalls = notificationTokenHttpCalls,
       loginStrings = this.accountLoginStringResources,
       patronParsers = this.patronUserProfileParsers,
       request = request
@@ -488,6 +516,7 @@ class Controller private constructor(
         feedLoader = this.feedLoader,
         patronParsers = this.patronUserProfileParsers,
         http = this.lsHttp,
+        notificationTokenHttpCalls = this.notificationTokenHttpCalls,
         logoutStrings = this.accountLogoutStringResources,
         profile = profile
       ).call()

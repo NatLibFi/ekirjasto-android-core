@@ -1,6 +1,7 @@
 package org.nypl.simplified.accounts.source.spi
 
 import android.content.res.Resources
+import org.librarysimplified.accounts.source.spi.R
 import org.nypl.simplified.accounts.api.AccountProviderResolutionStringsType
 
 /**
@@ -25,6 +26,9 @@ class AccountProviderSourceResolutionStrings(
 
   override val resolvingAuthDocumentOAuthMalformed: String
     get() = this.resources.getString(R.string.resolvingAuthDocumentOAuthMalformed)
+
+  override val resolvingAuthDocumentBasicTokenMalformed: String
+    get() = this.resources.getString(R.string.resolvingAuthDocumentBasicTokenMalformed)
 
   override val resolvingAuthDocumentSAML20Malformed: String
     get() = this.resources.getString(R.string.resolvingAuthDocumentSAML20Malformed)

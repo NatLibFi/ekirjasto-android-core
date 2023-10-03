@@ -42,13 +42,17 @@ import org.nypl.simplified.books.book_registry.BookRegistryType
 import org.nypl.simplified.books.book_registry.BookStatus
 import org.nypl.simplified.books.controller.ProfileAccountLogoutTask
 import org.nypl.simplified.feeds.api.FeedLoaderType
+import org.nypl.simplified.notifications.NotificationTokenHTTPCalls
+import org.nypl.simplified.notifications.NotificationTokenHTTPCallsType
 import org.nypl.simplified.opds.core.OPDSAcquisition
 import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
 import org.nypl.simplified.opds.core.OPDSAvailabilityOpenAccess
 import org.nypl.simplified.patron.PatronUserProfileParsers
 import org.nypl.simplified.patron.api.PatronUserProfileParsersType
 import org.nypl.simplified.profiles.api.ProfileID
+import org.nypl.simplified.profiles.api.ProfilePreferences
 import org.nypl.simplified.profiles.api.ProfileReadableType
+import org.nypl.simplified.tests.books.controller.FakeAccounts.fakeAccountProvider
 import org.nypl.simplified.tests.mocking.MockAccountLogoutStringResources
 import org.nypl.simplified.tests.mocking.MockBookDatabase
 import org.nypl.simplified.tests.mocking.MockBookDatabaseEntry
@@ -74,6 +78,7 @@ abstract class ProfileAccountLogoutTaskContract {
   private lateinit var profile: ProfileReadableType
   private lateinit var profileID: ProfileID
   private lateinit var server: MockWebServer
+  private lateinit var tokenHttp: NotificationTokenHTTPCallsType
 
   private var loginState: AccountLoginState? = null
 
@@ -92,6 +97,11 @@ abstract class ProfileAccountLogoutTaskContract {
             timeout = Pair(5L, TimeUnit.SECONDS)
           )
         )
+
+
+    this.tokenHttp =
+      Mockito.mock(NotificationTokenHTTPCalls::class.java)
+
     this.feedLoader =
       MockCrashingFeedLoader()
 
@@ -143,6 +153,10 @@ abstract class ProfileAccountLogoutTaskContract {
 
     this.server = MockWebServer()
     this.server.start()
+
+    val preferences = Mockito.mock(ProfilePreferences::class.java)
+    Mockito.`when`(this.profile.preferences()).thenReturn(preferences)
+    Mockito.`when`(preferences.areNotificationsEnabled).thenReturn(true)
   }
 
   @AfterEach
@@ -157,7 +171,7 @@ abstract class ProfileAccountLogoutTaskContract {
   @Test
   fun testLogoutNotRequired() {
     val provider =
-      Mockito.mock(AccountProviderType::class.java)
+      fakeAccountProvider()
 
     Mockito.`when`(provider.authentication)
       .thenReturn(null)
@@ -190,7 +204,8 @@ abstract class ProfileAccountLogoutTaskContract {
         http = this.http,
         patronParsers = PatronUserProfileParsers(),
         profile = this.profile,
-        logoutStrings = this.logoutStrings
+        logoutStrings = this.logoutStrings,
+        notificationTokenHttpCalls = tokenHttp
       )
 
     val result = task.call()
@@ -210,12 +225,13 @@ abstract class ProfileAccountLogoutTaskContract {
   @Test
   fun testLogoutNoDRM() {
     val provider =
-      Mockito.mock(AccountProviderType::class.java)
+      fakeAccountProvider()
 
     Mockito.`when`(provider.authentication)
       .thenReturn(null)
     Mockito.`when`(this.profile.id)
       .thenReturn(this.profileID)
+
     Mockito.`when`(this.profile.accounts())
       .thenReturn(sortedMapOf(Pair(this.accountID, this.account)))
     Mockito.`when`(this.account.id)
@@ -254,7 +270,8 @@ abstract class ProfileAccountLogoutTaskContract {
         http = this.http,
         patronParsers = PatronUserProfileParsers(),
         profile = this.profile,
-        logoutStrings = this.logoutStrings
+        logoutStrings = this.logoutStrings,
+        notificationTokenHttpCalls = tokenHttp
       )
 
     val result = task.call()
@@ -270,6 +287,8 @@ abstract class ProfileAccountLogoutTaskContract {
     Assertions.assertTrue(
       this.bookRegistry.books().values.all { it.status is BookStatus.Loaned.LoanedNotDownloaded }
     )
+
+    Mockito.verify(tokenHttp, Mockito.times(1)).deleteFCMTokenForProfileAccount(account, true)
   }
 
   /**
@@ -280,7 +299,7 @@ abstract class ProfileAccountLogoutTaskContract {
   @Test
   fun testLogoutDRMAdobeNoLongerSupported() {
     val provider =
-      Mockito.mock(AccountProviderType::class.java)
+      fakeAccountProvider()
 
     Mockito.`when`(provider.authentication)
       .thenReturn(null)
@@ -332,15 +351,13 @@ abstract class ProfileAccountLogoutTaskContract {
         http = this.http,
         patronParsers = PatronUserProfileParsers(),
         profile = this.profile,
-        logoutStrings = this.logoutStrings
+        logoutStrings = this.logoutStrings,
+        notificationTokenHttpCalls = tokenHttp
       )
 
     val result = task.call()
     this.logger.debug("result: {}", result)
     result.steps.forEach { step -> this.logger.debug("step {}: {}", step, step.resolution) }
-
-    val state =
-      this.account.loginState as AccountNotLoggedIn
 
     Assertions.assertTrue(
       this.bookDatabase.entries.values.all(MockBookDatabaseEntry::deleted)
@@ -358,7 +375,7 @@ abstract class ProfileAccountLogoutTaskContract {
   @Test
   fun testLogoutDRMAdobeError() {
     val provider =
-      Mockito.mock(AccountProviderType::class.java)
+      fakeAccountProvider()
 
     Mockito.`when`(provider.authentication)
       .thenReturn(null)
@@ -433,7 +450,8 @@ abstract class ProfileAccountLogoutTaskContract {
         http = this.http,
         patronParsers = PatronUserProfileParsers(),
         profile = this.profile,
-        logoutStrings = this.logoutStrings
+        logoutStrings = this.logoutStrings,
+        notificationTokenHttpCalls = tokenHttp
       )
 
     val result = task.call()
@@ -456,7 +474,7 @@ abstract class ProfileAccountLogoutTaskContract {
   @Test
   fun testLogoutDRMAdobe() {
     val provider =
-      Mockito.mock(AccountProviderType::class.java)
+      fakeAccountProvider()
 
     Mockito.`when`(provider.patronSettingsURI)
       .thenReturn(this.server.url("patron").toUri())
@@ -550,7 +568,8 @@ abstract class ProfileAccountLogoutTaskContract {
         feedLoader = this.feedLoader,
         profile = this.profile,
         patronParsers = PatronUserProfileParsers(),
-        logoutStrings = this.logoutStrings
+        logoutStrings = this.logoutStrings,
+        notificationTokenHttpCalls = tokenHttp
       )
 
     val result = task.call()

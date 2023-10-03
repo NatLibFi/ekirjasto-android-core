@@ -51,6 +51,7 @@ import static org.nypl.simplified.opds.core.OPDSFeedConstants.RELATED_REL_TEXT;
 import static org.nypl.simplified.opds.core.OPDSFeedConstants.REVOKE_URI_TEXT;
 import static org.nypl.simplified.opds.core.OPDSFeedConstants.SAMPLE_TEXT;
 import static org.nypl.simplified.opds.core.OPDSFeedConstants.THUMBNAIL_URI_TEXT;
+import static org.nypl.simplified.opds.core.OPDSFeedConstants.TIME_TRACKING_URI_TEXT;
 
 /**
  * The default implementation of the {@link OPDSAcquisitionFeedEntryParserType}
@@ -67,15 +68,17 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
 
   private void findAcquisitionAuthors(
     final Element element,
-    final OPDSAcquisitionFeedEntryBuilderType eb)
-    throws OPDSParseException {
-
+    final OPDSAcquisitionFeedEntryBuilderType eb) {
     final List<Element> e_authors =
       OPDSXML.getChildElementsWithName(element, ATOM_URI, "author");
     for (final Element ea : e_authors) {
-      final String name =
-        OPDSXML.getFirstChildElementTextWithName(Objects.requireNonNull(ea), ATOM_URI, "name");
-      eb.addAuthor(name);
+      final OptionType<Element> name =
+        OPDSXML.getFirstChildElementWithNameOptional(
+          Objects.requireNonNull(ea), ATOM_URI, "name");
+
+      if (name instanceof Some) {
+        eb.addAuthor(((Some<Element>) name).get().getTextContent());
+      }
     }
   }
 
@@ -186,12 +189,15 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
           continue;
         }
 
+        if (tryConsumeLinkTimeTracking(source, entry_builder, e_link, rel_text)) {
+          continue;
+        }
+
         tryConsumeAcquisitions(source, entry_builder, revoke, e_link, rel_text);
       }
     }
 
     parseCategories(element, entry_builder);
-
     findAcquisitionAuthors(element, entry_builder);
     findNarrators(element, entry_builder);
     entry_builder.setPublisherOption(findPublisher(element));
@@ -412,6 +418,32 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
           entry_builder.addParseError(
             this.invalidURI(source, hrefAttributeOfLinkRel(rel_text.equals(SAMPLE_TEXT) ?
               SAMPLE_TEXT : PREVIEW_TEXT), e));
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check if the given link refers to the time tracking uri. If it is, add it to the builder and
+   * return {@code true}.
+   */
+
+  private boolean tryConsumeLinkTimeTracking(
+    final URI source,
+    final OPDSAcquisitionFeedEntryBuilderType entry_builder,
+    final Element e_link,
+    final String rel_text) {
+
+    if (rel_text.equals(TIME_TRACKING_URI_TEXT)) {
+      if (e_link.hasAttribute("href")) {
+        try {
+          final URI u = scrubURI(source, e_link.getAttribute("href"));
+          entry_builder.setTimeTrackingUriOption(Option.some(u));
+        } catch (URISyntaxException e) {
+          entry_builder.addParseError(
+            this.invalidURI(source, hrefAttributeOfLinkRel(TIME_TRACKING_URI_TEXT), e));
         }
         return true;
       }

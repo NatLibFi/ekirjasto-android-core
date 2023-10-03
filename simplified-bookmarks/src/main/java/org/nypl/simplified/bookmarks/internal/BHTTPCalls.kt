@@ -3,6 +3,7 @@ package org.nypl.simplified.bookmarks.internal
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
+import one.irradia.mime.api.MIMECompatibility
 import one.irradia.mime.api.MIMEType
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Delete
@@ -10,7 +11,10 @@ import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Post
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Put
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP
+import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.addCredentialsToProperties
+import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.getAccessToken
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
+import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.bookmarks.api.BookmarkAnnotation
 import org.nypl.simplified.bookmarks.api.BookmarkAnnotationsJSON
 import org.nypl.simplified.bookmarks.api.BookmarkHTTPCallsType
@@ -33,6 +37,7 @@ class BHTTPCalls(
   private val logger = LoggerFactory.getLogger(BHTTPCalls::class.java)
 
   override fun bookmarksGet(
+    account: AccountType,
     annotationsURI: URI,
     credentials: AccountAuthenticationCredentials
   ): List<BookmarkAnnotation> {
@@ -41,42 +46,51 @@ class BHTTPCalls(
     val request =
       this.http.newRequest(annotationsURI)
         .setAuthorization(auth)
-        .build()
-
-    return request.execute().use { response ->
-      when (val status = response.status) {
-        is LSHTTPResponseStatus.Responded.OK ->
-          this.deserializeBookmarksFromStream(status.bodyStream ?: this.emptyStream())
-        is LSHTTPResponseStatus.Responded.Error ->
-          this.logAndFail(annotationsURI, status)
-        is LSHTTPResponseStatus.Failed ->
-          throw status.exception
-      }
-    }
-  }
-
-  override fun bookmarkDelete(
-    bookmarkURI: URI,
-    credentials: AccountAuthenticationCredentials
-  ) {
-    val auth =
-      AccountAuthenticatedHTTP.createAuthorization(credentials)
-    val request =
-      this.http.newRequest(bookmarkURI)
-        .setAuthorization(auth)
-        .setMethod(Delete)
+        .addCredentialsToProperties(credentials)
         .build()
 
     return request.execute().use { response ->
       when (val status = response.status) {
         is LSHTTPResponseStatus.Responded.OK -> {
+          account.updateBasicTokenCredentials(status.getAccessToken())
           this.deserializeBookmarksFromStream(status.bodyStream ?: this.emptyStream())
-          Unit
         }
-        is LSHTTPResponseStatus.Responded.Error ->
-          this.logAndFail(bookmarkURI, status)
-        is LSHTTPResponseStatus.Failed ->
+        is LSHTTPResponseStatus.Responded.Error -> {
+          this.logAndFail(annotationsURI, status)
+        }
+        is LSHTTPResponseStatus.Failed -> {
           throw status.exception
+        }
+      }
+    }
+  }
+
+  override fun bookmarkDelete(
+    account: AccountType,
+    bookmarkURI: URI,
+    credentials: AccountAuthenticationCredentials
+  ): Boolean {
+    val auth =
+      AccountAuthenticatedHTTP.createAuthorization(credentials)
+    val request =
+      this.http.newRequest(bookmarkURI)
+        .setAuthorization(auth)
+        .addCredentialsToProperties(credentials)
+        .setMethod(Delete(ByteArray(0), MIMECompatibility.applicationOctetStream))
+        .build()
+
+    return request.execute().use { response ->
+      when (val status = response.status) {
+        is LSHTTPResponseStatus.Responded.OK -> {
+          account.updateBasicTokenCredentials(status.getAccessToken())
+          true
+        }
+        is LSHTTPResponseStatus.Responded.Error -> {
+          this.logAndFail(bookmarkURI, status)
+        }
+        is LSHTTPResponseStatus.Failed -> {
+          throw status.exception
+        }
       }
     }
   }
@@ -84,10 +98,11 @@ class BHTTPCalls(
   private fun emptyStream() = ByteArrayInputStream(ByteArray(0))
 
   override fun bookmarkAdd(
+    account: AccountType,
     annotationsURI: URI,
     credentials: AccountAuthenticationCredentials,
     bookmark: BookmarkAnnotation
-  ) {
+  ): URI? {
     val data =
       BookmarkAnnotationsJSON.serializeBookmarkAnnotationToBytes(this.objectMapper, bookmark)
     val auth =
@@ -97,22 +112,35 @@ class BHTTPCalls(
     val request =
       this.http.newRequest(annotationsURI)
         .setAuthorization(auth)
+        .addCredentialsToProperties(credentials)
         .setMethod(post)
         .build()
 
     return request.execute().use { response ->
       when (val status = response.status) {
-        is LSHTTPResponseStatus.Responded.OK ->
-          Unit
-        is LSHTTPResponseStatus.Responded.Error ->
+        is LSHTTPResponseStatus.Responded.OK -> {
+          account.updateBasicTokenCredentials(status.getAccessToken())
+
+          val receivedBookmark = objectMapper.readTree(status.bodyStream ?: this.emptyStream())
+          try {
+            URI.create(receivedBookmark.get("id").asText())
+          } catch (exception: Exception) {
+            this.logger.error(exception.message)
+            null
+          }
+        }
+        is LSHTTPResponseStatus.Responded.Error -> {
           this.logAndFail(annotationsURI, status)
-        is LSHTTPResponseStatus.Failed ->
+        }
+        is LSHTTPResponseStatus.Failed -> {
           throw status.exception
+        }
       }
     }
   }
 
   override fun syncingEnable(
+    account: AccountType,
     settingsURI: URI,
     credentials: AccountAuthenticationCredentials,
     enabled: Boolean
@@ -126,15 +154,18 @@ class BHTTPCalls(
     val request =
       this.http.newRequest(settingsURI)
         .setAuthorization(auth)
+        .addCredentialsToProperties(credentials)
         .setMethod(put)
         .build()
 
     return request.execute().use { response ->
       when (val status = response.status) {
-        is LSHTTPResponseStatus.Responded.OK ->
-          Unit
-        is LSHTTPResponseStatus.Responded.Error ->
+        is LSHTTPResponseStatus.Responded.OK -> {
+          account.updateBasicTokenCredentials(status.getAccessToken())
+        }
+        is LSHTTPResponseStatus.Responded.Error -> {
           this.logAndFail(settingsURI, status)
+        }
         is LSHTTPResponseStatus.Failed ->
           throw status.exception
       }
@@ -142,6 +173,7 @@ class BHTTPCalls(
   }
 
   override fun syncingIsEnabled(
+    account: AccountType,
     settingsURI: URI,
     credentials: AccountAuthenticationCredentials
   ): Boolean {
@@ -150,14 +182,18 @@ class BHTTPCalls(
     val request =
       this.http.newRequest(settingsURI)
         .setAuthorization(auth)
+        .addCredentialsToProperties(credentials)
         .build()
 
     return request.execute().use { response ->
       when (val status = response.status) {
-        is LSHTTPResponseStatus.Responded.OK ->
+        is LSHTTPResponseStatus.Responded.OK -> {
+          account.updateBasicTokenCredentials(status.getAccessToken())
           this.deserializeSyncingEnabledFromStream(status.bodyStream ?: emptyStream())
-        is LSHTTPResponseStatus.Responded.Error ->
+        }
+        is LSHTTPResponseStatus.Responded.Error -> {
           this.logAndFail(settingsURI, status)
+        }
         is LSHTTPResponseStatus.Failed ->
           throw status.exception
       }

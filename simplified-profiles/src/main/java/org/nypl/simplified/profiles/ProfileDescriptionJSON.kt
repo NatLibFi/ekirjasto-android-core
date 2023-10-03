@@ -204,6 +204,12 @@ object ProfileDescriptionJSON {
     val sleepTimers =
       deserializeSleepTimers(objectMapper, objectNode)
 
+    val isManualLCPPassphraseEnabled =
+      JSONParserUtilities.getBooleanDefault(objectNode, "isManualLCPPassphraseEnabled", false)
+
+    val areNotificationsEnabled =
+      JSONParserUtilities.getBooleanDefault(objectNode, "areNotificationsEnabled", false)
+
     val mostRecentAccount =
       JSONParserUtilities.getStringOrNull(objectNode, "mostRecentAccount")
         ?.let { AccountID(UUID.fromString(it)) }
@@ -217,7 +223,9 @@ object ProfileDescriptionJSON {
       hasSeenLibrarySelectionScreen = hasSeenLibrarySelectionScreen,
       showDebugSettings = showDebugSettings,
       playbackRates = playbackRates,
-      sleepTimers = sleepTimers
+      sleepTimers = sleepTimers,
+      areNotificationsEnabled = areNotificationsEnabled,
+      isManualLCPPassphraseEnabled = isManualLCPPassphraseEnabled
     )
   }
 
@@ -250,6 +258,12 @@ object ProfileDescriptionJSON {
     val sleepTimers =
       deserializeSleepTimers(objectMapper, objectNode)
 
+    val isManualLCPPassphraseEnabled =
+      JSONParserUtilities.getBooleanDefault(objectNode, "isManualLCPPassphraseEnabled", false)
+
+    val areNotificationsEnabled =
+      JSONParserUtilities.getBooleanDefault(objectNode, "areNotificationsEnabled", false)
+
     val mostRecentAccount =
       JSONParserUtilities.getStringOrNull(objectNode, "mostRecentAccount")
         ?.let { AccountID(UUID.fromString(it)) }
@@ -262,7 +276,9 @@ object ProfileDescriptionJSON {
       mostRecentAccount = mostRecentAccount,
       hasSeenLibrarySelectionScreen = true,
       playbackRates = playbackRates,
-      sleepTimers = sleepTimers
+      sleepTimers = sleepTimers,
+      areNotificationsEnabled = areNotificationsEnabled,
+      isManualLCPPassphraseEnabled = isManualLCPPassphraseEnabled
     )
   }
 
@@ -319,6 +335,12 @@ object ProfileDescriptionJSON {
     val readerPrefs =
       deserializeReaderPreferences(objectMapper, preferencesNode)
 
+    val isManualLCPPassphraseEnabled =
+      JSONParserUtilities.getBooleanDefault(preferencesNode, "isManualLCPPassphraseEnabled", false)
+
+    val areNotificationsEnabled =
+      JSONParserUtilities.getBooleanDefault(preferencesNode, "areNotificationsEnabled", false)
+
     val preferences =
       ProfilePreferences(
         dateOfBirth = this.someOrNull(dateOfBirth),
@@ -327,7 +349,9 @@ object ProfileDescriptionJSON {
         mostRecentAccount = mostRecentAccountFallback,
         hasSeenLibrarySelectionScreen = true,
         playbackRates = playbackRates,
-        sleepTimers = sleepTimers
+        sleepTimers = sleepTimers,
+        areNotificationsEnabled = areNotificationsEnabled,
+        isManualLCPPassphraseEnabled = isManualLCPPassphraseEnabled
       )
 
     val attributeMap = mutableMapOf<String, String>()
@@ -369,7 +393,6 @@ object ProfileDescriptionJSON {
     objectMapper: ObjectMapper,
     node: ObjectNode?
   ): Map<String, PlayerPlaybackRate> {
-
     val str = JSONParserUtilities.getObjectOrNull(
       node, "playbackRates"
     ) ?: return hashMapOf()
@@ -390,7 +413,6 @@ object ProfileDescriptionJSON {
     objectMapper: ObjectMapper,
     node: ObjectNode?
   ): Map<String, Long?> {
-
     val str = JSONParserUtilities.getObjectOrNull(
       node, "sleepTimers"
     ) ?: return hashMapOf()
@@ -474,6 +496,8 @@ object ProfileDescriptionJSON {
   ): ObjectNode {
     val output = objectMapper.createObjectNode()
     output.put("showTestingLibraries", preferences.showTestingLibraries)
+    output.put("areNotificationsEnabled", preferences.areNotificationsEnabled)
+    output.put("isManualLCPPassphraseEnabled", preferences.isManualLCPPassphraseEnabled)
     output.put("hasSeenLibrarySelectionScreen", preferences.hasSeenLibrarySelectionScreen)
     output.put("showDebugSettings", preferences.showDebugSettings)
     output.put("mostRecentAccount", preferences.mostRecentAccount.uuid.toString())
@@ -508,7 +532,6 @@ object ProfileDescriptionJSON {
     objectMapper: ObjectMapper,
     playbackRates: Map<String, PlayerPlaybackRate>
   ): ObjectNode {
-
     val objectNode = objectMapper.createObjectNode()
     playbackRates.keys.forEach { key ->
       objectNode.put(key, playbackRates[key]?.name)

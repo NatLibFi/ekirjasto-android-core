@@ -5,7 +5,6 @@ import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.drm.core.AdobeAdeptExecutorType
 import org.nypl.drm.core.AxisNowServiceType
-import org.nypl.simplified.accounts.api.AccountReadableType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookID
@@ -31,6 +30,7 @@ import org.nypl.simplified.content.api.ContentResolverType
 import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
 import org.nypl.simplified.opds.core.OPDSAcquisitionPath
 import org.nypl.simplified.opds.core.OPDSAcquisitionPathElement
+import org.nypl.simplified.opds.core.getOrNull
 import org.nypl.simplified.profiles.api.ProfileID
 import org.nypl.simplified.profiles.api.ProfileReadableType
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
@@ -193,6 +193,9 @@ class BorrowTask private constructor(
         contentResolver = this.requirements.contentResolver,
         currentOPDSAcquisitionPathElement = path.elements.first(),
         httpClient = this.requirements.httpClient,
+        isManualLCPPassphraseEnabled =
+        this.requirements.profiles.currentProfile().getOrNull()
+          ?.preferences()?.isManualLCPPassphraseEnabled ?: false,
         logger = this.logger,
         opdsAcquisitionPath = path,
         samlDownloadContext = samlDownloadContext,
@@ -396,13 +399,14 @@ class BorrowTask private constructor(
   }
 
   private class BorrowContext(
-    override val account: AccountReadableType,
+    override val account: AccountType,
     override val audioBookManifestStrategies: AudioBookManifestStrategiesType,
     override val clock: () -> Instant,
     override val contentResolver: ContentResolverType,
     override val bundledContent: BundledContentResolverType,
     override val bookDatabaseEntry: BookDatabaseEntryType,
     override val httpClient: LSHTTPClientType,
+    override val isManualLCPPassphraseEnabled: Boolean,
     override val taskRecorder: TaskRecorderType,
     override val opdsAcquisitionPath: OPDSAcquisitionPath,
     override val samlDownloadContext: SAMLDownloadContext? = null,

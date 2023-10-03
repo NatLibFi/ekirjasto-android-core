@@ -12,6 +12,7 @@ import androidx.appcompat.widget.ActionMenuView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.TextViewCompat
+import org.librarysimplified.ui.neutrality.R
 import org.nypl.simplified.ui.neutrality.NeutralToolbar.IconKind.ICON_IS_LOGO
 import org.nypl.simplified.ui.neutrality.NeutralToolbar.IconKind.ICON_IS_NAVIGATION
 
@@ -28,7 +29,6 @@ class NeutralToolbar(
   attrs: AttributeSet?,
   defStyleAttr: Int
 ) : Toolbar(context, attrs, defStyleAttr) {
-
 
   companion object {
     const val neutralToolbarName = "NeutralToolbar"

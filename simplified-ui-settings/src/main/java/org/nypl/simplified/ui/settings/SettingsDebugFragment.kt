@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import org.librarysimplified.services.api.Services
+import org.librarysimplified.ui.settings.R
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryDebugging
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryType
 import org.nypl.simplified.adobe.extensions.AdobeDRMExtensions
@@ -64,6 +65,8 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
   private lateinit var syncAccountsButton: Button
   private lateinit var enableOpenEBooksQA: Button
   private lateinit var toolbar: NeutralToolbar
+  private lateinit var areNotificationsEnabled: SwitchCompat
+  private lateinit var isManualLCPPassphraseEnabled: SwitchCompat
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -94,6 +97,10 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
       view.findViewById(R.id.settingsVersionDevFailNextBootSwitch)
     this.hasSeenLibrarySelection =
       view.findViewById(R.id.settingsVersionDevSeenLibrarySelectionScreen)
+    this.isManualLCPPassphraseEnabled =
+      view.findViewById(R.id.settingsVersionDevIsManualLCPPassphraseEnabled)
+    this.areNotificationsEnabled =
+      view.findViewById(R.id.settingsVersionDevAreNotificationsEnabled)
     this.cardCreatorFakeLocation =
       view.findViewById(R.id.settingsVersionDevCardCreatorLocationSwitch)
     this.showOnlySupportedBooks =
@@ -132,6 +139,10 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
       this.viewModel.hasSeenLibrarySelection
     this.cardCreatorFakeLocation.isChecked =
       this.viewModel.cardCreatorFakeLocation
+    this.isManualLCPPassphraseEnabled.isChecked =
+      this.viewModel.isManualLCPPassphraseEnabled
+    this.areNotificationsEnabled.isChecked =
+      this.viewModel.areNotificationsEnabled
     this.showOnlySupportedBooks.isChecked =
       this.viewModel.showOnlySupportedBooks
     this.crashlyticsId.text =
@@ -198,8 +209,8 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
     }
 
     /*
-    * Update the current profile's preferences whenever the testing switch is changed.
-    */
+     * Update the current profile's preferences whenever the testing switch is changed.
+     */
 
     this.showTesting.setOnCheckedChangeListener { _, checked ->
       this.viewModel.showTestingLibraries = checked
@@ -231,6 +242,12 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
 
     this.showOnlySupportedBooks.setOnCheckedChangeListener { _, isChecked ->
       this.viewModel.showOnlySupportedBooks = isChecked
+    }
+    this.isManualLCPPassphraseEnabled.setOnCheckedChangeListener { _, isChecked ->
+      this.viewModel.isManualLCPPassphraseEnabled = isChecked
+    }
+    this.areNotificationsEnabled.setOnCheckedChangeListener { _, isChecked ->
+      this.viewModel.areNotificationsEnabled = isChecked
     }
 
     /*

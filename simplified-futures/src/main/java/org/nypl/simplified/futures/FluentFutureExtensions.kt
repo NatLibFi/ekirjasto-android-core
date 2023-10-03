@@ -33,6 +33,15 @@ object FluentFutureExtensions {
   }
 
   /**
+   * Apply a function `f` to the value of the current future. This is the same as #map except
+   * that the passed in value might be null.
+   */
+
+  fun <A, B> FluentFuture<A?>.mapNullable(f: (A?) -> B): FluentFuture<B> {
+    return this.transform(Function<A?, B> { x -> f.invoke(x) }, MoreExecutors.directExecutor())
+  }
+
+  /**
    * Apply a function `f` to the value of the current future, yielding a new future.
    */
 
@@ -48,7 +57,7 @@ object FluentFutureExtensions {
     clazz: Class<E>,
     f: (E) -> A
   ): FluentFuture<A> {
-    return this.catching(clazz, Function<E, A> { x -> f.invoke(x!!) }, MoreExecutors.directExecutor())
+    return this.catching(clazz, Function<E, A> { x -> f.invoke(x) }, MoreExecutors.directExecutor())
   }
 
   /**
