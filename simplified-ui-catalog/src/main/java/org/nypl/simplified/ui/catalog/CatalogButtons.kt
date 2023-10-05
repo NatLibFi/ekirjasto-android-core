@@ -2,6 +2,7 @@ package org.nypl.simplified.ui.catalog
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -30,7 +31,8 @@ class CatalogButtons(
 ) {
 
   private fun colorStateListForButtonItems(): ColorStateList? {
-    return ContextCompat.getColorStateList(context, R.color.simplified_button_text)
+    return ColorStateList.valueOf(Color.parseColor("#1E1E1E"))
+    //return ContextCompat.getColorStateList(context, R.color.simplified_button_text)
   }
 
   @UiThread

@@ -11,7 +11,8 @@
   <color name="colorEkirjastoBlack">#1E1E1E</color>
   <color name="colorEkirjastoGrey">#9A9A9A</color>
   <color name="colorEkirjastoLightGrey">#D8D8D8</color>
+  <color name="colorEkirjastoWhite">#FFFFFF</color>
 <!--  UI Elements mapping-->
-  <color name="colorEkirjastoButtonBackground">@color/colorEkirjastoLightestGreen</color>
-  <color name="colorEkirjastoButtonText">@color/colorEkirjastoBlack</color>
+  <color name="colorEkirjastSeekBarThumb">@color/colorEkirjastoBlack</color>
+  <color name="colorEkirjastoText">@color/colorEkirjastoBlack</color>
 </resources>
