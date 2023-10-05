@@ -31,3 +31,5 @@ simplified-tests-sandbox/src/main/*
 cardcreator.conf
 overdrive.json
 feedbooks.conf
+/simplified-files/configurations.txt
+/ktlint.jar
