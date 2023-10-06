@@ -60,33 +60,33 @@ fun calculateVersionCode(): Int {
  * A task that writes the required assets to a file in order to be used later by ZipCheck.
  */
 
-fun createRequiredAssetsFile(file: File): Task {
-    return task("CheckReleaseRequiredAssetsCreate") {
-        doLast {
-            file.writer().use {
-                palaceAssetsRequired.store(it, "")
-            }
-        }
-    }
-}
+//fun createRequiredAssetsFile(file: File): Task {
+//    return task("CheckReleaseRequiredAssetsCreate") {
+//        doLast {
+//            file.writer().use {
+//                palaceAssetsRequired.store(it, "")
+//            }
+//        }
+//    }
+//}
 
 /*
  * A task that executes ZipCheck against a given APK file and a list of required assets.
  */
 
-fun createRequiredAssetsTask(
-    checkFile: File,
-    assetList: File,
-): Task {
-    return task("CheckReleaseRequiredAssets_${checkFile.name}", Exec::class) {
-        commandLine = arrayListOf(
-            "java",
-            "$rootDir/org.thepalaceproject.android.platform/ZipCheck.java",
-            "$checkFile",
-            "$assetList",
-        )
-    }
-}
+//fun createRequiredAssetsTask(
+//    checkFile: File,
+//    assetList: File,
+//): Task {
+//    return task("CheckReleaseRequiredAssets_${checkFile.name}", Exec::class) {
+//        commandLine = arrayListOf(
+//            "java",
+//            "$rootDir/org.thepalaceproject.android.platform/ZipCheck.java",
+//            "$checkFile",
+//            "$assetList",
+//        )
+//    }
+//}
 
 /*
  * The signing information that is required to exist for release builds.
@@ -155,14 +155,14 @@ android {
      * Ensure that release builds are signed.
      */
 
-//    signingConfigs {
-//        create("release") {
+    signingConfigs {
+        create("release") {
 //            keyAlias = palaceKeyAlias
 //            keyPassword = palaceKeyPassword
 //            storeFile = palaceKeyStore
 //            storePassword = palaceStorePassword
-//        }
-//    }
+        }
+    }
 
     /*
      * Ensure that the right NDK ABIs are declared.
@@ -190,31 +190,31 @@ android {
      * Release builds need extra checking.
      */
 
-    applicationVariants.all {
-        if (this.buildType.name == "release") {
-            val preBuildTask = tasks.findByName("preReleaseBuild")
-            preBuildTask?.dependsOn?.add(requiredSigningTask)
-
-            /*
-             * For each APK output, create a task that checks that the APK contains the
-             * required assets.
-             */
-
-            this.outputs.forEach {
-                val outputFile = it.outputFile
-                val assetFile = File("${project.buildDir}/required-assets.conf")
-                val fileTask =
-                    createRequiredAssetsFile(assetFile)
-                val checkTask =
-                    createRequiredAssetsTask(checkFile = outputFile, assetList = assetFile)
-
-                checkTask.dependsOn.add(fileTask)
-                this.assembleProvider.configure {
-                    finalizedBy(checkTask)
-                }
-            }
-        }
-    }
+//    applicationVariants.all {
+//        if (this.buildType.name == "release") {
+//            val preBuildTask = tasks.findByName("preReleaseBuild")
+//            preBuildTask?.dependsOn?.add(requiredSigningTask)
+//
+//            /*
+//             * For each APK output, create a task that checks that the APK contains the
+//             * required assets.
+//             */
+//
+//            this.outputs.forEach {
+//                val outputFile = it.outputFile
+//                val assetFile = File("${project.buildDir}/required-assets.conf")
+//                val fileTask =
+//                    createRequiredAssetsFile(assetFile)
+//                val checkTask =
+//                    createRequiredAssetsTask(checkFile = outputFile, assetList = assetFile)
+//
+//                checkTask.dependsOn.add(fileTask)
+//                this.assembleProvider.configure {
+//                    finalizedBy(checkTask)
+//                }
+//            }
+//        }
+//    }
 }
 
 /*
@@ -226,15 +226,15 @@ afterEvaluate {
         ?.dependsOn?.add(tasks.findByName("bundle"))
 }
 
-//repositories {
-//    ivy {
-//        url("https://liblcp.dita.digital")
-//        patternLayout{
-//            artifact("/[organisation]/[module]/android/aar/test/[revision].[ext]")
-//        }
-//        metadataSources { artifact()}
-//    }
-//}
+repositories {
+    ivy {
+        url("https://liblcp.dita.digital")
+        patternLayout{
+            artifact("/[organisation]/[module]/android/aar/test/[revision].[ext]")
+        }
+        metadataSources { artifact()}
+    }
+}
 
 dependencies {
     implementation(project(":simplified-main"))
@@ -245,6 +245,7 @@ dependencies {
      *  ekirjasto added dependencies
      */
 
-//    implementation("readium:liblcp:1.0.0@aar")
-//    implementation(libs.nypl.theme)
+
+    implementation("readium:liblcp:1.0.0@aar")
+    implementation(libs.nypl.theme)
 }

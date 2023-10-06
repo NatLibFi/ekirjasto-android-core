@@ -80,4 +80,5 @@ dependencies {
     implementation(libs.rxjava)
     implementation(libs.slf4j)
     implementation(libs.transifex.sdk)
+    implementation(libs.google.material)
 }

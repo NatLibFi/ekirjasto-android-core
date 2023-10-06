@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import org.librarysimplified.ui.tutorial.R
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
-import org.nypl.simplified.ui.tutorial.R
+
 
 class LoginFragment : Fragment(R.layout.login_fragment) {
   private val listener: FragmentListenerType<LoginEvent> by fragmentListeners()

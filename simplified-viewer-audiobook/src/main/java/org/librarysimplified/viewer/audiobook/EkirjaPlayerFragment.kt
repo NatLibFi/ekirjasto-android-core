@@ -65,7 +65,6 @@ import rx.Subscription
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import org.nypl.simplified.viewer.audiobook.R
 
 /**
  * A player fragment.
@@ -399,8 +398,8 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   }
 
   private fun configureToolbarActions() {
-    this.toolbar.inflateMenu(R.menu.top_toolbar_menu)
-    this.bottomToolbar.inflateMenu(R.menu.bottom_toolbar_menu)
+    this.toolbar.inflateMenu(org.librarysimplified.viewer.audiobook.R.menu.top_toolbar_menu)
+    this.bottomToolbar.inflateMenu(org.librarysimplified.viewer.audiobook.R.menu.bottom_toolbar_menu)
     this.toolbar.setNavigationOnClickListener { this.onToolbarNavigationSelected() }
 
     val backbutton:LinearLayout = this.toolbar.findViewById(R.id.backButton)
