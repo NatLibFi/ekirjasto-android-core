@@ -59,6 +59,7 @@ import org.librarysimplified.audiobook.views.PlayerAccessibilityEvent.PlayerAcce
 import org.librarysimplified.audiobook.views.PlayerAccessibilityEvent.PlayerAccessibilityIsBuffering
 import org.librarysimplified.audiobook.views.PlayerAccessibilityEvent.PlayerAccessibilityIsWaitingForChapter
 import org.librarysimplified.services.api.Services
+import org.librarysimplified.viewer.audiobook.R.*
 import org.nypl.simplified.ui.thread.api.UIThreadServiceType
 import org.slf4j.LoggerFactory
 import rx.Subscription
@@ -383,7 +384,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     state: Bundle?
   ): View {
     this.log.debug("onCreateView")
-    return inflater.inflate(R.layout.ekirjasto_audio_player_view, container, false)
+    return inflater.inflate(layout.ekirjasto_audio_player_view, container, false)
   }
 
   override fun onDestroyView() {
@@ -398,11 +399,11 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   }
 
   private fun configureToolbarActions() {
-    this.toolbar.inflateMenu(org.librarysimplified.viewer.audiobook.R.menu.top_toolbar_menu)
-    this.bottomToolbar.inflateMenu(org.librarysimplified.viewer.audiobook.R.menu.bottom_toolbar_menu)
+    this.toolbar.inflateMenu(menu.top_toolbar_menu)
+    this.bottomToolbar.inflateMenu(menu.bottom_toolbar_menu)
     this.toolbar.setNavigationOnClickListener { this.onToolbarNavigationSelected() }
 
-    val backbutton:LinearLayout = this.toolbar.findViewById(R.id.backButton)
+    val backbutton:LinearLayout = this.toolbar.findViewById(org.librarysimplified.viewer.audiobook.R.id.backButton)
     backbutton.setOnClickListener{
       requireActivity().finish()
     }
@@ -497,7 +498,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
       IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
     )
 
-    this.bottomToolbar = view.findViewById(R.id.audioBookBottomToolbar)
+    this.bottomToolbar = view.findViewById(org.librarysimplified.viewer.audiobook.R.id.audioBookBottomToolbar)
     this.toolbar = view.findViewById(R.id.audioBookToolbar)
     this.toolbar.setNavigationContentDescription(R.string.audiobook_accessibility_navigation_back)
     configureToolbarActions()
@@ -750,7 +751,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
 
     this.uiThread.runOnUIThread(
       Runnable {
-        this.playPauseButton.setImageResource(R.drawable.elibrary_play_icon)
+        this.playPauseButton.setImageResource(drawable.elibrary_play_icon)
         this.playPauseButton.setOnClickListener { this.onPressedPlay() }
         this.playPauseButton.contentDescription =
           this.getString(R.string.audiobook_accessibility_play)
@@ -768,7 +769,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
           this.playerCommands.visibility = VISIBLE
           this.playerWaiting.text = ""
           this.currentPlaybackRate = this.player.playbackRate
-          this.playPauseButton.setImageResource(R.drawable.elibrary_play_icon)
+          this.playPauseButton.setImageResource(drawable.elibrary_play_icon)
           this.playPauseButton.setOnClickListener { this.onPressedPlay() }
           this.playPauseButton.contentDescription =
             this.getString(R.string.audiobook_accessibility_play)
@@ -786,7 +787,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
       Runnable {
         safelyPerformOperations {
           this.currentPlaybackRate = this.player.playbackRate
-          this.playPauseButton.setImageResource(R.drawable.elibrary_play_icon)
+          this.playPauseButton.setImageResource(drawable.elibrary_play_icon)
           this.playPauseButton.setOnClickListener { this.onPressedPlay() }
           this.playPauseButton.contentDescription =
             this.getString(R.string.audiobook_accessibility_play)
@@ -912,7 +913,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
         safelyPerformOperations {
           this.playerDownloadingChapter.visibility = GONE
           this.playerCommands.visibility = VISIBLE
-          this.playPauseButton.setImageResource(R.drawable.elibrary_pause_round_icon)
+          this.playPauseButton.setImageResource(drawable.elibrary_pause_round_icon)
           this.playPauseButton.setOnClickListener { this.onPressedPause(abandonAudioFocus = true) }
           this.playPauseButton.contentDescription =
             this.getString(R.string.audiobook_accessibility_pause)
@@ -933,7 +934,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
           this.playerDownloadingChapter.visibility = GONE
           this.playerCommands.visibility = VISIBLE
           this.player.playbackRate = this.currentPlaybackRate
-          this.playPauseButton.setImageResource(R.drawable.elibrary_pause_round_icon)
+          this.playPauseButton.setImageResource(drawable.elibrary_pause_round_icon)
           this.playPauseButton.setOnClickListener { this.onPressedPause(abandonAudioFocus = true) }
           this.playPauseButton.contentDescription =
             this.getString(R.string.audiobook_accessibility_pause)

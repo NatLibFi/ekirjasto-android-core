@@ -6,7 +6,7 @@ import org.librarysimplified.ui.splash.SplashEvent
 import org.librarysimplified.ui.tutorial.TutorialEvent
 import org.nypl.simplified.listeners.api.ListenerRepository
 import org.nypl.simplified.listeners.api.ListenerRepositoryFactory
-import org.nypl.simplified.ui.login.LoginEvent
+import org.librarysimplified.ui.login.LoginEvent
 
 class MainActivityDefaultViewModelFactory(fallbackFactory: ViewModelProvider.Factory) :
   ListenerRepositoryFactory<MainActivityListenedEvent, Unit>(fallbackFactory) {

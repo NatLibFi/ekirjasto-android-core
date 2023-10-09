@@ -459,8 +459,9 @@ internal object MainServices {
   ): BookCoverBadgeLookupType {
     return CatalogCoverBadgeImages.create(
       context.resources,
-      {context.getColor(R.color.colorPrimary)},
-      {context.getColor(R.color.white)},
+      //not sure where this was originally from, but something broke after merge so this would need to point to correct colorPrimary probably
+      {context.getColor(org.librarysimplified.ui.tutorial.R.color.colorPrimary)},
+      {context.getColor(android.R.color.white)},
       screenSize
     )
   }

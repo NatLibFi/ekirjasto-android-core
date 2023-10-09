@@ -1,4 +1,4 @@
-package org.nypl.simplified.ui.login
+package org.librarysimplified.ui.login
 
 import android.os.Bundle
 import android.view.View

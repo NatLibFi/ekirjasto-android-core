@@ -13,4 +13,8 @@ sealed class MainActivityListenedEvent {
   data class OnboardingEvent(
     val event: org.librarysimplified.ui.onboarding.OnboardingEvent
   ) : MainActivityListenedEvent()
+
+  data class LoginEvent(
+    val event: org.librarysimplified.ui.login.LoginEvent
+  ) : MainActivityListenedEvent()
 }
