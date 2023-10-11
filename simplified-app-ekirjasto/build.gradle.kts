@@ -1,6 +1,7 @@
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.util.Properties
 
 fun calculateVersionCode(): Int {
     val now = LocalDateTime.now(ZoneId.of("UTC"))
@@ -8,73 +9,224 @@ fun calculateVersionCode(): Int {
     // Seconds since 2021-03-15 09:20:00 UTC
     return (nowSeconds - 1615800000).toInt()
 }
-apply(plugin = "com.google.gms.google-services")
+
+//apply(plugin = "com.google.gms.google-services")
+//apply(plugin = "com.google.firebase.crashlytics")
+
+/*
+ * The asset files that are required to be present in order to build the app.
+ */
+
+val palaceAssetsRequired = Properties()
+
+/*
+ * The various DRM schemes require that some extra assets be present.
+ */
+
+val adobeDRM =
+    project.findProperty("org.thepalaceproject.adobeDRM.enabled") == "true"
+val lcpDRM =
+    project.findProperty("org.thepalaceproject.lcp.enabled") == "true"
+val findawayDRM =
+    project.findProperty("org.thepalaceproject.findaway.enabled") == "true"
+val overdriveDRM =
+    project.findProperty("org.thepalaceproject.overdrive.enabled") == "true"
+
+if (adobeDRM) {
+    palaceAssetsRequired.setProperty(
+        "assets/ReaderClientCert.sig",
+        "b064e68b96e258e42fe1ca66ae3fc4863dd802c46585462220907ed291e1217d",
+    )
+}
+
+if (adobeDRM || lcpDRM || findawayDRM || overdriveDRM) {
+    palaceAssetsRequired.setProperty(
+        "assets/secrets.conf",
+        "221db5c8c1ce1ddbc4f4c1a017f5b63271518d2adf6991010c2831a58b7f88ed",
+    )
+}
+
+val palaceAssetsDirectory =
+    project.findProperty("org.thepalaceproject.app.assets.palace") as String?
+
+if (palaceAssetsDirectory != null) {
+    val directory = File(palaceAssetsDirectory)
+    if (!directory.isDirectory) {
+        throw GradleException("The directory specified by org.thepalaceproject.app.assets.palace does not exist.")
+    }
+}
+
+/*
+ * A task that writes the required assets to a file in order to be used later by ZipCheck.
+ */
+
+fun createRequiredAssetsFile(file: File): Task {
+    return task("CheckReleaseRequiredAssetsCreate") {
+        doLast {
+            file.writer().use {
+                palaceAssetsRequired.store(it, "")
+            }
+        }
+    }
+}
+
+/*
+ * A task that executes ZipCheck against a given APK file and a list of required assets.
+ */
+
+fun createRequiredAssetsTask(
+    checkFile: File,
+    assetList: File,
+): Task {
+    return task("CheckReleaseRequiredAssets_${checkFile.name}", Exec::class) {
+        commandLine = arrayListOf(
+            "java",
+            "$rootDir/org.thepalaceproject.android.platform/ZipCheck.java",
+            "$checkFile",
+            "$assetList",
+        )
+    }
+}
+
+/*
+ * The signing information that is required to exist for release builds.
+ */
+
+val palaceKeyStore =
+    File("$rootDir/release.jks")
+val palaceKeyAlias =
+    project.findProperty("org.thepalaceproject.keyAlias") as String?
+val palaceKeyPassword =
+    project.findProperty("org.thepalaceproject.keyPassword") as String?
+val palaceStorePassword =
+    project.findProperty("org.thepalaceproject.storePassword") as String?
+
+val requiredSigningTask = task("CheckReleaseSigningInformation") {
+    if (palaceKeyAlias == null) {
+        throw GradleException("org.thepalaceproject.keyAlias is not specified.")
+    }
+    if (palaceKeyPassword == null) {
+        throw GradleException("org.thepalaceproject.keyPassword is not specified.")
+    }
+    if (palaceStorePassword == null) {
+        throw GradleException("org.thepalaceproject.storePassword is not specified.")
+    }
+}
 
 android {
     defaultConfig {
         versionCode = calculateVersionCode()
-//        resourceConfigurations.add("en")
-//        resourceConfigurations.add("es")
-        setProperty("archivesBaseName", "Ellibs-Ekirjasto")
+        resourceConfigurations.add("en")
+        resourceConfigurations.add("es")
+        setProperty("archivesBaseName", "palace")
     }
 
-//    packaging {
-//        jniLibs {
-//            keepDebugSymbols.add("lib/**/*.so")
-//
-//            /*
-//             * Various components (R2, the PDF library, LCP, etc) include this shared library.
-//             */
-//
-//            pickFirsts.add("lib/arm64-v8a/libc++_shared.so")
-//            pickFirsts.add("lib/armeabi-v7a/libc++_shared.so")
-//            pickFirsts.add("lib/x86/libc++_shared.so")
-//            pickFirsts.add("lib/x86_64/libc++_shared.so")
-//        }
-//    }
+    /*
+     * Add the assets directory to the source sets. This is required for the various
+     * secret files.
+     */
+
+    sourceSets {
+        findByName("main")?.apply {
+            if (palaceAssetsDirectory != null) {
+                assets {
+                    srcDir(palaceAssetsDirectory)
+                }
+            }
+        }
+    }
+
+    packaging {
+        jniLibs {
+            keepDebugSymbols.add("lib/**/*.so")
+
+            /*
+             * Various components (R2, the PDF library, LCP, etc) include this shared library.
+             */
+
+            pickFirsts.add("lib/arm64-v8a/libc++_shared.so")
+            pickFirsts.add("lib/armeabi-v7a/libc++_shared.so")
+            pickFirsts.add("lib/x86/libc++_shared.so")
+            pickFirsts.add("lib/x86_64/libc++_shared.so")
+        }
+    }
 
     /*
      * Ensure that release builds are signed.
      */
 
-//    signingConfigs {
-//        create("release") {
-////            keyAlias = palaceKeyAlias
-////            keyPassword = palaceKeyPassword
-////            storeFile = palaceKeyStore
-////            storePassword = palaceStorePassword
-//        }
-//    }
-}
-
-repositories {
-    mavenCentral()
-    google()
-    ivy {
-        url = uri("https://liblcp.dita.digital")
-        patternLayout{
-            artifact("/[organisation]/[module]/android/aar/test/[revision].[ext]")
+    signingConfigs {
+        create("release") {
+            keyAlias = palaceKeyAlias
+            keyPassword = palaceKeyPassword
+            storeFile = palaceKeyStore
+            storePassword = palaceStorePassword
         }
-        metadataSources {
-            artifact()
+    }
+
+    /*
+     * Ensure that the right NDK ABIs are declared.
+     */
+
+    buildTypes {
+        debug {
+            ndk {
+                abiFilters.add("x86")
+                abiFilters.add("arm64-v8a")
+                abiFilters.add("armeabi-v7a")
+            }
+            versionNameSuffix = "-debug"
+        }
+        release {
+            ndk {
+                abiFilters.add("arm64-v8a")
+                abiFilters.add("armeabi-v7a")
+            }
+            this.signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+    /*
+     * Release builds need extra checking.
+     */
+
+    applicationVariants.all {
+        if (this.buildType.name == "release") {
+            val preBuildTask = tasks.findByName("preReleaseBuild")
+            preBuildTask?.dependsOn?.add(requiredSigningTask)
+
+            /*
+             * For each APK output, create a task that checks that the APK contains the
+             * required assets.
+             */
+
+            this.outputs.forEach {
+                val outputFile = it.outputFile
+                val assetFile = File("${project.buildDir}/required-assets.conf")
+                val fileTask =
+                    createRequiredAssetsFile(assetFile)
+                val checkTask =
+                    createRequiredAssetsTask(checkFile = outputFile, assetList = assetFile)
+
+                checkTask.dependsOn.add(fileTask)
+                this.assembleProvider.configure {
+                    finalizedBy(checkTask)
+                }
+            }
         }
     }
 }
 
+/*
+ * Produce an AAB file whenever someone asks for "assemble".
+ */
+
+afterEvaluate {
+    tasks.findByName("assemble")
+        ?.dependsOn?.add(tasks.findByName("bundle"))
+}
+
 dependencies {
-    /**
-     * These were in the original "vanilla app" - see also build.gradle.old which is the original gradle build file
-     */
-//    implementation(project(":simplified-main"))
-//    implementation(project(":simplified-accounts-source-nyplregistry"))
-//    implementation(project(":simplified-analytics-circulation"))
-
-    /**
-     * Palace App has tons of copy pasta dependencies added which should come from main
-     * But looks like that for some reason the deps are note coming from there.
-     * Below is everything that was copied from the palace app
-     */
-
     implementation(project(":simplified-accessibility"))
     implementation(project(":simplified-accounts-api"))
     implementation(project(":simplified-accounts-database"))
@@ -82,7 +234,7 @@ dependencies {
     implementation(project(":simplified-accounts-json"))
     implementation(project(":simplified-accounts-registry"))
     implementation(project(":simplified-accounts-registry-api"))
-    implementation(project(":simplified-accounts-source-nyplregistry"))
+    //implementation(project(":simplified-accounts-source-nyplregistry"))
     implementation(project(":simplified-accounts-source-spi"))
     implementation(project(":simplified-adobe-extensions"))
     implementation(project(":simplified-analytics-api"))
@@ -171,6 +323,69 @@ dependencies {
     implementation(project(":simplified-viewer-preview"))
     implementation(project(":simplified-viewer-spi"))
     implementation(project(":simplified-webview"))
+
+    /*
+     * Dependencies conditional upon Adobe DRM support.
+     */
+
+    if (adobeDRM) {
+        implementation(libs.palace.drm.adobe)
+    }
+
+    /*
+     * Dependencies conditional upon LCP support.
+     */
+
+    if (lcpDRM) {
+        implementation(libs.readium.lcp) {
+            artifact {
+                type = "aar"
+            }
+        }
+    }
+
+    /*
+     * Dependencies conditional upon Findaway support.
+     */
+
+    if (findawayDRM) {
+        implementation(libs.dagger)
+        implementation(libs.exoplayer2.core)
+        implementation(libs.findaway)
+        implementation(libs.findaway.common)
+        implementation(libs.findaway.listening)
+        implementation(libs.findaway.persistence)
+        implementation(libs.findaway.play.android)
+        implementation(libs.google.gson)
+        implementation(libs.javax.inject)
+        implementation(libs.koin.android)
+        implementation(libs.koin.core)
+        implementation(libs.koin.core.jvm)
+        implementation(libs.moshi)
+        implementation(libs.moshi.adapters)
+        implementation(libs.moshi.kotlin)
+        implementation(libs.okhttp3)
+        implementation(libs.okhttp3.logging.interceptor)
+        implementation(libs.palace.findaway)
+        implementation(libs.retrofit2)
+        implementation(libs.retrofit2.adapter.rxjava)
+        implementation(libs.retrofit2.converter.gson)
+        implementation(libs.retrofit2.converter.moshi)
+        implementation(libs.rxandroid)
+        implementation(libs.rxrelay)
+        implementation(libs.sqlbrite)
+        implementation(libs.stately.common)
+        implementation(libs.stately.concurrency)
+        implementation(libs.timber)
+    }
+
+    /*
+     * Dependencies conditional upon Overdrive support.
+     */
+
+    if (overdriveDRM) {
+        implementation(libs.palace.overdrive)
+    }
 
     /*
      * Dependencies needed for Feedbooks JWT handling. Always enabled.
@@ -342,10 +557,10 @@ dependencies {
     implementation(libs.palace.http.refresh.token)
     implementation(libs.palace.http.uri)
     implementation(libs.palace.http.vanilla)
-//    implementation(libs.palace.readium2.api)
-//    implementation(libs.palace.readium2.ui.thread)
-//    implementation(libs.palace.readium2.vanilla)
-//    implementation(libs.palace.readium2.views)
+    implementation(libs.palace.readium2.api)
+    implementation(libs.palace.readium2.ui.thread)
+    implementation(libs.palace.readium2.vanilla)
+    implementation(libs.palace.readium2.views)
     implementation(libs.pandora.bottom.navigator)
     implementation(libs.pdfium.android)
     implementation(libs.picasso)
@@ -393,10 +608,4 @@ dependencies {
     implementation(libs.truevfs.driver.zip)
     implementation(libs.truevfs.kernel.impl)
     implementation(libs.truevfs.kernel.spec)
-
-    /**
-     *  ekirjasto added dependencies
-     */
-    implementation("readium:liblcp:1.0.0@aar")
-//    implementation(libs.nypl.theme)
 }

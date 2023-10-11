@@ -610,10 +610,10 @@ internal object MainServices {
       serviceConstructor = { MainCatalogBookRevokeStrings(context.resources) }
     )
 
-    val crashlyticsService = addServiceFromServiceLoaderOptionally(
-      message = strings.bootingGeneral("Crashlytics"),
-      interfaceType = CrashlyticsServiceType::class.java
-    )
+//    val crashlyticsService = addServiceFromServiceLoaderOptionally(
+//      message = strings.bootingGeneral("Crashlytics"),
+//      interfaceType = CrashlyticsServiceType::class.java
+//    )
 
     AccountProviderRegistryDebugging.load(context.applicationContext)
 
@@ -968,7 +968,8 @@ internal object MainServices {
       serviceConstructor = {
         TimeTrackingService(
           context = context,
-          httpCalls = TimeTrackingHTTPCalls(ObjectMapper(), lsHTTP, crashlyticsService),
+//          httpCalls = TimeTrackingHTTPCalls(ObjectMapper(), lsHTTP, crashlyticsService),
+          httpCalls = TimeTrackingHTTPCalls(ObjectMapper(), lsHTTP, null),
           timeTrackingDirectory = directories.directoryStorageTimeTracking,
           profilesController = profilesControllerTypeService
         )

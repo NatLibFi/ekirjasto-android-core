@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     super.onCreate(savedInstanceState)
     this.logger.debug("onCreate (super completed)")
 
-    interceptDeepLink()
+    //interceptDeepLink()
     val toolbar = this.findViewById(R.id.mainToolbar) as Toolbar
     this.setSupportActionBar(toolbar)
     this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -263,7 +263,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override fun onStart() {
     super.onStart()
     this.listenerRepo.registerHandler(this::handleEvent)
-    interceptDeepLink()
+    //interceptDeepLink()
   }
 
   override fun onStop() {
