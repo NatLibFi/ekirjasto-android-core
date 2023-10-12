@@ -608,4 +608,6 @@ dependencies {
     implementation(libs.truevfs.driver.zip)
     implementation(libs.truevfs.kernel.impl)
     implementation(libs.truevfs.kernel.spec)
+
+    implementation("readium:liblcp:1.0.0@aar")
 }

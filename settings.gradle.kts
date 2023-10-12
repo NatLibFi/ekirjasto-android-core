@@ -188,6 +188,16 @@ dependencyResolutionManagement {
          * Enable access to various credentials-gated elements.
          */
 
+        //ekirjasto lib lcp
+        ivy {
+            url = uri("https://liblcp.dita.digital")
+            patternLayout{
+                artifact("/[organisation]/[module]/android/aar/test/[revision].[ext]")
+            }
+            metadataSources {
+                artifact()
+            }
+        }
         if (lcpDRMEnabled) {
             val filePath: String =
                 when (val lcpProfile = property("org.thepalaceproject.lcp.profile")) {
