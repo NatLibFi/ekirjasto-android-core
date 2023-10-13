@@ -30,11 +30,11 @@
                 android:layout_marginEnd="10dp"
                 android:paddingTop="5dp"
                 android:src="@drawable/ic_baseline_arrow_back_24"
-                android:tint="@color/colorEkirjastoGreen"/>
+                app:tint="@color/colorEkirjastoGreen" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorEkirjastoBlack"
+                android:textColor="@color/colorEkirjastoText"
                 android:text="Back"/>
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
@@ -52,7 +52,7 @@
         android:lines="1"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@color/colorEkirjastoBlack"
+        android:textColor="@color/colorEkirjastoText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/audioBookToolbar"
@@ -69,7 +69,7 @@
         android:gravity="center"
         android:lines="1"
         android:textSize="16sp"
-        android:textColor="@color/colorEkirjastoBlack"
+        android:textColor="@color/colorEkirjastoText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_title"
@@ -83,7 +83,7 @@
         android:gravity="center"
         android:lines="1"
         android:textSize="14sp"
-        android:textColor="@color/colorEkirjastoBlack"
+        android:textColor="@color/colorEkirjastoText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_author"
@@ -91,7 +91,6 @@
 
     <SeekBar
         android:id="@+id/player_progress"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -113,7 +112,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/audiobook_player_initial"
         android:textSize="16sp"
-        android:textColor="@color/colorEkirjastoBlack"
+        android:textColor="@color/colorEkirjastoText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_progress" />
 
@@ -125,7 +124,7 @@
         android:layout_marginEnd="26dp"
         android:text="@string/audiobook_player_initial"
         android:textSize="16sp"
-        android:textColor="@color/colorEkirjastoBlack"
+        android:textColor="@color/colorEkirjastoText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_progress" />
 
@@ -140,7 +139,7 @@
         android:gravity="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/colorEkirjastoBlack"
+        android:textColor="@color/colorEkirjastoText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_progress"

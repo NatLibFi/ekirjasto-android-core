@@ -165,7 +165,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:background="?android:attr/listDivider" />
+            android:background="@color/colorEkirjastoDivider" />
 
         <TextView
             android:id="@+id/bookDetailMetadataTitle"
@@ -191,10 +191,11 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:background="?android:attr/listDivider" />
+            android:background="@color/colorEkirjastoDivider" />
 
         <FrameLayout
             android:id="@+id/bookDetailRelatedBooksContainer"
@@ -222,7 +223,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:background="?android:attr/listDivider"
+            android:background="@color/colorEkirjastoDivider"
             android:visibility="gone" />
 
         <TextView
@@ -244,7 +245,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:background="?android:attr/listDivider" />
+            android:background="@color/colorEkirjastoDivider" />
 
         <TextView
             android:id="@+id/bookDetailDebugStatus"

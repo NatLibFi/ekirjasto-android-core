@@ -836,10 +836,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
       button.text = facet.title
       button.setTextColor(
-        ContextCompat.getColor(
-          this.requireContext(),
-          org.librarysimplified.ui.neutrality.R.color.simplified_button_text
-        )
+        ContextCompat.getColor(this.requireContext(), R.color.colorEkirjastoFacetTabText)
       )
       button.setOnClickListener {
         this.logger.debug("selected entry point facet: {}", facet.title)

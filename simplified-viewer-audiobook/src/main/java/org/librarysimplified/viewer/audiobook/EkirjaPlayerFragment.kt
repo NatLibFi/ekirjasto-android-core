@@ -984,7 +984,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     this.playerTimeCurrent.contentDescription =
       this.playerTimeCurrentSpoken(offsetMilliseconds)
 
-    this.playerSpineElement.text = this.spineElementText(spineElement)
+    this.playerSpineElement.text = this.spineElementText(spineElement) + String.format(" (%s/%s)", spineElement.index + 1, this.book.spine.count().toString())
 
     // we just update the book chapter on the playerInfoModel if it's been initialized
     if (::playerInfoModel.isInitialized) {
