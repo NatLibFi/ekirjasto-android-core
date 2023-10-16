@@ -1,41 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="bottom|center"
+    android:gravity="top|center"
+    android:paddingTop="50dp"
     android:paddingBottom="50dp">
 
     <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:src="@drawable/e_kirjasto_logo_vihrea_fi_sve"/>
+
+    <ImageView
+        android:id="@+id/login_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
-        android:src="@drawable/e_kirjasto_logo_vihrea_fi_sve"/>
+        android:layout_above="@id/ekirjasto_loginButton"
+        android:layout_below="@id/login_logo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="30dp"
+        android:src="@drawable/e_kirjasto_login_background" />
 
     <Button
         android:id="@+id/ekirjasto_loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/ekirjasto_regButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="15dp"
         android:width="300dp"
         android:height="50dp"
         android:background="@color/colorEkirjastoLightestGreen"
-        android:text="Kirjaudu palveluun"
-        android:layout_marginBottom="15dp"
+        android:drawableEnd="@drawable/elibrary_arrow_right_icon"
         android:paddingRight="20dp"
-        android:drawableEnd="@drawable/elibrary_arrow_right_icon"/>
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:text="Kirjaudu palveluun" />
 
     <Button
         android:id="@+id/ekirjasto_regButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:width="300dp"
         android:height="50dp"
         android:background="@color/colorEkirjastoGreen"
-        android:text="Rekisteröidy palveluun"
-        android:paddingRight="20dp"
+        android:drawableEnd="@drawable/elibrary_arrow_right_icon"
         android:drawableTint="@color/colorEkirjastoBlack"
-        android:drawableEnd="@drawable/elibrary_arrow_right_icon" />
+        android:paddingRight="20dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:text="Rekisteröidy palveluun"/>
 
-</LinearLayout>
+</RelativeLayout>

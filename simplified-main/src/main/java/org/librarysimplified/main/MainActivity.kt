@@ -308,9 +308,6 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     val appCache =
       AppCache(this)
 
-    //skip tutorial
-    this.onTutorialFinished()
-
     if (appCache.isTutorialSeen()) {
       this.onTutorialFinished()
     } else {
