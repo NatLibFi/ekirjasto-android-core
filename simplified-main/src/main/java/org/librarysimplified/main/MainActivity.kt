@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   private fun handleLoginEvent(event: LoginEvent) {
     return when (event) {
       LoginEvent.StartLogin ->
-        this.onOnboardingFinished()
+        this.openMainFragment()
     }
   }
 
@@ -308,12 +308,13 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     val appCache =
       AppCache(this)
 
-    if (appCache.isTutorialSeen()) {
-      this.onTutorialFinished()
-    } else {
-      this.openTutorial()
-      appCache.setTutorialSeen(true)
-    }
+//    if (appCache.isTutorialSeen()) {
+//      this.onTutorialFinished()
+//    } else {
+//      this.openTutorial()
+//      appCache.setTutorialSeen(true)
+//    }
+    this.openTutorial()
   }
 
   private fun handleTutorialEvent(event: TutorialEvent) {
@@ -358,7 +359,6 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
         // Not used anymore.
       }
     }
-    this.openLogin()
   }
 
   private fun handleOnboardingEvent(event: OnboardingEvent) {
@@ -369,7 +369,8 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   }
 
   private fun onOnboardingFinished() {
-    this.openMainFragment()
+    //this.openMainFragment()
+    this.openLogin()
   }
 
   private fun openMainBackStack() {
@@ -410,6 +411,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   }
 
   private fun openLogin() {
+    this.logger.debug("openLogin")
     val loginFragment = LoginFragment()
     this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     this.supportFragmentManager.commit {
