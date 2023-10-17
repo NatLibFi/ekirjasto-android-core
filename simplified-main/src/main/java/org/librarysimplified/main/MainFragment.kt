@@ -216,7 +216,13 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
   }
 
   private fun setShowHoldsVisibility() {
+
     val showHolds = viewModel.showHoldsTab
+    //debug
+    this.logger.debug("DBGHOLDS BuildConfigurationType=${viewModel.buildConfig.javaClass.canonicalName}")
+    this.logger.debug("DBGHOLDS viewModel.showHoldsTab=$showHolds")
+    val provider = viewModel.profilesController.profileCurrent().mostRecentAccount().provider
+    this.logger.debug("DBGHOLDS accountProvider id=${provider.id}, displayName=${provider.displayName}, supportReservation=${provider.supportsReservations}")
     val holdsItem = this.bottomView.menu.findItem(org.librarysimplified.ui.tabs.R.id.tabHolds)
     holdsItem.isVisible = showHolds
     holdsItem.isEnabled = showHolds
