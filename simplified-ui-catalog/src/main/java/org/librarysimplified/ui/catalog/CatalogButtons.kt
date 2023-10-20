@@ -261,10 +261,11 @@ class CatalogButtons(
     onClick: (Button) -> Unit,
     heightMatchParent: Boolean = false
   ): Button {
-    return this.createButton(
+    return this.createButtonWithStyle(
       context = this.context,
       text = R.string.catalogCancelHold,
       description = R.string.catalogAccessibilityBookRevokeHold,
+      R.style.ReturnBookButton,
       heightMatchParent = heightMatchParent,
       onClick = onClick
     )
