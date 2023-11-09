@@ -118,7 +118,7 @@ android {
         versionCode = calculateVersionCode()
         resourceConfigurations.add("en")
         resourceConfigurations.add("es")
-        setProperty("archivesBaseName", "palace")
+        setProperty("archivesBaseName", "ekirjasto")
     }
 
     /*

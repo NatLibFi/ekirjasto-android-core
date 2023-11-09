@@ -1,6 +1,6 @@
 package fi.ellibs.simplye
 
-import org.librarysimplified.app.ekirjasto.R
+import fi.kansalliskirjasto.ekirjasto.R
 import org.nypl.simplified.buildconfig.api.BuildConfigOAuthScheme
 import org.nypl.simplified.buildconfig.api.BuildConfigurationAccountsRegistryURIs
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
