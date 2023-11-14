@@ -1,6 +1,5 @@
-package fi.ellibs.simplye
+package fi.kansalliskirjasto.ekirjasto
 
-import fi.kansalliskirjasto.ekirjasto.R
 import org.nypl.simplified.ui.branding.BrandingSplashServiceType
 
 /**

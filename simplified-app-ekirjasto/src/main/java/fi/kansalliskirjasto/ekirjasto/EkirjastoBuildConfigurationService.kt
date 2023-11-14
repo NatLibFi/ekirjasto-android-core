@@ -1,10 +1,9 @@
-package fi.ellibs.simplye
+package fi.kansalliskirjasto.ekirjasto
 
-import fi.kansalliskirjasto.ekirjasto.R
+import org.librarysimplified.main.BuildConfig
 import org.nypl.simplified.buildconfig.api.BuildConfigOAuthScheme
 import org.nypl.simplified.buildconfig.api.BuildConfigurationAccountsRegistryURIs
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
-import org.librarysimplified.main.BuildConfig
 import java.net.URI
 
 class EkirjastoBuildConfigurationService : BuildConfigurationServiceType {

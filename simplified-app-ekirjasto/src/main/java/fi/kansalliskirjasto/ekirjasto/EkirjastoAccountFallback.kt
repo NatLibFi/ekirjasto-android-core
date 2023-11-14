@@ -1,4 +1,4 @@
-package fi.ellibs.simplye
+package fi.kansalliskirjasto.ekirjasto
 
 import org.joda.time.DateTime
 import org.nypl.simplified.accounts.api.AccountProvider

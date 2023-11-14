@@ -1,8 +1,7 @@
-package fi.ellibs.simplye
+package fi.kansalliskirjasto.ekirjasto
 
 import org.librarysimplified.documents.DocumentConfiguration
 import org.librarysimplified.documents.DocumentConfigurationServiceType
-import java.net.URI
 
 class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
 
