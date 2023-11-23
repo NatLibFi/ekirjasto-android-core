@@ -18,6 +18,7 @@ import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 class CatalogCoverBadgeImages private constructor(
   private val screenSize: ScreenSizeInformationType,
   private val backgroundColorRGBA: () -> Int,
+  private val borderColorRGBA: () -> Int,
   private val audioBookIcon: Bitmap
 ) : BookCoverBadgeLookupType {
 
@@ -33,7 +34,10 @@ class CatalogCoverBadgeImages private constructor(
           bitmap = this.audioBookIcon,
           width = this.screenSize.dpToPixels(24).toInt(),
           height = this.screenSize.dpToPixels(24).toInt(),
-          backgroundColorRGBA = { this.backgroundColorRGBA() }
+          borderWidth = this.screenSize.dpToPixels(2).toInt(),
+          offsetSize = this.screenSize.dpToPixels(6).toInt(),
+          backgroundColorRGBA = { this.backgroundColorRGBA() },
+          borderColorRGBA = { this.borderColorRGBA() }
         )
       }
       BOOK_FORMAT_PDF -> {
@@ -54,12 +58,14 @@ class CatalogCoverBadgeImages private constructor(
     fun create(
       resources: Resources,
       backgroundColorRGBA: () -> Int,
+      borderColorRGBA: () -> Int,
       screenSize: ScreenSizeInformationType
     ): BookCoverBadgeLookupType {
       val audioBookIcon = BitmapFactory.decodeResource(resources, R.drawable.audiobook_icon)
       return CatalogCoverBadgeImages(
         audioBookIcon = audioBookIcon,
         backgroundColorRGBA = backgroundColorRGBA,
+        borderColorRGBA = borderColorRGBA,
         screenSize = screenSize
       )
     }

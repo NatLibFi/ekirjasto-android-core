@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/player_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/audioBookToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/simplifiedColorBackground"
+        android:minHeight="?attr/actionBarSize"
+        android:padding="0dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/Theme.AppCompat.DayNight"
+        tools:title="Back" >
+        <LinearLayout
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:paddingTop="5dp"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:tint="@color/colorEkirjastoGreen" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorEkirjastoText"
+                android:text="Back"/>
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/player_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorEkirjastoText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/audioBookToolbar"
+        tools:text="Very, very, very long placeholder text that should never be seen in practice." />
+
+    <TextView
+        android:id="@+id/player_author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:textSize="16sp"
+        android:textColor="@color/colorEkirjastoText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_title"
+        tools:text="Very, very, very long placeholder text that should never be seen in practice." />
+
+    <TextView
+        android:id="@+id/player_remaining_book_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:lines="1"
+        android:textSize="14sp"
+        android:textColor="@color/colorEkirjastoText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_author"
+        tools:text="4 hr 56 min remaining" />
+
+    <SeekBar
+        android:id="@+id/player_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
+        android:progress="0"
+        android:scaleY="1.2"
+        android:thumb="@drawable/seekbar_thumb"
+        android:progressDrawable="@drawable/seekbar_progress_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_remaining_book_time" />
+
+    <TextView
+        android:id="@+id/player_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/audiobook_player_initial"
+        android:textSize="16sp"
+        android:textColor="@color/colorEkirjastoText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_progress" />
+
+    <TextView
+        android:id="@+id/player_time_maximum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="26dp"
+        android:text="@string/audiobook_player_initial"
+        android:textSize="16sp"
+        android:textColor="@color/colorEkirjastoText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_progress" />
+
+    <TextView
+        android:id="@+id/player_spine_element"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/player_progress"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorEkirjastoText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_progress"
+        tools:text="Very, very, very long placeholder text that should never be seen in practice." />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/player_commands"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/player_commands_texts">
+
+        <ImageView
+            android:id="@+id/player_play_button"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:contentDescription="@string/audiobook_accessibility_play"
+            android:src="@drawable/elibrary_play_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tintMode="src_in" />
+
+        <ImageView
+            android:id="@+id/player_jump_backwards"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/audiobook_accessibility_backward_15"
+            android:src="@drawable/elibrary_rewind_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/player_play_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tintMode="src_in" />
+
+        <ImageView
+            android:id="@+id/player_jump_forwards"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/audiobook_accessibility_forward_15"
+            android:src="@drawable/elibrary_forward_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/player_play_button"
+            app:tintMode="src_in" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/player_commands_texts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomDivider">
+
+        <TextView
+            android:id="@+id/player_jump_backwards_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="start"
+            android:importantForAccessibility="no"
+            android:text="15 sec."
+            android:textColor="?attr/simplifiedColorControlIcon"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/player_play_pause_text"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/player_play_pause_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="start"
+            android:importantForAccessibility="no"
+            android:text="Play"
+            android:textColor="?attr/simplifiedColorControlIcon"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/player_jump_forwards_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="start"
+            android:importantForAccessibility="no"
+            android:text="15 sec."
+            android:textColor="?attr/simplifiedColorControlIcon"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/player_play_pause_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/bottomDivider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:layout_constraintBottom_toTopOf="@id/audioBookBottomToolbar"
+        android:backgroundTint="@color/colorEkirjastoGreen"
+        android:background="?android:attr/dividerHorizontal" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/audioBookBottomToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="?android:attr/windowBackground"
+        android:minHeight="?attr/actionBarSize"
+        app:itemPaddingTop="15dp"
+        app:itemPaddingBottom="15dp"
+        app:itemIconTint="@color/bottom_toolbar_colors"
+        app:itemTextColor="?android:textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/bottom_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="player_commands,player_downloading_chapter" />
+
+    <ProgressBar
+        android:id="@+id/player_downloading_chapter"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/player_waiting_buffering"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/audiobook_player_waiting"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/bottom_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/player_cover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/audiobook_accessibility_book_cover"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon"
+        app:layout_constraintBottom_toTopOf="@id/player_waiting_buffering"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_spine_element" />
+
+    <ImageView
+        android:id="@+id/player_bookmark"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:alpha="0.5"
+        android:contentDescription="@null"
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/bookmark" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

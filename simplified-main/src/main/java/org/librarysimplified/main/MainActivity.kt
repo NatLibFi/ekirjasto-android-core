@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import org.librarysimplified.services.api.Services
+import org.librarysimplified.ui.login.LoginEvent
+import org.librarysimplified.ui.login.LoginFragment
 import org.librarysimplified.ui.onboarding.OnboardingEvent
 import org.librarysimplified.ui.onboarding.OnboardingFragment
 import org.librarysimplified.ui.splash.SplashEvent
@@ -66,7 +68,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     super.onCreate(savedInstanceState)
     this.logger.debug("onCreate (super completed)")
 
-    interceptDeepLink()
+    //interceptDeepLink()
     val toolbar = this.findViewById(R.id.mainToolbar) as Toolbar
     this.setSupportActionBar(toolbar)
     this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -236,7 +238,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override fun onStart() {
     super.onStart()
     this.listenerRepo.registerHandler(this::handleEvent)
-    interceptDeepLink()
+    //interceptDeepLink()
   }
 
   override fun onStop() {
@@ -253,8 +255,18 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
       is MainActivityListenedEvent.TutorialEvent ->
         this.handleTutorialEvent(event.event)
 
+      is MainActivityListenedEvent.LoginEvent ->
+        this.handleLoginEvent(event.event)
+
       is MainActivityListenedEvent.OnboardingEvent ->
         this.handleOnboardingEvent(event.event)
+    }
+  }
+
+  private fun handleLoginEvent(event: LoginEvent) {
+    return when (event) {
+      LoginEvent.StartLogin ->
+        this.openMainFragment()
     }
   }
 
@@ -271,12 +283,13 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     val appCache =
       AppCache(this)
 
-    if (appCache.isTutorialSeen()) {
-      this.onTutorialFinished()
-    } else {
-      this.openTutorial()
-      appCache.setTutorialSeen(true)
-    }
+//    if (appCache.isTutorialSeen()) {
+//      this.onTutorialFinished()
+//    } else {
+//      this.openTutorial()
+//      appCache.setTutorialSeen(true)
+//    }
+    this.openTutorial()
   }
 
   private fun handleTutorialEvent(event: TutorialEvent) {
@@ -331,7 +344,8 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   }
 
   private fun onOnboardingFinished() {
-    this.openMainFragment()
+    //this.openMainFragment()
+    this.openLogin()
   }
 
   private fun openMainBackStack() {
@@ -368,6 +382,15 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     this.supportFragmentManager.commit {
       replace(R.id.mainFragmentHolder, tutorialFragment)
+    }
+  }
+
+  private fun openLogin() {
+    this.logger.debug("openLogin")
+    val loginFragment = LoginFragment()
+    this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    this.supportFragmentManager.commit {
+      replace(R.id.mainFragmentHolder, loginFragment)
     }
   }
 

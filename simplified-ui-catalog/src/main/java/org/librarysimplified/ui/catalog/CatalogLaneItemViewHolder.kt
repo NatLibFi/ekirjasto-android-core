@@ -34,7 +34,7 @@ class CatalogLaneItemViewHolder(
     }
 
     this.thumbnailLoading = coverLoader.loadThumbnailInto(
-      entry, imageView, 0, targetHeight
+      entry, imageView, 0, targetHeight, false
     )
   }
 

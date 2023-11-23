@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/player_menu_toc"
+        android:icon="@drawable/ic_toc_48"
+        android:title="@string/audiobook_player_menu_toc_title"
+        app:iconTint="?attr/simplifiedColorControlActionBar"
+        app:showAsAction="always" />
+
+</menu>

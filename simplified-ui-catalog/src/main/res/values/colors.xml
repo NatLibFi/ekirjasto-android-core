@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="simplifiedColorBookStatusText">@color/almost_black</color>
+    <color name="colorEkirjastoFacetTabButtonBackground">#FFFFFF</color>
+    <color name="colorEkirjastoFacetTabText">#1E1E1E</color>
+    <color name="colorEkirjastoFacetTabStroke">#D8D8D8</color>
+    <color name="colorEkirjastoFacetTabContainerBackground">#D8D8D8</color>
+    <color name="colorEkirjastoDivider">#D9F1EF</color>
+</resources>

@@ -227,19 +227,19 @@ class Controller private constructor(
   }
 
   private fun updateCrashlytics() {
-    try {
-      val profile = this.profileCurrent()
-      val crash = this.crashlytics
-      if (crash != null) {
-        ControllerCrashlytics.configureCrashlytics(
-          profile = profile,
-          crashlytics = crash
-        )
-      }
-    } catch (e: ProfileNoneCurrentException) {
-      // No profile is current!
-      return
-    }
+//    try {
+//      val profile = this.profileCurrent()
+//      val crash = this.crashlytics
+//      if (crash != null) {
+//        ControllerCrashlytics.configureCrashlytics(
+//          profile = profile,
+//          crashlytics = crash
+//        )
+//      }
+//    } catch (e: ProfileNoneCurrentException) {
+//      // No profile is current!
+//      return
+//    }
   }
 
   /**

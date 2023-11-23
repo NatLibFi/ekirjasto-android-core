@@ -45,7 +45,7 @@ import org.librarysimplified.audiobook.feedbooks.FeedbooksPlayerExtension
 import org.librarysimplified.audiobook.manifest.api.PlayerManifest
 import org.librarysimplified.audiobook.open_access.BearerTokenExtension
 import org.librarysimplified.audiobook.views.PlayerAccessibilityEvent
-import org.librarysimplified.audiobook.views.PlayerFragment
+import org.librarysimplified.audiobook.views.EkirjaPlayerFragment
 import org.librarysimplified.audiobook.views.PlayerFragmentListenerType
 import org.librarysimplified.audiobook.views.PlayerFragmentParameters
 import org.librarysimplified.audiobook.views.PlayerPlaybackRateFragment
@@ -157,7 +157,7 @@ class AudioBookPlayerActivity :
   private lateinit var loadingFragment: AudioBookLoadingFragment
   private lateinit var parameters: AudioBookPlayerParameters
   private lateinit var player: PlayerType
-  private lateinit var playerFragment: PlayerFragment
+  private lateinit var playerFragment: EkirjaPlayerFragment
   private lateinit var playerSubscription: Subscription
   private lateinit var sleepTimer: PlayerSleepTimerType
 
@@ -537,7 +537,7 @@ class AudioBookPlayerActivity :
         return@runOnUIThread
       }
 
-      this.playerFragment = PlayerFragment.newInstance(
+      this.playerFragment = EkirjaPlayerFragment.newInstance(
         PlayerFragmentParameters(
           currentRate = this.getBookCurrentPlaybackRate(),
           currentSleepTimerDuration = this.getBookSleepTimerRemainingDuration()

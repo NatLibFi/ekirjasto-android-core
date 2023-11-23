@@ -10,12 +10,13 @@
     <ImageView
         android:id="@+id/bookCellIdleCover"
         android:layout_width="@dimen/catalogFeedCellImageWidth"
-        android:layout_height="@dimen/catalogFeedCellHeight"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:contentDescription="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="@+id/bookCellIdleButtons"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/bookCellIdleTitle" />
 
     <ProgressBar
         android:id="@+id/bookCellIdleCoverProgress"
@@ -35,10 +36,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
+        android:includeFontPadding="false"
         android:maxLines="1"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/bookCellIdleCover"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="The Modern Prometheus" />
@@ -78,9 +81,10 @@
         android:layout_height="@dimen/catalogFeedCellButtonsHeight"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bookCellIdleCover">
@@ -88,8 +92,9 @@
         <!-- These views are removed at runtime and are just present for the sake of the UI editor preview -->
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="@dimen/catalogFeedCellButtonsHeight"
+            android:layout_weight="1"
             android:maxWidth="64dp"
             android:visibility="gone"
             tools:text="@string/catalogDismiss"
@@ -102,8 +107,9 @@
             tools:visibility="visible" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="@dimen/catalogFeedCellButtonsHeight"
+            android:layout_weight="1"
             android:maxWidth="64dp"
             android:visibility="gone"
             tools:text="@string/catalogDetails"
@@ -116,11 +122,24 @@
             tools:visibility="visible" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="@dimen/catalogFeedCellButtonsHeight"
+            android:layout_weight="1"
             android:maxWidth="64dp"
             android:visibility="gone"
             tools:text="@string/catalogRetry"
             tools:visibility="visible" />
+
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:background="@color/colorEkirjastoDivider"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

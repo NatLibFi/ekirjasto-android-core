@@ -2,6 +2,9 @@ package org.librarysimplified.ui.catalog
 
 import android.content.Context
 import android.text.TextUtils
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -10,6 +13,9 @@ import android.widget.Space
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.annotation.UiThread
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.google.android.material.button.MaterialButton
 import org.nypl.simplified.books.book_database.api.BookFormats
@@ -23,6 +29,11 @@ class CatalogButtons(
   private val context: Context,
   private val screenSizeInformation: ScreenSizeInformationType
 ) {
+
+  private fun colorStateListForButtonItems(): ColorStateList? {
+    //return ContextCompat.getColorStateList(context, org.librarysimplified.ui.neutrality.R.color.simplified_button_text)
+    return ColorStateList.valueOf(Color.parseColor("#1E1E1E"))
+  }
 
   @UiThread
   fun createButtonSpace(): Space {
@@ -64,6 +75,28 @@ class CatalogButtons(
     button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
     button.maxLines = 1
     button.ellipsize = TextUtils.TruncateAt.END
+    button.setOnClickListener {
+      button.isEnabled = false
+      onClick.invoke(button)
+      button.isEnabled = true
+    }
+    return button
+  }
+
+  @UiThread
+  fun createButtonWithStyle(
+    context: Context,
+    text: Int,
+    description: Int,
+    style: Int,
+    heightMatchParent: Boolean = false,
+    onClick: (Button) -> Unit
+  ) : Button {
+    val button = AppCompatButton(ContextThemeWrapper(this.context, style), null, style)
+    //val button = AppCompatButton(this.context, null, style)
+    button.text = context.getString(text)
+    button.contentDescription = context.getString(description)
+    button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
     button.setOnClickListener {
       button.isEnabled = false
       onClick.invoke(button)
@@ -186,9 +219,11 @@ class CatalogButtons(
     onClick: (Button) -> Unit,
     heightMatchParent: Boolean = false
   ): Button {
-    return this.createButton(
+    return this.createButtonWithStyle(
+      context = this.context,
       text = R.string.catalogCancelHold,
       description = R.string.catalogAccessibilityBookRevokeHold,
+      R.style.ReturnBookButton,
       heightMatchParent = heightMatchParent,
       onClick = onClick
     )
@@ -199,9 +234,11 @@ class CatalogButtons(
     onClick: (Button) -> Unit,
     heightMatchParent: Boolean = false
   ): Button {
-    return this.createButton(
+    return this.createButtonWithStyle(
+      context = this.context,
       text = R.string.catalogReturn,
       description = R.string.catalogAccessibilityBookRevokeLoan,
+      R.style.ReturnBookButton,
       heightMatchParent = heightMatchParent,
       onClick = onClick
     )

@@ -188,6 +188,16 @@ dependencyResolutionManagement {
          * Enable access to various credentials-gated elements.
          */
 
+        //ekirjasto lib lcp
+        ivy {
+            url = uri("https://liblcp.dita.digital")
+            patternLayout{
+                artifact("/[organisation]/[module]/android/aar/test/[revision].[ext]")
+            }
+            metadataSources {
+                artifact()
+            }
+        }
         if (lcpDRMEnabled) {
             val filePath: String =
                 when (val lcpProfile = property("org.thepalaceproject.lcp.profile")) {
@@ -239,6 +249,7 @@ include(":simplified-analytics-api")
 include(":simplified-analytics-circulation")
 include(":simplified-android-ktx")
 include(":simplified-announcements")
+include(":simplified-app-ekirjasto")
 include(":simplified-app-palace")
 include(":simplified-bookmarks")
 include(":simplified-bookmarks-api")

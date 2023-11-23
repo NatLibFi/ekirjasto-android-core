@@ -40,7 +40,8 @@ interface BookCoverProviderType {
     entry: FeedEntry.FeedEntryOPDS,
     imageView: ImageView,
     width: Int,
-    height: Int
+    height: Int,
+    isVerticalList : Boolean
   ): FluentFuture<Unit>
 
   /**

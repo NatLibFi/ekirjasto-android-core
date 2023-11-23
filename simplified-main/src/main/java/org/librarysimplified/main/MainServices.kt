@@ -448,7 +448,9 @@ internal object MainServices {
   ): BookCoverBadgeLookupType {
     return CatalogCoverBadgeImages.create(
       context.resources,
-      { Color.RED },
+      //not sure where this was originally from, but something broke after merge so this would need to point to correct colorPrimary probably
+      {context.getColor(org.librarysimplified.ui.tutorial.R.color.colorPrimary)},
+      {context.getColor(android.R.color.white)},
       screenSize
     )
   }
@@ -522,6 +524,8 @@ internal object MainServices {
       val service = serviceConstructor.invoke()
       if (service != null) {
         services.addService(interfaceType, service)
+      } else {
+        logger.warn("Adding Serivce Failed! {}", interfaceType.name)
       }
       return service
     }
@@ -578,10 +582,10 @@ internal object MainServices {
       serviceConstructor = { MainCatalogBookRevokeStrings(context.resources) }
     )
 
-    val crashlyticsService = addServiceFromServiceLoaderOptionally(
-      message = strings.bootingGeneral("Crashlytics"),
-      interfaceType = CrashlyticsServiceType::class.java
-    )
+//    val crashlyticsService = addServiceFromServiceLoaderOptionally(
+//      message = strings.bootingGeneral("Crashlytics"),
+//      interfaceType = CrashlyticsServiceType::class.java
+//    )
 
     AccountProviderRegistryDebugging.load(context.applicationContext)
 
@@ -932,7 +936,8 @@ internal object MainServices {
       serviceConstructor = {
         TimeTrackingService(
           context = context,
-          httpCalls = TimeTrackingHTTPCalls(ObjectMapper(), lsHTTP, crashlyticsService),
+//          httpCalls = TimeTrackingHTTPCalls(ObjectMapper(), lsHTTP, crashlyticsService),
+          httpCalls = TimeTrackingHTTPCalls(ObjectMapper(), lsHTTP, null),
           timeTrackingDirectory = directories.directoryStorageTimeTracking,
           profilesController = profilesControllerTypeService
         )

@@ -60,6 +60,7 @@ import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceTabButtons
 import org.thepalaceproject.theme.core.PalaceToolbar
+import kotlin.math.roundToInt
 
 /**
  * A fragment displaying an OPDS feed.
@@ -147,6 +148,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
   private lateinit var feedWithoutGroupsAdapter: CatalogPagedAdapter
   private lateinit var feedWithoutGroupsList: RecyclerView
   private lateinit var feedWithoutGroupsScrollListener: RecyclerView.OnScrollListener
+  //Ellibs Dev
+  //private lateinit var toolbar: NeutralToolbar
   private lateinit var toolbar: PalaceToolbar
 
   private var ageGateDialog: DialogFragment? = null
@@ -211,6 +214,11 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       this.feedContent.findViewById(R.id.feedContentLogoHeader)
     this.feedContentLogoImage =
       this.feedContent.findViewById(R.id.feedLibraryLogo)
+
+    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks) {
+      feedContentLogoImage.visibility = View.GONE
+    }
+
     this.feedContentLogoText =
       this.feedContent.findViewById(R.id.feedLibraryText)
 
@@ -510,7 +518,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
           iconView = feedContentLogoImage
         )
 
-        feedContentLogoText.text = account.provider.displayName
+        feedContentLogoText.text = ""
       } catch (e: Exception) {
         this.logger.debug("error configuring header: ", e)
       }
@@ -701,6 +709,9 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         return@forEach
       }
 
+      //Ellibs Dev TODO: refactor
+      //val button = AppCompatButton(context, null, R.style.FacetButton)
+      //button.setTextAppearance(R.style.FacetButtonText)
       val button = MaterialButton(context)
       val buttonLabel = AppCompatTextView(context)
       val spaceStart = Space(context)
@@ -712,6 +723,9 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
           ?: group.firstOrNull()
 
       button.id = View.generateViewId()
+      //ellibs dev TODO: Refactor?
+      button.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.catalog_facet_button_icon,0)
+      button.compoundDrawablePadding = resources.getDimension(R.dimen.catalogFacetButtonIconPadding).roundToInt();
       button.layoutParams = buttonLayoutParams
       button.text = active?.title
       button.ellipsize = TextUtils.TruncateAt.END
@@ -758,6 +772,10 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     ) { index, button ->
       val facet = facetGroup[index]
       button.text = facet.title
+      //Ellibs DEV TODO: Refactor
+      button.setTextColor(
+        ContextCompat.getColor(this.requireContext(), R.color.colorEkirjastoFacetTabText)
+      )
       button.setOnClickListener {
         this.logger.debug("selected entry point facet: {}", facet.title)
         this.viewModel.openFacet(facet)
