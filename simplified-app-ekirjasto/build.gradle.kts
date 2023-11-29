@@ -561,6 +561,7 @@ dependencies {
     implementation(libs.palace.readium2.ui.thread)
     implementation(libs.palace.readium2.vanilla)
     implementation(libs.palace.readium2.views)
+    implementation(libs.palace.theme)
     implementation(libs.pandora.bottom.navigator)
     implementation(libs.pdfium.android)
     implementation(libs.picasso)
