@@ -309,7 +309,7 @@ dependencies {
     implementation(project(":simplified-ui-images"))
     implementation(project(":simplified-ui-listeners-api"))
     implementation(project(":simplified-ui-navigation-tabs"))
-    implementation(project(":simplified-ui-neutrality"))
+    //implementation(project(":simplified-ui-neutrality"))
     implementation(project(":simplified-ui-onboarding"))
     implementation(project(":simplified-ui-screen"))
     implementation(project(":simplified-ui-settings"))

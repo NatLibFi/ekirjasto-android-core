@@ -709,10 +709,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         return@forEach
       }
 
-      //Ellibs Dev TODO: refactor
-      //val button = AppCompatButton(context, null, R.style.FacetButton)
-      //button.setTextAppearance(R.style.FacetButtonText)
       val button = MaterialButton(context)
+      button.setTextAppearance(R.style.FacetButtonText)
       val buttonLabel = AppCompatTextView(context)
       val spaceStart = Space(context)
       val spaceMiddle = Space(context)
@@ -772,9 +770,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     ) { index, button ->
       val facet = facetGroup[index]
       button.text = facet.title
-      //Ellibs DEV TODO: Refactor
       button.setTextColor(
-        ContextCompat.getColor(this.requireContext(), R.color.colorEkirjastoFacetTabText)
+        this.requireContext().getColor(R.color.colorEkirjastoFacetTabText)
       )
       button.setOnClickListener {
         this.logger.debug("selected entry point facet: {}", facet.title)
