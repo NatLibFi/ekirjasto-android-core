@@ -4,7 +4,7 @@
   android:id="@+id/bookDetailStatusFailed"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  tools:background="?attr/simplifiedColorBookStatus">
+  tools:background="@color/PalaceInvertedBackgroundColor">
 
   <TextView
     android:id="@+id/failedText"
@@ -16,6 +16,6 @@
     android:gravity="center"
     android:maxLines="2"
     android:textAlignment="center"
-    android:textColor="@color/simplifiedColorBookStatusText"
+    android:textColor="@color/PalaceTextInvertedColor"
     tools:text="@string/catalogPlaceholder" />
 </FrameLayout>

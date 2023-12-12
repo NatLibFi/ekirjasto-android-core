@@ -11,7 +11,7 @@
         android:id="@+id/audioBookToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/simplifiedColorBackground"
+        android:background="@color/PalaceInvertedBackgroundColor"
         android:minHeight="?attr/actionBarSize"
         android:padding="0dp"
         android:layout_marginBottom="5dp"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:paddingTop="5dp"
-                android:src="@drawable/ic_baseline_arrow_back_24"
+                android:src="@drawable/back"
                 app:tint="@color/colorEkirjastoGreen" />
             <TextView
                 android:layout_width="wrap_content"
@@ -206,7 +206,7 @@
             android:gravity="start"
             android:importantForAccessibility="no"
             android:text="15 sec."
-            android:textColor="?attr/simplifiedColorControlIcon"
+            android:textColor="@color/PalaceTextInvertedColor"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/player_play_pause_text"
@@ -221,7 +221,7 @@
             android:gravity="start"
             android:importantForAccessibility="no"
             android:text="Play"
-            android:textColor="?attr/simplifiedColorControlIcon"
+            android:textColor="@color/PalaceTextInvertedColor"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -236,7 +236,7 @@
             android:gravity="start"
             android:importantForAccessibility="no"
             android:text="15 sec."
-            android:textColor="?attr/simplifiedColorControlIcon"
+            android:textColor="@color/PalaceTextInvertedColor"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@id/player_play_pause_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -303,7 +303,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/audiobook_accessibility_book_cover"
         android:scaleType="fitCenter"
-        android:src="@drawable/icon"
+        android:src="@drawable/main_icon"
         app:layout_constraintBottom_toTopOf="@id/player_waiting_buffering"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -320,6 +320,6 @@
         android:focusable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/bookmark" />
+        app:srcCompat="@drawable/toolbar_bookmark" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

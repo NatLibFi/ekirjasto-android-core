@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <padding
-        android:left="?attr/simplifiedButtonHorizontalPadding"
-        android:top="?attr/simplifiedButtonVerticalPadding"
-        android:right="?attr/simplifiedButtonHorizontalPadding"
-        android:bottom="?attr/simplifiedButtonVerticalPadding" />
-    <corners android:radius="?attr/simplifiedButtonCornerRadius" />
+        android:left="8dp"
+        android:top="4dp"
+        android:right="8dp"
+        android:bottom="4dp" />
+    <corners android:radius="4dp" />
     <solid android:color="@color/colorEkirjastoButtonBackground" />
     <stroke
         android:width="@dimen/ekirjastoButtonStrokeWidth"
