@@ -28,7 +28,7 @@ jobs:
           CI_AWS_SECRET_KEY: ${{ secrets.CI_AWS_SECRET_KEY }}
           TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
           TRANSIFEX_SECRET: ${{ secrets.TRANSIFEX_SECRET }}
-        run: .ci/ci-main.sh normal
+        run: .ekirjasto-ci/ci-build.sh normal
       - name: Upload test report
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
