@@ -1,4 +1,4 @@
-package fi.ellibs.simplye
+package fi.kansalliskirjasto.ekirjasto
 
 import org.nypl.simplified.profiles.api.idle_timer.ProfileIdleTimerConfigurationServiceType
 
