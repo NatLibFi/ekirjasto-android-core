@@ -5,9 +5,9 @@
 
     <item
         android:id="@+id/player_menu_toc"
-        android:icon="@drawable/ic_toc_48"
+        android:icon="@drawable/toolbar_toc"
         android:title="@string/audiobook_player_menu_toc_title"
-        app:iconTint="?attr/simplifiedColorControlActionBar"
+        app:iconTint="@color/PalaceTextInvertedColor"
         app:showAsAction="always" />
 
 </menu>

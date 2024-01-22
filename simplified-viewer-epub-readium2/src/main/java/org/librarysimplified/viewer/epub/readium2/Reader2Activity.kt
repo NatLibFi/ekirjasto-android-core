@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.TxContextWrappingDelegate
@@ -193,25 +193,27 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
       WebView.setWebContentsDebuggingEnabled(true)
     }
 
-    this.readerFragment =
-      this.supportFragmentManager.fragmentFactory.instantiate(
-        this.classLoader,
-        SR2ReaderFragment::class.java.name
-      )
-    this.searchFragment =
-      this.supportFragmentManager.fragmentFactory.instantiate(
-        this.classLoader,
-        SR2SearchFragment::class.java.name
-      )
-    this.tocFragment =
-      this.supportFragmentManager.fragmentFactory.instantiate(
-        this.classLoader,
-        SR2TOCFragment::class.java.name
-      )
+    if (savedInstanceState == null) {
+      this.readerFragment =
+        this.supportFragmentManager.fragmentFactory.instantiate(
+          this.classLoader,
+          SR2ReaderFragment::class.java.name
+        )
+      this.searchFragment =
+        this.supportFragmentManager.fragmentFactory.instantiate(
+          this.classLoader,
+          SR2SearchFragment::class.java.name
+        )
+      this.tocFragment =
+        this.supportFragmentManager.fragmentFactory.instantiate(
+          this.classLoader,
+          SR2TOCFragment::class.java.name
+        )
 
-    this.supportFragmentManager.beginTransaction()
-      .add(R.id.reader2FragmentHost, this.readerFragment)
-      .commit()
+      this.supportFragmentManager.beginTransaction()
+        .add(R.id.reader2FragmentHost, this.readerFragment)
+        .commit()
+    }
   }
 
   override fun onStart() {
@@ -390,7 +392,7 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
     localLastReadBookmark: SR2Bookmark,
     serverLastReadBookmark: SR2Bookmark
   ) {
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
       .setTitle(R.string.reader_position_title)
       .setMessage(R.string.reader_position_message)
       .setNegativeButton(R.string.reader_position_move) { dialog, _ ->
@@ -436,14 +438,23 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
     )
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onBackPressed() {
-    if (this.tocFragment.isVisible) {
-      this.tocClose()
-    } else if (this.searchFragment.isVisible) {
-      this.searchClose()
-    } else {
-      super.onBackPressed()
+    if (this::tocFragment.isInitialized) {
+      if (this.tocFragment.isVisible) {
+        this.tocClose()
+        return
+      }
     }
+
+    if (this::searchFragment.isInitialized) {
+      if (this.searchFragment.isVisible) {
+        this.searchClose()
+        return
+      }
+    }
+
+    super.onBackPressed()
   }
 
   /**
@@ -615,7 +626,7 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
         exception
       }
 
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
       .setTitle(R.string.bookOpenFailedTitle)
       .setMessage(
         this.getString(

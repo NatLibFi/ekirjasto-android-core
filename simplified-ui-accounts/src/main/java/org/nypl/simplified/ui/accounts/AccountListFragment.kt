@@ -5,7 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,8 +25,8 @@ import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import org.nypl.simplified.ui.images.ImageLoaderType
-import org.nypl.simplified.ui.neutrality.NeutralToolbar
 import org.librarysimplified.ui.accounts.R
+import org.thepalaceproject.theme.core.PalaceToolbar
 
 /**
  * A fragment that shows the set of accounts in the current profile.
@@ -61,7 +61,7 @@ class AccountListFragment : Fragment(R.layout.account_list) {
   private lateinit var accountList: RecyclerView
   private lateinit var accountListAdapter: AccountListAdapter
   private lateinit var imageLoader: ImageLoaderType
-  private lateinit var toolbar: NeutralToolbar
+  private lateinit var toolbar: PalaceToolbar
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -75,7 +75,7 @@ class AccountListFragment : Fragment(R.layout.account_list) {
 
   private fun onAccountDeleteClicked(account: AccountType) {
     val context = this.requireContext()
-    AlertDialog.Builder(context)
+    MaterialAlertDialogBuilder(context)
       .setTitle(R.string.accountsDeleteConfirmTitle)
       .setMessage(
         context.getString(
@@ -110,7 +110,7 @@ class AccountListFragment : Fragment(R.layout.account_list) {
     this.accountList =
       view.findViewById(R.id.accountList)
     this.toolbar =
-      view.rootView.findViewWithTag(NeutralToolbar.neutralToolbarName)
+      view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
 
     this.accountListAdapter =
       AccountListAdapter(
@@ -197,7 +197,7 @@ class AccountListFragment : Fragment(R.layout.account_list) {
   }
 
   private fun showAccountDeletionFailedDialog(accountEvent: AccountEventDeletionFailed) {
-    AlertDialog.Builder(this.requireContext())
+    MaterialAlertDialogBuilder(this.requireContext())
       .setTitle(R.string.accountsDeletionFailed)
       .setMessage(R.string.accountsDeletionFailedMessage)
       .setPositiveButton(R.string.accountsDetails) { _, _ ->

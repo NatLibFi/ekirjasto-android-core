@@ -59,12 +59,10 @@ import org.nypl.simplified.profiles.api.ProfileEvent
 import org.nypl.simplified.profiles.api.ProfileID
 import org.nypl.simplified.profiles.api.ProfileType
 import org.nypl.simplified.profiles.api.ProfilesDatabaseType
-import org.nypl.simplified.profiles.api.idle_timer.ProfileIdleTimerType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountCreationStringResourcesType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountDeletionStringResourcesType
 import org.nypl.simplified.tests.MutableServiceDirectory
 import org.nypl.simplified.tests.books.controller.BooksControllerContract
-import org.nypl.simplified.tests.books.idle_timer.InoperableIdleTimer
 import org.nypl.simplified.tests.mocking.FakeAccountCredentialStorage
 import org.nypl.simplified.tests.mocking.MockAccount
 import org.nypl.simplified.tests.mocking.MockAccountCreationStringResources
@@ -102,6 +100,7 @@ class SyncBookRefreshToken {
   private lateinit var executorBooks: ListeningExecutorService
   private lateinit var executorDownloads: ListeningExecutorService
   private lateinit var executorFeeds: ListeningExecutorService
+  private lateinit var executorNotifications: ListeningExecutorService
   private lateinit var httpClient: LSHTTPClientType
   private lateinit var patronUserProfileParsers: PatronUserProfileParsersType
   private lateinit var profileEvents: PublishSubject<ProfileEvent>
@@ -151,7 +150,8 @@ class SyncBookRefreshToken {
       ),
       adobeCredentials = null,
       authenticationDescription = "BasicToken",
-      annotationsURI = URI("https://www.example.com")
+      annotationsURI = URI("https://www.example.com"),
+      deviceRegistrationURI = URI("https://www.example.com")
     )
 
     this.account.setLoginState(AccountLoginState.AccountLoggedIn(credentials))
@@ -172,6 +172,7 @@ class SyncBookRefreshToken {
     this.executorBooks = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
     this.executorDownloads = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
     this.executorFeeds = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
+    this.executorNotifications = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
     this.patronUserProfileParsers = Mockito.mock(PatronUserProfileParsersType::class.java)
     this.profileEvents = PublishSubject.create()
     this.profileEventsReceived = Collections.synchronizedList(ArrayList())
@@ -293,12 +294,11 @@ class SyncBookRefreshToken {
     services.putService(ContentResolverType::class.java, this.contentResolver)
     services.putService(FeedLoaderType::class.java, feedLoader)
     services.putService(LSHTTPClientType::class.java, this.httpClient)
-    services.putService(NotificationTokenHTTPCallsType::class.java, NotificationTokenHTTPCalls(this.httpClient))
+    services.putService(NotificationTokenHTTPCallsType::class.java, NotificationTokenHTTPCalls(this.httpClient, this.executorNotifications))
     services.putService(OPDSFeedParserType::class.java, parser)
     services.putService(PatronUserProfileParsersType::class.java, patronUserProfileParsers)
     services.putService(ProfileAccountCreationStringResourcesType::class.java, profileAccountCreationStringResources)
     services.putService(ProfileAccountDeletionStringResourcesType::class.java, profileAccountDeletionStringResources)
-    services.putService(ProfileIdleTimerType::class.java, InoperableIdleTimer())
     services.putService(ProfilesDatabaseType::class.java, profiles)
 
     return Controller.createFromServiceDirectory(

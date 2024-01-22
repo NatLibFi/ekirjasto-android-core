@@ -59,18 +59,25 @@
       android:required="false" />
 
     <activity
+        android:name="org.librarysimplified.viewer.preview.BookPreviewActivity"
+        android:exported="false"
+        android:parentActivityName="org.librarysimplified.main.MainActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/PalaceTheme.WithoutActionBar" />
+
+    <activity
       android:name="org.librarysimplified.viewer.epub.readium2.Reader2Activity"
       android:configChanges="orientation|keyboardHidden"
       android:exported="false"
       android:parentActivityName="org.librarysimplified.main.MainActivity"
       android:screenOrientation="portrait"
-      android:theme="@style/NeutralTheme.NoActionBar" />
+      android:theme="@style/PalaceTheme.WithoutActionBar" />
 
-    <activity
-      android:name="org.librarysimplified.viewer.pdf.PdfReaderActivity"
-      android:contentDescription="@string/app_name"
-      android:exported="false"
-      android:screenOrientation="portrait" />
+<!--    <activity-->
+<!--      android:name="org.librarysimplified.viewer.pdf.PdfReaderActivity"-->
+<!--      android:contentDescription="@string/app_name"-->
+<!--      android:exported="false"-->
+<!--      android:screenOrientation="portrait" />-->
 
     <activity
         android:name="org.librarysimplified.viewer.pdf.pdfjs.PdfReaderActivity"
@@ -83,7 +90,7 @@
       android:name="org.librarysimplified.viewer.audiobook.AudioBookPlayerActivity"
       android:screenOrientation="portrait"
       android:exported="false"
-      android:theme="@style/NeutralTheme.NoActionBar" />
+      android:theme="@style/PalaceTheme.WithoutActionBar" />
 
 <!--    <activity-->
 <!--      android:name="org.librarysimplified.cardcreator.CardCreatorActivity"-->

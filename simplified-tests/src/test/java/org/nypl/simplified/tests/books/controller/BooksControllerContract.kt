@@ -75,7 +75,6 @@ import org.nypl.simplified.profiles.ProfilesDatabases
 import org.nypl.simplified.profiles.api.ProfileDatabaseException
 import org.nypl.simplified.profiles.api.ProfileEvent
 import org.nypl.simplified.profiles.api.ProfilesDatabaseType
-import org.nypl.simplified.profiles.api.idle_timer.ProfileIdleTimerType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountCreationStringResourcesType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountDeletionStringResourcesType
 import org.nypl.simplified.taskrecorder.api.TaskResult
@@ -83,7 +82,6 @@ import org.nypl.simplified.tests.EventAssertions
 import org.nypl.simplified.tests.ExtraAssertions.assertInstanceOf
 import org.nypl.simplified.tests.MutableServiceDirectory
 import org.nypl.simplified.tests.books.BookFormatsTesting
-import org.nypl.simplified.tests.books.idle_timer.InoperableIdleTimer
 import org.nypl.simplified.tests.mocking.FakeAccountCredentialStorage
 import org.nypl.simplified.tests.mocking.MockAccountCreationStringResources
 import org.nypl.simplified.tests.mocking.MockAccountDeletionStringResources
@@ -128,6 +126,7 @@ abstract class BooksControllerContract {
   private lateinit var executorBooks: ListeningExecutorService
   private lateinit var executorDownloads: ListeningExecutorService
   private lateinit var executorFeeds: ListeningExecutorService
+  private lateinit var executorNotifications: ListeningExecutorService
   private lateinit var executorTimer: ListeningExecutorService
   private lateinit var lsHTTP: LSHTTPClientType
   private lateinit var patronUserProfileParsers: PatronUserProfileParsersType
@@ -159,7 +158,8 @@ abstract class BooksControllerContract {
       password = AccountPassword("1234"),
       adobeCredentials = null,
       authenticationDescription = null,
-      annotationsURI = URI("https://www.example.com")
+      annotationsURI = URI("https://www.example.com"),
+      deviceRegistrationURI = URI("https://www.example.com")
     )
   }
 
@@ -210,12 +210,11 @@ abstract class BooksControllerContract {
     services.putService(ContentResolverType::class.java, this.contentResolver)
     services.putService(FeedLoaderType::class.java, feedLoader)
     services.putService(LSHTTPClientType::class.java, this.lsHTTP)
-    services.putService(NotificationTokenHTTPCallsType::class.java, NotificationTokenHTTPCalls(this.lsHTTP))
+    services.putService(NotificationTokenHTTPCallsType::class.java, NotificationTokenHTTPCalls(this.lsHTTP, this.executorNotifications))
     services.putService(OPDSFeedParserType::class.java, parser)
     services.putService(PatronUserProfileParsersType::class.java, patronUserProfileParsers)
     services.putService(ProfileAccountCreationStringResourcesType::class.java, profileAccountCreationStringResources)
     services.putService(ProfileAccountDeletionStringResourcesType::class.java, profileAccountDeletionStringResources)
-    services.putService(ProfileIdleTimerType::class.java, InoperableIdleTimer())
     services.putService(ProfilesDatabaseType::class.java, profiles)
 
     return Controller.createFromServiceDirectory(
@@ -274,11 +273,10 @@ abstract class BooksControllerContract {
     services.putService(FeedLoaderType::class.java, feedLoader)
     services.putService(LSHTTPClientType::class.java, this.lsHTTP)
     services.putService(OPDSFeedParserType::class.java, parser)
-    services.putService(NotificationTokenHTTPCallsType::class.java, NotificationTokenHTTPCalls(this.lsHTTP))
+    services.putService(NotificationTokenHTTPCallsType::class.java, NotificationTokenHTTPCalls(this.lsHTTP, this.executorNotifications))
     services.putService(PatronUserProfileParsersType::class.java, patronUserProfileParsers)
     services.putService(ProfileAccountCreationStringResourcesType::class.java, profileAccountCreationStringResources)
     services.putService(ProfileAccountDeletionStringResourcesType::class.java, profileAccountDeletionStringResources)
-    services.putService(ProfileIdleTimerType::class.java, InoperableIdleTimer())
     services.putService(ProfilesDatabaseType::class.java, profiles)
 
     return Controller.createFromServiceDirectory(
@@ -312,6 +310,7 @@ abstract class BooksControllerContract {
     this.executorBooks = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
     this.executorDownloads = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
     this.executorFeeds = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
+    this.executorNotifications = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
     this.executorTimer = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool())
     this.patronUserProfileParsers = Mockito.mock(PatronUserProfileParsersType::class.java)
     this.profileEvents = PublishSubject.create<ProfileEvent>()

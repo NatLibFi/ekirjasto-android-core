@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions
 import com.google.common.util.concurrent.FluentFuture
 import com.io7m.jfunctional.Some
 import org.joda.time.DateTime
+import org.joda.time.Duration
 import org.joda.time.format.DateTimeFormatterBuilder
 import org.librarysimplified.services.api.Services
 import org.nypl.simplified.android.ktx.supportActionBar
@@ -37,9 +38,9 @@ import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
-import org.nypl.simplified.ui.neutrality.NeutralToolbar
 import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 import org.slf4j.LoggerFactory
+import org.thepalaceproject.theme.core.PalaceToolbar
 import java.net.URI
 
 /**
@@ -129,7 +130,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var statusInProgressText: TextView
   private lateinit var summary: TextView
   private lateinit var title: TextView
-  private lateinit var toolbar: NeutralToolbar
+  private lateinit var toolbar: PalaceToolbar
 
   private val dateFormatter =
     DateTimeFormatterBuilder()
@@ -175,7 +176,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     super.onViewCreated(view, savedInstanceState)
 
     this.toolbar =
-      view.rootView.findViewWithTag(NeutralToolbar.neutralToolbarName)
+      view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
 
     this.viewModel.bookWithStatusLive.observe(this.viewLifecycleOwner) { info ->
       reconfigureUI(info.first, info.second)
@@ -365,6 +366,18 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private val genreUriScheme =
     "http://librarysimplified.org/terms/genres/Simplified/"
 
+  private fun formatDuration(seconds: Double): String {
+    val duration = Duration.standardSeconds(seconds.toLong())
+    val hours = Duration.standardHours(duration.standardHours)
+    val remaining = duration.minus(hours)
+
+    return getString(
+      R.string.catalogDurationFormat,
+      hours.standardHours.toString(),
+      remaining.standardMinutes.toString()
+    )
+  }
+
   private fun configureMetadataTable(
     probableFormat: BookFormats.BookFormatDefinition?,
     entry: OPDSAcquisitionFeedEntry
@@ -436,6 +449,15 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       rowVal.text = this.dateTimeFormatter.print(entry.updated)
       this.metadata.addView(row)
     }
+
+    val duration = entry.duration
+    if (duration.isSome) {
+      val durationValue = (duration as Some<Double>).get()
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaDuration)
+      rowVal.text = formatDuration(durationValue)
+      this.metadata.addView(row)
+    }
   }
 
   private fun bookInfoViewOf(): Triple<View, TextView, TextView> {
@@ -453,7 +475,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         this.onBookStatusHeld(status, bookPreviewStatus)
       }
       is BookStatus.Loaned -> {
-        this.onBookStatusLoaned(status, book.book, bookPreviewStatus)
+        this.onBookStatusLoaned(status, book.book)
       }
       is BookStatus.Holdable -> {
         this.onBookStatusHoldable(status, bookPreviewStatus)
@@ -660,7 +682,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   }
 
   private fun onBookStatusReachedLoanLimit() {
-    AlertDialog.Builder(requireContext())
+    MaterialAlertDialogBuilder(requireContext())
       .setTitle(R.string.bookReachedLoanLimitDialogTitle)
       .setMessage(R.string.bookReachedLoanLimitDialogMessage)
       .setPositiveButton(R.string.bookReachedLoanLimitDialogButton) { dialog, _ ->
@@ -825,12 +847,9 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
   private fun onBookStatusLoaned(
     bookStatus: BookStatus.Loaned,
-    book: Book,
-    bookPreviewStatus: BookPreviewStatus
+    book: Book
   ) {
     this.buttons.removeAllViews()
-
-    var createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
 
     when (bookStatus) {
       is BookStatus.Loaned.LoanedNotDownloaded -> {
@@ -849,23 +868,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
             )
           }
         )
-
-        if (createPreviewButton) {
-          this.buttons.addView(this.buttonCreator.createButtonSpace())
-          this.buttons.addView(
-            this.buttonCreator.createReadPreviewButton(
-              bookFormat = parameters.feedEntry.probableFormat,
-              onClick = {
-                viewModel.openBookPreview(parameters.feedEntry)
-              }
-            )
-          )
-        }
       }
       is BookStatus.Loaned.LoanedDownloaded -> {
-        // the book preview button can be ignored
-        createPreviewButton = false
-
         when (val format = book.findPreferredFormat()) {
           is BookFormat.BookFormatPDF,
           is BookFormat.BookFormatEPUB -> {
@@ -912,8 +916,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
           }
         )
       )
-    } else if (!createPreviewButton) {
-      // add spaces on both sides if there aren't any other buttons
+    } else {
       this.buttons.addView(this.buttonCreator.createButtonSizedSpace(), 0)
       this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
     }

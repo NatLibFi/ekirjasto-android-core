@@ -11,10 +11,8 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.common.util.concurrent.MoreExecutors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,6 +35,7 @@ import org.nypl.simplified.ui.thread.api.UIThreadServiceType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
+import org.thepalaceproject.theme.core.PalaceToolbar
 import java.io.File
 import java.net.ServerSocket
 import java.util.ServiceLoader
@@ -81,7 +80,6 @@ class PdfReaderActivity : AppCompatActivity() {
   private lateinit var bookID: BookID
   private lateinit var feedEntry: FeedEntry.FeedEntryOPDS
   private lateinit var loadingBar: ProgressBar
-  private lateinit var pdfTitle: TextView
   private lateinit var webView: WebView
 
   private var pdfServer: PdfServer? = null
@@ -97,9 +95,6 @@ class PdfReaderActivity : AppCompatActivity() {
     createToolbar(params.documentTitle)
 
     this.loadingBar = findViewById(R.id.pdf_loading_progress)
-    this.pdfTitle = findViewById(R.id.pdf_title)
-    this.pdfTitle.text = params.documentTitle
-
     this.accountId = params.accountId
     this.feedEntry = params.entry
     this.bookID = params.id
@@ -199,7 +194,7 @@ class PdfReaderActivity : AppCompatActivity() {
     params: PdfReaderParameters,
     isSavedInstanceStateNull: Boolean
   ) {
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
       .setTitle(R.string.viewer_position_title)
       .setMessage(R.string.viewer_position_message)
       .setNegativeButton(R.string.viewer_position_move) { dialog, _ ->
@@ -229,13 +224,16 @@ class PdfReaderActivity : AppCompatActivity() {
   }
 
   private fun createToolbar(title: String) {
-    val toolbar = this.findViewById(R.id.pdf_toolbar) as Toolbar
+    val toolbar = this.findViewById(R.id.pdf_toolbar) as PalaceToolbar
+    toolbar.setLogoOnClickListener {
+      this.finish()
+    }
 
     this.setSupportActionBar(toolbar)
-    this.supportActionBar?.setHomeActionContentDescription(R.string.content_description_back)
-
     this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     this.supportActionBar?.setDisplayShowHomeEnabled(true)
+    this.supportActionBar?.setHomeActionContentDescription(R.string.content_description_back)
+    this.supportActionBar?.setHomeButtonEnabled(true)
     this.supportActionBar?.title = title
   }
 
@@ -427,7 +425,7 @@ class PdfReaderActivity : AppCompatActivity() {
     this.log.error("error: {}: ", title, failure)
 
     this.uiThread.runOnUIThread {
-      AlertDialog.Builder(context)
+      MaterialAlertDialogBuilder(context)
         .setTitle(title)
         .setMessage(failure.localizedMessage)
         .setOnDismissListener {

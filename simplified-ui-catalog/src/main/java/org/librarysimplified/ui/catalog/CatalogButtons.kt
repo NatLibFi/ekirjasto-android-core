@@ -1,12 +1,12 @@
 package org.librarysimplified.ui.catalog
 
 import android.content.Context
+import android.text.TextUtils
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Space
@@ -17,7 +17,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
+import com.google.android.material.button.MaterialButton
 import org.nypl.simplified.books.book_database.api.BookFormats
 import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 
@@ -64,16 +64,17 @@ class CatalogButtons(
 
   @UiThread
   fun createButton(
-    context: Context,
     text: Int,
     description: Int,
     heightMatchParent: Boolean = false,
     onClick: (Button) -> Unit
   ): Button {
-    val button = AppCompatButton(this.context)
-    button.text = context.getString(text)
-    button.contentDescription = context.getString(description)
+    val button = MaterialButton(this.context)
+    button.text = this.context.getString(text)
+    button.contentDescription = this.context.getString(description)
     button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
+    button.maxLines = 1
+    button.ellipsize = TextUtils.TruncateAt.END
     button.setOnClickListener {
       button.isEnabled = false
       onClick.invoke(button)
@@ -108,7 +109,7 @@ class CatalogButtons(
   fun createReadButtonWithLoanDuration(
     loanDuration: String,
     onClick: () -> Unit
-  ): LinearLayout {
+  ): View {
     return createButtonWithDuration(loanDuration, R.string.catalogRead, onClick)
   }
 
@@ -116,7 +117,7 @@ class CatalogButtons(
   fun createDownloadButtonWithLoanDuration(
     loanDuration: String,
     onClick: () -> Unit
-  ): LinearLayout {
+  ): View {
     return createButtonWithDuration(loanDuration, R.string.catalogDownload, onClick)
   }
 
@@ -124,7 +125,7 @@ class CatalogButtons(
   fun createListenButtonWithLoanDuration(
     loanDuration: String,
     onClick: () -> Unit
-  ): LinearLayout {
+  ): View {
     return createButtonWithDuration(loanDuration, R.string.catalogListen, onClick)
   }
 
@@ -133,64 +134,25 @@ class CatalogButtons(
     loanDuration: String,
     @StringRes res: Int,
     onClick: () -> Unit
-  ): LinearLayout {
-    val mainText = this.createCenteredTextForButtons(res).apply {
-      this.layoutParams = wrapContentParameters()
-      this.setTextColor(colorStateListForButtonItems())
-      this.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-      this.isDuplicateParentStateEnabled = true
-      this.movementMethod = null
-      this.isVerticalScrollBarEnabled = false
+  ): View {
+    val button = MaterialButton(this.context)
+    button.text = this.context.getString(res)
+    button.contentDescription = this.context.getString(res)
+    button.layoutParams = this.buttonLayoutParameters(true)
+    button.maxLines = 1
+    button.ellipsize = TextUtils.TruncateAt.END
+    button.setOnClickListener {
+      button.isEnabled = false
+      onClick.invoke()
+      button.isEnabled = true
     }
-
-    val textLoanDuration = this.createCenteredTextForButtons(loanDuration).apply {
-      this.layoutParams = wrapContentParameters()
-      this.setTextColor(colorStateListForButtonItems())
-      this.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-      this.isDuplicateParentStateEnabled = true
-      this.movementMethod = null
-      this.isVerticalScrollBarEnabled = false
-    }
-
-    val imageViewDimension = this.screenSizeInformation.dpToPixels(8).toInt()
-
-    val imageView = AppCompatImageView(this.context).apply {
-      this.layoutParams = ViewGroup.MarginLayoutParams(imageViewDimension, imageViewDimension).apply {
-        this.bottomMargin = 4
-      }
-      this.isDuplicateParentStateEnabled = true
-      this.setImageResource(R.drawable.ic_clock)
-      this.imageTintList = colorStateListForButtonItems()
-    }
-
-    val linearLayout = LinearLayout(this.context).apply {
-      this.orientation = LinearLayout.VERTICAL
-      this.gravity = Gravity.CENTER
-      this.layoutParams = ViewGroup.MarginLayoutParams(
-        ViewGroup.LayoutParams.WRAP_CONTENT,
-        ViewGroup.LayoutParams.MATCH_PARENT
-      ).apply {
-        this.marginEnd = screenSizeInformation.dpToPixels(6).toInt()
-      }
-      this.isDuplicateParentStateEnabled = true
-      this.addView(imageView)
-      this.addView(textLoanDuration)
-    }
-
-    return LinearLayout(this.context, null, androidx.appcompat.R.attr.buttonStyle).apply {
-      this.orientation = LinearLayout.HORIZONTAL
-      this.gravity = Gravity.CENTER
-      this.layoutParams = buttonLayoutParameters(
-        heightMatchParent = true
-      )
-      this.setOnClickListener {
-        this.isEnabled = false
-        onClick.invoke()
-        this.isEnabled = true
-      }
-      this.addView(linearLayout)
-      this.addView(mainText)
-    }
+    button.iconSize = this.screenSizeInformation.dpToPixels(24).toInt()
+    button.icon = CatalogTimedLoanDrawable(
+      context = this.context,
+      screenSizeInformation = this.screenSizeInformation,
+      durationText = loanDuration
+    )
+    return button
   }
 
   @UiThread
@@ -199,7 +161,6 @@ class CatalogButtons(
     heightMatchParent: Boolean = false
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogRead,
       description = R.string.catalogAccessibilityBookRead,
       heightMatchParent = heightMatchParent,
@@ -213,7 +174,6 @@ class CatalogButtons(
     onClick: (Button) -> Unit
   ): Button {
     return this.createButton(
-      context = this.context,
       text = if (bookFormat == BookFormats.BookFormatDefinition.BOOK_FORMAT_AUDIO) {
         R.string.catalogBookPreviewAudioBook
       } else {
@@ -234,7 +194,6 @@ class CatalogButtons(
     heightMatchParent: Boolean = false
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogListen,
       description = R.string.catalogAccessibilityBookListen,
       heightMatchParent = heightMatchParent,
@@ -248,7 +207,6 @@ class CatalogButtons(
     heightMatchParent: Boolean = false
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogDownload,
       description = R.string.catalogAccessibilityBookDownload,
       heightMatchParent = heightMatchParent,
@@ -291,7 +249,6 @@ class CatalogButtons(
     onClick: (Button) -> Unit
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogCancel,
       description = R.string.catalogAccessibilityBookDownloadCancel,
       onClick = onClick
@@ -304,7 +261,6 @@ class CatalogButtons(
     heightMatchParent: Boolean = false
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogReserve,
       description = R.string.catalogAccessibilityBookReserve,
       heightMatchParent = heightMatchParent,
@@ -318,7 +274,6 @@ class CatalogButtons(
     heightMatchParent: Boolean = false
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogGet,
       description = R.string.catalogAccessibilityBookBorrow,
       heightMatchParent = heightMatchParent,
@@ -331,7 +286,6 @@ class CatalogButtons(
     onClick: (Button) -> Unit
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogRetry,
       description = R.string.catalogAccessibilityBookErrorRetry,
       onClick = onClick
@@ -343,7 +297,6 @@ class CatalogButtons(
     onClick: (Button) -> Unit
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogDetails,
       description = R.string.catalogAccessibilityBookErrorDetails,
       onClick = onClick
@@ -355,7 +308,6 @@ class CatalogButtons(
     onClick: (Button) -> Unit
   ): Button {
     return this.createButton(
-      context = this.context,
       text = R.string.catalogDismiss,
       description = R.string.catalogAccessibilityBookErrorDismiss,
       onClick = onClick

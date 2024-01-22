@@ -6,22 +6,22 @@
     <item
         android:id="@+id/player_menu_playback_rate"
         android:title="Speed"
-        android:icon="@drawable/ic_speed_48"
-        app:iconTint="?attr/simplifiedColorControlActionBar"
+        android:icon="@drawable/toolbar_speed"
+        app:iconTint="@color/PalaceTextInvertedColor"
         app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/player_menu_add_bookmark"
-        android:icon="@drawable/ic_bookmark"
+        android:icon="@drawable/toolbar_bookmark"
         android:title="Bookmark"
-        app:iconTint="?attr/simplifiedColorControlActionBar"
+        app:iconTint="@color/PalaceTextInvertedColor"
         app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/player_menu_sleep"
-        android:icon="@drawable/ic_sleep"
+        android:icon="@drawable/baseline_work_24"
         android:title="Sleep timer"
-        app:iconTint="?attr/simplifiedColorControlActionBar"
+        app:iconTint="@color/PalaceTextInvertedColor"
         app:showAsAction="always|withText" />
 
 </menu>

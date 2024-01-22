@@ -153,10 +153,6 @@ abstract class ProfileAccountLogoutTaskContract {
 
     this.server = MockWebServer()
     this.server.start()
-
-    val preferences = Mockito.mock(ProfilePreferences::class.java)
-    Mockito.`when`(this.profile.preferences()).thenReturn(preferences)
-    Mockito.`when`(preferences.areNotificationsEnabled).thenReturn(true)
   }
 
   @AfterEach
@@ -256,7 +252,8 @@ abstract class ProfileAccountLogoutTaskContract {
         password = AccountPassword("1234"),
         adobeCredentials = null,
         authenticationDescription = null,
-        annotationsURI = URI("https://www.example.com")
+        annotationsURI = URI("https://www.example.com"),
+        deviceRegistrationURI = URI("https://www.example.com")
       )
 
     this.account.setLoginState(AccountLoggedIn(credentials))
@@ -288,7 +285,7 @@ abstract class ProfileAccountLogoutTaskContract {
       this.bookRegistry.books().values.all { it.status is BookStatus.Loaned.LoanedNotDownloaded }
     )
 
-    Mockito.verify(tokenHttp, Mockito.times(1)).deleteFCMTokenForProfileAccount(account, true)
+    Mockito.verify(tokenHttp, Mockito.times(1)).deleteFCMTokenForProfileAccount(account)
   }
 
   /**
@@ -337,7 +334,8 @@ abstract class ProfileAccountLogoutTaskContract {
           )
         ),
         annotationsURI = URI("https://www.example.com"),
-        authenticationDescription = null
+        authenticationDescription = null,
+        deviceRegistrationURI = URI("https://www.example.com")
       )
 
     this.account.setLoginState(AccountLoggedIn(credentials))
@@ -436,7 +434,8 @@ abstract class ProfileAccountLogoutTaskContract {
           )
         ),
         annotationsURI = URI("https://www.example.com"),
-        authenticationDescription = null
+        authenticationDescription = null,
+        deviceRegistrationURI = URI("https://www.example.com")
       )
 
     this.account.setLoginState(AccountLoggedIn(credentials))
@@ -554,7 +553,8 @@ abstract class ProfileAccountLogoutTaskContract {
           )
         ),
         annotationsURI = URI("https://www.example.com"),
-        authenticationDescription = null
+        authenticationDescription = null,
+        deviceRegistrationURI = URI("https://www.example.com")
       )
 
     this.account.setLoginState(AccountLoggedIn(credentials))

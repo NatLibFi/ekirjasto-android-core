@@ -1,5 +1,6 @@
 package org.nypl.simplified.ui.accounts
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.LocationManager
@@ -31,9 +32,9 @@ import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import org.nypl.simplified.ui.images.ImageLoaderType
-import org.nypl.simplified.ui.neutrality.NeutralToolbar
 import org.slf4j.LoggerFactory
 import org.librarysimplified.ui.accounts.R
+import org.thepalaceproject.theme.core.PalaceToolbar
 
 /**
  * A fragment that shows the account registry and allows for account creation.
@@ -61,7 +62,7 @@ class AccountListRegistryFragment : Fragment(R.layout.account_list_registry) {
   private lateinit var noLocation: TextView
   private lateinit var progress: ContentLoadingProgressBar
   private lateinit var title: TextView
-  private lateinit var toolbar: NeutralToolbar
+  private lateinit var toolbar: PalaceToolbar
   private var reload: MenuItem? = null
   private var errorDialog: AlertDialog? = null
 
@@ -88,7 +89,7 @@ class AccountListRegistryFragment : Fragment(R.layout.account_list_registry) {
     this.noLocation =
       view.findViewById(R.id.accountRegistryNoLocation)
     this.toolbar =
-      view.rootView.findViewWithTag(NeutralToolbar.neutralToolbarName)
+      view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
 
     this.accountListAdapter =
       FilterableAccountListAdapter(
@@ -275,7 +276,7 @@ class AccountListRegistryFragment : Fragment(R.layout.account_list_registry) {
 
     if (this.errorDialog == null) {
       val newDialog =
-        AlertDialog.Builder(this.requireActivity())
+        MaterialAlertDialogBuilder(this.requireActivity())
           .setTitle(R.string.accountCreationFailed)
           .setMessage(R.string.accountCreationFailedMessage)
           .setPositiveButton(R.string.accountsDetails) { dialog, _ ->

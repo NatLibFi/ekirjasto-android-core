@@ -164,16 +164,6 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
   private fun askForNotificationsPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      val services =
-        Services.serviceDirectory()
-      val profiles =
-        services.requireService(ProfilesControllerType::class.java)
-
-      if (!profiles.profileCurrent().preferences().areNotificationsEnabled) {
-        logger.debug("Notifications are currently disabled, so we won't be asking for permissions")
-        return
-      }
-
       ActivityCompat.requestPermissions(
         this,
         arrayOf(Manifest.permission.POST_NOTIFICATIONS),
@@ -243,21 +233,6 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
       )
     )
     return true
-  }
-
-  override fun onUserInteraction() {
-    super.onUserInteraction()
-
-    /*
-     * Each time the user interacts with something onscreen, reset the timer.
-     */
-
-    if (Services.isInitialized()) {
-      Services.serviceDirectory()
-        .requireService(ProfilesControllerType::class.java)
-        .profileIdleTimer()
-        .reset()
-    }
   }
 
   override fun onStart() {

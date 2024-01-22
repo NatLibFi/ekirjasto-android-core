@@ -14,7 +14,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -60,10 +60,10 @@ import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLogoutButtonDi
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLogoutButtonEnabled
 import org.nypl.simplified.ui.images.ImageAccountIcons
 import org.nypl.simplified.ui.images.ImageLoaderType
-import org.nypl.simplified.ui.neutrality.NeutralToolbar
 import org.slf4j.LoggerFactory
 import java.net.URI
 import org.librarysimplified.ui.accounts.R
+import org.thepalaceproject.theme.core.PalaceToolbar
 
 /**
  * A fragment that shows settings for a single account.
@@ -141,7 +141,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
   private lateinit var settingsCardCreator: ConstraintLayout
   private lateinit var signUpButton: Button
   private lateinit var signUpLabel: TextView
-  private lateinit var toolbar: NeutralToolbar
+  private lateinit var toolbar: PalaceToolbar
 
   private val imageButtonLoadingTag = "IMAGE_BUTTON_LOADING"
   private val nyplCardCreatorScheme = "nypl.card-creator"
@@ -174,7 +174,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     this.accountIcon =
       view.findViewById(R.id.accountCellIcon)
     this.toolbar =
-      view.rootView.findViewWithTag(NeutralToolbar.neutralToolbarName)
+      view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
 
     this.authentication =
       view.findViewById(R.id.auth)
@@ -503,7 +503,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           } catch (e: Exception) {
             this.logger.error("unable to start activity: ", e)
             val context = this.requireContext()
-            AlertDialog.Builder(context)
+            MaterialAlertDialogBuilder(context)
               .setMessage(context.getString(R.string.accountReportFailed, supportUrl))
               .create()
               .show()
@@ -964,7 +964,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         } catch (e: Exception) {
           this.logger.error("unable to start activity: ", e)
           val context = this.requireContext()
-          AlertDialog.Builder(context)
+          MaterialAlertDialogBuilder(context)
             .setMessage(context.getString(R.string.accountPasswordResetFailed, supportUrl))
             .create()
             .show()
@@ -1104,7 +1104,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
   private fun onAgeCheckboxClicked(): (View) -> Unit = {
     val isOver13 = this.viewModel.isOver13
-    AlertDialog.Builder(this.requireContext())
+    MaterialAlertDialogBuilder(this.requireContext())
       .setTitle(R.string.accountCOPPADeleteBooks)
       .setMessage(R.string.accountCOPPADeleteBooksConfirm)
       .setNegativeButton(R.string.accountCancel) { _, _ ->
@@ -1173,14 +1173,14 @@ class AccountDetailFragment : Fragment(R.layout.account) {
   }
 
   private fun showErrorGettingLocationDialog() {
-    AlertDialog.Builder(requireContext())
+    MaterialAlertDialogBuilder(requireContext())
       .setMessage(getString(R.string.accountCardCreatorLocationFailed))
       .create()
       .show()
   }
 
   private fun showLocationDisclaimerDialog() {
-    AlertDialog.Builder(requireContext())
+    MaterialAlertDialogBuilder(requireContext())
       .setMessage(R.string.accountCardCreatorDialogPermissionsMessage)
       .setPositiveButton(android.R.string.ok) { _, _ -> requestLocationPermissions() }
       .setNegativeButton(R.string.accountCardCreatorDialogCancel) { dialog, _ -> dialog?.dismiss() }
@@ -1189,7 +1189,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
   }
 
   private fun showSettingsDialog() {
-    AlertDialog.Builder(requireContext())
+    MaterialAlertDialogBuilder(requireContext())
       .setMessage(R.string.accountCardCreatorDialogOpenSettingsMessage)
       .setPositiveButton(R.string.accountCardCreatorDialogOpenSettings) { _, _ ->
         openAppSettings()

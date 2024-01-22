@@ -4,7 +4,6 @@ dependencies {
     implementation(project(":simplified-reports"))
     implementation(project(":simplified-taskrecorder-api"))
     implementation(project(":simplified-ui-listeners-api"))
-    implementation(project(":simplified-ui-neutrality"))
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
@@ -12,6 +11,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.androidx.core)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.customview)
     implementation(libs.androidx.drawerlayout)
     implementation(libs.androidx.fragment)
@@ -23,5 +23,6 @@ dependencies {
     implementation(libs.google.material)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
+    implementation(libs.palace.theme)
     implementation(libs.slf4j)
 }

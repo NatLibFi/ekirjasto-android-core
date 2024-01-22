@@ -1,6 +1,6 @@
 package org.nypl.simplified.ui.settings
 
-import android.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -26,8 +26,8 @@ import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.taskrecorder.api.TaskStep
 import org.nypl.simplified.taskrecorder.api.TaskStepResolution
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
-import org.nypl.simplified.ui.neutrality.NeutralToolbar
 import org.slf4j.LoggerFactory
+import org.thepalaceproject.theme.core.PalaceToolbar
 
 /**
  * A fragment that shows various debug options for testing app functionality at runtime.
@@ -64,15 +64,14 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
   private lateinit var showTesting: SwitchCompat
   private lateinit var syncAccountsButton: Button
   private lateinit var enableOpenEBooksQA: Button
-  private lateinit var toolbar: NeutralToolbar
-  private lateinit var areNotificationsEnabled: SwitchCompat
+  private lateinit var toolbar: PalaceToolbar
   private lateinit var isManualLCPPassphraseEnabled: SwitchCompat
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     this.toolbar =
-      view.rootView.findViewWithTag(NeutralToolbar.neutralToolbarName)
+      view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
     this.crashButton =
       view.findViewById(R.id.settingsVersionDevCrash)
     this.cacheButton =
@@ -99,8 +98,6 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
       view.findViewById(R.id.settingsVersionDevSeenLibrarySelectionScreen)
     this.isManualLCPPassphraseEnabled =
       view.findViewById(R.id.settingsVersionDevIsManualLCPPassphraseEnabled)
-    this.areNotificationsEnabled =
-      view.findViewById(R.id.settingsVersionDevAreNotificationsEnabled)
     this.cardCreatorFakeLocation =
       view.findViewById(R.id.settingsVersionDevCardCreatorLocationSwitch)
     this.showOnlySupportedBooks =
@@ -141,8 +138,6 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
       this.viewModel.cardCreatorFakeLocation
     this.isManualLCPPassphraseEnabled.isChecked =
       this.viewModel.isManualLCPPassphraseEnabled
-    this.areNotificationsEnabled.isChecked =
-      this.viewModel.areNotificationsEnabled
     this.showOnlySupportedBooks.isChecked =
       this.viewModel.showOnlySupportedBooks
     this.crashlyticsId.text =
@@ -245,9 +240,6 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
     }
     this.isManualLCPPassphraseEnabled.setOnCheckedChangeListener { _, isChecked ->
       this.viewModel.isManualLCPPassphraseEnabled = isChecked
-    }
-    this.areNotificationsEnabled.setOnCheckedChangeListener { _, isChecked ->
-      this.viewModel.areNotificationsEnabled = isChecked
     }
 
     /*
@@ -352,7 +344,7 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
     message.append(context.cacheDir?.isDirectory ?: false)
     message.append("\n")
 
-    AlertDialog.Builder(context)
+    MaterialAlertDialogBuilder(context)
       .setTitle("Cache Directory")
       .setMessage(message.toString())
       .show()
