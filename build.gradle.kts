@@ -845,4 +845,9 @@ allprojects {
         tasks.matching { task -> task.name.contains("UnitTest") }
             .forEach { task -> task.enabled = false }
     }
+
+    /*
+     * Apply custom dependencies and overrides. e.g. to those defined in org.thepalaceproject.android.platform submodule
+     */
+    apply(from = "${rootProject.projectDir}/custom_dependencies.gradle.kts")
 }
