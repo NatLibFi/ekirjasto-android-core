@@ -12,3 +12,8 @@
 	path = org.thepalaceproject.android.platform
 	url = https://github.com/ThePalaceProject/android-platform
     branch = main
+
+[submodule "ekirjasto-theme"]
+	path = ekirjasto-theme
+	url = https://github.com/NatLibFi/ekirjasto-android-theme.git
+	branch = ekirjasto-theme
