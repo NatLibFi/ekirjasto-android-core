@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="EKirjastoTheme_NoActionBar" parent="PalaceTheme.Splash">
-    <item name="android:fontFamily">@font/asap_regular</item>
-    <item name="colorPrimary">@color/colorEkirjastoWhite</item>
-    <item name="colorPrimaryVariant">@color/PalaceGrey0</item>
-    <item name="colorOnPrimary">@color/PalaceGrey3</item>
-    <item name="colorSurface">@color/colorPrimaryLight</item>
-    <item name="colorSecondary">@color/colorPrimaryDark</item>
-    <item name="colorSecondaryVariant">@color/PalaceGrey3</item>
-    <item name="colorOnSecondary">@color/PalaceGrey0</item>
-    <item name="colorOnBackground">@color/PalaceGrey0</item>
-    <item name="colorError">@color/PalaceError</item>
-    <item name="colorOnError">@color/PalaceGrey3</item>
-    <item name="colorAccent">@color/PalaceTextColor</item>
+  <style name="EKirjastoTheme_Splash" parent="PalaceTheme.Splash">
+<!--    <item name="android:fontFamily">@font/asap_regular</item>-->
+<!--    <item name="colorPrimary">@color/colorEkirjastoWhite</item>-->
+<!--    <item name="colorPrimaryVariant">@color/PalaceGrey0</item>-->
+<!--    <item name="colorOnPrimary">@color/PalaceGrey3</item>-->
+<!--    <item name="colorSurface">@color/colorPrimaryLight</item>-->
+<!--    <item name="colorSecondary">@color/colorPrimaryDark</item>-->
+<!--    <item name="colorSecondaryVariant">@color/PalaceGrey3</item>-->
+<!--    <item name="colorOnSecondary">@color/PalaceGrey0</item>-->
+<!--    <item name="colorOnBackground">@color/PalaceGrey0</item>-->
+<!--    <item name="colorError">@color/PalaceError</item>-->
+<!--    <item name="colorOnError">@color/PalaceGrey3</item>-->
+<!--    <item name="colorAccent">@color/PalaceTextColor</item>-->
 <!--    <item name="simplifiedColorPrimary">@color/colorPrimary</item>-->
 <!--    <item name="simplifiedColorPrimaryLight">@color/colorPrimaryLight</item>-->
 <!--    <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>-->
@@ -32,7 +32,7 @@
 <!--    <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>-->
 <!--  </style>-->
 
-  <dimen name="ekirjastoButtonCornerRadius">3dp</dimen>
-  <dimen name="ekirjastoButtonStrokeWidth">1dp</dimen>
+<!--  <dimen name="ekirjastoButtonCornerRadius">3dp</dimen>-->
+<!--  <dimen name="ekirjastoButtonStrokeWidth">1dp</dimen>-->
 
 </resources>

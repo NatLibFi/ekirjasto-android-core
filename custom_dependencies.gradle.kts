@@ -1,9 +1,7 @@
 configurations.all {
-    resolutionStrategy {
-        eachDependency {
-            if (requested.group == "org.thepalaceproject.theme" && requested.name == "org.thepalaceproject.theme.core") {
-                useTarget(project(":ekirjasto-theme:core"))
-            }
-        }
+    resolutionStrategy.dependencySubstitution {
+        substitute(module("org.thepalaceproject.theme:org.thepalaceproject.theme.core"))
+            .using(project(":ekirjasto-theme:core"))
+            .because("ekirjasto ui requirements")
     }
 }

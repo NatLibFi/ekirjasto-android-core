@@ -710,7 +710,6 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       }
 
       val button = MaterialButton(context)
-      button.setTextAppearance(R.style.FacetButtonText)
       val buttonLabel = AppCompatTextView(context)
       val spaceStart = Space(context)
       val spaceMiddle = Space(context)
@@ -770,9 +769,6 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     ) { index, button ->
       val facet = facetGroup[index]
       button.text = facet.title
-      button.setTextColor(
-        this.requireContext().getColor(R.color.colorEkirjastoFacetTabText)
-      )
       button.setOnClickListener {
         this.logger.debug("selected entry point facet: {}", facet.title)
         this.viewModel.openFacet(facet)

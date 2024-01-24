@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">@color/colorEkirjastoGreen</color>
-  <color name="colorPrimaryLight">@color/colorEkirjastoLightGreen</color>
-  <color name="colorPrimaryDark">@color/colorEkirjastoBlack</color>
+<!--  <color name="colorPrimary">@color/colorEkirjastoGreen</color>-->
+<!--  <color name="colorPrimaryLight">@color/colorEkirjastoLightGreen</color>-->
+<!--  <color name="colorPrimaryDark">@color/colorEkirjastoBlack</color>-->
 <!-- Colors from Styleguide -->
   <color name="colorEkirjastoGreen">#3FB8AF</color>
   <color name="colorEkirjastoLightGreen">#8AD2CD</color>
@@ -13,8 +13,8 @@
   <color name="colorEkirjastoLightGrey">#D8D8D8</color>
   <color name="colorEkirjastoWhite">#FFFFFF</color>
 <!--  UI Elements mapping-->
-  <color name="colorEkirjastoButtonBackground">@color/colorEkirjastoLightestGreen</color>
-  <color name="colorEkirjastoButtonText">@color/colorEkirjastoBlack</color>
-  <color name="colorEkirjastoButtonSecondaryText">@color/colorEkirjastoBlack</color>
-  <color name="colorEkirjastoBottomNavText">@color/colorEkirjastoBlack</color>
+<!--  <color name="colorEkirjastoButtonBackground">@color/colorEkirjastoLightestGreen</color>-->
+<!--  <color name="colorEkirjastoButtonText">@color/colorEkirjastoBlack</color>-->
+<!--  <color name="colorEkirjastoButtonSecondaryText">@color/colorEkirjastoBlack</color>-->
+<!--  <color name="colorEkirjastoBottomNavText">@color/colorEkirjastoBlack</color>-->
 </resources>
