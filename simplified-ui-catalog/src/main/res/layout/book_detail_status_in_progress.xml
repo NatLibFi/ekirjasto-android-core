@@ -6,8 +6,10 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/bookDetailStatusInProgress"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  tools:background="@color/PalaceInvertedBackgroundColor">
+  android:layout_height="match_parent"
+  android:paddingTop="10dp"
+  android:paddingBottom="10dp"
+  tools:background="@color/EkirjastoGrey">
 
   <TextView
     android:id="@+id/inProgressText"
@@ -16,7 +18,7 @@
     android:layout_marginStart="32dp"
     android:maxLength="4"
     android:maxLines="1"
-    android:textColor="@color/PalaceTextInvertedColor"
+    android:textColor="@color/PalaceTextColor"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
