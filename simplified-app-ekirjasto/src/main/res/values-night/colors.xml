@@ -13,8 +13,8 @@
     <color name="colorEkirjastoLightGrey">#D8D8D8</color>
     <color name="colorEkirjastoWhite">#FFFFFF</color>
     <!--  UI Elements mapping-->
-    <color name="colorEkirjastoButtonBackground">@color/colorEkirjastoLightestGreen</color>
-    <color name="colorEkirjastoButtonText">@color/colorEkirjastoBlack</color>
-    <color name="colorEkirjastoButtonSecondaryText">@color/colorEkirjastoWhite</color>
-    <color name="colorEkirjastoBottomNavText">@color/colorEkirjastoWhite</color>
+<!--    <color name="colorEkirjastoButtonBackground">@color/colorEkirjastoLightestGreen</color>-->
+<!--    <color name="colorEkirjastoButtonText">@color/colorEkirjastoBlack</color>-->
+<!--    <color name="colorEkirjastoButtonSecondaryText">@color/colorEkirjastoWhite</color>-->
+<!--    <color name="colorEkirjastoBottomNavText">@color/colorEkirjastoWhite</color>-->
 </resources>
