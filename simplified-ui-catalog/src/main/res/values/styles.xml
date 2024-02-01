@@ -11,6 +11,8 @@
     <style name="FacetButtonText" parent="TextAppearance.AppCompat.Widget.Button">
     </style>
 
-    <style name="ReturnBookButton" parent="Palace.Button.Contained.Small">
+    <style name="SecondaryButton" parent="Palace.Button.Outlined.Medium">
+    </style>
+    <style name="PrimaryButton" parent="Palace.Button.Contained.Medium">
     </style>
 </resources>

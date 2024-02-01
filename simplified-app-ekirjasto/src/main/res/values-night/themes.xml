@@ -22,7 +22,7 @@
 <!--    <item name="simplifiedColorTextBody">@color/colorEkirjastoWhite</item>-->
 <!--    <item name="simplifiedColorNavigationSelected">@color/colorEkirjastoWhite</item>-->
 <!--    <item name="simplifiedColorNavigationUnselected">@color/colorEkirjastoGreen</item>-->
-    <item name="actionBarSize">64dp</item>
+<!--    <item name="actionBarSize">64dp</item>-->
   </style>
 
 <!--  <style name="EKirjastoTheme_ActionBar" parent="NeutralTheme.ActionBar">-->
