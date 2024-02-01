@@ -3,8 +3,10 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/bookDetailStatusFailed"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  tools:background="@color/PalaceInvertedBackgroundColor">
+  android:layout_height="match_parent"
+  android:paddingTop="10dp"
+  android:paddingBottom="10dp"
+  tools:background="@color/EkirjastoGrey">
 
   <TextView
     android:id="@+id/failedText"
@@ -16,6 +18,6 @@
     android:gravity="center"
     android:maxLines="2"
     android:textAlignment="center"
-    android:textColor="@color/PalaceTextInvertedColor"
+    android:textColor="@color/PalaceTextColor"
     tools:text="@string/catalogPlaceholder" />
 </FrameLayout>
