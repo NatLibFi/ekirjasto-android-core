@@ -77,17 +77,6 @@ class CatalogButtons(
       heightMatchParent = heightMatchParent,
       onClick = onClick
     )
-//    val button = MaterialButton(this.context)
-//    button.text = this.context.getString(text)
-//    button.contentDescription = this.context.getString(description)
-//    button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
-//    button.maxLines = 1
-//    button.ellipsize = TextUtils.TruncateAt.END
-//    button.setOnClickListener {
-//      button.isEnabled = false
-//      onClick.invoke(button)
-//      button.isEnabled = true
-//    }
     return button
   }
 
@@ -100,7 +89,7 @@ class CatalogButtons(
     heightMatchParent: Boolean = false,
     onClick: (Button) -> Unit
   ) : Button {
-    val button = MaterialButton(ContextThemeWrapper(this.context, style), null, style)
+    val button = MaterialButton(ContextThemeWrapper(this.context, style))
     button.text = context.getString(text)
     button.contentDescription = context.getString(description)
     button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
