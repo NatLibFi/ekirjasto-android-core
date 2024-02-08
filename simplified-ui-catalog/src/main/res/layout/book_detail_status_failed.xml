@@ -6,7 +6,7 @@
   android:layout_height="match_parent"
   android:paddingTop="10dp"
   android:paddingBottom="10dp"
-  tools:background="@color/EkirjastoGrey">
+  android:background="@color/EkirjastoGrey">
 
   <TextView
     android:id="@+id/failedText"
