@@ -1,35 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <style name="EKirjastoTheme_Splash" parent="PalaceTheme.Splash">
-<!--    <item name="android:fontFamily">@font/asap_regular</item>-->
-<!--    <item name="colorPrimary">@color/colorPrimary</item>-->
-<!--    <item name="colorPrimaryVariant">@color/PalaceGrey0</item>-->
-<!--    <item name="colorOnPrimary">@color/colorEkirjastoBlack</item>-->
-<!--    <item name="colorSurface">@color/colorPrimaryLight</item>-->
-<!--    <item name="colorSecondary">@color/colorPrimaryDark</item>-->
-<!--    <item name="colorSecondaryVariant">@color/PalaceGrey3</item>-->
-<!--    <item name="colorOnSecondary">@color/colorEkirjastoWhite</item>-->
-<!--    <item name="colorOnBackground">@color/PalaceGrey0</item>-->
-<!--    <item name="colorError">@color/PalaceError</item>-->
-<!--    <item name="colorOnError">@color/PalaceGrey3</item>-->
-<!--    <item name="colorAccent">@color/PalaceTextColor</item>-->
-<!--&lt;!&ndash;    <item name="simplifiedColorPrimaryLight">@color/colorPrimaryLight</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedButtonCornerRadius">@dimen/ekirjastoButtonCornerRadius</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorBookStatus">@color/colorEkirjastoYellow</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorText">@color/colorEkirjastoBlack</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorTextBody">@color/colorEkirjastoBlack</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorNavigationSelected">@color/colorEkirjastoGreen</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorNavigationUnselected">@color/colorEkirjastoLightestGreen</item>&ndash;&gt;-->
-<!--    <item name="actionBarSize">64dp</item>-->
   </style>
-<!--&lt;!&ndash;  <style name="EKirjastoTheme_ActionBar" parent="NeutralTheme.ActionBar">&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="android:fontFamily">@font/asap_regular</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorPrimary">@color/colorPrimary</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorPrimaryLight">@color/colorPrimaryLight</item>&ndash;&gt;-->
-<!--&lt;!&ndash;    <item name="simplifiedColorPrimaryDark">@color/colorPrimaryDark</item>&ndash;&gt;-->
-<!--&lt;!&ndash;  </style>&ndash;&gt;-->
-
   <dimen name="ekirjastoButtonCornerRadius">3dp</dimen>
   <dimen name="ekirjastoButtonStrokeWidth">1dp</dimen>
 

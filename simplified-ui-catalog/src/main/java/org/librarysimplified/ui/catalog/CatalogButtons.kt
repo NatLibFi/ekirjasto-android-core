@@ -69,17 +69,14 @@ class CatalogButtons(
     heightMatchParent: Boolean = false,
     onClick: (Button) -> Unit
   ): Button {
-    val button = MaterialButton(this.context)
-    button.text = this.context.getString(text)
-    button.contentDescription = this.context.getString(description)
-    button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
-    button.maxLines = 1
-    button.ellipsize = TextUtils.TruncateAt.END
-    button.setOnClickListener {
-      button.isEnabled = false
-      onClick.invoke(button)
-      button.isEnabled = true
-    }
+    val button = createButtonWithStyle(
+      context = this.context,
+      style = R.style.PrimaryButton,
+      text = text,
+      description = description,
+      heightMatchParent = heightMatchParent,
+      onClick = onClick
+    )
     return button
   }
 
@@ -92,11 +89,12 @@ class CatalogButtons(
     heightMatchParent: Boolean = false,
     onClick: (Button) -> Unit
   ) : Button {
-    val button = AppCompatButton(ContextThemeWrapper(this.context, style), null, style)
-    //val button = AppCompatButton(this.context, null, style)
+    val button = MaterialButton(ContextThemeWrapper(this.context, style), null, style)
     button.text = context.getString(text)
     button.contentDescription = context.getString(description)
     button.layoutParams = this.buttonLayoutParameters(heightMatchParent)
+    button.maxLines = 1
+    button.ellipsize = TextUtils.TruncateAt.END
     button.setOnClickListener {
       button.isEnabled = false
       onClick.invoke(button)
@@ -223,7 +221,7 @@ class CatalogButtons(
       context = this.context,
       text = R.string.catalogCancelHold,
       description = R.string.catalogAccessibilityBookRevokeHold,
-      R.style.ReturnBookButton,
+      R.style.SecondaryButton,
       heightMatchParent = heightMatchParent,
       onClick = onClick
     )
@@ -238,7 +236,7 @@ class CatalogButtons(
       context = this.context,
       text = R.string.catalogReturn,
       description = R.string.catalogAccessibilityBookRevokeLoan,
-      R.style.ReturnBookButton,
+      R.style.SecondaryButton,
       heightMatchParent = heightMatchParent,
       onClick = onClick
     )
