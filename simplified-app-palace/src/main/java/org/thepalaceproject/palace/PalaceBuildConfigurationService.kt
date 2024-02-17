@@ -42,6 +42,8 @@ class PalaceBuildConfigurationService : BuildConfigurationServiceType {
     get() = false
   override val showChangeAccountsUi: Boolean
     get() = true
+  override val showActionBarLogo: Boolean
+    get() = false
   override val showAgeGateUi: Boolean
     get() = true
   override val brandingAppIcon: Int
