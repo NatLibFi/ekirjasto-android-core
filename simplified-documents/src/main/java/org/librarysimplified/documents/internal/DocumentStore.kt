@@ -16,6 +16,7 @@ import java.io.File
 internal class DocumentStore private constructor(
   override val about: DocumentType?,
   override val acknowledgements: DocumentType?,
+  override val feedback: DocumentType?,
   override val eula: EULAType?,
   override val licenses: DocumentType?,
   override val privacyPolicy: DocumentType?,
@@ -47,6 +48,14 @@ internal class DocumentStore private constructor(
           http = http,
           baseDirectory = baseDirectory,
           config = configuration.acknowledgements
+        )
+
+      val feedback =
+        this.documentForMaybe(
+          assetManager = assetManager,
+          http = http,
+          baseDirectory = baseDirectory,
+          config = configuration.feedback
         )
 
       val eula =
@@ -84,6 +93,7 @@ internal class DocumentStore private constructor(
       return DocumentStore(
         about = about,
         acknowledgements = acknowledgements,
+        feedback = feedback,
         eula = eula,
         licenses = licenses,
         privacyPolicy = privacyPolicy,

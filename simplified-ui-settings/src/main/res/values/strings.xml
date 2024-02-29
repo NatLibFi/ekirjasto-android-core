@@ -74,4 +74,6 @@
   <string name="settingsVersionCore">Core version</string>
   <string name="settingsVersionCoreSummary" />
   <string name="settingsDebugTransifex">This string should have been translated by Transifex.</string>
+  <string name="settingsFeedback">Feedback</string>
+  <string name="settingsFeedbackSummary" />
 </resources>

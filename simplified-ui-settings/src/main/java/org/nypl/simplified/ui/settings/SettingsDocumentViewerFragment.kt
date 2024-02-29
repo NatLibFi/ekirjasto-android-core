@@ -40,6 +40,7 @@ class SettingsDocumentViewerFragment : Fragment() {
         webView.webViewClient = WebViewClient()
         webView.webChromeClient = WebChromeClient()
         webView.settings.allowFileAccess = true
+        webView.settings.javaScriptEnabled = true;
 
         WebViewUtilities.setForcedDark(webView.settings, resources.configuration)
 

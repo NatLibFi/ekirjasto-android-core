@@ -16,6 +16,11 @@
       android:title="@string/settingsAcknowledgements" />
 
     <Preference
+        android:key="settingsFeedback"
+        android:summary="@string/settingsFeedbackSummary"
+        android:title="@string/settingsFeedback" />
+
+    <Preference
       android:key="settingsAbout"
       android:summary="@string/settingsAboutSummary"
       android:title="@string/settingsAbout" />

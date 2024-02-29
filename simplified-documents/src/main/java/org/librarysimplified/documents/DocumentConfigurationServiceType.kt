@@ -25,6 +25,12 @@ interface DocumentConfigurationServiceType {
   val acknowledgements: DocumentConfiguration?
 
   /**
+   * @return The application link feedback, if any.
+   */
+
+  val feedback: DocumentConfiguration?
+
+  /**
    * @return The EULA, if any
    */
 

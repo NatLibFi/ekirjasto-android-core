@@ -24,6 +24,12 @@ interface DocumentStoreType {
   val acknowledgements: DocumentType?
 
   /**
+   * @return The application link feedback, if any.
+   */
+
+  val feedback: DocumentType?
+
+  /**
    * @return The EULA, if any
    */
 

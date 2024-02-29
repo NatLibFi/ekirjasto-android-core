@@ -27,6 +27,14 @@ sealed class SettingsMainEvent {
   ) : SettingsMainEvent()
 
   /**
+   * The settings screen wants to open the feedback screen.
+   */
+  data class OpenFeedback(
+    val title: String,
+    val url: String,
+  ) : SettingsMainEvent()
+
+  /**
    * The settings screen wants to open debug options.
    */
 

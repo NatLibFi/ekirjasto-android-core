@@ -14,6 +14,8 @@ internal object EmptyDocumentStore : DocumentStoreType {
     null
   override val acknowledgements: DocumentType? =
     null
+  override val feedback: DocumentType? =
+    null
   override val eula: EULAType? =
     null
   override val licenses: DocumentType? =

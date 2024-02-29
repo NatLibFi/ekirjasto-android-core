@@ -450,6 +450,11 @@ internal class MainFragmentListenerDelegate(
         state
       }
 
+      is SettingsMainEvent.OpenFeedback -> {
+        this.openSettingsFeedback(event.title, event.url)
+        state
+      }
+
       SettingsMainEvent.OpenDebugOptions -> {
         this.openSettingsVersion()
         state
@@ -537,6 +542,13 @@ internal class MainFragmentListenerDelegate(
   }
 
   private fun openSettingsAcknowledgements(title: String, url: String) {
+    this.navigator.addFragment(
+      fragment = SettingsDocumentViewerFragment.create(title, url),
+      tab = org.librarysimplified.ui.tabs.R.id.tabSettings
+    )
+  }
+
+  private fun openSettingsFeedback(title: String, url: String) {
     this.navigator.addFragment(
       fragment = SettingsDocumentViewerFragment.create(title, url),
       tab = org.librarysimplified.ui.tabs.R.id.tabSettings

@@ -42,6 +42,7 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
   private lateinit var settingsPrivacy: Preference
   private lateinit var settingsVersion: Preference
   private lateinit var settingsVersionCore: Preference
+  private lateinit var settingsFeedback: Preference
   private lateinit var toolbar: PalaceToolbar
 
   private var toast: Toast? = null
@@ -64,6 +65,7 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
     this.settingsPrivacy = this.findPreference("settingsPrivacy")!!
     this.settingsVersion = this.findPreference("settingsVersion")!!
     this.settingsVersionCore = this.findPreference("settingsVersionCore")!!
+    this.settingsFeedback = this.findPreference("settingsFeedback")!!
 
     this.configureAbout(this.settingsAbout)
     this.configureAcknowledgements(this.settingsAcknowledgements)
@@ -76,6 +78,7 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
     this.configurePrivacy(this.settingsPrivacy)
     this.configureVersion(this.settingsVersion)
     this.configureVersionCore(this.settingsVersionCore)
+    this.configureFeedback(this.settingsFeedback)
   }
 
   override fun onStart() {
@@ -101,6 +104,23 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
         Preference.OnPreferenceClickListener {
           this.listener.post(
             SettingsMainEvent.OpenAcknowledgments(
+              title = it.title.toString(),
+              url = doc.readableURL.toString()
+            )
+          )
+          true
+        }
+    }
+  }
+
+  private fun configureFeedback(preference: Preference) {
+    val doc = this.viewModel.documents.feedback
+    preference.isVisible = doc != null
+    if (doc != null) {
+      preference.onPreferenceClickListener =
+        Preference.OnPreferenceClickListener {
+          this.listener.post(
+            SettingsMainEvent.OpenFeedback(
               title = it.title.toString(),
               url = doc.readableURL.toString()
             )
