@@ -64,6 +64,7 @@ import org.slf4j.LoggerFactory
 import java.net.URI
 import org.librarysimplified.ui.accounts.R
 import org.thepalaceproject.theme.core.PalaceToolbar
+import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 
 /**
  * A fragment that shows settings for a single account.
@@ -403,6 +404,9 @@ class AccountDetailFragment : Fragment(R.layout.account) {
             password = ""
           )
         }
+        is AccountProviderAuthenticationDescription.Ekirjasto -> {
+          this.authenticationViews.setEkirjastoEmail("")
+        }
         AccountProviderAuthenticationDescription.Anonymous,
         is AccountProviderAuthenticationDescription.COPPAAgeGate,
         is AccountProviderAuthenticationDescription.OAuthWithIntermediary,
@@ -449,6 +453,10 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
         is AccountProviderAuthenticationDescription.SAML2_0 -> {
           this.logger.warn("SAML 2.0 is not currently supported as an alternative.")
+        }
+
+        is AccountProviderAuthenticationDescription.Ekirjasto -> {
+          this.logger.warn("E-kirjasto is not currently supported as an alternative.")
         }
 
         is AccountProviderAuthenticationDescription.OAuthWithIntermediary -> {
@@ -600,6 +608,39 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       )
 
     this.viewModel.tryLogin(request)
+  }
+
+  // Finland
+  private fun onTryEkirjastoLogin(
+    authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto
+  ) {
+    val loginMethod: ViewsForEkirjasto.LoginMethod =
+      this.authenticationViews.getEkirjastoLoginMethod()
+    val email: String? =
+      this.authenticationViews.getEkirjastoLoginEmail()
+
+    if (loginMethod == ViewsForEkirjasto.LoginMethod.SuomiFi) {
+      this.viewModel.tryLogin(
+        ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi(
+          accountId = this.parameters.accountID,
+          description = authenticationDescription
+        )
+      )
+      this.listener.post(
+        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, email)
+      )
+    }
+    else if (loginMethod == ViewsForEkirjasto.LoginMethod.Passkey) {
+      this.viewModel.tryLogin(
+        ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
+          accountId = this.parameters.accountID,
+          description = authenticationDescription
+        )
+      )
+      this.listener.post(
+        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, email)
+      )
+    }
   }
 
   private fun sendOAuthIntent(
@@ -834,6 +875,10 @@ class AccountDetailFragment : Fragment(R.layout.account) {
             )
           }
 
+          is AccountAuthenticationCredentials.Ekirjasto -> {
+            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
+          }
+
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
           is AccountAuthenticationCredentials.SAML2_0 -> {
             // Nothing
@@ -868,6 +913,10 @@ class AccountDetailFragment : Fragment(R.layout.account) {
             )
           }
 
+          is AccountAuthenticationCredentials.Ekirjasto -> {
+            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
+          }
+
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
           is AccountAuthenticationCredentials.SAML2_0 -> {
             // No UI
@@ -896,6 +945,10 @@ class AccountDetailFragment : Fragment(R.layout.account) {
               user = creds.userName.value,
               password = creds.password.value
             )
+          }
+
+          is AccountAuthenticationCredentials.Ekirjasto -> {
+            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -1090,6 +1143,9 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
       is AccountProviderAuthenticationDescription.BasicToken ->
         this.onTryBasicTokenLogin(description)
+
+      is AccountProviderAuthenticationDescription.Ekirjasto ->
+        this.onTryEkirjastoLogin(description)
 
       is AccountProviderAuthenticationDescription.Anonymous,
       is AccountProviderAuthenticationDescription.COPPAAgeGate ->

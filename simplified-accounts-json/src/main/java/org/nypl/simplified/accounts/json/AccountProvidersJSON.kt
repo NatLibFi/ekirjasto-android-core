@@ -20,11 +20,13 @@ import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.BASIC_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.BASIC_TOKEN_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.COPPA_TYPE
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.EKIRJASTO_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.OAUTH_INTERMEDIARY_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.SAML_2_0_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.KeyboardInput
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.OAuthWithIntermediary
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.SAML2_0
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Ekirjasto
 import org.nypl.simplified.accounts.api.AccountProviderType
 import org.nypl.simplified.announcements.Announcement
 import org.nypl.simplified.announcements.AnnouncementJSON
@@ -192,6 +194,20 @@ object AccountProvidersJSON {
         if (logo != null) {
           authObject.put("logo", logo.toString())
         }
+        authObject
+      }
+      is Ekirjasto -> {
+        val authObject = mapper.createObjectNode()
+        authObject.put("type", EKIRJASTO_TYPE)
+        this.putConditionally(authObject, "authenticationURI", authentication.authenticate.toString())
+        this.putConditionally(authObject, "description", authentication.description)
+        this.putConditionally(authObject, "api", authentication.api.toString())
+        this.putConditionally(authObject, "passkey_login_start", authentication.passkey_login_start.toString())
+        this.putConditionally(authObject, "passkey_login_finish", authentication.passkey_login_finish.toString())
+        this.putConditionally(authObject, "passkey_register_start", authentication.passkey_register_start.toString())
+        this.putConditionally(authObject, "passkey_register_finish", authentication.passkey_register_finish.toString())
+        this.putConditionally(authObject, "tunnistus_start", authentication.tunnistus_start.toString())
+        this.putConditionally(authObject, "tunnistus_finish", authentication.tunnistus_finish.toString())
         authObject
       }
     }
@@ -508,6 +524,21 @@ object AccountProvidersJSON {
           JSONParserUtilities.getURIOrNull(container, "under13")
         )
       }
+
+      EKIRJASTO_TYPE -> {
+        Ekirjasto(
+          authenticate = JSONParserUtilities.getURI(container, "authenticationURI"),
+          description = JSONParserUtilities.getString(container,"description"),
+          api = JSONParserUtilities.getURI(container, "api"),
+          passkey_login_start = JSONParserUtilities.getURI(container, "passkey_login_start"),
+          passkey_login_finish = JSONParserUtilities.getURI(container, "passkey_login_finish"),
+          passkey_register_start = JSONParserUtilities.getURI(container, "passkey_register_start"),
+          passkey_register_finish = JSONParserUtilities.getURI(container, "passkey_register_finish"),
+          tunnistus_start = JSONParserUtilities.getURI(container, "tunnistus_start"),
+          tunnistus_finish = JSONParserUtilities.getURI(container, "tunnistus_finish"),
+        )
+      }
+
       else -> {
         this.logger.warn("encountered unrecognized authentication type: {}", authType)
         Anonymous

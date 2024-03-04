@@ -177,7 +177,8 @@ interface AccountProviderType : Comparable<AccountProviderType> {
       AccountProviderAuthenticationDescription.Anonymous,
       is AccountProviderAuthenticationDescription.Basic,
       is AccountProviderAuthenticationDescription.BasicToken,
-      is AccountProviderAuthenticationDescription.OAuthWithIntermediary ->
+      is AccountProviderAuthenticationDescription.OAuthWithIntermediary,
+      is AccountProviderAuthenticationDescription.Ekirjasto ->
         this.catalogURI
     }
   }
@@ -197,7 +198,8 @@ interface AccountProviderType : Comparable<AccountProviderType> {
       is AccountProviderAuthenticationDescription.SAML2_0,
       AccountProviderAuthenticationDescription.Anonymous,
       is AccountProviderAuthenticationDescription.OAuthWithIntermediary,
-      is AccountProviderAuthenticationDescription.COPPAAgeGate ->
+      is AccountProviderAuthenticationDescription.COPPAAgeGate,
+      is AccountProviderAuthenticationDescription.Ekirjasto ->
         false
       is AccountProviderAuthenticationDescription.Basic -> {
         when (auth.barcodeFormat) {

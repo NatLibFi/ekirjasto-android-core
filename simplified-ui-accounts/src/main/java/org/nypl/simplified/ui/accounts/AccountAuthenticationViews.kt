@@ -14,6 +14,7 @@ import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.COPPAAgeGate
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.OAuthWithIntermediary
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.SAML2_0
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Ekirjasto
 import org.nypl.simplified.accounts.api.AccountUsername
 
 import org.nypl.simplified.ui.accounts.view_bindings.AccountAuthenticationViewBindings
@@ -23,6 +24,7 @@ import org.nypl.simplified.ui.accounts.view_bindings.ViewsForBasicToken
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForCOPPAAgeGate
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForOAuthWithIntermediary
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForSAML20
+import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 
 /**
  * A class that handles the visibility for a set of overlapping views.
@@ -61,6 +63,11 @@ class AccountAuthenticationViews(
     ViewsForCOPPAAgeGate.bind(
       this.viewGroup.findViewById(R.id.authCOPPA)
     )
+  private val ekirjasto: ViewsForEkirjasto =
+    ViewsForEkirjasto.bind(
+      this.viewGroup.findViewById(R.id.authEkirjasto),
+      onUsernameChangeListener = onUsernamePasswordChangeListener
+    )
 
   private val viewGroups =
     listOf<AccountAuthenticationViewBindings>(
@@ -69,7 +76,8 @@ class AccountAuthenticationViews(
       this.anonymous,
       this.oAuthWithIntermediary,
       this.saml20,
-      this.coppa
+      this.coppa,
+      this.ekirjasto
     )
 
   private val dividers =
@@ -167,6 +175,10 @@ class AccountAuthenticationViews(
         this.saml20.viewGroup.visibility = VISIBLE
         this.saml20.configureFor(description)
       }
+      is Ekirjasto -> {
+        this.ekirjasto.viewGroup.visibility = VISIBLE
+        this.ekirjasto.configureFor(description)
+      }
     }
   }
 
@@ -190,6 +202,11 @@ class AccountAuthenticationViews(
     )
   }
 
+  // Helsinki
+  fun setEkirjastoEmail(email: String) {
+    this.ekirjasto.setUsername(email)
+  }
+
   /**
    * @return `true` if the views have all of the information required to attempt a login for the
    * given authentication description.
@@ -202,6 +219,9 @@ class AccountAuthenticationViews(
       }
       is BasicToken -> {
         this.basicToken.isSatisfied(description)
+      }
+      is Ekirjasto -> {
+        this.ekirjasto.isSatisfied(description)
       }
       is COPPAAgeGate,
       is OAuthWithIntermediary,
@@ -256,4 +276,23 @@ class AccountAuthenticationViews(
   fun getBasicTokenUser(): AccountUsername {
     return this.basicToken.getUser()
   }
+
+  /**
+   * @return The current E-kirjasto authentication email
+   */
+
+  // Finland
+  fun getEkirjastoLoginEmail(): String? {
+    return this.ekirjasto.getUsername().value
+  }
+
+  /**
+   * @return The current E-kirjasto authentication login method
+   */
+
+  // Finland
+  fun getEkirjastoLoginMethod(): ViewsForEkirjasto.LoginMethod {
+    return this.ekirjasto.getActiveLoginMethod()
+  }
+
 }

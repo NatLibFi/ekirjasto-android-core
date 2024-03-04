@@ -46,6 +46,9 @@ object AccountAuthenticationCredentialsJSON20210512 : AccountAuthenticationCrede
       "saml2_0" -> {
         deserializeSAML2_0(obj)
       }
+      "ekirjasto" -> {
+        deserializeEkirjasto(obj)
+      }
       else -> {
         throw JSONParseException("Unrecognized type: $type")
       }
@@ -123,6 +126,21 @@ object AccountAuthenticationCredentialsJSON20210512 : AccountAuthenticationCrede
       cookies = deserializeCookies(JSONParserUtilities.getArray(obj, "cookies")),
       annotationsURI = JSONParserUtilities.getURIOrNull(obj, "annotationsURI"),
       deviceRegistrationURI = JSONParserUtilities.getURIOrNull(obj, "deviceRegistrationURI")
+    )
+  }
+
+  private fun deserializeEkirjasto(obj: ObjectNode): AccountAuthenticationCredentials {
+    val adobeCredentials =
+      JSONParserUtilities.getObjectOrNull(obj, "adobe_credentials")
+        ?.let(AccountAuthenticationCredentialsAdobeJSON::deserializeAdobeCredentials)
+
+    return AccountAuthenticationCredentials.Ekirjasto(
+      accessToken = JSONParserUtilities.getString(obj, "accessToken"),
+      email = JSONParserUtilities.getString(obj, "email"),
+      adobeCredentials = adobeCredentials,
+      authenticationDescription = JSONParserUtilities.getStringOrNull(obj, "authenticationDescription"),
+      annotationsURI = JSONParserUtilities.getURIOrNull(obj, "annotationsURI"),
+      deviceRegistrationURI = null
     )
   }
 

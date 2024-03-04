@@ -132,6 +132,9 @@ class AudioBookPlayerParameters(
         is AccountAuthenticationCredentials.SAML2_0 -> {
           AudioBookCredentials.BearerToken(credentials.accessToken)
         }
+        is AccountAuthenticationCredentials.Ekirjasto -> {
+          AudioBookCredentials.BearerToken(credentials.accessToken)
+        }
         null -> {
           null
         }

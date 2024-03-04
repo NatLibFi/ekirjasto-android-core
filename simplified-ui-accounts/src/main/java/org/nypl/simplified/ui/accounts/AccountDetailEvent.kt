@@ -2,6 +2,7 @@ package org.nypl.simplified.ui.accounts
 
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
+import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import java.net.URL
 
@@ -28,6 +29,17 @@ sealed class AccountDetailEvent {
   data class OpenSAML20Login(
     val account: AccountID,
     val authenticationDescription: AccountProviderAuthenticationDescription.SAML2_0
+  ) : AccountDetailEvent()
+
+  /**
+   * The patron wants to log in through E-kirjasto.
+   */
+
+  data class OpenEkirjastoLogin(
+    val account: AccountID,
+    val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
+    val loginMethod: ViewsForEkirjasto.LoginMethod,
+    val email:String?
   ) : AccountDetailEvent()
 
   /**

@@ -115,6 +115,7 @@ val requiredSigningTask = task("CheckReleaseSigningInformation") {
 
 android {
     defaultConfig {
+        applicationId = "fi.kansalliskirjasto.ekirjasto"
         versionCode = calculateVersionCode()
         resourceConfigurations.add("en")
         resourceConfigurations.add("es")
@@ -172,6 +173,7 @@ android {
         debug {
             ndk {
                 abiFilters.add("x86")
+                abiFilters.add("x86_64")
                 abiFilters.add("arm64-v8a")
                 abiFilters.add("armeabi-v7a")
             }
@@ -234,7 +236,6 @@ dependencies {
     implementation(project(":simplified-accounts-json"))
     implementation(project(":simplified-accounts-registry"))
     implementation(project(":simplified-accounts-registry-api"))
-    //implementation(project(":simplified-accounts-source-nyplregistry"))
     implementation(project(":simplified-accounts-source-spi"))
     implementation(project(":simplified-adobe-extensions"))
     implementation(project(":simplified-analytics-api"))
@@ -323,6 +324,7 @@ dependencies {
     implementation(project(":simplified-viewer-preview"))
     implementation(project(":simplified-viewer-spi"))
     implementation(project(":simplified-webview"))
+    implementation(project(":simplified-accounts-source-ekirjasto"))
 
     /*
      * Dependencies conditional upon Adobe DRM support.
@@ -515,6 +517,7 @@ dependencies {
     implementation(libs.jackson.annotations)
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
+    implementation(libs.jackson.kotlin)
     implementation(libs.javax.inject)
     implementation(libs.joda.time)
     implementation(libs.jsoup)
@@ -617,4 +620,6 @@ dependencies {
     implementation(libs.truevfs.kernel.spec)
 
     implementation("readium:liblcp:1.0.0@aar")
+    implementation("androidx.credentials:credentials:1.2.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
 }

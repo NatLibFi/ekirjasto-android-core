@@ -15,3 +15,4 @@ picked up and used by the accounts registry implementation.
 * [org.librarysimplified.accounts.registry.api](../simplified-accounts-registry-api/README.md)
 * [org.librarysimplified.accounts.source.filebased](../simplified-accounts-source-filebased/README.md)
 * [org.librarysimplified.accounts.source.nyplregistry](../simplified-accounts-source-nyplregistry/README.md)
+* [org.librarysimplified.accounts.source.ekirjasto](../simplified-accounts-source-ekirjasto/README.md)

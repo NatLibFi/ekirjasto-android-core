@@ -35,9 +35,15 @@ import org.nypl.simplified.ui.accounts.AccountListFragmentParameters
 import org.nypl.simplified.ui.accounts.AccountListRegistryEvent
 import org.nypl.simplified.ui.accounts.AccountListRegistryFragment
 import org.nypl.simplified.ui.accounts.AccountPickerEvent
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.AccountEkirjastoPasskeyFragment
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.AccountEkirjastoPasskeyFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiFragment
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiFragmentParameters
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Event
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Fragment
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20FragmentParameters
+import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 import org.nypl.simplified.ui.errorpage.ErrorPageEvent
 import org.nypl.simplified.ui.errorpage.ErrorPageFragment
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
@@ -155,6 +161,9 @@ internal class MainFragmentListenerDelegate(
 
       is MainFragmentListenedEvent.AccountSAML20Event ->
         this.handleAccountSAML20Event(event.event, state)
+
+      is MainFragmentListenedEvent.AccountEkirjastoSuomiFiEvent ->
+        this.handleAccountEkirjastoSuomiFiEvent(event.event, state)
 
       is MainFragmentListenedEvent.AccountPickerEvent ->
         this.handleAccountPickerEvent(event.event, state)
@@ -367,6 +376,11 @@ internal class MainFragmentListenerDelegate(
         state
       }
 
+      is AccountDetailEvent.OpenEkirjastoLogin -> {
+        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod, event.email)
+        state
+      }
+
       is AccountDetailEvent.OpenDocViewer -> {
         this.openDocViewer(event.title, event.url)
         state
@@ -395,6 +409,24 @@ internal class MainFragmentListenerDelegate(
       }
 
       is AccountSAML20Event.OpenErrorPage -> {
+        this.openErrorPage(event.parameters)
+        state
+      }
+    }
+  }
+
+  private fun handleAccountEkirjastoSuomiFiEvent(
+    event: AccountEkirjastoSuomiFiEvent,
+    state: MainFragmentState
+  ): MainFragmentState {
+    return when (event) {
+      AccountEkirjastoSuomiFiEvent.AccessTokenObtained,
+      AccountEkirjastoSuomiFiEvent.PasskeySuccessful -> {
+        this.popBackStack()
+        state
+      }
+
+      is AccountEkirjastoSuomiFiEvent.OpenErrorPage -> {
         this.openErrorPage(event.parameters)
         state
       }
@@ -636,6 +668,40 @@ internal class MainFragmentListenerDelegate(
       ),
       tab = this.navigator.currentTab()
     )
+  }
+
+  // Finland
+  private fun openEkirjastoLogin(
+    account: AccountID,
+    authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
+    loginMethod: ViewsForEkirjasto.LoginMethod,
+    email: String?
+  ) {
+    when (loginMethod) {
+      ViewsForEkirjasto.LoginMethod.SuomiFi -> {
+        this.navigator.addFragment(
+          fragment = AccountEkirjastoSuomiFiFragment.create(
+            AccountEkirjastoSuomiFiFragmentParameters(
+              accountID = account,
+              authenticationDescription = authenticationDescription
+            )
+          ),
+          tab = this.navigator.currentTab()
+        )
+      }
+      ViewsForEkirjasto.LoginMethod.Passkey -> {
+        this.navigator.addFragment(
+          fragment = AccountEkirjastoPasskeyFragment.create(
+            AccountEkirjastoPasskeyFragmentParameters(
+              accountID = account,
+              authenticationDescription = authenticationDescription,
+              username = email!!
+            )
+          ),
+          tab = this.navigator.currentTab()
+        )
+      }
+    }
   }
 
   private fun openDocViewer(

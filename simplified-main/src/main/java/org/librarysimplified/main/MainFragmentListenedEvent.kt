@@ -18,6 +18,10 @@ sealed class MainFragmentListenedEvent {
     val event: org.nypl.simplified.ui.accounts.saml20.AccountSAML20Event
   ) : MainFragmentListenedEvent()
 
+  data class AccountEkirjastoSuomiFiEvent(
+    val event: org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
+  ) : MainFragmentListenedEvent()
+
   data class AccountDetailEvent(
     val event: org.nypl.simplified.ui.accounts.AccountDetailEvent
   ) : MainFragmentListenedEvent()

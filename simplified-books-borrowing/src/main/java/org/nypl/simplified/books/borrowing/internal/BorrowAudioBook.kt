@@ -117,6 +117,9 @@ class BorrowAudioBook private constructor() : BorrowSubtaskType {
         is AccountAuthenticationCredentials.SAML2_0 -> {
           AudioBookCredentials.BearerToken(accessToken = credentials.accessToken)
         }
+        is AccountAuthenticationCredentials.Ekirjasto -> {
+          AudioBookCredentials.BearerToken(accessToken = credentials.accessToken)
+        }
         null -> {
           null
         }

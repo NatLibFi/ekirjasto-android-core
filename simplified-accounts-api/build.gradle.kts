@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.palace.drm.core)
     implementation(libs.palace.http.api)
+    implementation(project(":simplified-opds-auth-document-api"))
 
     compileOnly(libs.google.auto.value)
     annotationProcessor(libs.google.auto.value.processor)

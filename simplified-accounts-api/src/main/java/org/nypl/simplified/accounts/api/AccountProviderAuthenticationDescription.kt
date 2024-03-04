@@ -54,6 +54,13 @@ sealed class AccountProviderAuthenticationDescription : Serializable {
 
     const val BASIC_TOKEN_TYPE =
       "http://thepalaceproject.org/authtype/basic-token"
+
+    /**
+     * The type used to identify E-kirjasto authentication.
+     */
+
+    const val EKIRJASTO_TYPE =
+      "http://e-kirjasto.fi/authtype/ekirjasto"
   }
 
   /**
@@ -348,5 +355,44 @@ sealed class AccountProviderAuthenticationDescription : Serializable {
 
     override val canBeAlternativeLoginMethod: Boolean =
       false
+  }
+
+  /**
+   * E-kirjasto
+   */
+
+  // Finland
+  data class Ekirjasto(
+    override val description: String,
+
+    /**
+     * The URI used to perform authentication.
+     */
+
+    val authenticate: URI,
+
+    /**
+     * The URI used to call E-kirjasto API.
+     */
+
+    val api: URI,
+
+    /**
+     * URI's for different login flows.
+     */
+
+    val tunnistus_start: URI,
+    val tunnistus_finish: URI,
+    val passkey_login_start: URI,
+    val passkey_login_finish: URI,
+    val passkey_register_start: URI,
+    val passkey_register_finish: URI
+
+  ) : AccountProviderAuthenticationDescription() {
+    override val isLoginPossible: Boolean =
+      true
+
+    override val canBeAlternativeLoginMethod: Boolean =
+      true
   }
 }

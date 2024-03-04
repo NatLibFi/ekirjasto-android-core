@@ -1,11 +1,9 @@
 fun getGitHash(): String {
-    val proc = ProcessBuilder("git", "rev-parse", "--short", "HEAD")
-        .redirectOutput(ProcessBuilder.Redirect.PIPE)
-        .redirectError(ProcessBuilder.Redirect.PIPE)
-        .start()
-
-    proc.waitFor(10L, TimeUnit.SECONDS)
-    return proc.inputStream.bufferedReader().readText().trim()
+    // Ekirjasto: required for Gradle Configuration cache, to prevent reconfiguration
+    //   if hash was not changed.
+    return providers.exec {
+        commandLine("git", "rev-parse", "--short", "HEAD")
+    }.standardOutput.asText.get().trim()
 }
 
 android {
@@ -136,6 +134,7 @@ dependencies {
     implementation(libs.irradia.opds2.parser.vanilla)
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
+    implementation(libs.jackson.kotlin)
     implementation(libs.joda.time)
     implementation(libs.joda.time)
     implementation(libs.kotlin.reflect)
@@ -159,4 +158,6 @@ dependencies {
     implementation(libs.slf4j)
     implementation(libs.slf4j)
     implementation(libs.transifex.sdk)
+    implementation("androidx.credentials:credentials:1.2.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
 }

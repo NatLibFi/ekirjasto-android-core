@@ -3,6 +3,7 @@ dependencies {
     implementation(project(":simplified-accounts-registry-api"))
     implementation(project(":simplified-accounts-source-spi"))
     implementation(project(":simplified-buildconfig-api"))
+    implementation(project(":simplified-links"))
     implementation(project(":simplified-presentableerror-api"))
     implementation(project(":simplified-taskrecorder-api"))
 

@@ -1,5 +1,6 @@
 package org.nypl.simplified.books.borrowing.internal
 
+import android.util.Log
 import com.io7m.junreachable.UnreachableCodeException
 import one.irradia.mime.api.MIMECompatibility
 import one.irradia.mime.api.MIMECompatibility.applicationOctetStream
