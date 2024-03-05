@@ -28,9 +28,12 @@ fun propertyBooleanOptional(name: String, defaultValue: Boolean): Boolean {
 }
 
 val localProp:Properties = Properties().apply {
-    println(rootDir.absolutePath)
-    load(FileInputStream(File(rootDir, "local.properties")))
-    println(this.stringPropertyNames())
+
+    try {
+        load(FileInputStream(File(rootDir, "local.properties")))
+    } catch (exception: Exception){
+        println(exception)
+    }
 }
 
 
@@ -38,6 +41,7 @@ val localProp:Properties = Properties().apply {
  * Overrides property from gradle.properties with same prop in local.properties if present
  */
 fun overrideProperty(name: String) : String{
+
     val value = localProp.getOrElse(name){
         providers.gradleProperty(name).orNull
     }.toString()
