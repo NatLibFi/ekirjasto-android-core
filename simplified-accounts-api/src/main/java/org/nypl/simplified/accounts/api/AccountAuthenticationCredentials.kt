@@ -160,4 +160,29 @@ sealed class AccountAuthenticationCredentials {
       return this.copy(adobeCredentials = newCredentials)
     }
   }
+
+  /**
+   * The user used E-kirjasto authentication to authenticate.
+   */
+
+  data class Ekirjasto(
+    val accessToken: String,
+    val email: String?,
+    override val adobeCredentials: AccountAuthenticationAdobePreActivationCredentials?,
+    override val authenticationDescription: String?,
+    override val annotationsURI: URI?,
+    override val deviceRegistrationURI: URI?
+  ) : AccountAuthenticationCredentials() {
+    override fun withoutAdobePostActivationCredentials(): AccountAuthenticationCredentials {
+      return this.copy(
+        adobeCredentials = this.adobeCredentials?.copy(postActivationCredentials = null)
+      )
+    }
+
+    override fun withAdobePreActivationCredentials(
+      newCredentials: AccountAuthenticationAdobePreActivationCredentials
+    ): AccountAuthenticationCredentials {
+      return this.copy(adobeCredentials = newCredentials)
+    }
+  }
 }

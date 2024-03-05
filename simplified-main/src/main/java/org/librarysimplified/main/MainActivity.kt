@@ -344,8 +344,8 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   }
 
   private fun onOnboardingFinished() {
-    //this.openMainFragment()
-    this.openLogin()
+    this.openMainFragment()
+    //this.openLogin()
   }
 
   private fun openMainBackStack() {

@@ -6,6 +6,7 @@ import com.google.common.base.Preconditions
 import one.irradia.mime.api.MIMECompatibility
 import one.irradia.mime.api.MIMEType
 import org.librarysimplified.http.api.LSHTTPAuthorizationBasic
+import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Post
 import org.librarysimplified.http.api.LSHTTPResponseStatus
@@ -28,6 +29,7 @@ import org.nypl.simplified.accounts.api.AccountLoginStringResourcesType
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.OAuthWithIntermediary
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.SAML2_0
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Ekirjasto
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.adobe.extensions.AdobeDRMExtensions
 import org.nypl.simplified.notifications.NotificationTokenHTTPCallsType
@@ -36,14 +38,7 @@ import org.nypl.simplified.patron.api.PatronDRMAdobe
 import org.nypl.simplified.patron.api.PatronUserProfileParsersType
 import org.nypl.simplified.profiles.api.ProfileReadableType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.Basic
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.BasicToken
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryCancel
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryComplete
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryInitiate
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.SAML20Cancel
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.SAML20Complete
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.SAML20Initiate
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.*
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
 import org.nypl.simplified.taskrecorder.api.TaskResult
@@ -157,6 +152,22 @@ class ProfileAccountLoginTask(
         is SAML20Cancel -> {
           this.runSAML20Cancel(this.request)
         }
+
+        is EkirjastoInitiateSuomiFi -> {
+          this.runEkirjastoInitiateSuomiFi(this.request)
+        }
+
+        is EkirjastoInitiatePassKey -> {
+          this.runEkirjastoInitiatePassKey(this.request)
+        }
+
+        is EkirjastoComplete -> {
+          this.runEkirjastoComplete(this.request)
+        }
+
+        is EkirjastoCancel -> {
+          this.runEkirjastoCancel(this.request)
+        }
       }
     } catch (e: Throwable) {
       this.logger.error("error during login process: ", e)
@@ -197,6 +208,110 @@ class ProfileAccountLoginTask(
         throw exception
       }
     }
+  }
+
+  // Finland
+  private fun runEkirjastoCancel(
+    request: EkirjastoCancel
+  ): TaskResult<Unit> {
+    this.steps.beginNewStep("Cancelling login...")
+    return when (this.account.loginState) {
+      is AccountLoggingIn,
+      is AccountLoggingInWaitingForExternalAuthentication -> {
+        this.account.setLoginState(AccountNotLoggedIn)
+        this.steps.finishSuccess(Unit)
+      }
+
+      AccountNotLoggedIn,
+      is AccountLoginFailed,
+      is AccountLoggedIn,
+      is AccountLoggingOut,
+      is AccountLogoutFailed -> {
+        this.steps.currentStepSucceeded(
+          "Ignored the cancellation attempt because the account wasn't waiting for authentication."
+        )
+        this.steps.finishSuccess(Unit)
+      }
+    }
+  }
+
+  // Finland
+  private fun runEkirjastoComplete(
+    request: EkirjastoComplete
+  ): TaskResult<Unit> {
+    val authenticationURI = request.description.authenticate
+
+    val httpRequest = this.http.newRequest(authenticationURI)
+      .setAuthorization(
+        LSHTTPAuthorizationBearerToken.ofToken(request.ekirjastoToken)
+      )
+      .setMethod(Post(ByteArray(0), MIMECompatibility.applicationOctetStream))
+      .build()
+
+    httpRequest.execute().use { response ->
+      when (val status = response.status) {
+        is LSHTTPResponseStatus.Responded.OK -> {
+          this.credentials = AccountAuthenticationCredentials.Ekirjasto(
+            accessToken = getAccessTokenFromEkirjastoCirculationResponse(
+              node = ObjectMapper().readTree(status.bodyStream)
+            ),
+            email = request.email,
+            adobeCredentials = null,
+            authenticationDescription = request.description.description,
+            annotationsURI = null,
+            deviceRegistrationURI = null
+          )
+
+          this.handlePatronUserProfile()
+          this.runDeviceActivation()
+          this.account.setLoginState(AccountLoggedIn(this.credentials))
+          notificationTokenHttpCalls.registerFCMTokenForProfileAccount(
+            account = account,
+          )
+          return this.steps.finishSuccess(Unit)
+        }
+
+        is LSHTTPResponseStatus.Responded.Error -> {
+          handleProfileAccountLoginError(authenticationURI, status)
+          return this.steps.finishFailure()
+        }
+
+        is LSHTTPResponseStatus.Failed -> {
+          this.steps.currentStepFailed(
+            "Connection failed when fetching authentication token.",
+            "connectionFailed",
+            status.exception
+          )
+          throw status.exception
+        }
+      }
+    }
+  }
+
+  // Finland
+  private fun runEkirjastoInitiateSuomiFi(
+    request: EkirjastoInitiateSuomiFi
+  ): TaskResult<Unit> {
+    this.account.setLoginState(
+      AccountLoggingInWaitingForExternalAuthentication(
+        description = request.description,
+        status = "Waiting for authentication..."
+      )
+    )
+    return this.steps.finishSuccess(Unit)
+  }
+
+  // Finland
+  private fun runEkirjastoInitiatePassKey(
+    request: EkirjastoInitiatePassKey
+  ): TaskResult<Unit> {
+    this.account.setLoginState(
+      AccountLoggingInWaitingForExternalAuthentication(
+        description = request.description,
+        status = "Waiting for authentication..."
+      )
+    )
+    return this.steps.finishSuccess(Unit)
   }
 
   private fun runSAML20Cancel(
@@ -430,6 +545,16 @@ class ProfileAccountLoginTask(
     }
   }
 
+  // Finland
+  private fun getAccessTokenFromEkirjastoCirculationResponse(node: JsonNode): String {
+    return try {
+      node.get("access_token").asText()
+    } catch (e: Exception) {
+      this.logger.error("Error getting access token from E-kirjasto circulation token response: ", e)
+      throw e
+    }
+  }
+
   private fun getAccessTokenFromBasicTokenResponse(node: JsonNode): String {
     return try {
       node.get("accessToken").asText()
@@ -482,6 +607,10 @@ class ProfileAccountLoginTask(
           deviceRegistrationURI = patronProfile.deviceRegistrationURI
         )
       }
+
+      is AccountAuthenticationCredentials.Ekirjasto -> {
+        currentCredentials.copy(annotationsURI = patronProfile.annotationsURI)
+      }
     }
   }
 
@@ -519,6 +648,20 @@ class ProfileAccountLoginTask(
       is SAML20Complete -> {
         this.account.provider.authentication is SAML2_0 ||
           (this.account.provider.authenticationAlternatives.any { it is SAML2_0 })
+      }
+
+      is EkirjastoComplete,
+      is EkirjastoCancel -> {
+          this.account.provider.authentication is Ekirjasto ||
+            (this.account.provider.authenticationAlternatives.any { it is Ekirjasto })
+        }
+      is EkirjastoInitiatePassKey -> {
+        (this.account.provider.authentication == this.request.description) ||
+          (this.account.provider.authenticationAlternatives.any { it == this.request.description })
+      }
+      is EkirjastoInitiateSuomiFi -> {
+        (this.account.provider.authentication == this.request.description) ||
+          (this.account.provider.authenticationAlternatives.any { it == this.request.description })
       }
     }
   }
@@ -695,7 +838,9 @@ class ProfileAccountLoginTask(
       is Basic,
       is BasicToken,
       is SAML20Initiate,
-      is OAuthWithIntermediaryInitiate -> {
+      is OAuthWithIntermediaryInitiate,
+      is EkirjastoInitiateSuomiFi,
+      is EkirjastoInitiatePassKey -> {
         this.account.setLoginState(
           AccountLoggingIn(
             status = step.description,
@@ -709,7 +854,9 @@ class ProfileAccountLoginTask(
       is SAML20Cancel,
       is SAML20Complete,
       is OAuthWithIntermediaryComplete,
-      is OAuthWithIntermediaryCancel -> {
+      is OAuthWithIntermediaryCancel,
+      is EkirjastoComplete,
+      is EkirjastoCancel -> {
         when (this.account.loginState) {
           is AccountLoggingInWaitingForExternalAuthentication -> {
             this.account.setLoginState(
@@ -785,6 +932,38 @@ class ProfileAccountLoginTask(
       }
 
       is SAML20Complete -> {
+        when (val loginState = this.account.loginState) {
+          is AccountLoggingIn -> {
+            loginState.description
+          }
+
+          is AccountLoggingInWaitingForExternalAuthentication -> {
+            loginState.description
+          }
+
+          AccountNotLoggedIn,
+          is AccountLoginFailed,
+          is AccountLoggedIn,
+          is AccountLoggingOut,
+          is AccountLogoutFailed -> {
+            throw NoCurrentDescription()
+          }
+        }
+      }
+
+      is EkirjastoCancel -> {
+        this.request.description
+      }
+
+      is EkirjastoInitiatePassKey-> {
+        this.request.description
+      }
+
+      is EkirjastoInitiateSuomiFi -> {
+        this.request.description
+      }
+
+      is EkirjastoComplete -> {
         when (val loginState = this.account.loginState) {
           is AccountLoggingIn -> {
             loginState.description

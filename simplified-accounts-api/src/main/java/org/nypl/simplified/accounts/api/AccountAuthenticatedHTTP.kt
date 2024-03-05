@@ -41,6 +41,10 @@ object AccountAuthenticatedHTTP {
         LSHTTPAuthorizationBearerToken.ofToken(
           token = credentials.accessToken
         )
+      is AccountAuthenticationCredentials.Ekirjasto ->
+        LSHTTPAuthorizationBearerToken.ofToken(
+          token = credentials.accessToken
+        )
     }
   }
 

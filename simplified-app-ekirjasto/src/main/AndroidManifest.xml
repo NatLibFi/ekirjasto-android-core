@@ -20,7 +20,8 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:theme="@style/EKirjastoTheme_Splash"
     android:usesCleartextTraffic="true"
-    tools:replace="android:allowBackup">
+    tools:replace="android:allowBackup"
+    android:enableOnBackInvokedCallback="true">
 
     <!-- Main entry point for the application. -->
     <activity

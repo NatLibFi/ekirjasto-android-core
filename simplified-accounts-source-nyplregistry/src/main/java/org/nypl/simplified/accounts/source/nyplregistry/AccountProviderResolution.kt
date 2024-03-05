@@ -13,6 +13,7 @@ import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.COPPA_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.OAUTH_INTERMEDIARY_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.SAML_2_0_TYPE
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Companion.EKIRJASTO_TYPE
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.KeyboardInput
 import org.nypl.simplified.accounts.api.AccountProviderDescription
 import org.nypl.simplified.accounts.api.AccountProviderResolutionListenerType
@@ -257,6 +258,12 @@ class AccountProviderResolution(
             extractAuthenticationDescriptionBasicToken(taskRecorder, authObject)
           )
         }
+
+        EKIRJASTO_TYPE -> {
+          authObjects.add(
+            extractAuthenticationDescriptionEkirjasto(taskRecorder, authObject)
+          )
+        }
       }
     }
 
@@ -281,6 +288,54 @@ class AccountProviderResolution(
     val message = this.stringResources.resolvingAuthDocumentNoUsableAuthenticationTypes
     taskRecorder.currentStepFailed(message, authDocumentUnusable(this.description))
     throw IOException(message)
+  }
+
+  // Finland
+  private fun extractAuthenticationDescriptionEkirjasto(
+    taskRecorder: TaskRecorderType,
+    authObject: AuthenticationObject
+  ): AccountProviderAuthenticationDescription {
+    val links = mutableMapOf<String, URI?>()
+    links["authenticate"] =
+      authObject.links.find { link -> link.relation == "authenticate" }?.hrefURI
+    links["api"] =
+      authObject.links.find { link -> link.relation == "api" }?.hrefURI
+    links["tunnistus_start"] =
+      authObject.links.find { link -> link.relation == "tunnistus_start" }?.hrefURI
+    links["tunnistus_finish"] =
+      authObject.links.find { link -> link.relation == "tunnistus_finish" }?.hrefURI
+    links["passkey_login_start"] =
+      authObject.links.find { link -> link.relation == "passkey_login_start" }?.hrefURI
+    links["passkey_login_finish"] =
+      authObject.links.find { link -> link.relation == "passkey_login_finish" }?.hrefURI
+    links["passkey_register_start"] =
+      authObject.links.find { link -> link.relation == "passkey_register_start" }?.hrefURI
+    links["passkey_register_finish"] =
+      authObject.links.find { link -> link.relation == "passkey_register_finish" }?.hrefURI
+
+    val emptyLinks = mutableListOf<String>()
+    for ((name, link) in links) {
+      if (link == null) {
+        emptyLinks.add(name)
+      }
+    }
+    if (emptyLinks.isNotEmpty()) {
+      val message = "Missing value for links: $emptyLinks."
+      taskRecorder.currentStepFailed(message, authDocumentUnusable(this.description))
+      throw IOException(message)
+    }
+
+    return AccountProviderAuthenticationDescription.Ekirjasto(
+      authenticate = links["authenticate"]!!,
+      description = authObject.description,
+      api = links["api"]!!,
+      tunnistus_start = links["tunnistus_start"]!!,
+      tunnistus_finish = links["tunnistus_finish"]!!,
+      passkey_login_start = links["passkey_login_start"]!!,
+      passkey_login_finish = links["passkey_login_finish"]!!,
+      passkey_register_start = links["passkey_register_start"]!!,
+      passkey_register_finish = links["passkey_register_finish"]!!
+    )
   }
 
   private fun extractAuthenticationDescriptionSAML20(

@@ -29,6 +29,8 @@
 
     <include layout="@layout/auth_saml" />
 
+    <include layout="@layout/auth_ekirjasto" />
+
     <View
         android:id="@+id/authBottomDivider"
         android:layout_width="match_parent"

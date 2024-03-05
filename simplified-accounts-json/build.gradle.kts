@@ -19,4 +19,5 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.palace.drm.core)
     implementation(libs.slf4j)
+    implementation(project(":simplified-opds-auth-document-api"))
 }

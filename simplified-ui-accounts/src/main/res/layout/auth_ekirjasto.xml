@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/authEkirjasto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:paddingStart="16dp"
+  android:paddingEnd="16dp">
+
+  <LinearLayout
+      android:id="@+id/ekirjastoLoginContainer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/accountEkirjastoSuomiFiLabel" />
+
+    <Button
+        android:id="@+id/suomiFiLogin"
+        android:layout_width="256dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/accountLogin" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/accountEkirjastoPassKeyLabel" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/authPassKeyUsernameLabel"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/accountUserName"
+      tools:visibility="visible">
+
+      <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/authPassKeyUsernameField"
+          android:layout_width="match_parent"
+          android:layout_height="48dp"
+          android:autofillHints="username"
+          android:hint="@string/accountUserName"
+          android:inputType="text"
+          android:isCredential="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+      android:id="@+id/passKeyLogin"
+      android:layout_width="256dp"
+      android:layout_height="48dp"
+      android:layout_gravity="center"
+      android:layout_marginTop="32dp"
+      android:layout_marginBottom="4dp"
+      android:drawableStart="@drawable/passkey"
+      android:drawablePadding="8dp"
+      android:text="@string/accountLoginWith" />
+
+    <Button
+        android:id="@+id/passKeyRegister"
+        android:layout_width="256dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"
+        android:drawableStart="@drawable/passkey"
+        android:drawablePadding="4dp"
+        android:text="@string/accountPasskeyCreate" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/ekirjastoCancelContainer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/ekirjastoCancelLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/accountEkirjastoLoggedInLabel"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/ekirjastoCancelButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/accountCancel" />
+
+  </LinearLayout>
+
+</LinearLayout>

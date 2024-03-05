@@ -106,6 +106,11 @@ object AccountAuthenticationCredentialsJSON {
         }
         authObject.set("cookies", cookieArray)
       }
+      is AccountAuthenticationCredentials.Ekirjasto -> {
+        authObject.put("@type", "ekirjasto")
+        authObject.put("accessToken", credentials.accessToken)
+        authObject.put("email", credentials.email)
+      }
     }
 
     val adobeObj =

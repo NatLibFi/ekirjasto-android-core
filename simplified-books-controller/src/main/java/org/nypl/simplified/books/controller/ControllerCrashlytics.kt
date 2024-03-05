@@ -36,6 +36,7 @@ internal object ControllerCrashlytics {
       }
       is AccountAuthenticationCredentials.OAuthWithIntermediary,
       is AccountAuthenticationCredentials.SAML2_0,
+      is AccountAuthenticationCredentials.Ekirjasto,
       null -> {
         this.clearCrashlyticsUserID(crashlytics)
       }

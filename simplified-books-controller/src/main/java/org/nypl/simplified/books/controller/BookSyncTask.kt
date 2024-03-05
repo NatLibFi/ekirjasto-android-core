@@ -166,6 +166,8 @@ class BookSyncTask(
         currentCredentials.copy(annotationsURI = profile.annotationsURI)
       is AccountAuthenticationCredentials.SAML2_0 ->
         currentCredentials.copy(annotationsURI = profile.annotationsURI)
+      is AccountAuthenticationCredentials.Ekirjasto ->
+        currentCredentials.copy(annotationsURI = profile.annotationsURI)
     }
   }
 

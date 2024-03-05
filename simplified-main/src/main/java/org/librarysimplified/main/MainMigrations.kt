@@ -100,6 +100,11 @@ internal object MainMigrations {
               taskRecorder.currentStepFailed(message, "missingInformation")
               return taskRecorder.finishFailure()
             }
+            is AccountAuthenticationCredentials.Ekirjasto -> {
+              val message = "Can't use E-kirjasto authentication during migrations."
+              taskRecorder.currentStepFailed(message, "missingInformation")
+              return taskRecorder.finishFailure()
+            }
           }
         }
         is AccountProviderAuthenticationDescription.BasicToken -> {
@@ -128,6 +133,11 @@ internal object MainMigrations {
         }
         is AccountProviderAuthenticationDescription.SAML2_0 -> {
           val message = "Can't use SAML 2.0 authentication during migrations."
+          taskRecorder.currentStepFailed(message, "missingInformation")
+          return taskRecorder.finishFailure()
+        }
+        is AccountProviderAuthenticationDescription.Ekirjasto -> {
+          val message = "Can't use E-kirjasto authentication during migrations."
           taskRecorder.currentStepFailed(message, "missingInformation")
           return taskRecorder.finishFailure()
         }

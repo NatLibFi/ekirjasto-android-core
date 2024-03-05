@@ -51,6 +51,7 @@
   <string name="accountSAML20LoginLabel">Sign in with SAML 2.0 WEB SSO</string>
   <string name="accountSAML20NoAccessToken">Failed to retrieve an access token from the URI: %1$s</string>
   <string name="accountSAML20NoPatronInfo">Failed to retrieve patron info from the URI: %1$s</string>
+  <string name="accountEkirjastoSuomiFiNoAccessToken">Failed to retrieve an access token from the URI: %1$s</string>
   <string name="accountSearchHint">Search accounts&#8230;</string>
   <string name="accountMore">More options</string>
   <string name="accountPasswordResetFailed">Sorry, we weren\'t able to find a usable app to reset your password. Please send email to %1$s if you need to report an issue.</string>
@@ -60,4 +61,10 @@
   <string name="accountEULA">End User License Agreement</string>
   <string name="accountMenuSearch">Search</string>
   <string name="accountMenuRefresh">Reload</string>
+  <string name="accountEkirjastoSuomiFiLabel">Suomi.fi login</string>
+  <string name="accountEkirjastoPassKeyLabel">Passkey login</string>
+  <string name="accountEmail">E-mail address</string>
+  <string name="accountEkirjastoLoggingInLabel">Logging in with %1$s</string>
+  <string name="accountEkirjastoLoggedInLabel">Logged in the E-kirjasto.</string>
+  <string name="accountPasskeyCreate">Register Passkey</string>
 </resources>

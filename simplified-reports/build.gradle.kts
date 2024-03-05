@@ -1,11 +1,9 @@
 fun getGitHash(): String {
-    val proc = ProcessBuilder("git", "rev-parse", "--short", "HEAD")
-        .redirectOutput(ProcessBuilder.Redirect.PIPE)
-        .redirectError(ProcessBuilder.Redirect.PIPE)
-        .start()
-
-    proc.waitFor(10L, TimeUnit.SECONDS)
-    return proc.inputStream.bufferedReader().readText().trim()
+    // Ekirjasto: required for Gradle Configuration cache, to prevent reconfiguration
+    //   if hash was not changed.
+    return providers.exec {
+        commandLine("git", "rev-parse", "--short", "HEAD")
+    }.standardOutput.asText.get().trim()
 }
 
 android {

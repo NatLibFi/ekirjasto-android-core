@@ -9,7 +9,7 @@ import java.net.URI
 class EkirjastoBuildConfigurationService : BuildConfigurationServiceType {
   override val libraryRegistry: BuildConfigurationAccountsRegistryURIs
     get() = BuildConfigurationAccountsRegistryURIs(
-      registry = URI(""),
+      registry = URI("${EkirjastoAccountFallback.circulationAPIURL}/libraries"),
       registryQA = URI("")
     )
   override val allowAccountsAccess: Boolean
@@ -33,7 +33,7 @@ class EkirjastoBuildConfigurationService : BuildConfigurationServiceType {
   override val supportErrorReportEmailAddress: String
     get() = "support@ellibs.com"
   override val supportErrorReportSubject: String
-    get() = "[palace-error]"
+    get() = "[ekirjasto-error]"
   override val oauthCallbackScheme: BuildConfigOAuthScheme
     get() = BuildConfigOAuthScheme("simplified-vanilla-oauth")
   override val allowExternalReaderLinks: Boolean

@@ -1,5 +1,6 @@
 package org.nypl.simplified.profiles.controller.api
 
+import android.content.Context
 import org.nypl.simplified.accounts.api.AccountCookie
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountPassword
@@ -96,5 +97,45 @@ sealed class ProfileAccountLoginRequest {
   data class SAML20Cancel(
     override val accountId: AccountID,
     val description: AccountProviderAuthenticationDescription.SAML2_0
+  ) : ProfileAccountLoginRequest()
+
+  /**
+   * A request to begin a login using E-kirjasto authentication and Suomi.fi.
+   */
+
+  data class EkirjastoInitiateSuomiFi(
+    override val accountId: AccountID,
+    val description: AccountProviderAuthenticationDescription.Ekirjasto,
+  ) : ProfileAccountLoginRequest()
+
+  /**
+   * A request to begin a login using E-kirjasto authentication and PassKey.
+   */
+
+  data class EkirjastoInitiatePassKey(
+    override val accountId: AccountID,
+    val description: AccountProviderAuthenticationDescription.Ekirjasto
+  ) : ProfileAccountLoginRequest()
+
+  /**
+   * A request to complete a login using E-kirjasto authentication. In other
+   * words, a set of E-kirjasto information has been passed to the application.
+   */
+
+  data class EkirjastoComplete(
+    override val accountId: AccountID,
+    val description: AccountProviderAuthenticationDescription.Ekirjasto,
+    val ekirjastoToken: String,
+    val email:String?
+  ) : ProfileAccountLoginRequest()
+
+  /**
+   * A request to cancel waiting for a login using E-kirjasto authentication.
+   */
+
+  data class EkirjastoCancel(
+    override val accountId: AccountID,
+    val description: AccountProviderAuthenticationDescription.Ekirjasto,
+    val email:String?
   ) : ProfileAccountLoginRequest()
 }

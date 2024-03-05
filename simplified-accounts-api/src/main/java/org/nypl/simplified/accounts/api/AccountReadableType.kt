@@ -39,7 +39,8 @@ interface AccountReadableType {
       AccountProviderAuthenticationDescription.Anonymous,
       is AccountProviderAuthenticationDescription.Basic,
       is AccountProviderAuthenticationDescription.BasicToken,
-      is AccountProviderAuthenticationDescription.OAuthWithIntermediary -> {
+      is AccountProviderAuthenticationDescription.OAuthWithIntermediary,
+      is AccountProviderAuthenticationDescription.Ekirjasto -> {
         this.provider.catalogURI == feedURI || this.preferences.catalogURIOverride == feedURI
       }
     }
@@ -88,7 +89,8 @@ interface AccountReadableType {
       is AccountProviderAuthenticationDescription.Basic,
       is AccountProviderAuthenticationDescription.BasicToken,
       is AccountProviderAuthenticationDescription.OAuthWithIntermediary,
-      is AccountProviderAuthenticationDescription.SAML2_0 -> {
+      is AccountProviderAuthenticationDescription.SAML2_0,
+      is AccountProviderAuthenticationDescription.Ekirjasto -> {
         true
       }
     }
