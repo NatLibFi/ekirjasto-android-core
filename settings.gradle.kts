@@ -1,3 +1,5 @@
+import java.io.File
+import java.io.FileInputStream
 import java.util.Properties
 
 pluginManagement {
@@ -23,6 +25,23 @@ fun property(name: String): String {
 fun propertyBooleanOptional(name: String, defaultValue: Boolean): Boolean {
     val value = propertyOptional(name) ?: return defaultValue
     return value.toBooleanStrict()
+}
+
+val localProp:Properties = Properties().apply {
+    println(rootDir.absolutePath)
+    load(FileInputStream(File(rootDir, "local.properties")))
+    println(this.stringPropertyNames())
+}
+
+
+/**
+ * Overrides property from gradle.properties with same prop in local.properties if present
+ */
+fun overrideProperty(name: String) : String{
+    val value = localProp.getOrElse(name){
+        providers.gradleProperty(name).orNull
+    }.toString()
+    return value;
 }
 
 val adobeDRM =
@@ -190,9 +209,9 @@ dependencyResolutionManagement {
 
         //ekirjasto lib lcp
         ivy {
-            url = uri("https://liblcp.dita.digital")
+            url = uri(overrideProperty("ekirjasto.liblcp.uri"))
             patternLayout{
-                artifact("/[organisation]/[module]/android/aar/test/[revision].[ext]")
+                artifact(overrideProperty("ekirjasto.liblcp.repositorylayout"))
             }
             metadataSources {
                 artifact()
