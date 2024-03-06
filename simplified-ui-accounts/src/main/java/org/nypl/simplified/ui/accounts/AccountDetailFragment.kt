@@ -405,7 +405,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           )
         }
         is AccountProviderAuthenticationDescription.Ekirjasto -> {
-          this.authenticationViews.setEkirjastoEmail("")
+          this.authenticationViews.setEkirjastoUsername("")
         }
         AccountProviderAuthenticationDescription.Anonymous,
         is AccountProviderAuthenticationDescription.COPPAAgeGate,
@@ -876,7 +876,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
+            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -914,7 +914,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
+            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -948,7 +948,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
+            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,

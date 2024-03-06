@@ -31,7 +31,7 @@ class ViewsForEkirjasto(
 
   enum class LoginMethod { SuomiFi, Passkey }
 
-  private val logger = LoggerFactory.getLogger(ViewsForBasic::class.java)
+  private val logger = LoggerFactory.getLogger(ViewsForEkirjasto::class.java)
 
   private var activeLoginMethod = LoginMethod.SuomiFi
 
