@@ -203,7 +203,7 @@ class AccountAuthenticationViews(
   }
 
   // Helsinki
-  fun setEkirjastoEmail(email: String) {
+  fun setEkirjastoUsername(email: String) {
     this.ekirjasto.setUsername(email)
   }
 
