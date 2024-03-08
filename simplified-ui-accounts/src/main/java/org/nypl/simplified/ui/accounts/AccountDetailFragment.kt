@@ -326,6 +326,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.tryLogin()
       }
     } else {
+      logger.debug("LoginButtonDisable 1")
       AsLoginButtonDisabled
     }
   }
@@ -618,7 +619,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       this.authenticationViews.getEkirjastoLoginMethod()
     val email: String? =
       this.authenticationViews.getEkirjastoLoginEmail()
-
+    logger.debug("On Try EKirjasto Login: Loginmethod=$loginMethod")
     if (loginMethod == ViewsForEkirjasto.LoginMethod.SuomiFi) {
       this.viewModel.tryLogin(
         ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi(
@@ -698,6 +699,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
   }
 
   private fun reconfigureAccountUI() {
+    logger.debug("account authentication type: ${viewModel.account.provider.authentication.description}")
     this.authenticationViews.showFor(this.viewModel.account.provider.authentication)
 
     if (this.viewModel.account.provider.cardCreatorURI != null) {
@@ -785,6 +787,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       }
 
     this.disableSyncSwitchForLoginState(this.viewModel.account.loginState)
+
+    logger.debug("Account Login State: ${this.viewModel.account.loginState}")
 
     return when (val loginState = this.viewModel.account.loginState) {
       AccountNotLoggedIn -> {
@@ -876,6 +880,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
+            logger.debug("Account Logged In as Ekirjasto")
             this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
@@ -1031,6 +1036,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       }
 
       is AsLoginButtonDisabled -> {
+        logger.debug("LoginButtonDisable 2")
         this.signUpLabel.setText(R.string.accountCardCreatorLabel)
         this.signUpLabel.isEnabled = true
       }
@@ -1089,6 +1095,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
     this.authenticationViews.lock()
 
+    logger.debug("LoginButtonDisable 3")
     this.setLoginButtonStatus(AsLoginButtonDisabled)
     this.authenticationAlternativesHide()
   }
