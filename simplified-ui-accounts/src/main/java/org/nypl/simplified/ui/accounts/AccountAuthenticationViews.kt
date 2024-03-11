@@ -282,7 +282,7 @@ class AccountAuthenticationViews(
    */
 
   // Finland
-  fun getEkirjastoLoginEmail(): String? {
+  fun getEkirjastoLoginUsername(): String? {
     return this.ekirjasto.getUsername().value
   }
 

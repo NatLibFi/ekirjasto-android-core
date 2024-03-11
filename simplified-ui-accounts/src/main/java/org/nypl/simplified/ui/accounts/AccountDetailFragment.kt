@@ -616,8 +616,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
   ) {
     val loginMethod: ViewsForEkirjasto.LoginMethod =
       this.authenticationViews.getEkirjastoLoginMethod()
-    val email: String? =
-      this.authenticationViews.getEkirjastoLoginEmail()
+    val username: String? =
+      this.authenticationViews.getEkirjastoLoginUsername()
 
     if (loginMethod == ViewsForEkirjasto.LoginMethod.SuomiFi) {
       this.viewModel.tryLogin(
@@ -627,7 +627,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         )
       )
       this.listener.post(
-        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, email)
+        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, username)
       )
     }
     else if (loginMethod == ViewsForEkirjasto.LoginMethod.Passkey) {
@@ -638,7 +638,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         )
       )
       this.listener.post(
-        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, email)
+        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, username)
       )
     }
   }
