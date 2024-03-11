@@ -58,6 +58,7 @@ import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLoginButtonDis
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLoginButtonEnabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLogoutButtonDisabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLogoutButtonEnabled
+import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsPasskeyRegisterEnabled
 import org.nypl.simplified.ui.images.ImageAccountIcons
 import org.nypl.simplified.ui.images.ImageLoaderType
 import org.slf4j.LoggerFactory
@@ -793,8 +794,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     return when (val loginState = this.viewModel.account.loginState) {
       AccountNotLoggedIn -> {
         this.loginProgress.visibility = View.GONE
-        this.setLoginButtonStatus(
-          AsLoginButtonEnabled {
+        this.setLoginButtonStatus(AsLoginButtonEnabled {
             this.loginFormLock()
             this.tryLogin()
           }
@@ -815,8 +815,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginFormLock()
 
         if (loginState.cancellable) {
-          this.setLoginButtonStatus(
-            AsCancelButtonEnabled {
+          this.setLoginButtonStatus(AsCancelButtonEnabled {
               // We don't really support this yet.
               throw UnimplementedCodeException()
             }
@@ -832,8 +831,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginProgressText.text = loginState.status
         this.loginButtonErrorDetails.visibility = View.GONE
         this.loginFormLock()
-        this.setLoginButtonStatus(
-          AsCancelButtonEnabled {
+        this.setLoginButtonStatus(AsCancelButtonEnabled {
             this.viewModel.tryLogin(
               OAuthWithIntermediaryCancel(
                 accountId = this.viewModel.account.id,
@@ -850,8 +848,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginProgressText.text = loginState.taskResult.steps.last().resolution.message
         this.loginFormUnlock()
         this.cancelImageButtonLoading()
-        this.setLoginButtonStatus(
-          AsLoginButtonEnabled {
+        this.setLoginButtonStatus(AsLoginButtonEnabled {
             this.loginFormLock()
             this.tryLogin()
           }
@@ -863,7 +860,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.authenticationAlternativesShow()
       }
 
-      is AccountLoggedIn -> {
+      is AccountLoggedIn -> { //TODO handle passkey register
         when (val creds = loginState.credentials) {
           is AccountAuthenticationCredentials.Basic -> {
             this.authenticationViews.setBasicUserAndPass(
@@ -881,6 +878,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
             logger.debug("Account Logged In as Ekirjasto")
+            //TODO: should probably get the ekirjasto token here and assign it to authenticationViews ?
             this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
@@ -893,8 +891,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginProgress.visibility = View.GONE
         this.loginFormLock()
         this.loginButtonErrorDetails.visibility = View.GONE
-        this.setLoginButtonStatus(
-          AsLogoutButtonEnabled {
+        this.setLoginButtonStatus(AsLogoutButtonEnabled {
             this.loginFormLock()
             this.viewModel.tryLogout()
           }
@@ -967,8 +964,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginProgressText.text = loginState.taskResult.steps.last().resolution.message
         this.cancelImageButtonLoading()
         this.loginFormLock()
-        this.setLoginButtonStatus(
-          AsLogoutButtonEnabled {
+        this.setLoginButtonStatus(AsLogoutButtonEnabled {
             this.loginFormLock()
             this.viewModel.tryLogout()
           }
@@ -1056,6 +1052,9 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       is AsCancelButtonEnabled,
       AsCancelButtonDisabled -> {
         // Nothing
+      }
+      is AsPasskeyRegisterEnabled -> {
+
       }
     }
   }
