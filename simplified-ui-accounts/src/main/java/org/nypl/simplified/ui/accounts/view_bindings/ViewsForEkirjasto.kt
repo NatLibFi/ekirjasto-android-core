@@ -132,19 +132,8 @@ class ViewsForEkirjasto(
         this.cancelButton.isEnabled = false
       }
       is AccountLoginButtonStatus.AsLogoutButtonEnabled -> {
-        //TODO should handle passkey register here
-        if (activeLoginMethod == LoginMethod.SuomiFi) {
-          this.loginContainer.visibility = VISIBLE
-          this.suomiFiButton.isEnabled = false
-          this.username.isEnabled = true
-          this.passkeyLoginButton.isEnabled = false
-          //is enabled when username is valid
-          this.passkeyRegisterButton.isEnabled = false
-        } else {
-          this.loginContainer.visibility = GONE
-        }
+        this.loginContainer.visibility = GONE
         this.cancelContainer.visibility = VISIBLE
-
         this.cancelLabel.text = res.getString(R.string.accountEkirjastoLoggedInLabel)
         this.cancelButton.setText(R.string.accountLogout)
         this.cancelButton.isEnabled = true
@@ -160,6 +149,17 @@ class ViewsForEkirjasto(
 
         this.cancelButton.setText(R.string.accountLogout)
         this.cancelButton.isEnabled = false
+      }
+
+      is AccountLoginButtonStatus.AsPasskeyRegisterEnabled -> {
+        this.loginContainer.visibility = VISIBLE
+        this.suomiFiButton.visibility = GONE
+        this.passkeyRegisterButton.visibility = VISIBLE
+        this.passkeyLoginButton.visibility = GONE
+        this.username.isEnabled = true
+        this.passkeyRegisterButton.setOnClickListener{
+          status.onClick.invoke()
+        }
       }
     }
   }
