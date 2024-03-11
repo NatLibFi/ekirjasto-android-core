@@ -65,8 +65,7 @@ class AccountAuthenticationViews(
     )
   private val ekirjasto: ViewsForEkirjasto =
     ViewsForEkirjasto.bind(
-      this.viewGroup.findViewById(R.id.authEkirjasto),
-      onUsernameChangeListener = onUsernamePasswordChangeListener
+      this.viewGroup.findViewById(R.id.authEkirjasto)
     )
 
   private val viewGroups =

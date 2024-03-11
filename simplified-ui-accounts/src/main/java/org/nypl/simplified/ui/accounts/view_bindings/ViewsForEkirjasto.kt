@@ -22,7 +22,6 @@ class ViewsForEkirjasto(
   val cancelContainer: LinearLayout,
   val suomiFiButton: Button,
   val username: TextInputEditText,
-  val onUsernameChangeListener: (AccountUsername, AccountPassword) -> Unit,
   val passkeyLoginButton: Button,
   val passkeyRegisterButton : Button,
   val cancelLabel: TextView,
@@ -38,10 +37,7 @@ class ViewsForEkirjasto(
   private val tokenTextListener =
     OnTextChangeListener(
       onChanged = { _, _, _, _ ->
-        this.onUsernameChangeListener.invoke(
-          AccountUsername(this.username.text.toString()),
-          AccountPassword("")
-        )
+
       }
     )
 
@@ -67,6 +63,7 @@ class ViewsForEkirjasto(
 
         this.passkeyLoginButton.text = res.getString(R.string.accountLoginWith, "passkey")
         this.passkeyLoginButton.isEnabled = true
+        this.passkeyRegisterButton.isEnabled = false
         this.passkeyLoginButton.setOnClickListener {
           this.activeLoginMethod = LoginMethod.Passkey
           status.onClick.invoke()
@@ -135,11 +132,20 @@ class ViewsForEkirjasto(
         this.cancelButton.isEnabled = false
       }
       is AccountLoginButtonStatus.AsLogoutButtonEnabled -> {
-        this.loginContainer.visibility = GONE
+        //TODO should handle passkey register here
+        if (activeLoginMethod == LoginMethod.SuomiFi) {
+          this.loginContainer.visibility = VISIBLE
+          this.suomiFiButton.isEnabled = false
+          this.username.isEnabled = true
+          this.passkeyLoginButton.isEnabled = false
+          //is enabled when username is valid
+          this.passkeyRegisterButton.isEnabled = false
+        } else {
+          this.loginContainer.visibility = GONE
+        }
         this.cancelContainer.visibility = VISIBLE
 
         this.cancelLabel.text = res.getString(R.string.accountEkirjastoLoggedInLabel)
-
         this.cancelButton.setText(R.string.accountLogout)
         this.cancelButton.isEnabled = true
         this.cancelButton.setOnClickListener {
@@ -175,7 +181,7 @@ class ViewsForEkirjasto(
   }
 
   fun isSatisfied(description: AccountProviderAuthenticationDescription.Ekirjasto): Boolean {
-    return !username.text.isNullOrBlank()
+    return true
   }
 
   fun configureFor(description: AccountProviderAuthenticationDescription.Ekirjasto) {
@@ -194,8 +200,7 @@ class ViewsForEkirjasto(
 
   companion object {
     fun bind(
-      viewGroup: ViewGroup,
-      onUsernameChangeListener: (AccountUsername, AccountPassword) -> Unit
+      viewGroup: ViewGroup
     ): ViewsForEkirjasto {
       return ViewsForEkirjasto(
         viewGroup = viewGroup,
@@ -203,7 +208,6 @@ class ViewsForEkirjasto(
         cancelContainer = viewGroup.findViewById(R.id.ekirjastoCancelContainer),
         suomiFiButton = viewGroup.findViewById(R.id.suomiFiLogin),
         username = viewGroup.findViewById(R.id.authPassKeyUsernameField),
-        onUsernameChangeListener = onUsernameChangeListener,
         passkeyLoginButton = viewGroup.findViewById(R.id.passKeyLogin),
         passkeyRegisterButton = viewGroup.findViewById(R.id.passKeyRegister),
         cancelLabel = viewGroup.findViewById(R.id.ekirjastoCancelLabel),
