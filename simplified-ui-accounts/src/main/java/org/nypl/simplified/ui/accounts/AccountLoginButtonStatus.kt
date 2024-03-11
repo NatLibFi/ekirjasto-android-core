@@ -50,4 +50,11 @@ sealed class AccountLoginButtonStatus {
    */
 
   object AsCancelButtonDisabled : AccountLoginButtonStatus()
+
+  /**
+   * User can now register a passkey
+   */
+  data class AsPasskeyRegisterEnabled(
+    val onClick: () -> Unit
+  ) : AccountLoginButtonStatus()
 }
