@@ -58,7 +58,6 @@ import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLoginButtonDis
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLoginButtonEnabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLogoutButtonDisabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLogoutButtonEnabled
-import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsPasskeyRegisterEnabled
 import org.nypl.simplified.ui.images.ImageAccountIcons
 import org.nypl.simplified.ui.images.ImageLoaderType
 import org.slf4j.LoggerFactory
@@ -878,7 +877,14 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
             logger.debug("Account Logged In as Ekirjasto")
+            val loginMethod = this.authenticationViews.getEkirjastoLoginMethod();
+            if (loginMethod == ViewsForEkirjasto.LoginMethod.SuomiFi){
+              this.authenticationViews.setEkirjastoPasskeyState(ViewsForEkirjasto.PasskeyLoginState.RegisterAvailable)
+            }
+            //TODO: remove log
+            logger.warn("loginMethod = $loginMethod, token=${creds.accessToken}, ekirjastoToken=${creds.ekirjastoToken}")
             //TODO: should probably get the ekirjasto token here and assign it to authenticationViews ?
+
             this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
@@ -896,6 +902,13 @@ class AccountDetailFragment : Fragment(R.layout.account) {
             this.viewModel.tryLogout()
           }
         )
+        if (authenticationViews.getEkirjastoPasskeyState() == ViewsForEkirjasto.PasskeyLoginState.RegisterAvailable) {
+          this.setLoginButtonStatus(AsLoginButtonEnabled {
+            logger.debug("Login button should be configured as passkey register")
+            this.loginFormLock()
+            this.tryLogin()
+          })
+        }
         this.authenticationAlternativesHide()
       }
 
@@ -1052,9 +1065,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       is AsCancelButtonEnabled,
       AsCancelButtonDisabled -> {
         // Nothing
-      }
-      is AsPasskeyRegisterEnabled -> {
-
       }
     }
   }
