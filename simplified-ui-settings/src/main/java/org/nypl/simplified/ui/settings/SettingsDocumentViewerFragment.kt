@@ -39,7 +39,7 @@ class SettingsDocumentViewerFragment : Fragment() {
       binding.documentViewerWebView.let { webView ->
         webView.webViewClient = WebViewClient()
         webView.webChromeClient = WebChromeClient()
-        webView.settings.allowFileAccess = true
+        webView.settings.allowFileAccess = false
 
         // Beware that this line is a potential XSS vulnerability. The sites displayed are all
         // assumed to be benign enough for this to be OK and if the worst should happen the certs
