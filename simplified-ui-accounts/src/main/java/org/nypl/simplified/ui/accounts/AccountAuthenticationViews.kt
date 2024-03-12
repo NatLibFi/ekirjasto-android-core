@@ -294,4 +294,12 @@ class AccountAuthenticationViews(
     return this.ekirjasto.getActiveLoginMethod()
   }
 
+  fun setEkirjastoPasskeyState(state: ViewsForEkirjasto.PasskeyLoginState) {
+    this.ekirjasto.passkeyState = state
+  }
+
+  fun getEkirjastoPasskeyState(): ViewsForEkirjasto.PasskeyLoginState {
+    return this.ekirjasto.passkeyState
+  }
+
 }
