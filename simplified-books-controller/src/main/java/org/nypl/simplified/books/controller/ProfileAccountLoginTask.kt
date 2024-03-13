@@ -255,7 +255,7 @@ class ProfileAccountLoginTask(
             accessToken = getAccessTokenFromEkirjastoCirculationResponse(
               node = ObjectMapper().readTree(status.bodyStream)
             ),
-            ekirjastoToken = null,
+            ekirjastoToken = request.ekirjastoToken,
             username = request.email,
             adobeCredentials = null,
             authenticationDescription = request.description.description,

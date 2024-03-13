@@ -619,7 +619,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       this.authenticationViews.getEkirjastoLoginMethod()
     val username: String? =
       this.authenticationViews.getEkirjastoLoginUsername()
-    logger.debug("On Try EKirjasto Login: Loginmethod=$loginMethod")
+    logger.warn("On Try EKirjasto Login: Loginmethod=$loginMethod")
     if (loginMethod == ViewsForEkirjasto.LoginMethod.SuomiFi) {
       this.viewModel.tryLogin(
         ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi(
@@ -904,7 +904,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         )
         if (authenticationViews.getEkirjastoPasskeyState() == ViewsForEkirjasto.PasskeyLoginState.RegisterAvailable) {
           this.setLoginButtonStatus(AsLoginButtonEnabled {
-            logger.debug("Login button should be configured as passkey register")
+            logger.warn("Passkey: Login button should be configured as passkey register")
             this.loginFormLock()
             this.tryLogin()
           })
