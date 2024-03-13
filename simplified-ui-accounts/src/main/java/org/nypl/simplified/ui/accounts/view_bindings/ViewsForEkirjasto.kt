@@ -68,6 +68,7 @@ class ViewsForEkirjasto(
 
     when (passkeyState) {
       PasskeyLoginState.RegisterUnavailable -> {
+        this.logger.debug("Ekirjasto passkey registering is not available")
         this.passkeyLoginButton.isEnabled = false
         this.passkeyRegisterButton.isEnabled = false
         this.suomiFiButton.text = res.getString(R.string.accountLoginWith, "Suomi.fi")
@@ -78,14 +79,18 @@ class ViewsForEkirjasto(
         }
       }
       PasskeyLoginState.RegisterAvailable -> {
+        this.logger.debug("Ekirjasto passkey register available")
         //suomiFiLogin is ignored because it is probably configured as logout button at this point
+        this.username.isEnabled = true
         this.passkeyLoginButton.isEnabled = false
         this.passkeyRegisterButton.isEnabled = true
         this.passkeyRegisterButton.setOnClickListener {
+          this.activeLoginMethod = LoginMethod.Passkey
           status.onClick.invoke()
         }
       }
       PasskeyLoginState.Registered -> {
+        this.logger.debug("Ekirjasto passkey is registered")
         this.passkeyLoginButton.isEnabled = true
         this.passkeyRegisterButton.isEnabled = false
         this.passkeyLoginButton.text = res.getString(R.string.accountLoginWith, "passkey")
@@ -103,7 +108,7 @@ class ViewsForEkirjasto(
 
   override fun setLoginButtonStatus(status: AccountLoginButtonStatus) {
     val res = this.viewGroup.resources
-    logger.debug("setLoginButtonStatus $status")
+    logger.warn("Ekirjasto view: setLoginButtonStatus $status")
     return when (status) {
       is AccountLoginButtonStatus.AsLoginButtonEnabled -> handleLoginEnabled(status,res)
       AccountLoginButtonStatus.AsLoginButtonDisabled -> {
@@ -181,18 +186,6 @@ class ViewsForEkirjasto(
         this.cancelButton.setText(R.string.accountLogout)
         this.cancelButton.isEnabled = false
       }
-
-      //TODO: move the functionality elsewhere as adding this event broke everything
-//      is AccountLoginButtonStatus.AsPasskeyRegisterEnabled -> {
-//        this.loginContainer.visibility = VISIBLE
-//        this.suomiFiButton.visibility = GONE
-//        this.passkeyRegisterButton.visibility = VISIBLE
-//        this.passkeyLoginButton.visibility = GONE
-//        this.username.isEnabled = true
-//        this.passkeyRegisterButton.setOnClickListener{
-//          status.onClick.invoke()
-//        }
-//      }
     }
   }
 

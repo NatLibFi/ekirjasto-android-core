@@ -703,6 +703,7 @@ internal class MainFragmentListenerDelegate(
     loginMethod: ViewsForEkirjasto.LoginMethod,
     email: String?
   ) {
+    this.logger.debug("Open Ekirjasto Login. loginMethod=$loginMethod")
     when (loginMethod) {
       ViewsForEkirjasto.LoginMethod.SuomiFi -> {
         this.navigator.addFragment(
