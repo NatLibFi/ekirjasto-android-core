@@ -11,5 +11,6 @@ import java.io.Serializable
 data class AccountEkirjastoPasskeyFragmentParameters(
   val accountID: AccountID,
   val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
-  val username: String
+  val username: String,
+  val ekirjastoToken: String?
 ) : Serializable
