@@ -611,6 +611,20 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     this.viewModel.tryLogin(request)
   }
 
+  private fun tryRegisterPasskey(credentials: AccountAuthenticationCredentials) {
+    val description = this.viewModel.account.provider.authentication
+    if (credentials is AccountAuthenticationCredentials.Ekirjasto &&
+      description is AccountProviderAuthenticationDescription.Ekirjasto) {
+      this.listener.post(
+        AccountDetailEvent.OpenEkirjastoPasskeyRegister(
+          this.parameters.accountID,
+          description,
+          credentials.username!!,
+          credentials.ekirjastoToken!!
+        )
+      )
+    }
+  }
   // Finland
   private fun onTryEkirjastoLogin(
     authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto
@@ -906,7 +920,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           this.setLoginButtonStatus(AsLoginButtonEnabled {
             logger.warn("Passkey: Login button should be configured as passkey register")
             this.loginFormLock()
-            this.tryLogin()
+            //this.tryLogin()
+            this.tryRegisterPasskey(loginState.credentials)
           })
         }
         this.authenticationAlternativesHide()
@@ -990,6 +1005,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       }
     }
   }
+
+
 
   private fun disableSyncSwitchForLoginState(loginState: AccountLoginState) {
     return when (loginState) {

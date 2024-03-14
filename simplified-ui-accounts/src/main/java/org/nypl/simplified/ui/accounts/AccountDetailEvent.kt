@@ -39,7 +39,14 @@ sealed class AccountDetailEvent {
     val account: AccountID,
     val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
     val loginMethod: ViewsForEkirjasto.LoginMethod,
-    val email:String?
+    val username:String?,
+  ) : AccountDetailEvent()
+
+  data class OpenEkirjastoPasskeyRegister(
+    val account: AccountID,
+    val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
+    val username:String?,
+    val ekirjastoToken: String?
   ) : AccountDetailEvent()
 
   /**
