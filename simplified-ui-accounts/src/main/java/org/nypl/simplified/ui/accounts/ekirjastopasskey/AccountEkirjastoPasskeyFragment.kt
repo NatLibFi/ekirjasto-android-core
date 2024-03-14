@@ -86,6 +86,8 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
 
   private lateinit var progress: ProgressBar
 
+  //TODO viewmodel
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     this.progress = view.findViewById(R.id.passkeyprogressBar)

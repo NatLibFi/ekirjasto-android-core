@@ -377,7 +377,12 @@ internal class MainFragmentListenerDelegate(
       }
 
       is AccountDetailEvent.OpenEkirjastoLogin -> {
-        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod, event.email)
+        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod, event.username, null)
+        state
+      }
+
+      is AccountDetailEvent.OpenEkirjastoPasskeyRegister -> {
+        this.openEkirjastoLogin(event.account, event.authenticationDescription, ViewsForEkirjasto.LoginMethod.Passkey, event.username, event.ekirjastoToken)
         state
       }
 
@@ -701,7 +706,8 @@ internal class MainFragmentListenerDelegate(
     account: AccountID,
     authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
     loginMethod: ViewsForEkirjasto.LoginMethod,
-    email: String?
+    email: String?,
+    ekirjastoToken: String?
   ) {
     this.logger.debug("Open Ekirjasto Login. loginMethod=$loginMethod")
     when (loginMethod) {
@@ -722,7 +728,8 @@ internal class MainFragmentListenerDelegate(
             AccountEkirjastoPasskeyFragmentParameters(
               accountID = account,
               authenticationDescription = authenticationDescription,
-              username = email!!
+              username = email!!,
+              ekirjastoToken = ekirjastoToken
             )
           ),
           tab = this.navigator.currentTab()
