@@ -2,6 +2,7 @@
 # Android Studio 2.2.3 Defaults
 #
 
+**/bin
 **/build
 *.iml
 .DS_Store
@@ -33,3 +34,5 @@ overdrive.json
 feedbooks.conf
 /simplified-files/configurations.txt
 /ktlint.jar
+/transifex.jar
+

@@ -118,7 +118,8 @@ android {
         applicationId = "fi.kansalliskirjasto.ekirjasto"
         versionCode = calculateVersionCode()
         resourceConfigurations.add("en")
-        resourceConfigurations.add("es")
+        resourceConfigurations.add("fi")
+        resourceConfigurations.add("sv")
         setProperty("archivesBaseName", "ekirjasto")
     }
 
