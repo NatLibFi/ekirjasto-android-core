@@ -38,19 +38,19 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
     remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute")
   )
 
+  override val acknowledgements: DocumentConfiguration? =
+    null
+
   // If you are adding or trying to modify an accessibilityStatement field be sure to have a look
   // at the lines below as well as the class documentation.
   val accessibilityStatement: DocumentConfiguration? = null
   // A better name for this would be "accessibilityStatement" or "accessibilityReport".
   // As to why this is weirdly named, check the long explanation given in the class documentation.
-  override val acknowledgements: DocumentConfiguration? =
+  override val eula: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
       remoteURI = URI.create("https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-saavutettavuusseloste")
     )
-
-  override val eula: DocumentConfiguration? =
-    null
 
   override val licenses: DocumentConfiguration? =
     null
