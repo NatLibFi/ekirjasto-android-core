@@ -1,6 +1,5 @@
 package org.nypl.simplified.profiles.controller.api
 
-import android.content.Context
 import org.nypl.simplified.accounts.api.AccountCookie
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountPassword
@@ -126,7 +125,7 @@ sealed class ProfileAccountLoginRequest {
     override val accountId: AccountID,
     val description: AccountProviderAuthenticationDescription.Ekirjasto,
     val ekirjastoToken: String,
-    val email:String?
+    val username:String?
   ) : ProfileAccountLoginRequest()
 
   /**
@@ -136,6 +135,6 @@ sealed class ProfileAccountLoginRequest {
   data class EkirjastoCancel(
     override val accountId: AccountID,
     val description: AccountProviderAuthenticationDescription.Ekirjasto,
-    val email:String?
+    val username:String?
   ) : ProfileAccountLoginRequest()
 }

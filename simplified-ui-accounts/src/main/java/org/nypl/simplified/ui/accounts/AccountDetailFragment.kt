@@ -619,7 +619,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         AccountDetailEvent.OpenEkirjastoPasskeyRegister(
           this.parameters.accountID,
           description,
-          credentials.username!!,
+          authenticationViews.getEkirjastoLoginUsername(),
           credentials.ekirjastoToken!!
         )
       )
@@ -896,10 +896,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
               this.authenticationViews.setEkirjastoPasskeyState(ViewsForEkirjasto.PasskeyLoginState.RegisterAvailable)
             }
             //TODO: remove log
-            logger.warn("loginMethod = $loginMethod, token=${creds.accessToken}, ekirjastoToken=${creds.ekirjastoToken}")
-            //TODO: should probably get the ekirjasto token here and assign it to authenticationViews ?
-
-            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
+            logger.warn("loginMethod=$loginMethod, username=${creds.username} token=${creds.accessToken}, ekirjastoToken=${creds.ekirjastoToken}")
+//            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -919,6 +917,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         if (authenticationViews.getEkirjastoPasskeyState() == ViewsForEkirjasto.PasskeyLoginState.RegisterAvailable) {
           this.setLoginButtonStatus(AsLoginButtonEnabled {
             logger.warn("Passkey: Login button should be configured as passkey register")
+            loginState.credentials
             this.loginFormLock()
             //this.tryLogin()
             this.tryRegisterPasskey(loginState.credentials)

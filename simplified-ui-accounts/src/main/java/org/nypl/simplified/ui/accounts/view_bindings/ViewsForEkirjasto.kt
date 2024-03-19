@@ -43,7 +43,6 @@ class ViewsForEkirjasto(
   private val tokenTextListener =
     OnTextChangeListener(
       onChanged = { _, _, _, _ ->
-
       }
     )
 

@@ -256,7 +256,7 @@ class ProfileAccountLoginTask(
               node = ObjectMapper().readTree(status.bodyStream)
             ),
             ekirjastoToken = request.ekirjastoToken,
-            username = request.email,
+            username = request.username,
             adobeCredentials = null,
             authenticationDescription = request.description.description,
             annotationsURI = null,

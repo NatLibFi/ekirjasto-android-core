@@ -5,15 +5,10 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.webkit.CookieManager
-import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.lifecycle.ViewModel
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import hu.akarnokd.rxjava2.subjects.UnicastWorkSubject
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -177,7 +172,7 @@ class AccountEkirjastoSuomiFiViewModel(
           accountId = this.account,
           description = this.description,
           ekirjastoToken = ekirjastoToken,
-          email = null
+          username = null
         )
       )
       this.eventSubject.onNext(
@@ -198,7 +193,7 @@ class AccountEkirjastoSuomiFiViewModel(
         ProfileAccountLoginRequest.EkirjastoCancel(
           accountId = this.account,
           description = this.description,
-          email = null
+          username = null
         )
       )
     }
