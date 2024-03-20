@@ -619,7 +619,8 @@ dependencies {
     implementation(libs.truevfs.kernel.impl)
     implementation(libs.truevfs.kernel.spec)
 
-    implementation("readium:liblcp:1.0.0@aar")
+    implementation("readium:liblcp:2.1.0@aar")
     implementation("androidx.credentials:credentials:1.2.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
 }
+
