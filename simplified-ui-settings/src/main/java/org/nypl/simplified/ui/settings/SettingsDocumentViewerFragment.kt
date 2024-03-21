@@ -39,7 +39,13 @@ class SettingsDocumentViewerFragment : Fragment() {
       binding.documentViewerWebView.let { webView ->
         webView.webViewClient = WebViewClient()
         webView.webChromeClient = WebChromeClient()
-        webView.settings.allowFileAccess = true
+
+        // Beware that this line is a potential XSS vulnerability. The sites displayed are all
+        // assumed to be benign enough for this to be OK and if the worst should happen the certs
+        // can be revoked and this has been tested to work as expected.
+        webView.settings.javaScriptEnabled = true
+        // Disable file access to prevent potential file theft
+        webView.settings.allowFileAccess = false
 
         WebViewUtilities.setForcedDark(webView.settings, resources.configuration)
 
