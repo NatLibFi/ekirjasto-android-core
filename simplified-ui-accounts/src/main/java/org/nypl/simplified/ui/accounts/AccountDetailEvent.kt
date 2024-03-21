@@ -2,7 +2,7 @@ package org.nypl.simplified.ui.accounts
 
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
-import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import java.net.URL
 
@@ -35,18 +35,19 @@ sealed class AccountDetailEvent {
    * The patron wants to log in through E-kirjasto.
    */
 
-  data class OpenEkirjastoLogin(
+  data class OpenEkirjastoSuomiFiLogin(
     val account: AccountID,
     val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
-    val loginMethod: ViewsForEkirjasto.LoginMethod,
-    val username:String?,
+    val loginMethod: EkirjastoLoginMethod.SuomiFi,
+//    val username:String?,
   ) : AccountDetailEvent()
 
-  data class OpenEkirjastoPasskeyRegister(
+  data class OpenEkirjastoPasskeyLogin(
     val account: AccountID,
     val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
-    val username:String?,
-    val ekirjastoToken: String?
+    val loginMethod: EkirjastoLoginMethod.Passkey
+//    val username:String?,
+//    val ekirjastoToken: String?
   ) : AccountDetailEvent()
 
   /**

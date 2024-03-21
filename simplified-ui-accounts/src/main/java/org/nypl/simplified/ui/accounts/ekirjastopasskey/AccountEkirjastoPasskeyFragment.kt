@@ -36,6 +36,7 @@ import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import org.slf4j.LoggerFactory
 
@@ -92,7 +93,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
         application = this.requireActivity().application,
         account = this.parameters.accountID,
         description = this.parameters.authenticationDescription,
-        ekirjastoToken = this.parameters.ekirjastoToken
+        ekirjastoToken = this.parameters.loginMethod.token
       )
     }
   )
@@ -210,9 +211,13 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     }
   }
 
-  private fun passkeyLoginAsync(requestJson: String) {
+  private fun passkeyLoginAsync(username: String) {
+    this.logger.debug("Passkey Login Async")
+    //TODO request json
+    val requestJson = "";
+
     val getPublicKeyCredentialOption = GetPublicKeyCredentialOption(
-      requestJson = requestJson
+      requestJson = username
     )
     val credentialRequest = GetCredentialRequest(
       listOf(getPublicKeyCredentialOption)
@@ -281,7 +286,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
         accountId = this.parameters.accountID,
         description = this.parameters.authenticationDescription,
         ekirjastoToken = ekirjastoToken,
-        username = this.parameters.username
+        username = this.parameters.loginMethod.username?.value
       )
     )
     this.listener.post(AccountEkirjastoSuomiFiEvent.AccessTokenObtained)
@@ -293,7 +298,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
       ProfileAccountLoginRequest.EkirjastoCancel(
         accountId = this.parameters.accountID,
         description = this.parameters.authenticationDescription,
-        username = this.parameters.username
+        username = this.parameters.loginMethod.username?.value
       )
     )
 
@@ -313,33 +318,45 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     super.onStart()
     logger.debug("$tag Passkey Fragment OnStart")
 
+    val loginState = parameters.loginMethod.loginState
+    val username = parameters.loginMethod.username!!.value
+
     //todo: register events
-    val startRequestJson = JsonMapper().writeValueAsString(mapOf("username" to parameters.username))
-    logger.debug("startRequestJson: \n"+startRequestJson)
 
-    val registerState = tryLogin(startRequestJson)
-    val responseJson = registerState.getResponse()?.bodyStream.toString()
-    logger.debug("$tag received Response Json")
-    logger.debug(responseJson)
-//    // TODO: Just for testing.. Get the json from responseJson?
-//    val requestJson = "{\n" +
-//      "  \"challenge\": \"T1xCsnxM2DNL2KdK5CLa6fMhD7OBqho6syzInk_n-Uo\",\n" +
-//      "  \"allowCredentials\": [],\n" +
-//      "  \"timeout\": 1800000,\n" +
-//      "  \"userVerification\": \"required\",\n" +
-//      "  \"rpId\": \"credential-manager-app-test.glitch.me\"\n" +
-//      "}"
+    when (loginState){
+      EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable -> passkeyRegisterAsync(username)
+      EkirjastoLoginMethod.Passkey.LoginState.Registered -> passkeyLoginAsync(username)
+      else -> this.logger.warn("Unhandled login state: "+loginState.toString())
+    }
 
-    if (registerState == RegisterState.Registered) {
-      logger.debug("TODO: user registered, login with passkey")
-      //passkeyLoginAsync(requestJson)
-    }
-    else if (registerState == RegisterState.Registering) {
-    logger.debug("TODO: user registering new passkey")
-    //createPasskeyAsync()
-    } else {
-      handleFailure(Exception("Passkey (E-kirjasto) registration failed."))
-    }
+//    val startRequestJson = JsonMapper().writeValueAsString(mapOf("username" to username, ))
+//    logger.debug("startRequestJson: \n"+startRequestJson)
+//    logger.debug(parameters.authenticationDescription.passkey_register_start.toString())
+//    logger.debug(parameters.authenticationDescription.passkey_register_finish.toString())
+
+//    val registerState = tryLogin(startRequestJson)
+//    val responseJson = registerState.getResponse()?.bodyStream.toString()
+//    logger.debug("$tag received Response Json")
+//    logger.debug(responseJson)
+////    // TODO: Just for testing.. Get the json from responseJson?
+////    val requestJson = "{\n" +
+////      "  \"challenge\": \"T1xCsnxM2DNL2KdK5CLa6fMhD7OBqho6syzInk_n-Uo\",\n" +
+////      "  \"allowCredentials\": [],\n" +
+////      "  \"timeout\": 1800000,\n" +
+////      "  \"userVerification\": \"required\",\n" +
+////      "  \"rpId\": \"credential-manager-app-test.glitch.me\"\n" +
+////      "}"
+//
+//    if (registerState == RegisterState.Registered) {
+//      logger.debug("TODO: user registered, login with passkey")
+//      //passkeyLoginAsync(requestJson)
+//    }
+//    else if (registerState == RegisterState.Registering) {
+//    logger.debug("TODO: user registering new passkey")
+//    //createPasskeyAsync()
+//    } else {
+//      handleFailure(Exception("Passkey (E-kirjasto) registration failed."))
+//    }
   }
 
   private enum class RegisterState {
@@ -364,6 +381,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     var userRegistered = false
     var userRegistering = false
     try {
+      logger.debug("Try Login Start")
       result = passkeyRequest(
         parameters.authenticationDescription.passkey_login_start,
         requestJson
@@ -372,6 +390,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
       userRegistering = false
 
       if (!userRegistered) {
+        logger.debug("Try register start")
         result = passkeyRequest(
           parameters.authenticationDescription.passkey_register_start,
           requestJson
@@ -395,9 +414,9 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     return RegisterState.Failure
   }
 
-  private fun createPasskeyAsync() {
+  private fun passkeyRegisterAsync(username: String) {
     logger.debug("create passkey async")
-    if (parameters.ekirjastoToken == null) {
+    if (parameters.loginMethod.token == null) {
       handleFailure(Exception("Missing token. Cannot complete passkey registration"))
       return
     }
