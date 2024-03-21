@@ -63,6 +63,7 @@ import org.nypl.simplified.ui.images.ImageLoaderType
 import org.slf4j.LoggerFactory
 import java.net.URI
 import org.librarysimplified.ui.accounts.R
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 import org.thepalaceproject.theme.core.PalaceToolbar
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 
@@ -611,30 +612,33 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     this.viewModel.tryLogin(request)
   }
 
-  private fun tryRegisterPasskey(credentials: AccountAuthenticationCredentials) {
+  private fun tryEkirjastoPasskeyLogin(credentials: AccountAuthenticationCredentials) {
     val description = this.viewModel.account.provider.authentication
     if (credentials is AccountAuthenticationCredentials.Ekirjasto &&
       description is AccountProviderAuthenticationDescription.Ekirjasto) {
       this.listener.post(
-        AccountDetailEvent.OpenEkirjastoPasskeyRegister(
+        AccountDetailEvent.OpenEkirjastoPasskeyLogin(
           this.parameters.accountID,
           description,
-          authenticationViews.getEkirjastoLoginUsername(),
-          credentials.ekirjastoToken!!
+          EkirjastoLoginMethod.Passkey(
+            loginState = this.authenticationViews.getEkirjastoPasskeyState(),
+            token = credentials.accessToken,
+            username = authenticationViews.getEkirjastoLoginUsername()
+          )
         )
       )
     }
   }
   // Finland
-  private fun onTryEkirjastoLogin(
+  private fun onTryEkirjastoSuomiFiLogin(
     authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto
   ) {
-    val loginMethod: ViewsForEkirjasto.LoginMethod =
+    val loginMethod: EkirjastoLoginMethod =
       this.authenticationViews.getEkirjastoLoginMethod()
-    val username: String? =
-      this.authenticationViews.getEkirjastoLoginUsername()
-    logger.warn("On Try EKirjasto Login: Loginmethod=$loginMethod")
-    if (loginMethod == ViewsForEkirjasto.LoginMethod.SuomiFi) {
+//    val username: String? =
+//      this.authenticationViews.getEkirjastoLoginUsername()
+    logger.warn("On Try EKirjasto Suomi.fi Login: Loginmethod=$loginMethod")
+    if (loginMethod is EkirjastoLoginMethod.SuomiFi) {
       this.viewModel.tryLogin(
         ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi(
           accountId = this.parameters.accountID,
@@ -642,20 +646,22 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         )
       )
       this.listener.post(
-        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, username)
+        AccountDetailEvent.OpenEkirjastoSuomiFiLogin(this.parameters.accountID, authenticationDescription, loginMethod)
       )
+    } else {
+      this.logger.warn("Invalid login method for suomi.fi login")
     }
-    else if (loginMethod == ViewsForEkirjasto.LoginMethod.Passkey) {
-      this.viewModel.tryLogin(
-        ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
-          accountId = this.parameters.accountID,
-          description = authenticationDescription
-        )
-      )
-      this.listener.post(
-        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, username)
-      )
-    }
+//    else if (loginMethod == ViewsForEkirjasto.LoginMethod.Passkey) {
+//      this.viewModel.tryLogin(
+//        ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
+//          accountId = this.parameters.accountID,
+//          description = authenticationDescription
+//        )
+//      )
+//      this.listener.post(
+//        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, username)
+//      )
+//    }
   }
 
   private fun sendOAuthIntent(
@@ -892,8 +898,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           is AccountAuthenticationCredentials.Ekirjasto -> {
             logger.debug("Account Logged In as Ekirjasto")
             val loginMethod = this.authenticationViews.getEkirjastoLoginMethod();
-            if (loginMethod == ViewsForEkirjasto.LoginMethod.SuomiFi){
-              this.authenticationViews.setEkirjastoPasskeyState(ViewsForEkirjasto.PasskeyLoginState.RegisterAvailable)
+            if (loginMethod is EkirjastoLoginMethod.SuomiFi){
+              this.authenticationViews.setEkirjastoPasskeyState(EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable)
             }
             //TODO: remove log
             logger.warn("loginMethod=$loginMethod, username=${creds.username} token=${creds.accessToken}, ekirjastoToken=${creds.ekirjastoToken}")
@@ -914,13 +920,12 @@ class AccountDetailFragment : Fragment(R.layout.account) {
             this.viewModel.tryLogout()
           }
         )
-        if (authenticationViews.getEkirjastoPasskeyState() == ViewsForEkirjasto.PasskeyLoginState.RegisterAvailable) {
+        if (authenticationViews.getEkirjastoPasskeyState() == EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable) {
           this.setLoginButtonStatus(AsLoginButtonEnabled {
             logger.warn("Passkey: Login button should be configured as passkey register")
-            loginState.credentials
             this.loginFormLock()
             //this.tryLogin()
-            this.tryRegisterPasskey(loginState.credentials)
+            this.tryEkirjastoPasskeyLogin(loginState.credentials)
           })
         }
         this.authenticationAlternativesHide()
@@ -1177,7 +1182,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.onTryBasicTokenLogin(description)
 
       is AccountProviderAuthenticationDescription.Ekirjasto ->
-        this.onTryEkirjastoLogin(description)
+        this.onTryEkirjastoSuomiFiLogin(description)
 
       is AccountProviderAuthenticationDescription.Anonymous,
       is AccountProviderAuthenticationDescription.COPPAAgeGate ->

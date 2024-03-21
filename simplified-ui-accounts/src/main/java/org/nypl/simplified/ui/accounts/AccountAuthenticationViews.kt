@@ -16,6 +16,7 @@ import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.SAML2_0
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Ekirjasto
 import org.nypl.simplified.accounts.api.AccountUsername
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 
 import org.nypl.simplified.ui.accounts.view_bindings.AccountAuthenticationViewBindings
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForAnonymous
@@ -281,8 +282,8 @@ class AccountAuthenticationViews(
    */
 
   // Finland
-  fun getEkirjastoLoginUsername(): String? {
-    return this.ekirjasto.getUsername().value
+  fun getEkirjastoLoginUsername(): AccountUsername? {
+    return this.ekirjasto.getUsername()
   }
 
   /**
@@ -290,15 +291,15 @@ class AccountAuthenticationViews(
    */
 
   // Finland
-  fun getEkirjastoLoginMethod(): ViewsForEkirjasto.LoginMethod {
+  fun getEkirjastoLoginMethod(): EkirjastoLoginMethod {
     return this.ekirjasto.getActiveLoginMethod()
   }
 
-  fun setEkirjastoPasskeyState(state: ViewsForEkirjasto.PasskeyLoginState) {
+  fun setEkirjastoPasskeyState(state: EkirjastoLoginMethod.Passkey.LoginState) {
     this.ekirjasto.passkeyState = state
   }
 
-  fun getEkirjastoPasskeyState(): ViewsForEkirjasto.PasskeyLoginState {
+  fun getEkirjastoPasskeyState(): EkirjastoLoginMethod.Passkey.LoginState {
     return this.ekirjasto.passkeyState
   }
 
