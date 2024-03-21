@@ -13,6 +13,16 @@ interface DocumentConfigurationServiceType {
   val privacyPolicy: DocumentConfiguration?
 
   /**
+   * @return The application feedback form, if any.
+   */
+  val feedback: DocumentConfiguration?
+
+  /**
+   * @return The accessibility statement, if any.
+   */
+  val accessibilityStatement: DocumentConfiguration?
+
+  /**
    * @return The application acknowledgements, if any.
    */
 

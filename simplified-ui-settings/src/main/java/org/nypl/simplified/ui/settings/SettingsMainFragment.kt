@@ -40,6 +40,8 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
   private lateinit var settingsFaq: Preference
   private lateinit var settingsLicense: Preference
   private lateinit var settingsPrivacy: Preference
+  private lateinit var settingsFeedback: Preference
+  private lateinit var settingsAccessibilityStatement: Preference
   private lateinit var settingsVersion: Preference
   private lateinit var settingsVersionCore: Preference
   private lateinit var toolbar: PalaceToolbar
@@ -62,6 +64,8 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
     this.settingsFaq = this.findPreference("settingsFaq")!!
     this.settingsLicense = this.findPreference("settingsLicense")!!
     this.settingsPrivacy = this.findPreference("settingsPrivacy")!!
+    this.settingsFeedback = this.findPreference("settingsFeedback")!!
+    this.settingsAccessibilityStatement = this.findPreference("settingsAccessibilityStatement")!!
     this.settingsVersion = this.findPreference("settingsVersion")!!
     this.settingsVersionCore = this.findPreference("settingsVersionCore")!!
 
@@ -74,6 +78,8 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
     this.configureFaq(this.settingsFaq)
     this.configureLicense(this.settingsLicense)
     this.configurePrivacy(this.settingsPrivacy)
+    this.configureFeedback(this.settingsFeedback)
+    this.configureAccessibilityStatement(this.settingsAccessibilityStatement)
     this.configureVersion(this.settingsVersion)
     this.configureVersionCore(this.settingsVersionCore)
   }
@@ -212,6 +218,40 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
         Preference.OnPreferenceClickListener {
           this.listener.post(
             SettingsMainEvent.OpenPrivacy(
+              title = it.title.toString(),
+              url = doc.readableURL.toString()
+            )
+          )
+          true
+        }
+    }
+  }
+
+  private fun configureFeedback(preference: Preference) {
+    val doc = this.viewModel.documents.feedback
+    preference.isVisible = doc != null
+    if (doc != null) {
+      preference.onPreferenceClickListener =
+        Preference.OnPreferenceClickListener {
+          this.listener.post(
+            SettingsMainEvent.OpenFeedback(
+              title = it.title.toString(),
+              url = doc.readableURL.toString()
+            )
+          )
+          true
+        }
+    }
+  }
+
+  private fun configureAccessibilityStatement(preference: Preference) {
+    val doc = this.viewModel.documents.accessibilityStatement
+    preference.isVisible = doc != null
+    if (doc != null) {
+      preference.onPreferenceClickListener =
+        Preference.OnPreferenceClickListener {
+          this.listener.post(
+            SettingsMainEvent.OpenAccessibilityStatement(
               title = it.title.toString(),
               url = doc.readableURL.toString()
             )

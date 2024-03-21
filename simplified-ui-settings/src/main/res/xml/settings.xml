@@ -4,6 +4,12 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <Preference
+      android:icon="@android:drawable/ic_menu_send"
+      android:key="settingsFeedback"
+      android:summary="@string/settingsFeedbackSummary"
+      android:title="@string/settingsFeedback" />
+
+  <Preference
     android:icon="@drawable/ic_settings_account"
     android:key="settingsAccounts"
     android:summary="@string/settingsAccountsSummary"
@@ -40,6 +46,12 @@
           android:key="settingsPrivacy"
           android:summary="@string/settingsPrivacySummary"
           android:title="@string/settingsPrivacy" />
+
+    <Preference
+        android:key="settingsAccessibilityStatement"
+        android:summary="@string/settingsAccessibilityStatementSummary"
+        android:title="@string/settingsAccessibilityStatement" />
+
   </PreferenceCategory>
 
   <PreferenceCategory android:title="@string/settingsInfo">

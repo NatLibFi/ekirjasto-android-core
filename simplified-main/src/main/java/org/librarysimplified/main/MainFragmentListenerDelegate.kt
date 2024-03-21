@@ -506,6 +506,16 @@ internal class MainFragmentListenerDelegate(
         this.openSettingsPrivacy(event.title, event.url)
         state
       }
+
+      is SettingsMainEvent.OpenFeedback -> {
+        this.openSettingsFeedback(event.title, event.url)
+        state
+      }
+
+      is SettingsMainEvent.OpenAccessibilityStatement -> {
+        this.openSettingsAccessibilityStatement(event.title, event.url)
+        state
+      }
     }
   }
 
@@ -602,6 +612,22 @@ internal class MainFragmentListenerDelegate(
       tab = org.librarysimplified.ui.tabs.R.id.tabSettings
     )
   }
+
+  private fun openSettingsFeedback(title: String, url: String) {
+    this.navigator.addFragment(
+      fragment = SettingsDocumentViewerFragment.create(title, url),
+      tab = org.librarysimplified.ui.tabs.R.id.tabSettings
+    )
+  }
+
+  private fun openSettingsAccessibilityStatement(title: String, url: String) {
+    this.navigator.addFragment(
+      fragment = SettingsDocumentViewerFragment.create(title, url),
+      tab = org.librarysimplified.ui.tabs.R.id.tabSettings
+    )
+  }
+
+
 
   private fun openSettingsVersion() {
     this.navigator.addFragment(

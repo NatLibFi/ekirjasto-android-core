@@ -67,4 +67,21 @@ sealed class SettingsMainEvent {
     val title: String,
     val url: String,
   ) : SettingsMainEvent()
+
+  /**
+   * The settings screen wants to open the "Feedback" screen.
+   */
+
+  data class OpenFeedback(
+    val title: String,
+    val url: String,
+  ) : SettingsMainEvent()
+
+  /**
+   * The settings screen wants to open the "Accessibility Statement" screen.
+   */
+  data class OpenAccessibilityStatement(
+    val title: String,
+    val url: String,
+  ) : SettingsMainEvent()
 }

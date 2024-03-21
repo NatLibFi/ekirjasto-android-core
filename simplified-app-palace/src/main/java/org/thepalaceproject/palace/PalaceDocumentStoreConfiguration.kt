@@ -12,6 +12,12 @@ class PalaceDocumentStoreConfiguration : DocumentConfigurationServiceType {
       remoteURI = URI.create("https://legal.palaceproject.io/Privacy%20Policy.html")
     )
 
+  override val feedback: DocumentConfiguration? =
+    null
+
+  override val accessibilityStatement: DocumentConfiguration? =
+    null
+
   override val about: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
