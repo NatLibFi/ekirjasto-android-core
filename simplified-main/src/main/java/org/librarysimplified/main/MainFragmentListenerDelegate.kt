@@ -40,6 +40,7 @@ import org.nypl.simplified.ui.accounts.ekirjastopasskey.AccountEkirjastoPasskeyF
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiFragment
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Event
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Fragment
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20FragmentParameters
@@ -376,13 +377,13 @@ internal class MainFragmentListenerDelegate(
         state
       }
 
-      is AccountDetailEvent.OpenEkirjastoLogin -> {
-        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod, event.username, null)
+      is AccountDetailEvent.OpenEkirjastoSuomiFiLogin -> {
+        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod)
         state
       }
 
-      is AccountDetailEvent.OpenEkirjastoPasskeyRegister -> {
-        this.openEkirjastoLogin(event.account, event.authenticationDescription, ViewsForEkirjasto.LoginMethod.Passkey, event.username, event.ekirjastoToken)
+      is AccountDetailEvent.OpenEkirjastoPasskeyLogin -> {
+        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod)
         state
       }
 
@@ -705,13 +706,11 @@ internal class MainFragmentListenerDelegate(
   private fun openEkirjastoLogin(
     account: AccountID,
     authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
-    loginMethod: ViewsForEkirjasto.LoginMethod,
-    email: String?,
-    ekirjastoToken: String?
+    loginMethod: EkirjastoLoginMethod,
   ) {
     this.logger.debug("Open Ekirjasto Login. loginMethod=$loginMethod")
     when (loginMethod) {
-      ViewsForEkirjasto.LoginMethod.SuomiFi -> {
+      is EkirjastoLoginMethod.SuomiFi -> {
         this.navigator.addFragment(
           fragment = AccountEkirjastoSuomiFiFragment.create(
             AccountEkirjastoSuomiFiFragmentParameters(
@@ -722,14 +721,13 @@ internal class MainFragmentListenerDelegate(
           tab = this.navigator.currentTab()
         )
       }
-      ViewsForEkirjasto.LoginMethod.Passkey -> {
+      is EkirjastoLoginMethod.Passkey -> {
         this.navigator.addFragment(
           fragment = AccountEkirjastoPasskeyFragment.create(
             AccountEkirjastoPasskeyFragmentParameters(
               accountID = account,
               authenticationDescription = authenticationDescription,
-              username = email!!,
-              ekirjastoToken = ekirjastoToken
+              loginMethod
             )
           ),
           tab = this.navigator.currentTab()
