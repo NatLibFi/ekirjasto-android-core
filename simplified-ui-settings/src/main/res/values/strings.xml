@@ -54,6 +54,10 @@
   <string name="settingsFaqSummary" />
   <string name="settingsPrivacy">Privacy Policy</string>
   <string name="settingsPrivacySummary" />
+  <string name="settingsFeedback">Feedback</string>
+  <string name="settingsFeedbackSummary" />
+  <string name="settingsAccessibilityStatement">Accessibility Statement</string>
+  <string name="settingsAccessibilityStatementSummary" />
   <string name="settingsInfo">App info</string>
   <string name="settingsLicense">Software Licenses</string>
   <string name="settingsLicenseSummary" />

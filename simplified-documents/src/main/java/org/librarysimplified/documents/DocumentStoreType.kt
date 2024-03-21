@@ -12,6 +12,18 @@ interface DocumentStoreType {
   val privacyPolicy: DocumentType?
 
   /**
+   * @return The application feedback form, if any.
+   */
+
+  val feedback: DocumentType?
+
+  /**
+   * @return The application accessibility statement, if any.
+   */
+
+  val accessibilityStatement: DocumentType?
+
+  /**
    * @return The application acknowledgements, if any.
    */
 

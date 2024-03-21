@@ -19,6 +19,8 @@ internal class DocumentStore private constructor(
   override val eula: EULAType?,
   override val licenses: DocumentType?,
   override val privacyPolicy: DocumentType?,
+  override val feedback: DocumentType?,
+  override val accessibilityStatement: DocumentType?,
   override val faq: DocumentType?
 ) : DocumentStoreType {
 
@@ -73,6 +75,23 @@ internal class DocumentStore private constructor(
           config = configuration.privacyPolicy
         )
 
+      val feedback =
+        this.documentForMaybe(
+          assetManager = assetManager,
+          http = http,
+          baseDirectory = baseDirectory,
+          config = configuration.feedback
+        )
+
+      val accessibilityStatement =
+        this.documentForMaybe(
+          assetManager = assetManager,
+          http = http,
+          baseDirectory = baseDirectory,
+          config = configuration.accessibilityStatement
+        )
+
+
       val faq =
         this.documentForMaybe(
           assetManager = assetManager,
@@ -87,6 +106,8 @@ internal class DocumentStore private constructor(
         eula = eula,
         licenses = licenses,
         privacyPolicy = privacyPolicy,
+        feedback = feedback,
+        accessibilityStatement = accessibilityStatement,
         faq = faq
       )
     }

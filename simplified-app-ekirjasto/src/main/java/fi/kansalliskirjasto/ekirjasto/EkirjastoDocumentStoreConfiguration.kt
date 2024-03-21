@@ -2,11 +2,27 @@ package fi.kansalliskirjasto.ekirjasto
 
 import org.librarysimplified.documents.DocumentConfiguration
 import org.librarysimplified.documents.DocumentConfigurationServiceType
+import java.net.URI
 
 class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
 
   override val privacyPolicy: DocumentConfiguration? =
-    null
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-tietosuoja-ja-rekisteriseloste")
+    )
+
+  override val feedback: DocumentConfiguration? =
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute")
+    )
+
+  override val accessibilityStatement: DocumentConfiguration? =
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-saavutettavuusseloste")
+    )
 
   override val about: DocumentConfiguration? =
     null

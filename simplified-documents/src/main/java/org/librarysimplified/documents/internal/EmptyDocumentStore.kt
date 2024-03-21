@@ -10,6 +10,10 @@ import org.librarysimplified.documents.EULAType
 internal object EmptyDocumentStore : DocumentStoreType {
   override val privacyPolicy: DocumentType? =
     null
+  override val feedback: DocumentType? =
+    null
+  override val accessibilityStatement: DocumentType? =
+    null
   override val about: DocumentType? =
     null
   override val acknowledgements: DocumentType? =
