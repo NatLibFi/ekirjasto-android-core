@@ -3,12 +3,6 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
 
-  <Preference
-    android:icon="@drawable/ic_settings_account"
-    android:key="settingsAccounts"
-    android:summary="@string/settingsAccountsSummary"
-    android:title="@string/settingsAccounts" />
-
   <PreferenceCategory android:title="@string/settingsDocumentation" >
     <Preference
       android:key="settingsAcknowledgements"

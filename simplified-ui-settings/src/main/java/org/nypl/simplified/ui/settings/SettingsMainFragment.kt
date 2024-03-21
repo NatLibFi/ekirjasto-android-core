@@ -32,7 +32,6 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
     services.requireService(BuildConfigurationServiceType::class.java)
 
   private lateinit var settingsAbout: Preference
-  private lateinit var settingsAccounts: Preference
   private lateinit var settingsAcknowledgements: Preference
   private lateinit var settingsCommit: Preference
   private lateinit var settingsDebug: Preference
@@ -55,7 +54,6 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
 
     this.settingsAbout = this.findPreference("settingsAbout")!!
     this.settingsAcknowledgements = this.findPreference("settingsAcknowledgements")!!
-    this.settingsAccounts = this.findPreference("settingsAccounts")!!
     this.settingsCommit = this.findPreference("settingsCommit")!!
     this.settingsDebug = this.findPreference("settingsDebug")!!
     this.settingsEULA = this.findPreference("settingsEULA")!!
@@ -67,7 +65,6 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
 
     this.configureAbout(this.settingsAbout)
     this.configureAcknowledgements(this.settingsAcknowledgements)
-    this.configureAccounts(this.settingsAccounts)
     this.configureBuild(this.settingsCommit)
     this.configureDebug(this.settingsDebug)
     this.configureEULA(this.settingsEULA)
