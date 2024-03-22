@@ -1,11 +1,11 @@
 package org.nypl.simplified.ui.accounts.ekirjastopasskey
 
 import android.app.Application
+import androidx.credentials.CredentialManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiViewModel
 
 class AccountEkirjastoPasskeyViewModelFactory(
   private val application: Application,
@@ -20,7 +20,8 @@ class AccountEkirjastoPasskeyViewModelFactory(
         application = this.application,
         account = this.account,
         description = this.description,
-        ekirjastoToken = this.ekirjastoToken
+        circulationToken = this.ekirjastoToken!!,
+        credentialManager = CredentialManager.create(application)
       ) as T
     }
     throw IllegalStateException("Can't create values of $modelClass")
