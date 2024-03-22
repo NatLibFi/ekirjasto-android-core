@@ -20,7 +20,6 @@ import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.json.JsonMapper
 import kotlinx.coroutines.launch
 import java.net.URI
 import java.nio.charset.Charset
@@ -76,6 +75,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
 
   private val profilesController = services.requireService(ProfilesControllerType::class.java)
 
+  //todo remove
   private val http = this.services.requireService(LSHTTPClientType::class.java)
 
   private val tag = "PASSKEY";
@@ -321,12 +321,14 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     val loginState = parameters.loginMethod.loginState
     val username = parameters.loginMethod.username!!.value
 
+    logger.debug("loginstate: {}", loginState)
+
     //todo: register events
 
     when (loginState){
       EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable -> passkeyRegisterAsync(username)
       EkirjastoLoginMethod.Passkey.LoginState.Registered -> passkeyLoginAsync(username)
-      else -> this.logger.warn("Unhandled login state: "+loginState.toString())
+      else -> this.logger.warn("Unhandled login state: {}", loginState)
     }
 
 //    val startRequestJson = JsonMapper().writeValueAsString(mapOf("username" to username, ))
@@ -415,13 +417,13 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
   }
 
   private fun passkeyRegisterAsync(username: String) {
-    logger.debug("create passkey async")
+    logger.debug("Passkey Register Async")
     if (parameters.loginMethod.token == null) {
       handleFailure(Exception("Missing token. Cannot complete passkey registration"))
       return
     }
     lifecycleScope.launch {
-
+      viewModel.passkeyRegister(username)
     }
   }
 
