@@ -159,57 +159,23 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     }
   }
 
-  private fun handleFailure(e: Exception) {
-    // TODO Make sure errors are handled properly and communicated to the user properly.
-    logger.error("$tag Ann error occurred", e)
-    when (e) {
-      is CreatePublicKeyCredentialDomException -> {
-        // Handle the passkey DOM errors thrown according to the
-        // WebAuthn spec.
-        //handlePasskeyError(e.domError)
-      }
-      is CreateCredentialCancellationException -> {
-        // The user intentionally canceled the operation and chose not
-        // to register the credential.
-      }
-      is CreateCredentialInterruptedException -> {
-        // Retry-able error. Consider retrying the call.
-      }
-      is CreateCredentialProviderConfigurationException -> {
-        // Your app is missing the provider configuration dependency.
-        // Most likely, you're missing the
-        // "credentials-play-services-auth" module.
-      }
-      //is CreateCredentialUnknownException -> ...
-      is CreateCredentialCustomException -> {
-        // You have encountered an error from a 3rd-party SDK. If you
-        // make the API call with a request object that's a subclass of
-        // CreateCustomCredentialRequest using a 3rd-party SDK, then you
-        // should check for any custom exception type constants within
-        // that SDK to match with e.type. Otherwise, drop or log the
-        // exception.
-      }
-      else -> logger.warn("Unexpected exception type ${e::class.java.name}")
-    }
 
-    this.postPasskeyFailed(e)
-  }
 
-  private fun finishPasskey(result:LSHTTPResponseStatus.Responded.OK?) {
-    if (result == null) {
-      handleFailure(Exception("Passkey (E-kirjasto) finishing failed."))
-    }
-    else {
-      try {
-        val ekirjastoToken = getAccessTokenFromEkirjastoAPIResponse(
-          node = ObjectMapper().readTree(result.bodyStream)
-        )
-        postPasskeySuccessful(ekirjastoToken)
-      } catch (e: Exception) {
-        handleFailure(e)
-      }
-    }
-  }
+//  private fun finishPasskey(result:LSHTTPResponseStatus.Responded.OK?) {
+//    if (result == null) {
+//      handleFailure(Exception("Passkey (E-kirjasto) finishing failed."))
+//    }
+//    else {
+//      try {
+//        val ekirjastoToken = getAccessTokenFromEkirjastoAPIResponse(
+//          node = ObjectMapper().readTree(result.bodyStream)
+//        )
+//        postPasskeySuccessful(ekirjastoToken)
+//      } catch (e: Exception) {
+//        handleFailure(e)
+//      }
+//    }
+//  }
 
   private fun passkeyLoginAsync(username: String) {
     this.logger.debug("Passkey Login Async")
@@ -249,16 +215,16 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
           else -> {
             // Catch any unrecognized credential type here
             logger.error("Unexpected type of credential")
-            handleFailure(Exception("Unexpected type of credential"))
+//            handleFailure(Exception("Unexpected type of credential"))
             return@launch
           }
         }
       } catch (e: NoCredentialException) {
         logger.error("No credential available", e)
-        handleFailure(e)
+//        handleFailure(e)
         return@launch
       } catch (e : GetCredentialException) {
-        handleFailure(e)
+//        handleFailure(e)
         return@launch
       }
 
@@ -270,11 +236,11 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
           "{\"id\": \"request.id\", \"data\": \"data\"}"
         )
       } catch (e : Exception) {
-        handleFailure(e)
+//        handleFailure(e)
         return@launch
       }
 
-      finishPasskey(result)
+//      finishPasskey(result)
     }
   }
 
@@ -401,10 +367,10 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
       }
 
       if (!userRegistering) {
-        handleFailure(Exception("Passkey (E-kirjasto) registration failed."))
+//        handleFailure(Exception("Passkey (E-kirjasto) registration failed."))
       }
     } catch (e: Exception) {
-      handleFailure(e)
+//      handleFailure(e)
     }
 
     if (userRegistering){
@@ -419,7 +385,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
   private fun passkeyRegisterAsync(username: String) {
     logger.debug("Passkey Register Async")
     if (parameters.loginMethod.token == null) {
-      handleFailure(Exception("Missing token. Cannot complete passkey registration"))
+      //handleFailure(Exception("Missing token. Cannot complete passkey registration"))
       return
     }
     lifecycleScope.launch {
