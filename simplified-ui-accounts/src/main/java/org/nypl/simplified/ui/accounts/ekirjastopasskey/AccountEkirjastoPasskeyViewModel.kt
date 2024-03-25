@@ -50,19 +50,23 @@ class AccountEkirjastoPasskeyViewModel (
       is CreatePublicKeyCredentialDomException -> {
         // Handle the passkey DOM errors thrown according to the
         // WebAuthn spec.
+        logger.error("CreatePublicKeyCredentialDomException")
         //handlePasskeyError(e.domError)
       }
       is CreateCredentialCancellationException -> {
         // The user intentionally canceled the operation and chose not
         // to register the credential.
+        logger.error("CreateCredentialCancellationException")
       }
       is CreateCredentialInterruptedException -> {
         // Retry-able error. Consider retrying the call.
+        logger.error("CreateCredentialInterruptedException")
       }
       is CreateCredentialProviderConfigurationException -> {
         // Your app is missing the provider configuration dependency.
         // Most likely, you're missing the
         // "credentials-play-services-auth" module.
+        logger.error("CreateCredentialProviderConfigurationException")
       }
       //is CreateCredentialUnknownException -> ...
       is CreateCredentialCustomException -> {
@@ -72,6 +76,7 @@ class AccountEkirjastoPasskeyViewModel (
         // should check for any custom exception type constants within
         // that SDK to match with e.type. Otherwise, drop or log the
         // exception.
+        logger.error("CreateCredentialCustomException")
       }
       else -> logger.warn("Unexpected exception type ${e::class.java.name}")
     }
