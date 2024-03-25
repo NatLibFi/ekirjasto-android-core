@@ -22,6 +22,7 @@
     android:usesCleartextTraffic="true"
     tools:replace="android:allowBackup"
     android:enableOnBackInvokedCallback="true">
+    <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
 
     <!-- Main entry point for the application. -->
     <activity
