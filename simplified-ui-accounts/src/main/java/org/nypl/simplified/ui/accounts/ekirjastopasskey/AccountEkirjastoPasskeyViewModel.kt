@@ -7,6 +7,7 @@ import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialCustomException
 import androidx.credentials.exceptions.CreateCredentialInterruptedException
 import androidx.credentials.exceptions.CreateCredentialProviderConfigurationException
+import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
 import androidx.lifecycle.ViewModel
 import com.fasterxml.jackson.databind.JsonNode
@@ -28,7 +29,6 @@ import org.slf4j.LoggerFactory
 import java.io.InputStream
 import java.net.URI
 import java.nio.charset.Charset
-import kotlin.reflect.typeOf
 
 class AccountEkirjastoPasskeyViewModel (
   private val application: Application,
@@ -68,7 +68,16 @@ class AccountEkirjastoPasskeyViewModel (
         // "credentials-play-services-auth" module.
         logger.error("CreateCredentialProviderConfigurationException")
       }
-      //is CreateCredentialUnknownException -> ...
+      is CreateCredentialUnknownException -> {
+        //TODO alternate passkey procedures.
+        //This may occur when device does not have Credential Manager enabled
+        //e.g. in Oneplus 12R it was tested and error msg was:
+        //androidx.credentials.exceptions.CreateCredentialUnknownException: Failed resolution of:
+        //Lcom/google/android/gms/fido/fido2/api/common/ErrorCode
+        //theory is it is trying to use a backup method using fido2 api,
+        // so implementing fido2 when such message is given may be valid way use passkeys on those devices
+        logger.error("CreateCredentialUnknownException")
+      }
       is CreateCredentialCustomException -> {
         // You have encountered an error from a 3rd-party SDK. If you
         // make the API call with a request object that's a subclass of
@@ -118,7 +127,7 @@ class AccountEkirjastoPasskeyViewModel (
   suspend fun passkeyRegister(username: String) {
     val uri = description.passkey_register_start
     val body = JsonMapper().writeValueAsString(mapOf("username" to username, ))
-    val httpRequest = postRequest(uri, body)
+    val httpRequest = createPostRequest(uri, body)
     val response = sendRequest(httpRequest)
     when (val status = response.status){
       is LSHTTPResponseStatus.Responded.OK -> status.bodyStream?.let{
@@ -146,13 +155,13 @@ class AccountEkirjastoPasskeyViewModel (
       val response : String = result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
       //todo map data and start complete request
       logger.debug("Credential Manager Result: {}",response)
-    } catch (e : Exception){
+    } catch (e : Exception) {
       handleFailure(e)
     }
 
   }
 
-  private fun postRequest(uri: URI, body: String?): LSHTTPRequestType {
+  private fun createPostRequest(uri: URI, body: String?): LSHTTPRequestType {
     var bodyString = "";
     body?.let { bodyString = it }
     return this.http.newRequest(uri)
