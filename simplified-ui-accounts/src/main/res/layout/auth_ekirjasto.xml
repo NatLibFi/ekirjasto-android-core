@@ -39,7 +39,8 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/accountEkirjastoPassKeyLabel" />
+        android:text="@string/accountEkirjastoPassKeyLabel"
+        android:isCredential="true"/>
 
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/authPassKeyUsernameLabel"
