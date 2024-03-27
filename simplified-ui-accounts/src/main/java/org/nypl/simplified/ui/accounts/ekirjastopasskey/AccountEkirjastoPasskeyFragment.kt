@@ -389,7 +389,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
       return
     }
     lifecycleScope.launch {
-      viewModel.passkeyRegister(username)
+      val auth = viewModel.passkeyRegister(username)
     }
   }
 
