@@ -24,7 +24,11 @@ import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Post
 import org.librarysimplified.http.api.LSHTTPRequestType
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.http.api.LSHTTPResponseType
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.AuthResponse
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.AuthenticatorResponse
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.FinishRegisterRequest
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PublicKey
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.RegisterSignedChallengeRequest
 import org.slf4j.LoggerFactory
 import java.io.InputStream
 import java.net.URI
@@ -45,7 +49,6 @@ class AccountEkirjastoPasskeyViewModel (
 
   private fun handleFailure(e: Exception) {
     // TODO Make sure errors are handled properly and communicated to the user properly.
-    logger.error("Error during Passkey process occurred", e)
     when (e) {
       is CreatePublicKeyCredentialDomException -> {
         // Handle the passkey DOM errors thrown according to the
@@ -85,7 +88,8 @@ class AccountEkirjastoPasskeyViewModel (
         // should check for any custom exception type constants within
         // that SDK to match with e.type. Otherwise, drop or log the
         // exception.
-        logger.error("CreateCredentialCustomException")
+        logger.error("CreateCredentialCustomException type={}, message={}",e.type, e.message)
+
       }
       else -> logger.warn("Unexpected exception type ${e::class.java.name}")
     }
@@ -124,20 +128,35 @@ class AccountEkirjastoPasskeyViewModel (
 
   }
 
-  suspend fun passkeyRegister(username: String) {
+  suspend fun passkeyRegister(username: String):AuthResponse {
     val uri = description.passkey_register_start
     val body = JsonMapper().writeValueAsString(mapOf("username" to username, ))
+    try {
+      val registerStartResponse = requestPasskeyRegisterStart(uri, body)
+      val challengeResponse = startPasskeyRegisterChallenge(username, registerStartResponse)
+      val authResponse = passkeyRegisterFinish(username, challengeResponse)
+      logger.debug("Auth Response received: $authResponse")
+      logger.debug("TODO: handle register finished event? store auth info")
+      return authResponse
+    } catch (e: Exception) {
+      handleFailure(e)
+    }
+    throw Exception("Passkey Register - unknown error")
+  }
+
+  private suspend fun requestPasskeyRegisterStart(uri: URI, body: String): JsonNode {
     val httpRequest = createPostRequest(uri, body)
     val response = sendRequest(httpRequest)
     when (val status = response.status){
       is LSHTTPResponseStatus.Responded.OK -> status.bodyStream?.let{
-        startPasskeyRegisterChallenge(username, bodyAsJsonNode(it))
+        return bodyAsJsonNode(it)
       }
-      else -> logger.debug("Passkey Register. Unhandled response status: {}", status)
+      else -> throw Exception("Passkey Register Start request failed: $status", )
     }
+    throw Exception("requestPasskeyRegisterStart unknown error")
   }
 
-  private suspend fun startPasskeyRegisterChallenge(username: String, jsonBody: JsonNode) {
+  private suspend fun startPasskeyRegisterChallenge(username: String, jsonBody: JsonNode): AuthenticatorResponse {
     logger.debug("Start Passkey Register Challenge. User={}, challenge={}", username, jsonBody.toPrettyString())
     val publicKeyJsonNode = jsonBody.get("publicKey")
     logger.debug("Public Key: jsonNode={}",publicKeyJsonNode)
@@ -153,10 +172,41 @@ class AccountEkirjastoPasskeyViewModel (
         request = createPublicKeyCredentialRequest,
       )
       val response : String = result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
-      //todo map data and start complete request
-      logger.debug("Credential Manager Result: {}",response)
+      logger.debug("Authenticator Response: {}",response)
+      return objectMapper.readValue<AuthenticatorResponse>(response)
     } catch (e : Exception) {
       handleFailure(e)
+    }
+    throw Exception("PasskeyRegisterChallenge exception")
+  }
+
+  private fun passkeyRegisterFinish(username: String, authResponse: AuthenticatorResponse): AuthResponse {
+    val body = FinishRegisterRequest(
+      username = username,
+      data = RegisterSignedChallengeRequest(
+        id = authResponse.id,
+        rawId = authResponse.rawId,
+        response = authResponse.response,
+        type = authResponse.type
+      )
+    )
+    val uri = description.passkey_register_finish
+    val request = createPostRequest(uri, objectMapper.writeValueAsString(body))
+    val response = sendRequest(request)
+    this.logger.debug("Response status: ${response.status}")
+    response.use {
+      when (val status = response.status){
+        is LSHTTPResponseStatus.Responded.OK -> {
+          val body: JsonNode = this.objectMapper.readValue(status.bodyStream.toString())
+          this.logger.debug("Response body: ${body.toPrettyString()}")
+          return AuthResponse(
+            success = body["token"].asText() != null,
+            token = body["token"].asText(),
+            exp = body["exp"].asLong()
+          )
+        }
+        else -> throw Exception("Passkey Register Finish request failed: $status")
+      }
     }
 
   }
