@@ -39,6 +39,8 @@ class EkirjastoBuildConfigurationService : BuildConfigurationServiceType {
   override val allowExternalReaderLinks: Boolean
     get() = false
   override val showChangeAccountsUi: Boolean
+    get() = false
+  override val showActionBarLogo: Boolean
     get() = true
   override val showAgeGateUi: Boolean
     get() = true

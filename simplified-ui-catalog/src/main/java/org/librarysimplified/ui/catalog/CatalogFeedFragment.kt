@@ -599,6 +599,19 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       }
 
       /*
+       * If the change accounts UI is disabled, check if logo should be shown.
+       */
+      if (this.configurationService.showActionBarLogo) {
+        // Show the logo, but don't make it act like a button
+        actionBar.setLogo(this.configurationService.brandingAppIcon)
+        actionBar.setDisplayHomeAsUpEnabled(false)
+        this.toolbar.setLogoOnClickListener {
+          // Do nothing
+        }
+        return
+      }
+
+      /*
        * Otherwise, show nothing.
        */
 

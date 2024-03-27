@@ -37,6 +37,14 @@ interface BuildConfigurationAccountsType {
   val showChangeAccountsUi: Boolean
 
   /**
+   * If `showChangeAccountsUi` is set to `false`, setting this to true will
+   * still show the logo in the action bar. If `showChangeAccountsUi` is true,
+   * this setting will have no effect.
+   */
+
+  val showActionBarLogo: Boolean
+
+  /**
    * If set to `true`, users will be show age verification prompts and status on
    * the accounts screen.
    */
