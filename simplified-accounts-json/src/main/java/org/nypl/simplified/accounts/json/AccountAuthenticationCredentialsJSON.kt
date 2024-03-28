@@ -109,7 +109,8 @@ object AccountAuthenticationCredentialsJSON {
       is AccountAuthenticationCredentials.Ekirjasto -> {
         authObject.put("@type", "ekirjasto")
         authObject.put("accessToken", credentials.accessToken)
-        authObject.put("email", credentials.username)
+        authObject.put("ekirjastoToken", credentials.ekirjastoToken)
+        authObject.put("username", credentials.username)
       }
     }
 

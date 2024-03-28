@@ -318,6 +318,7 @@ class AccountsDatabase private constructor(
         )
       }
 
+      this.logger.debug("CREDS store credentials")
       val credentials = state.credentials
       if (credentials != null) {
         this.credentials.put(this.id, credentials)

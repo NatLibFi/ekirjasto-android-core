@@ -5,13 +5,8 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.PublicKeyCredential
-import androidx.credentials.exceptions.CreateCredentialCancellationException
-import androidx.credentials.exceptions.CreateCredentialCustomException
-import androidx.credentials.exceptions.CreateCredentialInterruptedException
-import androidx.credentials.exceptions.CreateCredentialProviderConfigurationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
-import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
@@ -19,7 +14,6 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.launch
 import java.net.URI
 import java.nio.charset.Charset
@@ -34,6 +28,7 @@ import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PasskeyAuth
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
@@ -159,103 +154,94 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     }
   }
 
-
-
-//  private fun finishPasskey(result:LSHTTPResponseStatus.Responded.OK?) {
-//    if (result == null) {
-//      handleFailure(Exception("Passkey (E-kirjasto) finishing failed."))
-//    }
-//    else {
-//      try {
-//        val ekirjastoToken = getAccessTokenFromEkirjastoAPIResponse(
-//          node = ObjectMapper().readTree(result.bodyStream)
-//        )
-//        postPasskeySuccessful(ekirjastoToken)
-//      } catch (e: Exception) {
-//        handleFailure(e)
-//      }
-//    }
-//  }
-
   private fun passkeyLoginAsync(username: String) {
     this.logger.debug("Passkey Login Async")
-    //TODO request json
-    val requestJson = "";
-
-    val getPublicKeyCredentialOption = GetPublicKeyCredentialOption(
-      requestJson = username
-    )
-    val credentialRequest = GetCredentialRequest(
-      listOf(getPublicKeyCredentialOption)
-    )
 
     lifecycleScope.launch {
-      try {
-        val result = credentialManager.getCredential(requireContext(), credentialRequest)
+      val auth: PasskeyAuth = viewModel.passkeyLogin(username)
+      if (auth.success) {
+        postPasskeySuccessful(auth)
+      } else {
+        postPasskeyFailed(Exception("Passkey authenticate failed"))
+    }
 
-        // Handle the successfully returned credential.
-        when (val credential = result.credential) {
-          is PublicKeyCredential -> {
-            val responseJson = credential.authenticationResponseJson
-            logger.debug("passkey response: $responseJson")
-            /*
-            * something like:  {
-              "id": "KEDetxZcUfinhVi6Za5nZQ",
-              "type": "public-key",
-              "rawId": "KEDetxZcUfinhVi6Za5nZQ",
-              "response": {
-                "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiVDF4Q3NueE0yRE5MMktkSzVDTGE2Zk1oRDdPQnFobzZzeXpJbmtfbi1VbyIsIm9yaWdpbiI6ImFuZHJvaWQ6YXBrLWtleS1oYXNoOk1MTHpEdll4UTRFS1R3QzZVNlpWVnJGUXRIOEdjVi0xZDQ0NEZLOUh2YUkiLCJhbmRyb2lkUGFja2FnZU5hbWUiOiJjb20uZ29vZ2xlLmNyZWRlbnRpYWxtYW5hZ2VyLnNhbXBsZSJ9",
-                "authenticatorData": "j5r_fLFhV-qdmGEwiukwD5E_5ama9g0hzXgN8thcFGQdAAAAAA",
-                "signature": "MEUCIQCO1Cm4SA2xiG5FdKDHCJorueiS04wCsqHhiRDbbgITYAIgMKMFirgC2SSFmxrh7z9PzUqr0bK1HZ6Zn8vZVhETnyQ",
-                "userHandle": "2HzoHm_hY0CjuEESY9tY6-3SdjmNHOoNqaPDcZGzsr0"
-              }
-            }
-            * */
-          }
-          else -> {
-            // Catch any unrecognized credential type here
-            logger.error("Unexpected type of credential")
-//            handleFailure(Exception("Unexpected type of credential"))
-            return@launch
-          }
-        }
-      } catch (e: NoCredentialException) {
-        logger.error("No credential available", e)
-//        handleFailure(e)
-        return@launch
-      } catch (e : GetCredentialException) {
-//        handleFailure(e)
-        return@launch
-      }
 
-      // TODO Gather correct json information. Maybe responseJson?
-      var result:LSHTTPResponseStatus.Responded.OK? = null
-      try {
-        result = passkeyRequest(
-          parameters.authenticationDescription.passkey_login_finish,
-          "{\"id\": \"request.id\", \"data\": \"data\"}"
-        )
-      } catch (e : Exception) {
-//        handleFailure(e)
-        return@launch
-      }
+//    val requestJson = "";
+//
+//    val getPublicKeyCredentialOption = GetPublicKeyCredentialOption(
+//      requestJson = username
+//    )
+//    val credentialRequest = GetCredentialRequest(
+//      listOf(getPublicKeyCredentialOption)
+//    )
 
-//      finishPasskey(result)
+//    lifecycleScope.launch {
+//      try {
+//        val result = credentialManager.getCredential(requireContext(), credentialRequest)
+//
+//        // Handle the successfully returned credential.
+//        when (val credential = result.credential) {
+//          is PublicKeyCredential -> {
+//            val responseJson = credential.authenticationResponseJson
+//            logger.debug("passkey response: $responseJson")
+//            /*
+//            * something like:  {
+//              "id": "KEDetxZcUfinhVi6Za5nZQ",
+//              "type": "public-key",
+//              "rawId": "KEDetxZcUfinhVi6Za5nZQ",
+//              "response": {
+//                "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiVDF4Q3NueE0yRE5MMktkSzVDTGE2Zk1oRDdPQnFobzZzeXpJbmtfbi1VbyIsIm9yaWdpbiI6ImFuZHJvaWQ6YXBrLWtleS1oYXNoOk1MTHpEdll4UTRFS1R3QzZVNlpWVnJGUXRIOEdjVi0xZDQ0NEZLOUh2YUkiLCJhbmRyb2lkUGFja2FnZU5hbWUiOiJjb20uZ29vZ2xlLmNyZWRlbnRpYWxtYW5hZ2VyLnNhbXBsZSJ9",
+//                "authenticatorData": "j5r_fLFhV-qdmGEwiukwD5E_5ama9g0hzXgN8thcFGQdAAAAAA",
+//                "signature": "MEUCIQCO1Cm4SA2xiG5FdKDHCJorueiS04wCsqHhiRDbbgITYAIgMKMFirgC2SSFmxrh7z9PzUqr0bK1HZ6Zn8vZVhETnyQ",
+//                "userHandle": "2HzoHm_hY0CjuEESY9tY6-3SdjmNHOoNqaPDcZGzsr0"
+//              }
+//            }
+//            * */
+//          }
+//          else -> {
+//            // Catch any unrecognized credential type here
+//            logger.error("Unexpected type of credential")
+////            handleFailure(Exception("Unexpected type of credential"))
+//            return@launch
+//          }
+//        }
+//      } catch (e: NoCredentialException) {
+//        logger.error("No credential available", e)
+////        handleFailure(e)
+//        return@launch
+//      } catch (e : GetCredentialException) {
+////        handleFailure(e)
+//        return@launch
+//      }
+//
+//      // TODO Gather correct json information. Maybe responseJson?
+//      var result:LSHTTPResponseStatus.Responded.OK? = null
+//      try {
+//        result = passkeyRequest(
+//          parameters.authenticationDescription.passkey_login_finish,
+//          "{\"id\": \"request.id\", \"data\": \"data\"}"
+//        )
+//      } catch (e : Exception) {
+////        handleFailure(e)
+//        return@launch
+//      }
+//
+////      finishPasskey(result)
     }
   }
 
 
 
-  private fun postPasskeySuccessful(ekirjastoToken: String) {
-    this.profilesController.profileAccountLogin(
-      ProfileAccountLoginRequest.EkirjastoComplete(
-        accountId = this.parameters.accountID,
-        description = this.parameters.authenticationDescription,
-        ekirjastoToken = ekirjastoToken,
-        username = this.parameters.loginMethod.username?.value
-      )
-    )
-    this.listener.post(AccountEkirjastoSuomiFiEvent.AccessTokenObtained)
+  private fun postPasskeySuccessful(authInfo: PasskeyAuth) {
+//    this.profilesController.profileAccountLogin(
+//      ProfileAccountLoginRequest.EkirjastoComplete(
+//        accountId = this.parameters.accountID,
+//        description = this.parameters.authenticationDescription,
+//        ekirjastoToken = authInfo.token,
+//        username = this.parameters.loginMethod.username?.value
+//      )
+//    )
+    this.listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
   }
 
   private fun postPasskeyFailed(exception: Throwable) {
@@ -291,95 +277,11 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
 
     //todo: register events
 
-    when (loginState){
+    when (loginState) {
       EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable -> passkeyRegisterAsync(username)
       EkirjastoLoginMethod.Passkey.LoginState.Registered -> passkeyLoginAsync(username)
       else -> this.logger.warn("Unhandled login state: {}", loginState)
     }
-
-//    val startRequestJson = JsonMapper().writeValueAsString(mapOf("username" to username, ))
-//    logger.debug("startRequestJson: \n"+startRequestJson)
-//    logger.debug(parameters.authenticationDescription.passkey_register_start.toString())
-//    logger.debug(parameters.authenticationDescription.passkey_register_finish.toString())
-
-//    val registerState = tryLogin(startRequestJson)
-//    val responseJson = registerState.getResponse()?.bodyStream.toString()
-//    logger.debug("$tag received Response Json")
-//    logger.debug(responseJson)
-////    // TODO: Just for testing.. Get the json from responseJson?
-////    val requestJson = "{\n" +
-////      "  \"challenge\": \"T1xCsnxM2DNL2KdK5CLa6fMhD7OBqho6syzInk_n-Uo\",\n" +
-////      "  \"allowCredentials\": [],\n" +
-////      "  \"timeout\": 1800000,\n" +
-////      "  \"userVerification\": \"required\",\n" +
-////      "  \"rpId\": \"credential-manager-app-test.glitch.me\"\n" +
-////      "}"
-//
-//    if (registerState == RegisterState.Registered) {
-//      logger.debug("TODO: user registered, login with passkey")
-//      //passkeyLoginAsync(requestJson)
-//    }
-//    else if (registerState == RegisterState.Registering) {
-//    logger.debug("TODO: user registering new passkey")
-//    //createPasskeyAsync()
-//    } else {
-//      handleFailure(Exception("Passkey (E-kirjasto) registration failed."))
-//    }
-  }
-
-  private enum class RegisterState {
-    Failure,
-    Registered,
-    Registering;
-
-    var result: LSHTTPResponseStatus.Responded.OK? = null
-
-    fun withValue(value: LSHTTPResponseStatus.Responded.OK) : RegisterState{
-      this.result = value
-      return this
-    }
-    fun getResponse(): LSHTTPResponseStatus.Responded.OK?{
-      return result
-    }
-
-  }
-
-  private fun tryLogin(requestJson: String): RegisterState {
-    var result:LSHTTPResponseStatus.Responded.OK? = null
-    var userRegistered = false
-    var userRegistering = false
-    try {
-      logger.debug("Try Login Start")
-      result = passkeyRequest(
-        parameters.authenticationDescription.passkey_login_start,
-        requestJson
-      )
-      userRegistered = (result != null)
-      userRegistering = false
-
-      if (!userRegistered) {
-        logger.debug("Try register start")
-        result = passkeyRequest(
-          parameters.authenticationDescription.passkey_register_start,
-          requestJson
-        )
-        userRegistering = (result != null)
-      }
-
-      if (!userRegistering) {
-//        handleFailure(Exception("Passkey (E-kirjasto) registration failed."))
-      }
-    } catch (e: Exception) {
-//      handleFailure(e)
-    }
-
-    if (userRegistering){
-      return RegisterState.Registering.withValue(result!!)
-    }
-    if (userRegistered){
-      return RegisterState.Registered.withValue(result!!)
-    }
-    return RegisterState.Failure
   }
 
   private fun passkeyRegisterAsync(username: String) {
@@ -390,6 +292,11 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     }
     lifecycleScope.launch {
       val auth = viewModel.passkeyRegister(username)
+      if (auth.success){
+        postPasskeySuccessful(auth)
+      } else {
+        postPasskeyFailed(Exception("Passkey Authentication Failed: Got PasskeyAuth.success = false"))
+      }
     }
   }
 

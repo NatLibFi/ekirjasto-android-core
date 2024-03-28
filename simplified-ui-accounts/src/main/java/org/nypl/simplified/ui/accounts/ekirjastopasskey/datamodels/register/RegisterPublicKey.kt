@@ -1,6 +1,6 @@
-package org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels
+package org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register
 
-data class PublicKey(
+data class RegisterPublicKey(
   val challenge: String,
   val rp: RelyingPartyType,
   val user: User,

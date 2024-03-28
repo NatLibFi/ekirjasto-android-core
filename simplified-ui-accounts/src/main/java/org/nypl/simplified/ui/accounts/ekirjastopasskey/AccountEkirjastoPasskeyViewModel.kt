@@ -11,9 +11,9 @@ import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
 import androidx.lifecycle.ViewModel
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.coroutines.suspendCancellableCoroutine
 import one.irradia.mime.api.MIMEType
 import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
 import org.librarysimplified.http.api.LSHTTPClientType
@@ -24,12 +24,16 @@ import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Post
 import org.librarysimplified.http.api.LSHTTPRequestType
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.http.api.LSHTTPResponseType
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.AuthResponse
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.AuthenticatorResponse
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.FinishRegisterRequest
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PublicKey
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.RegisterChallengeRequestResponse
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.RegisterSignedChallengeRequest
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PasskeyAuth
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.AuthenticateFinishRequest
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterPasskeyResponse
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.FinishRegisterRequest
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterPublicKey
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterChallengeRequestResponse
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterSignedChallengeRequest
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.AuthenticateParameters
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.AuthenticatePublicKey
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.AuthenticateResult
 import org.slf4j.LoggerFactory
 import java.io.InputStream
 import java.net.URI
@@ -39,7 +43,9 @@ class AccountEkirjastoPasskeyViewModel (
   private val application: Application,
   private val account: AccountID,
   private val description: AccountProviderAuthenticationDescription.Ekirjasto,
+  // Used for register passkey
   private val circulationToken: String,
+  // Used for passkey login
   private val credentialManager: CredentialManager
 ) : ViewModel() {
 
@@ -47,6 +53,9 @@ class AccountEkirjastoPasskeyViewModel (
   private val http = this.services.requireService(LSHTTPClientType::class.java)
   private val logger = LoggerFactory.getLogger(AccountEkirjastoPasskeyFragment::class.java)
   private val objectMapper = jacksonObjectMapper()
+  private val authenticator = Authenticator(application, credentialManager)
+
+  //TODO internal events
 
   private fun handleFailure(e: Exception) {
     // TODO Make sure errors are handled properly and communicated to the user properly.
@@ -93,65 +102,151 @@ class AccountEkirjastoPasskeyViewModel (
 
       }
       else -> {
-        logger.warn("Unexpected exception type ${e::class.java.name}")
+        logger.error("Unexpected exception type ${e::class.java.name}: ${e.message}")
         logger.error(e.stackTraceToString())
       }
     }
 
+
+    //TODO post internal event for passkey failed
     //this.postPasskeyFailed(e)
   }
 
-  fun createPasskeyAsync(requestJson: String) {
-//    val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(
-//      requestJson = requestJson
-//    )
-//
-//    try {
-//        val result = credentialManager.createCredential(
-//        context = requireContext(),
-//        request = createPublicKeyCredentialRequest,
-//      )
-//    } catch (e : CreateCredentialException){
-//      handleFailure(e)
-//      return@launch
-//    }
-//
-//    // TODO Gather correct json information. Maybe result.data?
-//    var result: LSHTTPResponseStatus.Responded.OK? = null
-//    try {
-//      result = passkeyRequest(
-//        parameters.authenticationDescription.passkey_register_finish,
-//        "{\"email\": \"email\", \"data\": \"data\"}"
-//      )
-//    } catch (e : Exception) {
-//      handleFailure(e)
-//      return@launch
-//    }
-//
-//    finishPasskey(result)
+  suspend fun passkeyLogin(username: String): PasskeyAuth {
+
+    lateinit var startResponse : AuthenticatePublicKey
+    lateinit var challengeResponse : AuthenticateResult
+    try {
+      startResponse = requestPasskeyLoginStart(username)
+      this.logger.debug("Passkey Login Start response= {}",startResponse)
+    } catch (e: Exception){
+      handleFailure(e)
+      return PasskeyAuth.Fail(e)
+    }
+
+    try {
+      challengeResponse = requestPasskeyLoginChallenge(startResponse)
+      this.logger.debug("Passkey Login Challenge response = {}", challengeResponse)
+    } catch (e: Exception) {
+      handleFailure(e)
+      return PasskeyAuth.Fail(e)
+
+    }
+
+    when (challengeResponse) {
+
+      is AuthenticateResult.Success -> {
+        try {
+          return requestPasskeyLoginComplete(challengeResponse)
+        } catch (e: Exception) {
+          handleFailure(e)
+          return PasskeyAuth.Fail(e)
+        }
+      }
+      is AuthenticateResult.Failure -> {
+        logger.debug("Authenticator result Failed")
+        return PasskeyAuth.Fail(Exception("Fail"))
+      }
+    }
 
   }
 
-  suspend fun passkeyRegister(username: String):AuthResponse {
+  suspend fun requestPasskeyLoginStart(username: String): AuthenticatePublicKey {
+    var startRequest = postRequest(description.passkey_login_start, mapToJson(mapOf("username" to username)))
+    var requestResponse = sendRequest(startRequest)
+    var responseBody = "";
+    when (val status = requestResponse.status){
+      is LSHTTPResponseStatus.Responded.OK -> {
+        responseBody = status.bodyStream.toString()
+      }
+      is LSHTTPResponseStatus.Responded.Error -> {
+        throw Exception("Passkey Login Start Error: ${status.properties.status}")
+      }
+      is LSHTTPResponseStatus.Failed -> {
+        throw Exception("Passkey Login Start Failed",status.exception)
+      }
+    }
+    this.logger.debug("RequestPassKeyLoginStart response ={}",responseBody)
+
+    val response = objectMapper.readTree(responseBody)
+    return objectMapper.readValue(response["publicKey"].toString())
+  }
+
+  private suspend fun requestPasskeyLoginChallenge(publicKey: AuthenticatePublicKey): AuthenticateResult {
+
+    val result = authenticator.authenticate(AuthenticateParameters(
+      relyingPartyId = publicKey.rpId,
+      challenge = publicKey.challenge,
+      timeout = publicKey.timeout,
+      userVerification = publicKey.userVerification,
+      allowCredentials = publicKey.allowCredentials
+    ))
+
+    return result
+
+  }
+
+  private suspend fun requestPasskeyLoginComplete(authResult: AuthenticateResult.Success) : PasskeyAuth{
+    val data = AuthenticateFinishRequest.fromAuthenticationResult(authResult)
+    val dataJson = this.objectMapper.writeValueAsString(data)
+    var response = sendRequest(authorizedPostRequest(description.passkey_login_finish, dataJson))
+    var responseBodyNode: JsonNode?
+    when (val status=response.status){
+      is LSHTTPResponseStatus.Responded.OK -> {
+        responseBodyNode = bodyAsJsonNode(status.bodyStream!!)
+      }
+      else -> {
+        throw Exception("Login Finish request failed")
+      }
+    }
+
+    responseBodyNode.let {
+      val token = it["token"].asText()
+      val exp = it["exp"].asLong()
+      if (token != null) {
+        return PasskeyAuth.Ok(token,exp)
+      }
+    }
+    throw Exception("Passkey Login Complete Failed")
+  }
+
+  suspend fun passkeyRegister(username: String):PasskeyAuth {
     val uri = description.passkey_register_start
-    val body = JsonMapper().writeValueAsString(mapOf("username" to username, ))
+    val body = mapToJson(mapOf("username" to username))
+    lateinit var registerStartResponse: JsonNode
+    lateinit var challengeResponse: RegisterPasskeyResponse
+    lateinit var authResponse: PasskeyAuth
+
     try {
-      val registerStartResponse = requestPasskeyRegisterStart(uri, body)
+      logger.debug("Register Start")
+      registerStartResponse = requestPasskeyRegisterStart(uri, body)
       logger.debug("Register Start Complete")
-      val challengeResponse = startPasskeyRegisterChallenge(username, registerStartResponse)
-      logger.debug("Register Challenge Complete")
-      val authResponse = passkeyRegisterFinish(username, challengeResponse)
-      logger.debug("Register Finish Complete: $authResponse")
-      logger.debug("TODO: handle register finished event? store auth info")
-      return authResponse
     } catch (e: Exception) {
       handleFailure(e)
     }
-    throw Exception("Passkey Register - unknown error")
+
+    try {
+      logger.debug("Register Challenge")
+      challengeResponse = startPasskeyRegisterChallenge(username, registerStartResponse)
+      logger.debug("Register Challenge Complete")
+    } catch (e: Exception) {
+      handleFailure(e)
+    }
+
+    try {
+      logger.debug("Register Finish")
+      authResponse = passkeyRegisterFinish(username, challengeResponse)
+      logger.debug("Register Finish Complete: $authResponse")
+    } catch (e: Exception){
+      handleFailure(e)
+    }
+
+    logger.debug("TODO: handle register finished event? store auth info")
+    return authResponse
   }
 
   private suspend fun requestPasskeyRegisterStart(uri: URI, body: String): JsonNode {
-    val httpRequest = createPostRequest(uri, body)
+    val httpRequest = authorizedPostRequest(uri, body)
     val response = sendRequest(httpRequest)
     when (val status = response.status){
       is LSHTTPResponseStatus.Responded.OK -> status.bodyStream?.let{
@@ -162,12 +257,12 @@ class AccountEkirjastoPasskeyViewModel (
     throw Exception("requestPasskeyRegisterStart unknown error")
   }
 
-  private suspend fun startPasskeyRegisterChallenge(username: String, jsonBody: JsonNode): AuthenticatorResponse {
+  private suspend fun startPasskeyRegisterChallenge(username: String, jsonBody: JsonNode): RegisterPasskeyResponse {
+    //TODO refactor credentialmanager use to Authenticator
     logger.debug("Start Passkey Register Challenge. User={}, challenge={}", username, jsonBody.toPrettyString())
     val publicKeyJsonNode = jsonBody.get("publicKey")
-    logger.debug("Public Key: jsonNode={}",publicKeyJsonNode)
-    val publicKey: PublicKey = objectMapper.readValue(publicKeyJsonNode.toString())
-    logger.debug("Public Key Deserialized:{}",objectMapper.writeValueAsString(publicKey))
+    val publicKey: RegisterPublicKey = objectMapper.readValue(publicKeyJsonNode.toString())
+    lateinit var responseJson: JsonNode;
     val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(
       requestJson = objectMapper.writeValueAsString(publicKey)
     )
@@ -179,22 +274,20 @@ class AccountEkirjastoPasskeyViewModel (
       )
       val response : String = result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
       logger.debug("Authenticator Response: {}",response)
-      val jsonNode: JsonNode = this.objectMapper.readValue(response)
-      val responseProperty = jsonNode["response"]
-      logger.debug("response property: ${responseProperty}")
-      return AuthenticatorResponse(
-        id = jsonNode["id"].asText(),
-        rawId = jsonNode["rawId"].asText(),
-        response = this.objectMapper.readValue<RegisterChallengeRequestResponse>(responseProperty.toString()),
-        type = jsonNode["type"].asText()
-      )
+      responseJson = this.objectMapper.readValue(response)
     } catch (e : Exception) {
-      handleFailure(e)
+      throw Exception("Error on Passkey Register Challenge", e)
     }
-    throw Exception("PasskeyRegisterChallenge exception")
+
+    return RegisterPasskeyResponse(
+      id = responseJson["id"].asText(),
+      rawId = responseJson["rawId"].asText(),
+      response = this.objectMapper.readValue<RegisterChallengeRequestResponse>(responseJson["response"].toString()),
+      type = responseJson["type"].asText()
+    )
   }
 
-  private fun passkeyRegisterFinish(username: String, authResponse: AuthenticatorResponse): AuthResponse {
+  private fun passkeyRegisterFinish(username: String, authResponse: RegisterPasskeyResponse): PasskeyAuth {
     val body = FinishRegisterRequest(
       username = username,
       data = RegisterSignedChallengeRequest(
@@ -205,7 +298,7 @@ class AccountEkirjastoPasskeyViewModel (
       )
     )
     val uri = description.passkey_register_finish
-    val request = createPostRequest(uri, objectMapper.writeValueAsString(body))
+    val request = authorizedPostRequest(uri, objectMapper.writeValueAsString(body))
     val response = sendRequest(request)
     this.logger.debug("Response status: ${response.status}")
     response.use {
@@ -213,7 +306,7 @@ class AccountEkirjastoPasskeyViewModel (
         is LSHTTPResponseStatus.Responded.OK -> {
           val responseBody: JsonNode = bodyAsJsonNode(status.bodyStream!!)
           this.logger.debug("Response body: ${responseBody.toPrettyString()}")
-          return AuthResponse(
+          return PasskeyAuth(
             success = responseBody["token"].asText() != null,
             token = responseBody["token"].asText(),
             exp = responseBody["exp"].asLong()
@@ -222,10 +315,21 @@ class AccountEkirjastoPasskeyViewModel (
         else -> throw Exception("Passkey Register Finish request failed: $status")
       }
     }
-
   }
 
-  private fun createPostRequest(uri: URI, body: String?): LSHTTPRequestType {
+  private fun postRequest(uri: URI, body: String?): LSHTTPRequestType {
+    var bodyString = "";
+    body?.let {bodyString = it}
+    return this.http.newRequest(uri)
+      .setMethod(Post(
+        bodyString.toByteArray(Charset.forName("UTF-8")),
+        MIMEType("application", "json", mapOf())
+      ))
+      .addHeader("accept","json")
+      .build()
+  }
+
+  private fun authorizedPostRequest(uri: URI, body: String?): LSHTTPRequestType {
     var bodyString = "";
     body?.let { bodyString = it }
     return this.http.newRequest(uri)
@@ -239,6 +343,7 @@ class AccountEkirjastoPasskeyViewModel (
   }
   private fun sendRequest(request: LSHTTPRequestType): LSHTTPResponseType {
 
+
     val response = request.execute()
     when (val status = response.status) {
       is LSHTTPResponseStatus.Responded.OK -> {
@@ -246,7 +351,7 @@ class AccountEkirjastoPasskeyViewModel (
       }
 
       is LSHTTPResponseStatus.Responded.Error -> {
-        logger.error("Request Error: {}", status.properties?.status)
+        logger.error("Request Error: {}", status.properties.status)
       }
 
       is LSHTTPResponseStatus.Failed -> {
@@ -258,5 +363,8 @@ class AccountEkirjastoPasskeyViewModel (
   private fun bodyAsJsonNode(input: InputStream): JsonNode {
     val node = this.objectMapper.readTree(input)
     return node
+  }
+  private fun mapToJson(map: Map<String, String>): String {
+    return this.objectMapper.writeValueAsString(map)
   }
 }
