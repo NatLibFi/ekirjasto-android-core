@@ -1,4 +1,4 @@
-package org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels
+package org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register
 
 data class RegisterSignedChallengeRequest(
   val id: String,

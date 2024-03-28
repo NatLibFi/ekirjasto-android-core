@@ -108,6 +108,7 @@ class AccountEkirjastoSuomiFiViewModel(
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+      super.onPageStarted(view, url, favicon)
       logger.debug("onPageStarted $url")
       url?.let {
         if (it.startsWith(this.description.tunnistus_finish.toString())) {
@@ -115,7 +116,6 @@ class AccountEkirjastoSuomiFiViewModel(
           this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.AccessTokenStartReceive())
         }
       }
-      super.onPageStarted(view, url, favicon)
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
