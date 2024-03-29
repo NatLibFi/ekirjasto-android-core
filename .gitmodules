@@ -6,12 +6,12 @@
 [submodule "simplified-tests/src/test/resources/org/nypl/simplified/tests/bookmark_annotations/spec"]
 	path = simplified-tests/src/test/resources/org/nypl/simplified/tests/bookmark_annotations/spec
 	url = https://github.com/ThePalaceProject/mobile-specs
-    branch = main
+	branch = main
 
 [submodule "org.thepalaceproject.android.platform"]
 	path = org.thepalaceproject.android.platform
-	url = https://github.com/ThePalaceProject/android-platform
-    branch = main
+	url = https://github.com/NatLibFi/ekirjasto-android-platform
+	branch = ekirjasto
 
 [submodule "ekirjasto-theme"]
 	path = ekirjasto-theme

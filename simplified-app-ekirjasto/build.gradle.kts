@@ -1,3 +1,4 @@
+import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -8,6 +9,25 @@ fun calculateVersionCode(): Int {
     val nowSeconds = now.toEpochSecond(ZoneOffset.UTC)
     // Seconds since 2021-03-15 09:20:00 UTC
     return (nowSeconds - 1615800000).toInt()
+}
+
+val localProp: Properties = Properties().apply{
+    try {
+        load(FileInputStream(File(rootDir, "local.properties")))
+    } catch (exception: Exception) {
+        println(exception)
+    }
+}
+
+
+/**
+ * Overrides property from gradle.properties with same prop in local.properties if present
+ */
+fun overrideProperty(name: String) : String {
+    val value = localProp.getOrElse(name){
+        providers.gradleProperty(name).orNull
+    }?.toString() ?: throw Exception("Property not found: $name")
+    return value
 }
 
 //apply(plugin = "com.google.gms.google-services")
@@ -398,6 +418,11 @@ dependencies {
     implementation(libs.net.minidev.json.smart)
     implementation(libs.net.minidev.accessors.smart)
 
+    // Transifex
+    implementation(libs.transifex.common)
+    implementation(libs.transifex.sdk)
+    implementation(libs.b3nedikt.viewpump)
+
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.annotation)
@@ -501,7 +526,6 @@ dependencies {
     implementation(libs.google.gson)
     implementation(libs.google.guava)
     implementation(libs.google.material)
-    implementation(libs.inflationx.viewpump)
     implementation(libs.io7m.jfunctional)
     implementation(libs.io7m.jnull)
     implementation(libs.irradia.fieldrush.api)
@@ -600,8 +624,6 @@ dependencies {
     implementation(libs.service.wight.core)
     implementation(libs.slf4j)
     implementation(libs.timber)
-    implementation(libs.transifex.common)
-    implementation(libs.transifex.sdk)
     implementation(libs.transport.api)
     implementation(libs.transport.backend.cct)
     implementation(libs.transport.runtime)
@@ -620,7 +642,15 @@ dependencies {
     implementation(libs.truevfs.kernel.impl)
     implementation(libs.truevfs.kernel.spec)
 
-    implementation("readium:liblcp:1.0.0@aar")
+    var libLcpRepositoryLayout = overrideProperty("ekirjasto.liblcp.repositorylayout")
+    if (libLcpRepositoryLayout.contains("test")) {
+        println("Using test liblcp AAR")
+        implementation("readium:liblcp:1.0.0@aar")
+    }
+    else {
+        println("Using production liblcp AAR")
+        implementation("readium:liblcp:2.1.0@aar")
+    }
     implementation("androidx.credentials:credentials:1.2.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
 }

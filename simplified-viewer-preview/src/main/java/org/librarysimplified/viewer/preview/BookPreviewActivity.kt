@@ -9,9 +9,9 @@ import androidx.activity.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.TxContextWrappingDelegate
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import com.transifex.txnative.TxNative
 import io.reactivex.disposables.Disposable
 import org.librarysimplified.mdc.MDCKeys
 import org.librarysimplified.r2.api.SR2Command
@@ -63,10 +63,6 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
 
   private val logger = LoggerFactory.getLogger(BookPreviewActivity::class.java)
 
-  private val appCompatDelegate: TxContextWrappingDelegate by lazy {
-    TxContextWrappingDelegate(super.getDelegate())
-  }
-
   private val services =
     Services.serviceDirectory()
   private val accessibilityService =
@@ -111,8 +107,13 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
     handleFeedEntry()
   }
 
+  private var mAppCompatDelegate: AppCompatDelegate? = null
   override fun getDelegate(): AppCompatDelegate {
-    return this.appCompatDelegate
+    if (mAppCompatDelegate == null) {
+      mAppCompatDelegate = TxNative.wrapAppCompatDelegate(super.getDelegate(), this)
+    }
+
+    return mAppCompatDelegate!!
   }
 
   override fun onStop() {

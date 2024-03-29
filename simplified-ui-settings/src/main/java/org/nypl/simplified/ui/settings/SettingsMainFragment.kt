@@ -1,5 +1,6 @@
 package org.nypl.simplified.ui.settings
 
+import android.annotation.SuppressLint
 import org.librarysimplified.ui.settings.R
 
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceGroup
 import org.librarysimplified.services.api.Services
 import org.nypl.simplified.android.ktx.supportActionBar
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
@@ -69,6 +71,8 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
     this.settingsVersion = this.findPreference("settingsVersion")!!
     this.settingsVersionCore = this.findPreference("settingsVersionCore")!!
 
+    this.resetPreferenceLocalizations(this.preferenceScreen)
+
     this.configureAbout(this.settingsAbout)
     this.configureAcknowledgements(this.settingsAcknowledgements)
     this.configureAccounts(this.settingsAccounts)
@@ -87,6 +91,45 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
   override fun onStart() {
     super.onStart()
     this.configureToolbar()
+  }
+
+  private fun resetPreferenceLocalizations(parent : PreferenceGroup) {
+    // androidx.preference:preference-ktx would have `PreferenceGroup.children`,
+    // but I don't want to add the dependency just for that
+    for (i in 0 ..< parent.preferenceCount) {
+      val pref = parent.getPreference(i)
+      if (pref.key != null) {
+        val title = getStringResourceByName(pref.key)
+        if (title != null) {
+          pref.title = title
+        }
+
+        val summary = getStringResourceByName(pref.key + "Summary")
+        if (summary != null) {
+          pref.summary = summary
+        }
+      }
+
+      if (pref is PreferenceGroup) {
+        resetPreferenceLocalizations(pref)
+      }
+    }
+  }
+
+  // Suppressing lint is a code smell, but this is better than hard-coding the list of preferences
+  @SuppressLint("DiscouragedApi")
+  private fun getStringResourceByName(name : String) : String? {
+    if (this.context != null) {
+      val resId = resources.getIdentifier(name, "string", requireContext().packageName)
+      if (resId != 0) {
+        val string = getString(resId)
+        if (string.isNotEmpty() && !string.startsWith("[[")) {
+          return string
+        }
+      }
+    }
+
+    return null
   }
 
   private fun configureToolbar() {

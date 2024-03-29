@@ -1,11 +1,13 @@
 package org.librarysimplified.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -97,6 +99,16 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
     val settingsItem = this.bottomView.menu.findItem(org.librarysimplified.ui.tabs.R.id.tabSettings)
     settingsItem.isVisible = viewModel.buildConfig.showSettingsTab
     settingsItem.isEnabled = viewModel.buildConfig.showSettingsTab
+
+    // Force bottom tab menu strings to go through Transifex wrapper to actually localize tab titles
+    this.bottomView.menu.forEach {
+      when (it.itemId) {
+        org.librarysimplified.ui.tabs.R.id.tabCatalog   -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabCatalog)
+        org.librarysimplified.ui.tabs.R.id.tabBooks     -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabBooks)
+        org.librarysimplified.ui.tabs.R.id.tabHolds     -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabHolds)
+        org.librarysimplified.ui.tabs.R.id.tabSettings  -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabSettings)
+      }
+    }
 
     this.navigator =
       TabbedNavigator.create(

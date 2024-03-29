@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.TxContextWrappingDelegate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.common.util.concurrent.ListeningExecutorService
 import com.google.common.util.concurrent.MoreExecutors
+import com.transifex.txnative.TxNative
 import org.joda.time.DateTime
 import org.librarysimplified.audiobook.api.PlayerAudioBookType
 import org.librarysimplified.audiobook.api.PlayerAudioEngineRequest
@@ -322,10 +322,6 @@ class AudioBookPlayerActivity :
     }
   }
 
-  private val appCompatDelegate: TxContextWrappingDelegate by lazy {
-    TxContextWrappingDelegate(super.getDelegate())
-  }
-
   private fun findBookAuthor(entry: OPDSAcquisitionFeedEntry): String {
     if (entry.authors.isEmpty()) {
       return ""
@@ -333,8 +329,13 @@ class AudioBookPlayerActivity :
     return entry.authors.first()
   }
 
+  private var mAppCompatDelegate: AppCompatDelegate? = null
   override fun getDelegate(): AppCompatDelegate {
-    return this.appCompatDelegate
+    if (mAppCompatDelegate == null) {
+      mAppCompatDelegate = TxNative.wrapAppCompatDelegate(super.getDelegate(), this)
+    }
+
+    return mAppCompatDelegate!!
   }
 
   override fun onDestroy() {

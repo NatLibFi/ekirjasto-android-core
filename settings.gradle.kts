@@ -40,12 +40,11 @@ val localProp:Properties = Properties().apply {
 /**
  * Overrides property from gradle.properties with same prop in local.properties if present
  */
-fun overrideProperty(name: String) : String{
-
+fun overrideProperty(name: String) : String {
     val value = localProp.getOrElse(name){
         providers.gradleProperty(name).orNull
-    }.toString()
-    return value;
+    }?.toString() ?: throw Exception("Property not found: $name")
+    return value
 }
 
 val adobeDRM =

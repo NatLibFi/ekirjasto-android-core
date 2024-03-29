@@ -24,7 +24,7 @@ object MainTransifex {
         props.getProperty("transifex.token")
       }
     } catch (e: FileNotFoundException) {
-      this.logger.warn("Failed to initialize Transifex; secrets.conf not found")
+      this.logger.warn("secrets.conf not found, will insert empty Transifex token")
       null
     } catch (e: Exception) {
       this.logger.warn("Failed to initialize Transifex", e)
@@ -37,11 +37,8 @@ object MainTransifex {
    */
 
   fun configure(applicationContext: Context) {
-    val token = loadTransifexToken(applicationContext)
-    if (token == null) {
-      this.logger.warn("Failed to initialize Transifex; transifex.token key not present")
-      return
-    }
+    this.logger.debug("MainTransifex.configure()")
+    val token = loadTransifexToken(applicationContext) ?: ""
 
     val localeState =
       LocaleState(

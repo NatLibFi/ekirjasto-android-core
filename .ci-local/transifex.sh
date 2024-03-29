@@ -30,7 +30,7 @@ fi
 
 info "Downloading Transifex jar"
 
-wget -c https://github.com/transifex/transifex-java/releases/download/1.2.1/transifex.jar ||
+wget -c https://github.com/transifex/transifex-java/releases/download/1.3.0/transifex.jar ||
   fatal "could not download Transifex"
 
 sha256sum -c .ci-local/transifex.sha256 ||
