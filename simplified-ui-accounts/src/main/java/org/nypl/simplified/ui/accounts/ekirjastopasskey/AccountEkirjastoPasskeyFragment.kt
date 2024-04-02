@@ -2,11 +2,6 @@ package org.nypl.simplified.ui.accounts.ekirjastopasskey
 
 import androidx.core.os.bundleOf
 import androidx.credentials.CredentialManager
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetPublicKeyCredentialOption
-import androidx.credentials.PublicKeyCredential
-import androidx.credentials.exceptions.GetCredentialException
-import androidx.credentials.exceptions.NoCredentialException
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
@@ -88,7 +83,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
         application = this.requireActivity().application,
         account = this.parameters.accountID,
         description = this.parameters.authenticationDescription,
-        ekirjastoToken = this.parameters.loginMethod.token
+        ekirjastoToken = this.parameters.loginMethod.circulationToken
       )
     }
   )
@@ -286,7 +281,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
 
   private fun passkeyRegisterAsync(username: String) {
     logger.debug("Passkey Register Async")
-    if (parameters.loginMethod.token == null) {
+    if (parameters.loginMethod.circulationToken == null) {
       //handleFailure(Exception("Missing token. Cannot complete passkey registration"))
       return
     }

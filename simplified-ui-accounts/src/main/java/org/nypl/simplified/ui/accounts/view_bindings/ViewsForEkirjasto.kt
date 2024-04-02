@@ -57,6 +57,7 @@ class ViewsForEkirjasto(
   }
 
   private fun handleLoginEnabled(status: AccountLoginButtonStatus.AsLoginButtonEnabled, res: Resources) {
+    logger.warn("Handle Login Enabled")
     this.loginContainer.visibility = VISIBLE
     this.cancelContainer.visibility = GONE
 //    this.suomiFiButton.isEnabled = false

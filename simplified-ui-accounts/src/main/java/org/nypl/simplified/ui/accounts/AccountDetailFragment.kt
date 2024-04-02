@@ -65,7 +65,6 @@ import java.net.URI
 import org.librarysimplified.ui.accounts.R
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 import org.thepalaceproject.theme.core.PalaceToolbar
-import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 
 /**
  * A fragment that shows settings for a single account.
@@ -622,7 +621,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           description,
           EkirjastoLoginMethod.Passkey(
             loginState = this.authenticationViews.getEkirjastoPasskeyState(),
-            token = credentials.accessToken,
+            circulationToken = credentials.accessToken,
             username = authenticationViews.getEkirjastoLoginUsername()
           )
         )
@@ -879,7 +878,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.authenticationAlternativesShow()
       }
 
-      is AccountLoggedIn -> { //TODO handle passkey register
+      is AccountLoggedIn -> {
         when (val creds = loginState.credentials) {
           is AccountAuthenticationCredentials.Basic -> {
             this.authenticationViews.setBasicUserAndPass(
