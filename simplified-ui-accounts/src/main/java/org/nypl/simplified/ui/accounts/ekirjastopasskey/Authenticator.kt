@@ -1,16 +1,23 @@
 package org.nypl.simplified.ui.accounts.ekirjastopasskey
 
 import android.app.Application
+import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.PublicKeyCredential
 import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.AuthenticateParameters
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.AuthenticateResult
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.PublicKeyCredentialRequestOptions
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterChallengeRequestResponse
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterResult
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterParameters
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
@@ -21,7 +28,7 @@ class Authenticator (
   val credentialManager: CredentialManager )
 {
   val objectMapper = jacksonObjectMapper()
-  val logger = LoggerFactory.getLogger(Authenticator::class.java)
+  val logger: Logger = LoggerFactory.getLogger(Authenticator::class.java)
 
   suspend fun authenticate(parameters: AuthenticateParameters): AuthenticateResult {
     val options = PublicKeyCredentialRequestOptions.from(parameters)
@@ -50,6 +57,33 @@ class Authenticator (
 
     return AuthenticateResult.Failure()
 
+  }
+
+  suspend fun register(parameters: RegisterParameters): RegisterResult {
+
+    lateinit var responseJson: JsonNode;
+    val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(
+      requestJson = objectMapper.writeValueAsString(parameters)
+    )
+
+    try {
+      val result = credentialManager.createCredential(
+        context = application,
+        request = createPublicKeyCredentialRequest,
+      )
+      val response : String = result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
+      logger.debug("Authenticator Response: {}",response)
+      responseJson = this.objectMapper.readValue(response)
+    } catch (e : Exception) {
+      throw Exception("Error on Passkey Register Challenge", e)
+    }
+
+    return RegisterResult(
+      id = responseJson["id"].asText(),
+      rawId = responseJson["rawId"].asText(),
+      response = this.objectMapper.readValue<RegisterChallengeRequestResponse>(responseJson["response"].toString()),
+      type = responseJson["type"].asText()
+    )
   }
 
 }
