@@ -108,6 +108,7 @@ class ProfileAccountLoginTask(
           this.steps.beginNewStep(this.loginStrings.loginCheckAuthRequired)
         )
       ) {
+        this.logger.warn("updateLoggingInState returns false")
         return this.steps.finishSuccess(Unit)
       }
 
@@ -239,6 +240,7 @@ class ProfileAccountLoginTask(
   private fun runEkirjastoComplete(
     request: EkirjastoComplete
   ): TaskResult<Unit> {
+    this.logger.warn("ProfileAccountLogin EKirjastoComplete: request=$request")
     val authenticationURI = request.description.authenticate
 
     val httpRequest = this.http.newRequest(authenticationURI)
@@ -262,6 +264,7 @@ class ProfileAccountLoginTask(
             annotationsURI = null,
             deviceRegistrationURI = null
           )
+          this.logger.warn("ekirjastoComplete Response OK, credentials updated: $credentials")
 
           this.handlePatronUserProfile()
           this.runDeviceActivation()

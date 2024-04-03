@@ -20,7 +20,7 @@ class AccountEkirjastoPasskeyViewModelFactory(
         application = this.application,
         account = this.account,
         description = this.description,
-        circulationToken = this.ekirjastoToken!!,
+        circulationToken = this.ekirjastoToken,
         credentialManager = CredentialManager.create(application)
       ) as T
     }

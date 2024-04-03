@@ -19,7 +19,8 @@ import org.slf4j.LoggerFactory
 
 class ViewsForEkirjasto(
   override val viewGroup: ViewGroup,
-  val loginContainer: LinearLayout,
+  val suomifiLoginContainer: LinearLayout,
+  val passkeyLoginContainer: LinearLayout,
   val cancelContainer: LinearLayout,
   val suomiFiButton: Button,
   val username: TextInputEditText,
@@ -32,11 +33,9 @@ class ViewsForEkirjasto(
   private val logger = LoggerFactory.getLogger(ViewsForEkirjasto::class.java)
 
   private var activeLoginMethod : EkirjastoLoginMethod = EkirjastoLoginMethod.SuomiFi()
-  var passkeyState = EkirjastoLoginMethod.Passkey.LoginState.RegisterUnavailable
-    get() = field
-    set(value) {
-      field = value
-    }
+  val passkeyState
+    get() = (activeLoginMethod as? EkirjastoLoginMethod.Passkey)?.loginState
+        ?: EkirjastoLoginMethod.Passkey.LoginState.RegisterUnavailable
 
   private val tokenTextListener =
     OnTextChangeListener(
@@ -58,8 +57,8 @@ class ViewsForEkirjasto(
 
   private fun handleLoginEnabled(status: AccountLoginButtonStatus.AsLoginButtonEnabled, res: Resources) {
     logger.warn("Handle Login Enabled")
-    this.loginContainer.visibility = VISIBLE
-    this.cancelContainer.visibility = GONE
+//    this.suomifiLoginContainer.visibility = VISIBLE
+//    this.cancelContainer.visibility = GONE
 //    this.suomiFiButton.isEnabled = false
 //    this.passkeyLoginButton.isEnabled = false
 //    this.passkeyRegisterButton.isEnabled = false
@@ -67,38 +66,55 @@ class ViewsForEkirjasto(
     when (passkeyState) {
       EkirjastoLoginMethod.Passkey.LoginState.RegisterUnavailable -> {
         this.logger.debug("Ekirjasto passkey registering is not available")
-        this.passkeyLoginButton.isEnabled = false
-        this.passkeyRegisterButton.isEnabled = false
+        this.suomifiLoginContainer.visibility = VISIBLE
+        this.passkeyLoginContainer.visibility = VISIBLE
+        this.cancelContainer.visibility = GONE
+        this.passkeyRegisterButton.visibility = GONE
         this.suomiFiButton.text = res.getString(R.string.accountLoginWith, "Suomi.fi")
         this.suomiFiButton.isEnabled = true
         this.suomiFiButton.setOnClickListener {
           this.activeLoginMethod = EkirjastoLoginMethod.SuomiFi()
           status.onClick.invoke()
         }
+        this.passkeyLoginButton.text = res.getString(R.string.accountLoginWith, "passkey")
+        this.passkeyLoginButton.setOnClickListener{
+          this.activeLoginMethod = EkirjastoLoginMethod.Passkey(
+            loginState = EkirjastoLoginMethod.Passkey.LoginState.LoggingIn,
+            username = getUsername(),
+            circulationToken = null)
+          status.onClick.invoke()
+        }
       }
       EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable -> {
         this.logger.debug("Ekirjasto passkey register available")
         //suomiFiLogin is ignored because it is probably configured as logout button at this point
+        this.suomifiLoginContainer.visibility = GONE
+        this.passkeyLoginContainer.visibility = VISIBLE
+        this.cancelContainer.visibility = VISIBLE
+        this.passkeyLoginButton.visibility = GONE
         this.username.isEnabled = true
-        this.passkeyLoginButton.isEnabled = false
-        this.passkeyRegisterButton.isEnabled = true
+        this.passkeyRegisterButton.visibility = VISIBLE
         this.passkeyRegisterButton.setOnClickListener {
           this.activeLoginMethod = EkirjastoLoginMethod.Passkey(passkeyState, null, null)
           status.onClick.invoke()
         }
       }
-      EkirjastoLoginMethod.Passkey.LoginState.Registered -> {
-        this.logger.debug("Ekirjasto passkey is registered")
-        this.passkeyLoginButton.isEnabled = true
-        this.passkeyRegisterButton.isEnabled = false
-        this.passkeyLoginButton.text = res.getString(R.string.accountLoginWith, "passkey")
-        this.passkeyLoginButton.isEnabled = true
-        this.passkeyLoginButton.setOnClickListener {
-          this.activeLoginMethod = EkirjastoLoginMethod.Passkey(passkeyState, null, getUsername())
-          status.onClick.invoke()
-        }
+      EkirjastoLoginMethod.Passkey.LoginState.LoggingIn -> {
+        this.logger.debug("Ekirjasto passkey is Logging In")
+        this.cancelContainer.visibility = VISIBLE
+        this.suomifiLoginContainer.visibility = GONE
+        this.passkeyLoginContainer.visibility = GONE
+//        this.passkeyLoginButton.visibility = VISIBLE
+//        this.passkeyRegisterButton.visibility = GONE
+//        this.passkeyLoginButton.setOnClickListener {
+//          this.activeLoginMethod = EkirjastoLoginMethod.Passkey(passkeyState, null, getUsername())
+//          status.onClick.invoke()
+//        }
       }
       EkirjastoLoginMethod.Passkey.LoginState.LoggedIn -> {
+        this.passkeyLoginContainer.visibility = GONE
+        this.suomifiLoginContainer.visibility = GONE
+        this.cancelContainer.visibility = VISIBLE
         logger.warn("Already logged in with passkey. Should not have LoginButton enabled status!")
       }
     }
@@ -107,19 +123,18 @@ class ViewsForEkirjasto(
   override fun setLoginButtonStatus(status: AccountLoginButtonStatus) {
     val res = this.viewGroup.resources
     logger.warn("Ekirjasto view: setLoginButtonStatus $status")
-    return when (status) {
+    when (status) {
       is AccountLoginButtonStatus.AsLoginButtonEnabled -> handleLoginEnabled(status,res)
       AccountLoginButtonStatus.AsLoginButtonDisabled -> {
-        this.loginContainer.visibility = VISIBLE
+        this.suomifiLoginContainer.visibility = GONE
+        this.passkeyLoginButton.visibility = GONE
         this.cancelContainer.visibility = GONE
-
-        //this.suomiFiButton.text = res.getString(R.string.accountLoginWith, "Suomi.fi")
-        //this.suomiFiButton.isEnabled = false
-        this.passkeyLoginButton.text = res.getString(R.string.accountLoginWith, "passkey")
-        this.passkeyLoginButton.isEnabled = false
+//        this.passkeyLoginButton.text = res.getString(R.string.accountLoginWith, "passkey")
+//        this.passkeyLoginButton.isEnabled = false
       }
       is AccountLoginButtonStatus.AsCancelButtonEnabled -> {
-        this.loginContainer.visibility = GONE
+        this.suomifiLoginContainer.visibility = GONE
+        this.passkeyLoginContainer.visibility = GONE
         this.cancelContainer.visibility = VISIBLE
 
         when (this.activeLoginMethod) {
@@ -144,7 +159,8 @@ class ViewsForEkirjasto(
         }
       }
       AccountLoginButtonStatus.AsCancelButtonDisabled -> {
-        this.loginContainer.visibility = GONE
+        this.suomifiLoginContainer.visibility = GONE
+        this.passkeyLoginContainer.visibility = GONE
         this.cancelContainer.visibility = VISIBLE
 
         when (this.activeLoginMethod) {
@@ -166,7 +182,8 @@ class ViewsForEkirjasto(
         this.cancelButton.isEnabled = false
       }
       is AccountLoginButtonStatus.AsLogoutButtonEnabled -> {
-        this.loginContainer.visibility = GONE
+        this.suomifiLoginContainer.visibility = GONE
+        this.passkeyLoginContainer.visibility = GONE
         this.cancelContainer.visibility = VISIBLE
         this.cancelLabel.text = res.getString(R.string.accountEkirjastoLoggedInLabel)
         this.cancelButton.setText(R.string.accountLogout)
@@ -176,7 +193,8 @@ class ViewsForEkirjasto(
         }
       }
       AccountLoginButtonStatus.AsLogoutButtonDisabled -> {
-        this.loginContainer.visibility = GONE
+        this.suomifiLoginContainer.visibility = GONE
+        this.passkeyLoginContainer.visibility = GONE
         this.cancelContainer.visibility = VISIBLE
 
         this.cancelLabel.text = res.getString(R.string.accountEkirjastoLoggedInLabel)
@@ -185,6 +203,7 @@ class ViewsForEkirjasto(
         this.cancelButton.isEnabled = false
       }
     }
+    this.logger.warn("LoginButtonStatus Set. Login Method = ${this.activeLoginMethod}")
   }
 
   override fun setResetPasswordLabelStatus(
@@ -221,13 +240,28 @@ class ViewsForEkirjasto(
     return activeLoginMethod
   }
 
+  fun updatePasskeyState(state: EkirjastoLoginMethod.Passkey.LoginState) {
+    when (val method = activeLoginMethod){
+      is EkirjastoLoginMethod.Passkey -> {
+        activeLoginMethod = EkirjastoLoginMethod.Passkey(
+          loginState = state,
+          circulationToken = method.circulationToken,
+          username = method.username
+        )
+      }
+      else -> return
+    }
+
+  }
+
   companion object {
     fun bind(
       viewGroup: ViewGroup
     ): ViewsForEkirjasto {
       return ViewsForEkirjasto(
         viewGroup = viewGroup,
-        loginContainer = viewGroup.findViewById(R.id.ekirjastoLoginContainer),
+        suomifiLoginContainer = viewGroup.findViewById(R.id.suomifiLoginContainer),
+        passkeyLoginContainer = viewGroup.findViewById(R.id.passkeyLoginContainer),
         cancelContainer = viewGroup.findViewById(R.id.ekirjastoCancelContainer),
         suomiFiButton = viewGroup.findViewById(R.id.suomiFiLogin),
         username = viewGroup.findViewById(R.id.authPassKeyUsernameField),

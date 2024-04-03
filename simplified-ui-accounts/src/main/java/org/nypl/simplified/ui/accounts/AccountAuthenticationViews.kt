@@ -203,8 +203,8 @@ class AccountAuthenticationViews(
   }
 
   // Helsinki
-  fun setEkirjastoUsername(email: String) {
-    this.ekirjasto.setUsername(email)
+  fun setEkirjastoUsername(username: String) {
+    this.ekirjasto.setUsername(username)
   }
 
   /**
@@ -296,7 +296,7 @@ class AccountAuthenticationViews(
   }
 
   fun setEkirjastoPasskeyState(state: EkirjastoLoginMethod.Passkey.LoginState) {
-    this.ekirjasto.passkeyState = state
+    this.ekirjasto.updatePasskeyState(state)
   }
 
   fun getEkirjastoPasskeyState(): EkirjastoLoginMethod.Passkey.LoginState {

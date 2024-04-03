@@ -10,6 +10,6 @@ sealed class EkirjastoLoginMethod {
     val circulationToken: String?,
     val username: AccountUsername?
   ) : EkirjastoLoginMethod(){
-    enum class LoginState { RegisterUnavailable, RegisterAvailable, Registered, LoggedIn}
+    enum class LoginState { RegisterUnavailable, RegisterAvailable, LoggingIn, LoggedIn}
   }
 }
