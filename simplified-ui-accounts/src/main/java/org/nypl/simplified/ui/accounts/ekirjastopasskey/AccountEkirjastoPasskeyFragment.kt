@@ -228,6 +228,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
 
 
   private fun postPasskeySuccessful(authInfo: PasskeyAuth) {
+    this.logger.debug("Passkey Successful: $authInfo")
 //    this.profilesController.profileAccountLogin(
 //      ProfileAccountLoginRequest.EkirjastoComplete(
 //        accountId = this.parameters.accountID,
@@ -274,7 +275,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
 
     when (loginState) {
       EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable -> passkeyRegisterAsync(username)
-      EkirjastoLoginMethod.Passkey.LoginState.Registered -> passkeyLoginAsync(username)
+      EkirjastoLoginMethod.Passkey.LoginState.LoggingIn -> passkeyLoginAsync(username)
       else -> this.logger.warn("Unhandled login state: {}", loginState)
     }
   }
@@ -287,7 +288,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     }
     lifecycleScope.launch {
       val auth = viewModel.passkeyRegister(username)
-      if (auth.success){
+      if (auth.success) {
         postPasskeySuccessful(auth)
       } else {
         postPasskeyFailed(Exception("Passkey Authentication Failed: Got PasskeyAuth.success = false"))

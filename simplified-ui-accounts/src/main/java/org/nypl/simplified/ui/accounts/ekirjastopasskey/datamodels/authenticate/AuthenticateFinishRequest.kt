@@ -3,6 +3,7 @@ package org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate
 import kotlin.math.sign
 
 data class AuthenticateFinishRequest(
+  val type: String = "public-key",
   val id: String,
   val rawId: String,
   val response: AuthenticateResultResponse

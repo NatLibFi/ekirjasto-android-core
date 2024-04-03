@@ -43,7 +43,7 @@ class AccountEkirjastoPasskeyViewModel (
   private val account: AccountID,
   private val description: AccountProviderAuthenticationDescription.Ekirjasto,
   // Used for register passkey
-  private val circulationToken: String,
+  private val circulationToken: String?,
   // Used for passkey login
   private val credentialManager: CredentialManager
 ) : ViewModel() {
@@ -155,23 +155,25 @@ class AccountEkirjastoPasskeyViewModel (
   }
 
   private fun postPasskeyComplete(username: String, auth: PasskeyAuth) {
-    this.profiles.profileAccountLogin(
-      ProfileAccountLoginRequest.EkirjastoComplete(
-        accountId = this.account,
-        description = this.description,
-        ekirjastoToken = auth.token,
-        username = username
-      )
-    )
+    this.logger.warn("Posting Passkey Completed event --  is this necessary?")
+//    this.profiles.profileAccountLogin(
+//      ProfileAccountLoginRequest.EkirjastoComplete(
+//        accountId = this.account,
+//        description = this.description,
+//        ekirjastoToken = auth.token,
+//        username = username
+//      )
+//    )
   }
 
   suspend fun requestPasskeyLoginStart(username: String): AuthenticatePublicKey {
-    var startRequest = createPostRequest(description.passkey_login_start, mapToJson(mapOf("username" to username)))
+    val data = mapToJson(mapOf("username" to username))
+    var startRequest = createPostRequest(description.passkey_login_start, null) //TODO ?
     var requestResponse = sendRequest(startRequest)
-    var responseBody = "";
+    val response: JsonNode
     when (val status = requestResponse.status){
       is LSHTTPResponseStatus.Responded.OK -> {
-        responseBody = status.bodyStream.toString()
+        response = bodyAsJsonNode(status.bodyStream!!)
       }
       is LSHTTPResponseStatus.Responded.Error -> {
         throw Exception("Passkey Login Start Error: ${status.properties.status}")
@@ -180,9 +182,9 @@ class AccountEkirjastoPasskeyViewModel (
         throw Exception("Passkey Login Start Failed",status.exception)
       }
     }
-    this.logger.debug("RequestPassKeyLoginStart response ={}",responseBody)
+    this.logger.debug("RequestPassKeyLoginStart response ={}",response.toPrettyString())
 
-    val response = objectMapper.readTree(responseBody)
+
     return objectMapper.readValue(response["publicKey"].toString())
   }
 
@@ -201,9 +203,10 @@ class AccountEkirjastoPasskeyViewModel (
   }
 
   private suspend fun requestPasskeyLoginComplete(authResult: AuthenticateResult.Success) : PasskeyAuth{
-    val data = AuthenticateFinishRequest.fromAuthenticationResult(authResult)
+    val data: AuthenticateFinishRequest = AuthenticateFinishRequest.fromAuthenticationResult(authResult)
     val dataJson = this.objectMapper.writeValueAsString(data)
-    var response = sendRequest(createAuthorizedPostRequest(description.passkey_login_finish, dataJson))
+    val requestBody: String = mapToJson(mapOf("id" to authResult.id, "data" to dataJson))
+    var response = sendRequest(createPostRequest(description.passkey_login_finish, requestBody))
     var responseBodyNode: JsonNode?
     when (val status=response.status){
       is LSHTTPResponseStatus.Responded.OK -> {
@@ -259,7 +262,6 @@ class AccountEkirjastoPasskeyViewModel (
       postPasskeyComplete(username, authResponse)
     }
 
-    logger.debug("TODO: handle register finished event? store auth info")
     return authResponse
   }
 
@@ -313,8 +315,8 @@ class AccountEkirjastoPasskeyViewModel (
   }
 
   private fun createPostRequest(uri: URI, body: String?): LSHTTPRequestType {
-    var bodyString = "";
-    body?.let {bodyString = it}
+    val bodyString = body ?:""
+    logger.warn("post: $uri, $bodyString")
     return this.http.newRequest(uri)
       .setMethod(Post(
         bodyString.toByteArray(Charset.forName("UTF-8")),
@@ -332,12 +334,11 @@ class AccountEkirjastoPasskeyViewModel (
         bodyString.toByteArray(Charset.forName("UTF-8")),
         MIMEType("application", "json", mapOf())
       ))
-      .setAuthorization(LSHTTPAuthorizationBearerToken.ofToken(circulationToken))
+      .setAuthorization(LSHTTPAuthorizationBearerToken.ofToken(circulationToken!!))
       .addHeader("accept","json")
       .build()
   }
   private fun sendRequest(request: LSHTTPRequestType): LSHTTPResponseType {
-
 
     val response = request.execute()
     when (val status = response.status) {
@@ -346,7 +347,8 @@ class AccountEkirjastoPasskeyViewModel (
       }
 
       is LSHTTPResponseStatus.Responded.Error -> {
-        logger.error("Request Error: {}", status.properties.status)
+        val body = status.bodyStream?.let{ bodyAsJsonNode(it)}
+        logger.error("Request Error: {} {}", status.properties.status, body?.toPrettyString())
       }
 
       is LSHTTPResponseStatus.Failed -> {
