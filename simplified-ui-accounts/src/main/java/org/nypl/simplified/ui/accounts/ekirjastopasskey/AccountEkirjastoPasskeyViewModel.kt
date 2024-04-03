@@ -9,6 +9,7 @@ import androidx.credentials.exceptions.CreateCredentialProviderConfigurationExce
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
 import androidx.lifecycle.ViewModel
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -205,7 +206,11 @@ class AccountEkirjastoPasskeyViewModel (
   private suspend fun requestPasskeyLoginComplete(authResult: AuthenticateResult.Success) : PasskeyAuth{
     val data: AuthenticateFinishRequest = AuthenticateFinishRequest.fromAuthenticationResult(authResult)
     val dataJson = this.objectMapper.writeValueAsString(data)
-    val requestBody: String = mapToJson(mapOf("id" to authResult.id, "data" to dataJson))
+    val jsonNode = objectMapper.createObjectNode()
+    jsonNode.put("id", data.id)
+    jsonNode.replace("data", objectMapper.readTree(dataJson))
+    val requestBody: String = objectMapper.writeValueAsString(jsonNode)
+    logger.warn("passkeyLoginComplete requestBody= ${jsonNode.toPrettyString()}")
     var response = sendRequest(createPostRequest(description.passkey_login_finish, requestBody))
     var responseBodyNode: JsonNode?
     when (val status=response.status){
