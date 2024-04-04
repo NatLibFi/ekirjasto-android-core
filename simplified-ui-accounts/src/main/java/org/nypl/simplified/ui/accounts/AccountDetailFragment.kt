@@ -623,6 +623,10 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       }
     }
     if ( description is AccountProviderAuthenticationDescription.Ekirjasto) {
+      this.viewModel.tryLogin(ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
+        accountId = this.parameters.accountID,
+        description = description
+      ))
       this.listener.post(
         AccountDetailEvent.OpenEkirjastoPasskeyLogin(
           this.parameters.accountID,

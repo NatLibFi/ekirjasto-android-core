@@ -12,4 +12,5 @@ sealed class EkirjastoLoginMethod {
   ) : EkirjastoLoginMethod(){
     enum class LoginState { RegisterUnavailable, RegisterAvailable, LoggingIn, LoggedIn}
   }
+
 }
