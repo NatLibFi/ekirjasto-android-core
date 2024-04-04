@@ -149,7 +149,7 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
       ErrorPageParameters(
         emailAddress = this.viewModel.supportEmailAddress,
         body = "",
-        subject = "[simplye-error-report]",
+        subject = "[ekirjasto-error-report]",
         attributes = sortedMapOf(),
         taskSteps = taskSteps
       )
