@@ -514,7 +514,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         ImageAccountIcons.loadAccountLogoIntoView(
           loader = this.imageLoader.loader,
           account = account.provider.toDescription(),
-          defaultIcon = R.drawable.account_default,
+          defaultIcon = R.drawable.header_logo,
           iconView = feedContentLogoImage
         )
 
