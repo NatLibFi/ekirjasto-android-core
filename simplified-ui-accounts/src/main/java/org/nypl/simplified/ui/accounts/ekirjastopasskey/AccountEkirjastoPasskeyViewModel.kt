@@ -23,6 +23,7 @@ import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Post
 import org.librarysimplified.http.api.LSHTTPRequestType
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.http.api.LSHTTPResponseType
+import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PasskeyAuth
@@ -55,8 +56,10 @@ class AccountEkirjastoPasskeyViewModel (
   private val logger = LoggerFactory.getLogger(AccountEkirjastoPasskeyViewModel::class.java)
   private val objectMapper = jacksonObjectMapper()
   private val authenticator = Authenticator(application, credentialManager)
+  private val buildConfig =
+    services.requireService(BuildConfigurationServiceType::class.java)
 
-  //TODO internal events
+
 
   private fun handleFailure(e: Exception) {
     // TODO Make sure errors are handled properly and communicated to the user properly.
@@ -108,26 +111,36 @@ class AccountEkirjastoPasskeyViewModel (
       }
     }
 
+    this.profiles.profileAccountLogin(
+      ProfileAccountLoginRequest.EkirjastoCancel(
+        accountId = account,
+        description = description,
+        username = "no username"
+      )
+    )
 
-    //TODO post internal event for passkey failed
-    //this.postPasskeyFailed(e)
   }
 
   suspend fun passkeyLogin(username: String): PasskeyAuth {
 
     lateinit var startResponse : AuthenticatePublicKey
     lateinit var challengeResponse : AuthenticateResult
+
+    //TODO TaskRecording
+
     try {
+      this.logger.debug("Passkey Login Start")
       startResponse = requestPasskeyLoginStart(username)
-      this.logger.debug("Passkey Login Start response= {}",startResponse)
+      this.logger.debug("Passkey Login Start responded")
     } catch (e: Exception){
       handleFailure(e)
       return PasskeyAuth.Fail(e)
     }
 
     try {
+      this.logger.debug("Passkey Login Challenge")
       challengeResponse = requestPasskeyLoginChallenge(startResponse)
-      this.logger.debug("Passkey Login Challenge response = {}", challengeResponse)
+      this.logger.debug("Passkey Login Challenge responded")
     } catch (e: Exception) {
       handleFailure(e)
       return PasskeyAuth.Fail(e)
@@ -138,6 +151,7 @@ class AccountEkirjastoPasskeyViewModel (
 
       is AuthenticateResult.Success -> {
         try {
+          this.logger.debug("Passkey Login Complete")
           val auth = requestPasskeyLoginComplete(challengeResponse)
           if (auth.success){
             postPasskeyComplete(username, auth)
@@ -168,7 +182,7 @@ class AccountEkirjastoPasskeyViewModel (
   }
 
   suspend fun requestPasskeyLoginStart(username: String): AuthenticatePublicKey {
-    val data = mapToJson(mapOf("username" to username))
+    //val data = mapToJson(mapOf("username" to username))
     var startRequest = createPostRequest(description.passkey_login_start, null) //TODO ?
     var requestResponse = sendRequest(startRequest)
     val response: JsonNode
@@ -183,8 +197,6 @@ class AccountEkirjastoPasskeyViewModel (
         throw Exception("Passkey Login Start Failed",status.exception)
       }
     }
-    this.logger.debug("RequestPassKeyLoginStart response ={}",response.toPrettyString())
-
 
     return objectMapper.readValue(response["publicKey"].toString())
   }
@@ -210,7 +222,6 @@ class AccountEkirjastoPasskeyViewModel (
     jsonNode.put("id", data.id)
     jsonNode.replace("data", objectMapper.readTree(dataJson))
     val requestBody: String = objectMapper.writeValueAsString(jsonNode)
-    logger.warn("passkeyLoginComplete requestBody= ${jsonNode.toPrettyString()}")
     var response = sendRequest(createPostRequest(description.passkey_login_finish, requestBody))
     var responseBodyNode: JsonNode?
     when (val status=response.status){
@@ -238,7 +249,7 @@ class AccountEkirjastoPasskeyViewModel (
     lateinit var registerStartResponse: JsonNode
     lateinit var challengeResponse: RegisterResult
     lateinit var authResponse: PasskeyAuth
-
+    //TODO TaskRecording
     try {
       logger.debug("Register Start")
       registerStartResponse = requestPasskeyRegisterStart(uri, body)
@@ -258,7 +269,7 @@ class AccountEkirjastoPasskeyViewModel (
     try {
       logger.debug("Register Finish")
       authResponse = passkeyRegisterFinish(username, challengeResponse)
-      logger.debug("Register Finish Complete: $authResponse")
+      logger.debug("Register Finish Complete")
     } catch (e: Exception){
       handleFailure(e)
     }
@@ -283,7 +294,7 @@ class AccountEkirjastoPasskeyViewModel (
   }
 
   private suspend fun startPasskeyRegisterChallenge(username: String, jsonBody: JsonNode): RegisterResult {
-    logger.debug("Start Passkey Register Challenge. User={}, challenge={}", username, jsonBody.toPrettyString())
+    logger.debug("Start Passkey Register Challenge")
     val publicKeyJsonNode = jsonBody.get("publicKey")
     val params: RegisterParameters = objectMapper.readValue(publicKeyJsonNode.toString())
     return authenticator.register(params)
@@ -307,7 +318,6 @@ class AccountEkirjastoPasskeyViewModel (
       when (val status = response.status){
         is LSHTTPResponseStatus.Responded.OK -> {
           val responseBody: JsonNode = bodyAsJsonNode(status.bodyStream!!)
-          this.logger.debug("Response body: ${responseBody.toPrettyString()}")
           return PasskeyAuth(
             success = responseBody["token"].asText() != null,
             token = responseBody["token"].asText(),
@@ -321,7 +331,6 @@ class AccountEkirjastoPasskeyViewModel (
 
   private fun createPostRequest(uri: URI, body: String?): LSHTTPRequestType {
     val bodyString = body ?:""
-    logger.warn("post: $uri, $bodyString")
     return this.http.newRequest(uri)
       .setMethod(Post(
         bodyString.toByteArray(Charset.forName("UTF-8")),
@@ -369,4 +378,7 @@ class AccountEkirjastoPasskeyViewModel (
   private fun mapToJson(map: Map<String, String>): String {
     return this.objectMapper.writeValueAsString(map)
   }
+
+  val supportEmailAddress: String =
+    buildConfig.supportErrorReportEmailAddress
 }

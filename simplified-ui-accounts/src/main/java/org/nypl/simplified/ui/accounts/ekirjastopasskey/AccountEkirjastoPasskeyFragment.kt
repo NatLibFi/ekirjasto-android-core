@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.launch
@@ -18,13 +19,17 @@ import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Post
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
+import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
+import org.nypl.simplified.taskrecorder.api.TaskRecorder
+import org.nypl.simplified.taskrecorder.api.TaskStep
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PasskeyAuth
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
+import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiInternalEvent
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import org.slf4j.LoggerFactory
@@ -94,64 +99,6 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     credentialManager = CredentialManager.create(requireContext())
   }
 
-  // Finland
-  private fun getAccessTokenFromEkirjastoAPIResponse(node: JsonNode): String {
-    return try {
-      node.get("token").asText()
-    } catch (e: Exception) {
-      this.logger.error("Error getting access token from E-kirjasto API token response: ", e)
-      throw e
-    }
-  }
-
-  private fun passkeyRequest(uri: URI, json: String): LSHTTPResponseStatus.Responded.OK? {
-    var isFinishRequest = false
-    if (uri == parameters.authenticationDescription.passkey_login_finish
-      || uri == parameters.authenticationDescription.passkey_register_finish
-    ) {
-      isFinishRequest = true
-    }
-    logger.debug("$tag passkeyRequest ($uri) isFinishRequest: $isFinishRequest")
-
-    val httpRequest = this.http.newRequest(uri)
-      .setMethod(
-        Post(
-          json.toByteArray(Charset.forName("UTF-8")),
-          MIMEType("application", "json", mapOf())
-        )
-      )
-      .build()
-
-    httpRequest.execute().use { response ->
-      when (val status = response.status) {
-        is LSHTTPResponseStatus.Responded.OK -> {
-          logger.debug("$tag passkeyRequest ($uri) OK: ${status.bodyStream.toString()}")
-
-          // User is registered, registration started or finished successfully.
-          return status
-        }
-
-        is LSHTTPResponseStatus.Responded.Error -> {
-
-          val statusCode = status.properties?.status ?: 999
-          logger.debug("$tag passkeyRequest ($uri) ERROR: ${status.toString()}")
-          logger.debug("$tag passkeyRequest ($uri) ERROR: statusCode ${statusCode}")
-          val startRequestFailed = (!isFinishRequest && statusCode != 404)
-          if (isFinishRequest || startRequestFailed) {
-            throw Exception()
-          }
-
-          // User was not registered.
-          return null
-        }
-
-        is LSHTTPResponseStatus.Failed -> {
-          throw status.exception
-        }
-      }
-    }
-  }
-
   private fun passkeyLoginAsync(username: String) {
     this.logger.debug("Passkey Login Async")
 
@@ -166,7 +113,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
   }
 
   private fun postPasskeySuccessful(authInfo: PasskeyAuth) {
-    this.logger.debug("Passkey Login Successful: $authInfo")
+    this.logger.debug("Passkey Login Successful")
     this.profilesController.profileAccountLogin(
       ProfileAccountLoginRequest.EkirjastoComplete(
         accountId = this.parameters.accountID,
@@ -179,22 +126,34 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
   }
 
   private fun postPasskeyFailed(exception: Throwable) {
-    // TODO I don't know if this correct at all.
-    this.profilesController.profileAccountLogin(
-      ProfileAccountLoginRequest.EkirjastoCancel(
-        accountId = this.parameters.accountID,
-        description = this.parameters.authenticationDescription,
-        username = this.parameters.loginMethod.username?.value
-      )
-    )
+    val newDialog =
+      AlertDialog.Builder(this.requireActivity())
+        .setTitle(R.string.accountCreationFailed)
+        .setMessage(R.string.accountCreationFailedMessage)
+        .setPositiveButton(R.string.accountsDetails) { dialog, _ ->
+          this.showErrorPage(this.makeLoginTaskSteps(exception.message?:"Passkey login failed"))
+          dialog.dismiss()
+        }.create()
+    newDialog.show()
+  }
 
+  private fun makeLoginTaskSteps(
+    message: String
+  ): List<TaskStep> {
+    val taskRecorder = TaskRecorder.create()
+    taskRecorder.beginNewStep("Started E-kirjasto login...")
+    taskRecorder.currentStepFailed(message, "suomifiAccountCreationFailed")
+    return taskRecorder.finishFailure<AccountType>().steps
+  }
+
+  private fun showErrorPage(taskSteps: List<TaskStep>) {
     val parameters =
       ErrorPageParameters(
-        emailAddress = this.supportEmailAddress,
+        emailAddress = this.viewModel.supportEmailAddress,
         body = "",
-        subject = "[simplye-error-report]",
+        subject = "[ekirjasto-error-report]",
         attributes = sortedMapOf(),
-        taskSteps = listOf()
+        taskSteps = taskSteps
       )
 
     this.listener.post(AccountEkirjastoSuomiFiEvent.OpenErrorPage(parameters))
@@ -229,7 +188,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
       if (auth.success) {
         listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
       } else {
-        postPasskeyFailed(Exception("Passkey Authentication Failed: Got PasskeyAuth.success = false"))
+        postPasskeyFailed(Exception("Passkey Registration Failed"))
       }
     }
   }
