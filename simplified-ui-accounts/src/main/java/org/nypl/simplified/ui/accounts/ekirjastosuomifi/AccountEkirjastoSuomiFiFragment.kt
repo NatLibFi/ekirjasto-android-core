@@ -2,6 +2,7 @@ package org.nypl.simplified.ui.accounts.ekirjastosuomifi
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.INVISIBLE
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
@@ -17,6 +18,7 @@ import org.nypl.simplified.taskrecorder.api.TaskStep
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import org.nypl.simplified.webview.WebViewUtilities
 import org.librarysimplified.ui.accounts.R
+import org.slf4j.LoggerFactory
 
 /**
  * A fragment that performs the E-kirjasto login workflow.
@@ -40,6 +42,7 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
     }
   }
 
+  private val logger = LoggerFactory.getLogger(AccountEkirjastoSuomiFiFragment::class.java)
   private val eventSubscriptions: CompositeDisposable =
     CompositeDisposable()
 
@@ -108,7 +111,8 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
   }
 
   private fun onSuomiFiEventAccessTokenStartReceive() {
-    this.webView.visibility = View.GONE;
+    logger.debug("Access token Start Receive - webview should be invisible")
+    this.webView.visibility = INVISIBLE
   }
 
   private fun onWebViewClientReady() {
