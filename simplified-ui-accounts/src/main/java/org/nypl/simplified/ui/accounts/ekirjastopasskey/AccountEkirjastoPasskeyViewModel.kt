@@ -327,7 +327,7 @@ class AccountEkirjastoPasskeyViewModel (
         bodyString.toByteArray(Charset.forName("UTF-8")),
         MIMEType("application", "json", mapOf())
       ))
-      .addHeader("accept","json")
+      .addHeader("accept","application/json")
       .build()
   }
 

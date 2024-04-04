@@ -33,9 +33,9 @@ class ViewsForEkirjasto(
   private val logger = LoggerFactory.getLogger(ViewsForEkirjasto::class.java)
 
   private var activeLoginMethod : EkirjastoLoginMethod = EkirjastoLoginMethod.SuomiFi()
-  val passkeyState
-    get() = (activeLoginMethod as? EkirjastoLoginMethod.Passkey)?.loginState
-        ?: EkirjastoLoginMethod.Passkey.LoginState.RegisterUnavailable
+
+  var passkeyState : EkirjastoLoginMethod.Passkey.LoginState = EkirjastoLoginMethod.Passkey.LoginState.RegisterUnavailable
+
 
   private val tokenTextListener =
     OnTextChangeListener(
@@ -78,8 +78,9 @@ class ViewsForEkirjasto(
         }
         this.passkeyLoginButton.text = res.getString(R.string.accountLoginWith, "passkey")
         this.passkeyLoginButton.setOnClickListener{
+          this.passkeyState = EkirjastoLoginMethod.Passkey.LoginState.LoggingIn
           this.activeLoginMethod = EkirjastoLoginMethod.Passkey(
-            loginState = EkirjastoLoginMethod.Passkey.LoginState.LoggingIn,
+            loginState = this.passkeyState,
             username = getUsername(),
             circulationToken = null)
           status.onClick.invoke()
@@ -112,9 +113,9 @@ class ViewsForEkirjasto(
 //        }
       }
       EkirjastoLoginMethod.Passkey.LoginState.LoggedIn -> {
+        this.cancelContainer.visibility = VISIBLE
         this.passkeyLoginContainer.visibility = GONE
         this.suomifiLoginContainer.visibility = GONE
-        this.cancelContainer.visibility = VISIBLE
         logger.warn("Already logged in with passkey. Should not have LoginButton enabled status!")
       }
     }
@@ -241,6 +242,7 @@ class ViewsForEkirjasto(
   }
 
   fun updatePasskeyState(state: EkirjastoLoginMethod.Passkey.LoginState) {
+    this.passkeyState = state
     when (val method = activeLoginMethod){
       is EkirjastoLoginMethod.Passkey -> {
         activeLoginMethod = EkirjastoLoginMethod.Passkey(
