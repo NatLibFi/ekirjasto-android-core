@@ -5,6 +5,9 @@ import android.content.pm.PackageManager
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.http.vanilla.LSHTTPClients
+import org.librarysimplified.http.vanilla.LSHTTPProblemReportParsers
+import org.librarysimplified.http.vanilla.extensions.LSHTTPInterceptorFactoryType
+import java.util.ServiceLoader
 import java.util.concurrent.TimeUnit
 
 object MainHTTP {
@@ -31,6 +34,10 @@ object MainHTTP {
         timeout = Pair(15L, TimeUnit.MINUTES)
       )
 
-    return LSHTTPClients().create(context, configuration)
+    // Add Accept-Language interceptor to the list of auto-discovered interceptors
+    val interceptors = ServiceLoader.load(LSHTTPInterceptorFactoryType::class.java).toList()
+      .plus(CustomHTTPInterceptors.AcceptLanguageFactory())
+
+    return LSHTTPClients(LSHTTPProblemReportParsers(), interceptors).create(context, configuration)
   }
 }
