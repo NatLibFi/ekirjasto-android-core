@@ -7,6 +7,8 @@ import androidx.credentials.exceptions.CreateCredentialCustomException
 import androidx.credentials.exceptions.CreateCredentialInterruptedException
 import androidx.credentials.exceptions.CreateCredentialProviderConfigurationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
 import androidx.lifecycle.ViewModel
 import com.fasterxml.jackson.core.JsonParser
@@ -72,22 +74,26 @@ class AccountEkirjastoPasskeyViewModel (
         // Handle the passkey DOM errors thrown according to the
         // WebAuthn spec.
         logger.error("CreatePublicKeyCredentialDomException")
+        steps.currentStepFailed(e.message?:"Credential Manager Error", e.domError.type, e)
         //handlePasskeyError(e.domError)
       }
       is CreateCredentialCancellationException -> {
         // The user intentionally canceled the operation and chose not
         // to register the credential.
         logger.error("CreateCredentialCancellationException")
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
       }
       is CreateCredentialInterruptedException -> {
         // Retry-able error. Consider retrying the call.
         logger.error("CreateCredentialInterruptedException")
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
       }
       is CreateCredentialProviderConfigurationException -> {
         // Your app is missing the provider configuration dependency.
         // Most likely, you're missing the
         // "credentials-play-services-auth" module.
         logger.error("CreateCredentialProviderConfigurationException")
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
       }
       is CreateCredentialUnknownException -> {
         //TODO alternate passkey procedures.
@@ -98,6 +104,7 @@ class AccountEkirjastoPasskeyViewModel (
         //theory is it is trying to use a backup method using fido2 api,
         // so implementing fido2 when such message is given may be valid way use passkeys on those devices
         logger.error("CreateCredentialUnknownException")
+        steps.currentStepFailed(e.message?:"Unknown Error", "", e)
       }
       is CreateCredentialCustomException -> {
         // You have encountered an error from a 3rd-party SDK. If you
@@ -107,11 +114,16 @@ class AccountEkirjastoPasskeyViewModel (
         // that SDK to match with e.type. Otherwise, drop or log the
         // exception.
         logger.error("CreateCredentialCustomException type={}, message={}",e.type, e.message)
-
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
+      }
+      is GetCredentialUnsupportedException -> {
+        logger.error("GetCredentialUnsupportedException", e)
+        steps.currentStepFailed(e.message?:"Credentials not Supported", "", e)
       }
       else -> {
         logger.error("Unexpected exception type ${e::class.java.name}: ${e.message}")
         logger.error(e.stackTraceToString())
+        steps.currentStepFailed("Unexpected Error", e.message?:"", e)
       }
     }
 
