@@ -26,6 +26,9 @@ import org.librarysimplified.http.api.LSHTTPResponseType
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
+import org.nypl.simplified.taskrecorder.api.TaskRecorder
+import org.nypl.simplified.taskrecorder.api.TaskRecorderType
+import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PasskeyAuth
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.AuthenticateFinishRequest
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterResult
@@ -58,6 +61,7 @@ class AccountEkirjastoPasskeyViewModel (
   private val authenticator = Authenticator(application, credentialManager)
   private val buildConfig =
     services.requireService(BuildConfigurationServiceType::class.java)
+  private val steps: TaskRecorderType = TaskRecorder.create()
 
 
 
@@ -121,7 +125,7 @@ class AccountEkirjastoPasskeyViewModel (
 
   }
 
-  suspend fun passkeyLogin(username: String): PasskeyAuth {
+  suspend fun passkeyLogin(username: String): TaskResult<PasskeyAuth> {
 
     lateinit var startResponse : AuthenticatePublicKey
     lateinit var challengeResponse : AuthenticateResult
@@ -129,42 +133,47 @@ class AccountEkirjastoPasskeyViewModel (
     //TODO TaskRecording
 
     try {
+      steps.beginNewStep("Passkey Login Start")
+      steps.addAttribute("username", username)
       this.logger.debug("Passkey Login Start")
       startResponse = requestPasskeyLoginStart(username)
       this.logger.debug("Passkey Login Start responded")
+      steps.currentStepSucceeded("Login start request OK")
     } catch (e: Exception){
       handleFailure(e)
-      return PasskeyAuth.Fail(e)
+      return steps.finishFailure()
     }
 
     try {
       this.logger.debug("Passkey Login Challenge")
+      steps.beginNewStep("Authenticator Challenge")
       challengeResponse = requestPasskeyLoginChallenge(startResponse)
       this.logger.debug("Passkey Login Challenge responded")
+      steps.currentStepSucceeded("Authentication completed")
     } catch (e: Exception) {
       handleFailure(e)
-      return PasskeyAuth.Fail(e)
-
+      return steps.finishFailure()
     }
 
     when (challengeResponse) {
 
       is AuthenticateResult.Success -> {
-        try {
+        return try {
           this.logger.debug("Passkey Login Complete")
+          steps.beginNewStep("Complete Login")
           val auth = requestPasskeyLoginComplete(challengeResponse)
-          if (auth.success){
-            postPasskeyComplete(username, auth)
-          }
-          return auth
+          postPasskeyComplete(username, auth)
+          steps.currentStepSucceeded("Complete Login succeeded")
+          steps.finishSuccess(auth)
         } catch (e: Exception) {
           handleFailure(e)
-          return PasskeyAuth.Fail(e)
+          steps.finishFailure()
         }
       }
       is AuthenticateResult.Failure -> {
-        logger.debug("Authenticator result Failed")
-        return PasskeyAuth.Fail(Exception("Fail"))
+        logger.warn("Authenticator result Failed")
+        steps.currentStepFailed(challengeResponse.message, "AuthenticatorError", challengeResponse.error)
+        return steps.finishFailure()
       }
     }
   }
@@ -224,61 +233,67 @@ class AccountEkirjastoPasskeyViewModel (
     val requestBody: String = objectMapper.writeValueAsString(jsonNode)
     var response = sendRequest(createPostRequest(description.passkey_login_finish, requestBody))
     var responseBodyNode: JsonNode?
-    when (val status=response.status){
+    when (val status=response.status) {
       is LSHTTPResponseStatus.Responded.OK -> {
         responseBodyNode = bodyAsJsonNode(status.bodyStream!!)
       }
-      else -> {
-        throw Exception("Login Finish request failed")
+      is LSHTTPResponseStatus.Responded.Error -> {
+        throw Exception("Login Finish request errror $status")
+      }
+      is LSHTTPResponseStatus.Failed -> {
+        throw status.exception
+
       }
     }
 
-    responseBodyNode.let {
-      val token = it["token"].asText()
-      val exp = it["exp"].asLong()
-      if (token != null) {
-        return PasskeyAuth.Ok(token,exp)
-      }
-    }
-    throw Exception("Passkey Login Complete Failed")
+    val token = responseBodyNode["token"].asText()
+    val exp = responseBodyNode["exp"].asLong()
+    return PasskeyAuth(token,exp)
   }
 
-  suspend fun passkeyRegister(username: String):PasskeyAuth {
+  suspend fun passkeyRegister(username: String) : TaskResult<PasskeyAuth> {
     val uri = description.passkey_register_start
     val body = mapToJson(mapOf("username" to username))
     lateinit var registerStartResponse: JsonNode
     lateinit var challengeResponse: RegisterResult
     lateinit var authResponse: PasskeyAuth
-    //TODO TaskRecording
     try {
       logger.debug("Register Start")
+      steps.beginNewStep("Passkey Register Start")
       registerStartResponse = requestPasskeyRegisterStart(uri, body)
       logger.debug("Register Start Complete")
+      steps.currentStepSucceeded("Passkey Register Start Success")
     } catch (e: Exception) {
       handleFailure(e)
+      return steps.finishFailure()
     }
 
     try {
       logger.debug("Register Challenge")
+      steps.beginNewStep("Passkey Register Challenge Start")
       challengeResponse = startPasskeyRegisterChallenge(username, registerStartResponse)
       logger.debug("Register Challenge Complete")
+      steps.currentStepSucceeded("Passkey Register Challenge completed")
     } catch (e: Exception) {
       handleFailure(e)
+      return steps.finishFailure()
     }
 
     try {
       logger.debug("Register Finish")
+      steps.beginNewStep("Passkey Register Finish start")
       authResponse = passkeyRegisterFinish(username, challengeResponse)
       logger.debug("Register Finish Complete")
+      steps.currentStepSucceeded("Passkey Register Finished successfully")
     } catch (e: Exception){
       handleFailure(e)
+      return steps.finishFailure()
     }
 
-    if (authResponse.success){
-      postPasskeyComplete(username, authResponse)
-    }
+    postPasskeyComplete(username, authResponse)
 
-    return authResponse
+    return steps.finishSuccess(authResponse)
+
   }
 
   private suspend fun requestPasskeyRegisterStart(uri: URI, body: String): JsonNode {
@@ -319,12 +334,16 @@ class AccountEkirjastoPasskeyViewModel (
         is LSHTTPResponseStatus.Responded.OK -> {
           val responseBody: JsonNode = bodyAsJsonNode(status.bodyStream!!)
           return PasskeyAuth(
-            success = responseBody["token"].asText() != null,
             token = responseBody["token"].asText(),
             exp = responseBody["exp"].asLong()
           )
         }
-        else -> throw Exception("Passkey Register Finish request failed: $status")
+        is LSHTTPResponseStatus.Responded.Error -> {
+          throw Exception("Register Finish Error: $status")
+        }
+        is LSHTTPResponseStatus.Failed -> {
+          throw status.exception
+        }
       }
     }
   }

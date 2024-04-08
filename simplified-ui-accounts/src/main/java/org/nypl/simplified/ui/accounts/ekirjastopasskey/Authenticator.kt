@@ -39,24 +39,21 @@ class Authenticator (
     var result: GetCredentialResponse? = null
     try {
       result = credentialManager.getCredential(application, request)
-    } catch (e: Exception){
-      logger.error("Authenticate Error",e)
+    } catch (e: Exception) {
+      return AuthenticateResult.Failure("Authentication Error", e)
     }
-    result?.let {
+    result.let {
       try{
-        when (val cred = it.credential){
+        when (val cred = it.credential) {
           is PublicKeyCredential -> {
             return AuthenticateResult.parseJson(cred)
           }
           else -> throw Exception("Invalid credential type: ${cred.javaClass.name}")
         }
-      } catch(e: JsonParseException){
-        logger.error("Error parsing response", e)
+      } catch(e: JsonParseException) {
+        return AuthenticateResult.Failure("Error Parsing credentials", e)
       }
     }
-
-    return AuthenticateResult.Failure()
-
   }
 
   suspend fun register(parameters: RegisterParameters): RegisterResult {
