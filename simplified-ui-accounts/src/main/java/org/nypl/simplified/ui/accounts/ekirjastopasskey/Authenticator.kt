@@ -7,7 +7,6 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.PublicKeyCredential
-import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -15,8 +14,8 @@ import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.AuthenticateResult
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.authenticate.PublicKeyCredentialRequestOptions
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterChallengeRequestResponse
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterResult
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterParameters
+import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.register.RegisterResult
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -36,7 +35,7 @@ class Authenticator (
     val request = GetCredentialRequest.Builder()
       .addCredentialOption(credOption)
       .build()
-    var result: GetCredentialResponse? = null
+    val result: GetCredentialResponse?
     result = credentialManager.getCredential(application, request)
     result.let {
       when (val cred = it.credential) {
@@ -50,7 +49,7 @@ class Authenticator (
 
   suspend fun register(parameters: RegisterParameters): RegisterResult {
 
-    lateinit var responseJson: JsonNode;
+    lateinit var responseJson: JsonNode
     val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(
       requestJson = objectMapper.writeValueAsString(parameters)
     )
