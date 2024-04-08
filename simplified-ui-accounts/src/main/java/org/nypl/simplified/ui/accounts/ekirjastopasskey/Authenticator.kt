@@ -37,21 +37,13 @@ class Authenticator (
       .addCredentialOption(credOption)
       .build()
     var result: GetCredentialResponse? = null
-    try {
-      result = credentialManager.getCredential(application, request)
-    } catch (e: Exception) {
-      return AuthenticateResult.Failure("Authentication Error", e)
-    }
+    result = credentialManager.getCredential(application, request)
     result.let {
-      try{
-        when (val cred = it.credential) {
-          is PublicKeyCredential -> {
-            return AuthenticateResult.parseJson(cred)
-          }
-          else -> throw Exception("Invalid credential type: ${cred.javaClass.name}")
+      when (val cred = it.credential) {
+        is PublicKeyCredential -> {
+          return AuthenticateResult.parseJson(cred)
         }
-      } catch(e: JsonParseException) {
-        return AuthenticateResult.Failure("Error Parsing credentials", e)
+        else -> throw Exception("Invalid credential type: ${cred.javaClass.name}")
       }
     }
   }
