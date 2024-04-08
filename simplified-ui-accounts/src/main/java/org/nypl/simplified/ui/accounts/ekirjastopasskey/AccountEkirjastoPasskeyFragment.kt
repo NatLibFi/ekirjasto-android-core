@@ -1,25 +1,22 @@
 package org.nypl.simplified.ui.accounts.ekirjastopasskey
 
-import androidx.core.os.bundleOf
-import androidx.credentials.CredentialManager
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
+import androidx.credentials.CredentialManager
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
-import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
-import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.taskrecorder.api.TaskStep
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PasskeyAuth
@@ -64,15 +61,12 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
 
   private val profilesController = services.requireService(ProfilesControllerType::class.java)
 
-  //todo remove
-  private val http = this.services.requireService(LSHTTPClientType::class.java)
-
-  private val tag = "PASSKEY";
+  private val tag = "PASSKEY"
 
   val supportEmailAddress: String = buildConfig.supportErrorReportEmailAddress
 
 
-  private lateinit var credentialManager: CredentialManager;// = CredentialManager.create(requireContext())
+  private lateinit var credentialManager: CredentialManager
 
   private lateinit var progress: ProgressBar
 
