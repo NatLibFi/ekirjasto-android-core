@@ -9,14 +9,8 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.launch
-import java.net.URI
-import java.nio.charset.Charset
-import one.irradia.mime.api.MIMEType
 import org.librarysimplified.http.api.LSHTTPClientType
-import org.librarysimplified.http.api.LSHTTPRequestBuilderType.Method.Post
-import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
 import org.nypl.simplified.accounts.database.api.AccountType
@@ -26,10 +20,10 @@ import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
+import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.taskrecorder.api.TaskStep
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.datamodels.PasskeyAuth
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiInternalEvent
 import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import org.slf4j.LoggerFactory
@@ -99,19 +93,6 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     credentialManager = CredentialManager.create(requireContext())
   }
 
-  private fun passkeyLoginAsync(username: String) {
-    this.logger.debug("Passkey Login Async")
-
-    lifecycleScope.launch {
-      val auth: PasskeyAuth = viewModel.passkeyLogin(username)
-      if (auth.success) {
-        postPasskeySuccessful(auth)
-      } else {
-        postPasskeyFailed(Exception("Passkey authenticate failed"))
-      }
-    }
-  }
-
   private fun postPasskeySuccessful(authInfo: PasskeyAuth) {
     this.logger.debug("Passkey Login Successful")
     this.profilesController.profileAccountLogin(
@@ -125,26 +106,19 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     this.listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
   }
 
-  private fun postPasskeyFailed(exception: Throwable) {
+  private fun postPasskeyFailed(result: TaskResult.Failure<PasskeyAuth>) {
     val newDialog =
       AlertDialog.Builder(this.requireActivity())
         .setTitle(R.string.accountCreationFailed)
         .setMessage(R.string.accountCreationFailedMessage)
         .setPositiveButton(R.string.accountsDetails) { dialog, _ ->
-          this.showErrorPage(this.makeLoginTaskSteps(exception.message?:"Passkey login failed"))
+          this.showErrorPage(result.steps)
           dialog.dismiss()
         }.create()
     newDialog.show()
   }
 
-  private fun makeLoginTaskSteps(
-    message: String
-  ): List<TaskStep> {
-    val taskRecorder = TaskRecorder.create()
-    taskRecorder.beginNewStep("Started E-kirjasto login...")
-    taskRecorder.currentStepFailed(message, "suomifiAccountCreationFailed")
-    return taskRecorder.finishFailure<AccountType>().steps
-  }
+//  private fun makeLoginTaskSteps(
 
   private fun showErrorPage(taskSteps: List<TaskStep>) {
     val parameters =
@@ -177,6 +151,18 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     }
   }
 
+  private fun passkeyLoginAsync(username: String) {
+    this.logger.debug("Passkey Login Async")
+
+    lifecycleScope.launch {
+      val result = viewModel.passkeyLogin(username)
+      when (result){
+        is TaskResult.Success<PasskeyAuth> -> postPasskeySuccessful(result.result)
+        is TaskResult.Failure<PasskeyAuth> -> postPasskeyFailed(result)
+      }
+    }
+  }
+
   private fun passkeyRegisterAsync(username: String) {
     logger.debug("Passkey Register Async")
     if (parameters.loginMethod.circulationToken == null) {
@@ -184,11 +170,10 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
       return
     }
     lifecycleScope.launch {
-      val auth = viewModel.passkeyRegister(username)
-      if (auth.success) {
-        listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
-      } else {
-        postPasskeyFailed(Exception("Passkey Registration Failed"))
+      val result = viewModel.passkeyRegister(username)
+      when (result){
+        is TaskResult.Success<PasskeyAuth> -> listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
+        is TaskResult.Failure<PasskeyAuth> -> postPasskeyFailed(result)
       }
     }
   }

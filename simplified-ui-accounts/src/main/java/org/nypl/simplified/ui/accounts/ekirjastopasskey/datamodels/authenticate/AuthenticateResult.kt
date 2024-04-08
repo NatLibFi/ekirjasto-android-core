@@ -21,7 +21,10 @@ sealed class AuthenticateResult {
     }
   }
 
-  class Failure : AuthenticateResult()
+  data class Failure(
+    val message: String,
+    val error: Exception?
+  ) : AuthenticateResult()
   data class Success(
     val id: String,
     val rawId: String,
