@@ -634,7 +634,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           EkirjastoLoginMethod.Passkey(
             loginState = this.authenticationViews.getEkirjastoPasskeyState(),
             circulationToken = token,
-            username = authenticationViews.getEkirjastoLoginUsername()
           )
         )
       )

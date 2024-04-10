@@ -2,6 +2,8 @@ package org.nypl.simplified.ui.accounts.ekirjasto
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -9,6 +11,7 @@ import androidx.fragment.app.viewModels
 import io.reactivex.disposables.CompositeDisposable
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
+import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
 import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoggedIn
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoggingIn
@@ -18,9 +21,10 @@ import org.nypl.simplified.accounts.api.AccountLoginState.AccountNotLoggedIn
 import org.nypl.simplified.android.ktx.supportActionBar
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.ui.accounts.AccountDetailEvent
-import org.nypl.simplified.ui.accounts.AccountDetailViewModel
 import org.nypl.simplified.ui.accounts.AccountFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceToolbar
 
@@ -38,7 +42,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private val services = Services.serviceDirectory()
 
-  private val viewModel: AccountDetailViewModel by viewModels(
+  private val viewModel: EkirjastoAccountViewModel by viewModels(
     factoryProducer = {
       EkirjastoAccountViewModelFactory(
         account = this.parameters.accountID,
@@ -87,6 +91,18 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   override fun onStart() {
     super.onStart()
     this.configureToolbar()
+    this.buttonLogout.setOnClickListener(){
+      this.viewModel.tryLogout()
+    }
+    this.buttonLoginSuomiFi.setOnClickListener {
+      onTryLoginSuomiFi()
+    }
+    this.buttonLoginPasskey.setOnClickListener {
+      onTryLoginPasskey()
+    }
+    this.buttonRegisterPasskey.setOnClickListener {
+      onTryRegisterPasskey()
+    }
 
     /*
      * Configure the bookmark syncing switch to enable/disable syncing permissions.
@@ -138,7 +154,10 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   }
 
   private fun OnConfigureNotLoggedIn(loginState: AccountNotLoggedIn) {
-    TODO("Not yet implemented")
+    buttonLogout.visibility = GONE
+    buttonLoginSuomiFi.visibility = VISIBLE
+    buttonLoginPasskey.visibility = VISIBLE
+    buttonRegisterPasskey.visibility = GONE
   }
 
   private fun OnConfigureAccountLoggingIn(loginState: AccountLoggingIn) {
@@ -154,7 +173,10 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   }
 
   private fun OnConfigureAccountLoggedIn(loginState: AccountLoggedIn) {
-    TODO("Not yet implemented")
+    buttonLogout.visibility = VISIBLE
+    buttonLoginSuomiFi.visibility = GONE
+    buttonLoginPasskey.visibility = GONE
+    buttonRegisterPasskey.visibility = VISIBLE
   }
 
   private fun OnConfigureAccountLoggingOut(loginState: AccountLoginState.AccountLoggingOut) {
@@ -163,6 +185,72 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private fun OnConfigureAccountLogoutFailed(loginState: AccountLoginState.AccountLogoutFailed) {
     TODO("Not yet implemented")
+  }
+
+  private fun onTryRegisterPasskey() {
+    val description = this.viewModel.authenticationDescription
+    val credentials = this.viewModel.account.loginState.credentials
+    val token = credentials?.let {
+      if (it is AccountAuthenticationCredentials.Ekirjasto) {
+        it.accessToken
+      } else {
+        null
+      }
+    }
+    this.viewModel.tryLogin(
+      ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
+        accountId = this.parameters.accountID,
+        description = description
+      )
+    )
+    this.listener.post(
+      AccountDetailEvent.OpenEkirjastoPasskeyLogin(
+        this.parameters.accountID,
+        description,
+        EkirjastoLoginMethod.Passkey(
+          loginState = EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable,
+          circulationToken = token,
+        )
+      )
+    )
+  }
+
+  private fun onTryLoginPasskey(
+  ) {
+
+    val description = this.viewModel.authenticationDescription
+    this.logger.debug("TryEkirjastoPasskeyLogin")
+
+    this.viewModel.tryLogin(
+      ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
+      accountId = this.parameters.accountID,
+      description = description
+    ))
+    this.listener.post(
+      AccountDetailEvent.OpenEkirjastoPasskeyLogin(
+        this.parameters.accountID,
+        description,
+        EkirjastoLoginMethod.Passkey(
+          loginState = EkirjastoLoginMethod.Passkey.LoginState.LoggingIn,
+          circulationToken = null,
+        )
+      )
+    )
+
+  }
+  // Finland
+  private fun onTryLoginSuomiFi(
+  ) {
+    val authenticationDescription = this.viewModel.authenticationDescription
+    this.viewModel.tryLogin(
+      ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi(
+        accountId = this.parameters.accountID,
+        description = authenticationDescription
+      )
+    )
+    this.listener.post(
+      AccountDetailEvent.OpenEkirjastoSuomiFiLogin(this.parameters.accountID, authenticationDescription, EkirjastoLoginMethod.SuomiFi())
+    )
   }
 
   override fun onStop() {

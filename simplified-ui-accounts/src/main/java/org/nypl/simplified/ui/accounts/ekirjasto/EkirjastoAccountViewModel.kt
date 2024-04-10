@@ -13,6 +13,7 @@ import org.nypl.simplified.accounts.api.AccountEventLoginStateChanged
 import org.nypl.simplified.accounts.api.AccountEventUpdated
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountLoginState
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.bookmarks.api.BookmarkEvent
 import org.nypl.simplified.bookmarks.api.BookmarkServiceType
@@ -60,6 +61,10 @@ class EkirjastoAccountViewModel(
 
   val account: AccountType =
     this.accountLive.value!!
+
+
+  val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto =
+    this.account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
 
   /**
    * A live data element that tracks the status of the bookmark syncing switch for the
