@@ -14,7 +14,7 @@ import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountUsername
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus
 import org.nypl.simplified.ui.accounts.OnTextChangeListener
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.slf4j.LoggerFactory
 
 class ViewsForEkirjasto(

@@ -35,16 +35,14 @@ import org.nypl.simplified.ui.accounts.AccountListFragmentParameters
 import org.nypl.simplified.ui.accounts.AccountListRegistryEvent
 import org.nypl.simplified.ui.accounts.AccountListRegistryFragment
 import org.nypl.simplified.ui.accounts.AccountPickerEvent
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.AccountEkirjastoPasskeyFragment
 import org.nypl.simplified.ui.accounts.ekirjastopasskey.AccountEkirjastoPasskeyFragmentParameters
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiFragment
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiFragmentParameters
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiEvent
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragment
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Event
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Fragment
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20FragmentParameters
-import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 import org.nypl.simplified.ui.errorpage.ErrorPageEvent
 import org.nypl.simplified.ui.errorpage.ErrorPageFragment
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
@@ -723,7 +721,7 @@ internal class MainFragmentListenerDelegate(
       }
       is EkirjastoLoginMethod.Passkey -> {
         this.navigator.addFragment(
-          fragment = AccountEkirjastoPasskeyFragment.create(
+          fragment = org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragment.create(
             AccountEkirjastoPasskeyFragmentParameters(
               accountID = account,
               authenticationDescription = authenticationDescription,

@@ -2,7 +2,7 @@ package org.nypl.simplified.ui.accounts
 
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.EkirjastoLoginMethod
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import java.net.URL
 
