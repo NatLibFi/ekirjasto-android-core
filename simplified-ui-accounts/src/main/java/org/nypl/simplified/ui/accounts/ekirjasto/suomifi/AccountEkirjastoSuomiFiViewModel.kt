@@ -172,7 +172,6 @@ class AccountEkirjastoSuomiFiViewModel(
           accountId = this.account,
           description = this.description,
           ekirjastoToken = ekirjastoToken,
-          username = null
         )
       )
       this.eventSubject.onNext(
@@ -193,7 +192,6 @@ class AccountEkirjastoSuomiFiViewModel(
         ProfileAccountLoginRequest.EkirjastoCancel(
           accountId = this.account,
           description = this.description,
-          username = null
         )
       )
     }
