@@ -27,7 +27,6 @@ import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.ui.accounts.AccountCardCreatorFragment
 import org.nypl.simplified.ui.accounts.AccountCardCreatorParameters
 import org.nypl.simplified.ui.accounts.AccountDetailEvent
-import org.nypl.simplified.ui.accounts.AccountDetailFragment
 import org.nypl.simplified.ui.accounts.AccountFragmentParameters
 import org.nypl.simplified.ui.accounts.AccountListEvent
 import org.nypl.simplified.ui.accounts.AccountListFragment
@@ -35,6 +34,7 @@ import org.nypl.simplified.ui.accounts.AccountListFragmentParameters
 import org.nypl.simplified.ui.accounts.AccountListRegistryEvent
 import org.nypl.simplified.ui.accounts.AccountListRegistryFragment
 import org.nypl.simplified.ui.accounts.AccountPickerEvent
+import org.nypl.simplified.ui.accounts.ekirjasto.EKirjastoAccountFragment
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiEvent
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragment
@@ -671,9 +671,9 @@ internal class MainFragmentListenerDelegate(
     comingFromDeepLink: Boolean,
     barcode: String?
   ) {
-    this.logger.debug("openSettingsAccount called with comingFromDeepLink: $comingFromDeepLink")
+    this.logger.debug("Open Ekirjasto Account: called with comingFromDeepLink: $comingFromDeepLink")
     this.navigator.addFragment(
-      fragment = AccountDetailFragment.create(
+      fragment = EKirjastoAccountFragment.create(
         AccountFragmentParameters(
           accountID = accountID,
           showPleaseLogInTitle = comingFromBookLoanRequest,

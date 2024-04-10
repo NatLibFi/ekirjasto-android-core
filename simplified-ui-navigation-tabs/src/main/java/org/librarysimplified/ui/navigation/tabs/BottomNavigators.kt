@@ -19,6 +19,8 @@ import org.librarysimplified.ui.catalog.CatalogFeedArguments
 import org.librarysimplified.ui.catalog.CatalogFeedFragment
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership
 import org.librarysimplified.ui.tabs.R
+import org.nypl.simplified.ui.accounts.AccountFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjasto.EKirjastoAccountFragment
 import org.nypl.simplified.ui.settings.SettingsMainFragment
 import org.slf4j.LoggerFactory
 
@@ -79,7 +81,10 @@ object BottomNavigators {
             )
           },
           R.id.tabSettings to {
-            createSettingsFragment(R.id.tabSettings)
+            createSettingsFragment(
+              R.id.tabSettings,
+              profilesController,
+              accountProviders.defaultProvider)
           }
         ),
         defaultTab = R.id.tabCatalog,
@@ -150,9 +155,19 @@ object BottomNavigators {
     )
   }
 
-  private fun createSettingsFragment(id: Int): Fragment {
+  private fun createSettingsFragment(
+    id: Int,
+    profilesController: ProfilesControllerType,
+    defaultProvider: AccountProviderType
+    ): Fragment {
+    val account = pickDefaultAccount(profilesController, defaultProvider)
     logger.debug("[{}]: creating settings fragment", id)
-    return SettingsMainFragment()
+    return EKirjastoAccountFragment.create(AccountFragmentParameters(
+      accountID = account.id,
+      showPleaseLogInTitle = false,
+      hideToolbar = false,
+      barcode = null
+    ))
   }
 
   private fun createHoldsFragment(
