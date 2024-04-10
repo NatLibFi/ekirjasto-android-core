@@ -1,0 +1,3 @@
+# Replace "test" here with the liblcp AAR secret
+ekirjasto.liblcp.repositorylayout=/[organisation]/[module]/android/aar/test/[revision].[ext]
+

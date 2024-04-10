@@ -1,1 +1,1306 @@
-{"data":{"contentDescriptionBack":{"string":"Takaisin"},"contentDescriptionLogo":{"string":"Logo"},"search":{"string":"Hae…"},"resolving":{"string":"Selvitetään tilintarjoajaa..."},"resolvingAuthDocument":{"string":"Selvitetään todennusdokumenttia…"},"resolvingAuthDocumentBasicTokenMalformed":{"string":"Perustunnistejärjestelmän kuvauksen on sisällettävä todennuksen URI."},"resolvingAuthDocumentCOPPAAgeGateMalformed":{"string":"COPPA-säännön ikäportin kuvauksessa on eriteltävä yli ja alle 13-vuotiaiden URI."},"resolvingAuthDocumentMissingURI":{"string":"Todennusdokumentille ei annettu URIa."},"resolvingAuthDocumentNoStartURI":{"string":"Todennusdokumentissa ei annettu aloitusluettelon URIa."},"resolvingAuthDocumentNoUsableAuthenticationTypes":{"string":"Tili ei määrittänyt sellaista todennustyyppiä, jonka ymmärtäisimme."},"resolvingAuthDocumentOAuthMalformed":{"string":"OAuth-järjestelmän kuvauksen on sisällettävä todennuksen URI."},"resolvingAuthDocumentSAML20Malformed":{"string":"SAML 2.0 -järjestelmän kuvauksen on sisällettävä todennuksen URI."},"resolvingAuthDocumentParseFailed":{"string":"Todennusdokumentti oli virheellisesti muodostettu eikä sitä voitu jäsentää."},"resolvingAuthDocumentRetrievalFailed":{"string":"Todennusdokumenttia ei voitu noutaa palvelimelta."},"resolvingAuthDocumentRetrievalFailedWithProblem":{"string":"Todennusdokumenttia ei voitu noutaa palvelimelta."},"resolvingAuthDocumentUnusableLink":{"string":"Emme ymmärtäneet todennusdokumentin linkkiä."},"resolvingUnexpectedException":{"string":"Odottamaton poikkeus vastaanotettiin ratkaisun aikana!"},"dialog_manual_passphrase_cancel":{"string":"Peruuta"},"dialog_manual_passphrase_done":{"string":"Valmis"},"dialog_manual_passphrase_hint":{"string":"Salasana"},"dialog_manual_passphrase_title":{"string":"Anna LCP-salasana"},"bookPreviewPlayerInitialTime":{"string":"00:00:00"},"bookPreviewPlayerSeek30":{"string":"30"},"bookPreviewFailedTitle":{"string":"Kirjan esikatselun lataaminen epäonnistui"},"bookPreviewFailedMessage":{"string":"Tämän kirjan esikatselun lataamisessa tapahtui virhe. Yritä myöhemmin uudelleen."},"bookPreviewAccessibilityBack":{"string":"Takaisin"},"bookPreviewAccessibilityForward30":{"string":"Kelaa eteenpäin 30 sekuntia"},"bookPreviewAccessibilityBackward30":{"string":"Kelaa taaksepäin 30 sekuntia"},"bookPreviewAccessibilityPlay":{"string":"Toista"},"bookPreviewAccessibilityPause":{"string":"Keskeytä"},"bookPreviewAccessibilityCover":{"string":"Kirjan kansi"},"bookPreviewAccessibilityTimeCurrent":{"string":"%s toistettu"},"bookPreviewAccessibilityTimeRemaining":{"string":"%s jäljellä"},"bookPreviewAccessibilityHours":{"string":"tuntia"},"bookPreviewAccessibilityMinutes":{"string":"minuuttia"},"bookPreviewAccessibilitySeconds":{"string":"sekuntia"},"bookPreviewAccessibilityHour":{"string":"tunti"},"bookPreviewAccessibilityMinute":{"string":"minuutti"},"bookPreviewAccessibilitySecond":{"string":"sekunti"},"contentDescriptionTutorialPage":{"string":"Tutoriaalisivu"},"contentDescriptionSkipButton":{"string":"Ohita-painike"},"contentDescriptionStep1":{"string":"Vaihe 1 - Etsi kirjastosi"},"contentDescriptionStep2":{"string":"Vaihe 2 - Etkö löydä kirjastoasi? Palacen kirjahyllystä löydät yli 10 000 ilmaista kirjaa, joista voit nauttia nyt"},"contentDescriptionStep3":{"string":"Vaihe 3 - Lue. Kuuntele. Nauti!"},"revokeACSDeleteRights":{"string":"Poistetaan Adobe ACS:n oikeuksia koskevia tietoja…"},"revokeACSDeleteRightsFailed":{"string":"Adobe ACS:n oikeuksia koskevien tietojen poistaminen epäonnistui."},"revokeACSExecute":{"string":"Suoritetaan Adobe ACS:n peruutuskomentoja…"},"revokeACSExecuteOK":{"string":"Adobe ACS:n peruutuskomennot suoritettiin onnistuneesti."},"revokeACSGettingDeviceCredentials":{"string":"Noudetaan Adobe ACS -laitteen tunnistetiedot…"},"revokeACSGettingDeviceCredentialsNotActivated":{"string":"Adobe ACS -laitetta ei ole aktivoitu."},"revokeACSGettingDeviceCredentialsOK":{"string":"Adobe ACS -laitteen tunnistetiedot on noudettu."},"revokeACSLoan":{"string":"Peruutetaan laina Adobe ACS:n kautta..."},"revokeACSLoanNotReturnable":{"string":"Adobe ACS uskoo, että tätä lainaa ei voi palauttaa."},"revokeACSLoanNotSupported":{"string":"Adobe ACS:ää ei tueta."},"revokeACSTimedOut":{"string":"Aikakatkaisu Adobe ACS:ää odotettaessa."},"revokeBookACSConnectorFailed":{"string":"Adobe ACS:n komennot epäonnistuivat, virhekoodi %1$s."},"revokeBookACSFailed":{"string":"Adobe ACS:n komentojen suorittaminen epäonnistui yhtä poikkeusta lukuun ottamatta."},"revokeBookCancelled":{"string":"Peruuttaminen peruutettiin."},"revokeBookDatabaseLookup":{"string":"Avataan kirjatietokannan merkintää..."},"revokeBookDatabaseLookupFailed":{"string":"Kirjatietokannan merkinnän avaaminen epäonnistui."},"revokeBookDatabaseLookupOK":{"string":"Kirjatietokannan merkintä avattiin onnistuneesti."},"revokeCredentialsRequired":{"string":"Tunnistetiedot vaaditaan, mutta niitä ei ole annettu."},"revokeDeleteBook":{"string":"Poistetaan kirjatietokannan merkintää."},"revokeDeleteBookFailed":{"string":"Kirjatietokannan merkinnän poistaminen epäonnistui."},"revokeFormat":{"string":"Suoritetaan muotokohtaista peruuttamista..."},"revokeFormatNothingToDo":{"string":"Tämä muoto ei edellytä erityistoimintoja."},"revokeFormatSpecific":{"string":"Suoritetaan muodon %1$s peruuttamista…"},"revokeNotRevocable":{"string":"Kirjaa ei voi peruuttaa!"},"revokeServerNotify":{"string":"Ilmoitetaan palvelimelle peruuttamisesta..."},"revokeServerNotifyFeedCorrupt":{"string":"Palvelin palautti syötteen, jossa oli vioittunut merkintä."},"revokeServerNotifyFeedEmpty":{"string":"Palvelin palautti tyhjän peruutussyötteen"},"revokeServerNotifyFeedFailed":{"string":"Palvelimen peruutussyötteen käsittely epäonnistui."},"revokeServerNotifyFeedOK":{"string":"Palvelimen peruutussyöte käsiteltiin onnistuneesti."},"revokeServerNotifyFeedTimedOut":{"string":"Aikakatkaisu palvelimen peruutussyötettä odotettaessa."},"revokeServerNotifyFeedWithGroups":{"string":"Palvelin palautti peruutussyötteen ryhmien kanssa."},"revokeServerNotifyNotRevocable":{"string":"Lainaa, jonka saatavuus on %1$s, ei voi peruuttaa."},"revokeServerNotifyNoURI":{"string":"Palvelimen ilmoitukselle ei annettu URIa."},"revokeServerNotifyProcessingFeed":{"string":"Käsitellään palvelimen peruutussyötettä…"},"revokeServerNotifySavingEntry":{"string":"Tallennetaan peruutussyötteen merkintää…"},"revokeServerNotifySavingEntryFailed":{"string":"Palvelimen peruutussyötteen tallentaminen epäonnistui."},"revokeServerNotifyURI":{"string":"Ilmoitetaan palvelimelle %1$s kautta."},"revokeStarted":{"string":"Peruuttaminen aloitettiin…"},"profileAccountCreatingAnAccountProviderDescription":{"string":"Luodaan tilintarjoajan kuvausta..."},"profileAccountCreationCreatingAccount":{"string":"Luodaan tiliä…"},"profileAccountCreationCreatingAccountFailed":{"string":"Tilin luominen epäonnistui."},"profileAccountCreationResolvingAccountProvider":{"string":"Selvitetään tilintarjoajaa..."},"profileAccountCreationResolvingAccountProviderFailed":{"string":"Tilintarjoajan selvittäminen epäonnistui."},"profileAccountCreationSucceeded":{"string":"Tilin luominen onnistui."},"profileAccountDeleting":{"string":"Poistetaan tiliä…"},"profileAccountDeletionFailed":{"string":"Tilin poistaminen epäonnistui."},"profileAccountDeletionOnlyOneAccountRemaining":{"string":"Yhtä jäljellä olevaa tiliä ei voida poistaa. Vähintään yksi tili on oltava olemassa."},"profileAccountDeletionSucceeded":{"string":"Tilin poistaminen onnistui."},"profileAccountFetchingOPDSFeed":{"string":"Haetaan OPDS-syötettä…"},"profileAccountFetchingOPDSFeedFailed":{"string":"OPDS-syötteen hakeminen epäonnistui!"},"profileAccountFindingAuthDocumentURI":{"string":"Etsitään todennusdokumentin URIa..."},"profileAccountParsingOPDSFeed":{"string":"Jäsennetään OPDS-syötettä…"},"profileAccountParsingOPDSFeedFailed":{"string":"OPDS-syötteen jäsentäminen epäonnistui!"},"profileAccountSearchingFeedForAuthenticationDocument":{"string":"Haetaan todennusdokumentin syötettä…"},"loginDeviceActivated":{"string":"Laite aktivoitu"},"loginDeviceActivating":{"string":"Yritetään aktivoida laitetta..."},"loginAuthRequired":{"string":"Todennus vaaditaan. Jatketaan..."},"loginCheckingAuthenticationRequirement":{"string":"Tarkistetaan todennusvaatimusta..."},"loginPatronSettingsRequesting":{"string":"Pyydetään asiakkaan asetuksia..."},"loginPatronSettingsOK":{"string":"Asiakkaan asetukset vastaanotettiin"},"loginErrorServer":{"string":"Palvelin palautti virheen: %1$d %2$s"},"loginErrorAuthNotRequired":{"string":"Todennusta ei vaadita!"},"loginErrorNoPatronURI":{"string":"Asiakkaan asetusten URIa ei ole määritetty!"},"loginErrorInvalidCredentials":{"string":"Sisäänkirjautumisesi on virheellinen. Yritä uudelleen."},"loginErrorConnectionFailed":{"string":"Tapahtui verkkovirhe. Tarkista internetyhteys tai yritä myöhemmin uudelleen."},"loginErrorPatronSettingsParseError":{"string":"Palvelimen palauttamia asiakkaan asetuksia ei voitu jäsentää!"},"loginDeviceDRMNotSupported":{"string":"Tämä tili edellyttää Adobe ACS DRM:ää, mutta tämä sovelluksen versio ei tue sitä."},"loginDeviceActivationPostDeviceManager":{"string":"Otetaan yhteyttä laitehallintaan..."},"loginDeviceActivationPostDeviceManagerDone":{"string":"Lähetetty laitehallinnan URIin."},"loginDeviceActivationFailed":{"string":"Laitteen aktivointi epäonnistui: %1$s (%2$s)"},"logoutClearingBookDatabase":{"string":"Tyhjennetään kirjatietokantaa..."},"logoutClearingBookDatabaseFailed":{"string":"Kirjatietokannan tyhjentäminen epäonnistui!"},"logoutUpdatingOpdsEntry":{"string":"Päivitetään kirjan %1$s OPDS-merkintää…"},"logoutOPDSFeedTimedOut":{"string":"Aikakatkaisu palvelimen OPDS-syötettä odotettaessa"},"logoutNoAlternateLinkInDatabase":{"string":"Tietokannassa ei ole saatavilla vaihtoehtoista linkkiä."},"logoutOPDSFeedFailed":{"string":"OPDS-merkinnän haku epäonnistui."},"logoutOPDSFeedCorrupt":{"string":"Palvelin palautti syötteen, jossa oli vioittunut merkintä."},"logoutOPDSFeedEmpty":{"string":"Palvelin palautti tyhjän peruutussyötteen."},"logoutOPDSFeedWithGroups":{"string":"Palvelin palautti peruutussyötteen ryhmien kanssa."},"logoutDeactivatingDeviceAdobe":{"string":"Deaktivoidaan laitetta..."},"logoutDeactivatingDeviceAdobeDeactivated":{"string":"Deaktivoitu laite."},"logoutDeactivatingDeviceAdobeFailed":{"string":"Laitteen deaktivointi epäonnistui: %1$s (%2$s)"},"logoutDeactivatingDeviceAdobeNotActive":{"string":"Laite ei näytä olevan aktivoitu."},"logoutDeactivatingDeviceAdobeUnsupported":{"string":"Tämä sovelluksen versio ei tue Adobe ACS DRM:ää."},"logoutDeviceDeactivationPostDeviceManager":{"string":"Otetaan yhteyttä laitehallintaan…"},"logoutDeviceDeactivationPostDeviceManagerFinished":{"string":"Lähetetty laitehallinnan URIin."},"logoutNotLoggedIn":{"string":"Tili ei näytä olevan kirjautuneena sisään!"},"logoutStarted":{"string":"Kirjaudutaan ulos…"},"notification_channel_name_old":{"string":"Kohde saatavilla"},"notification_channel_description_reservations":{"string":"Varauksiisi liittyvät ilmoitukset."},"notification_channel_id_reservations":{"string":"channel_id_reservations"},"notification_channel_name_reservations":{"string":"Varaukset"},"notification_channel_description_loans":{"string":"Lainoihisi liittyvät ilmoitukset."},"notification_channel_id_loans":{"string":"channel_id_loans"},"notification_channel_name_loans":{"string":"Lainat"},"bootFailedGeneric":{"string":"Havaitsimme ongelman. Tarkista internetyhteys tai yritä uudelleen sulkemalla sovellus ja avaamalla se uudelleen."},"bootAdobeDRMFailed":{"string":"Jokin meni pieleen Adobe DRM -järjestelmässä. Jotkin kirjat eivät ole saatavilla tässä sovelluksen versiossa. Kokeile päivittää sovelluksen uusimpaan versioon."},"unexpectedException":{"string":"Tapahtui odottamaton poikkeus."},"app_name":{"string":"Vanilla-profiilit"},"bookOpenFailedTitle":{"string":"Kirjan lataaminen epäonnistui"},"bookOpenFailedMessage":{"string":"Kirjan avaamisessa tapahtui virhe: (%1$s): %2$s."},"reader_bookmark_added":{"string":"Kirjanmerkki lisättiin"},"reader_bookmark_adding":{"string":"Lisätään kirjanmerkkiä…"},"reader_bookmark_error_adding":{"string":"Kirjanmerkin lisäämisessä tapahtui virhe"},"reader_position_title":{"string":"Synkronoi lukukohta"},"reader_position_message":{"string":"Haluatko siirtyä sivulle, jolle jäit?"},"reader_position_move":{"string":"Siirry"},"reader_position_stay":{"string":"Pysy"},"settings":{"string":"Asetukset"},"settingsAbout":{"string":"Tietoja Palacesta"},"settingsAccounts":{"string":"Kirjastot"},"settingsAccountsSummary":{"string":"Lisää, poista tai määritä kirjastoja"},"settingsAcknowledgements":{"string":"Kiitokset"},"settingsCommit":{"string":"Tee"},"settingsCancel":{"string":"Peruuta"},"settingsCardCreatorLabel":{"string":"Eikö sinulla ole kirjastokorttia?"},"settingsCardCreatorSignUp":{"string":"Rekisteröidy"},"settingsCOPPADeleteBooks":{"string":"Poistetaanko kirjat?"},"settingsCOPPADeleteBooksConfirm":{"string":"Jos muutat ikäsi, kaikki nykyiseltä tililtä ladatut kirjat poistetaan."},"settingsCOPPAOver13":{"string":"Olen yli 13"},"settingsCustomOPDS":{"string":"Mukautettu OPDS-syöte"},"settingsCustomOPDSCreate":{"string":"Luo"},"settingsCustomOPDSInvalidURI":{"string":"URI ei ole kelvollinen."},"settingsCustomOPDSURL":{"string":"Mukautetun syötteen URL-osoite…"},"settingsDebug":{"string":"Virheenkorjausasetukset"},"settingsDelete":{"string":"Poista"},"settingsDetails":{"string":"Tiedot"},"settingsDevAddCustomOpdsFeed":{"string":"Lisää mukautettu OPDS-syöte"},"settingsDevAdobeDrmActivations":{"string":"Adobe DRM:n aktivoinnit"},"settingsDevCacheDir":{"string":"Näytä välimuistihakemisto"},"settingsDevCardCreatorUserNewYork":{"string":"Kortin luoja: kuvittele, että käyttäjä on New Yorkissa"},"settingsDevCrash":{"string":"Kaatuminen"},"settingsDevCrashlytics":{"string":"Crashlytics"},"settingsDevCrashlyticsCurrentUserId":{"string":"Nykyinen Crashlytics-käyttäjätunnus"},"settingsDevDrmSupport":{"string":"DRM-tuki"},"settingsDevEnableHiddenLibraries":{"string":"Ota piilotetut kirjastot käyttöön"},"settingsDevEnableManualLCPPassphrase":{"string":"Ota käyttöön manuaalinen LCP-salasana"},"settingsDevEnableTimeTracking":{"string":"Ota ajanseuranta käyttöön"},"settingsDevFailNextStartup":{"string":"Aiheuttaa sovelluksen seuraavan käynnistyksen epäonnistumisen"},"settingsDevForgetAllAnnouncements":{"string":"Unohda kaikki ilmoitukset"},"settingsDevPlaceholder":{"string":"Paikkamerkki"},"settingsDevSendAnalytics":{"string":"Lähetä analytiikka"},"settingsDevSendErrorLogs":{"string":"Lähetä virhelokit"},"settingsDevShowErrorPage":{"string":"Näytä virhesivu"},"settingsDevShowSupportedBooks":{"string":"Näytä vain tuetut kirjat (näytä kirjat, joita ei tueta, poistamalla valinta)"},"settingsDevSyncAccounts":{"string":"Synkronoi tilit"},"settingsDevTestingFeatures":{"string":"Testausominaisuudet"},"settingsDevToggleOpenEBooksQAAccount":{"string":"Valitse OpenEBooks QA -tili"},"settingsDevUserSeenLibrarySelection":{"string":"Onko käyttäjä nähnyt kirjaston valintanäytön?"},"settingsDocumentation":{"string":"Dokumentaatio"},"settingsEULA":{"string":"Käyttäjäsopimus"},"settingsEULAStatement":{"string":"Hyväksyn loppukäyttäjän lisenssisopimuksen ehdot."},"settingsFaq":{"string":"Usein kysytyt kysymykset"},"settingsPrivacy":{"string":"Tietosuojakäytäntö"},"settingsInfo":{"string":"Sovelluksen tiedot"},"settingsLicense":{"string":"Ohjelmistolisenssit"},"settingsLogin":{"string":"Kirjaudu sisään"},"settingsLoginWith":{"string":"Kirjaudu sisään käyttämällä %1$s"},"settingsLoginAlternatives":{"string":"Vaihtoehtoiset kirjautumistavat"},"settingsLogout":{"string":"Kirjaudu ulos"},"settingsPassword":{"string":"Salasana"},"settingsPasswordHide":{"string":"Piilota salasana"},"settingsPasswordShow":{"string":"Näytä salasana"},"settingsPlaceholder":{"string":"Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."},"settingsReportIssue":{"string":"Ilmoita ongelmasta…"},"settingsSyncBookmarks":{"string":"Synkronoi kirjanmerkit"},"settingsTapToDebug":{"string":"Virheenkorjaustila %1$d…"},"settingsUserName":{"string":"Käyttäjänimi"},"settingsVersion":{"string":"Sovellusversio"},"settingsVersionCore":{"string":"Ydinversio"},"settingsDebugTransifex":{"string":"Transifexin olisi pitänyt kääntää tämä merkkijono."},"accessibility_table_of_contents":{"string":"Avaa sisällysluettelo"},"table_of_contents_title":{"string":"Sisällysluettelo"},"table_of_contents_empty_message":{"string":"Tälle teokselle ei ole saatavilla sisällysluetteloa"},"accessibility_settings":{"string":"Avaa asetusvalikko"},"settings_title":{"string":"Asetukset"},"content_description_back":{"string":"Takaisin"},"viewer_position_title":{"string":"Synkronoi lukukohta"},"viewer_position_message":{"string":"Haluatko siirtyä sivulle, jolle jäit?"},"viewer_position_move":{"string":"Siirry"},"viewer_position_stay":{"string":"Pysy"},"errorDetailsTitle":{"string":"Virheen tiedot"},"errorSendReport":{"string":"Lähetä tukeen"},"errorStepsTitle":{"string":"Vaiheet"},"errorTitle":{"string":"Tässä on ongelmastasi luotu virheloki:"},"audio_book_player":{"string":"Äänikirjasoitin"},"audio_book_player_bookmark_adding":{"string":"Lisätään kirjanmerkkiä…"},"audio_book_player_bookmark_added":{"string":"Kirjanmerkki lisättiin"},"audio_book_player_bookmark_already_added":{"string":"Tähän kohtaan on jo tallennettu kirjanmerkki."},"audio_book_player_bookmark_error_adding":{"string":"Kirjanmerkin lisäämisessä tapahtui virhe"},"audio_book_player_do_keep":{"string":"Säilytä"},"audio_book_player_do_return":{"string":"Palauta"},"audio_book_player_error_book_open":{"string":"Äänikirjaa ei voida avata"},"audio_book_player_error_engine_open":{"string":"Äänimoottoria ei voida alustaa"},"audio_book_player_return_question":{"string":"Haluatko palauttaa sen?"},"audio_book_player_return_title":{"string":"Äänikirjasi on päättynyt"},"audio_book_player_toc_title":{"string":"Sisällysluettelo"},"catalogFeedLoading":{"string":"Ladataan syötettä…"},"feedByAuthor":{"string":"Tekijä"},"feedByTitle":{"string":"Nimi"},"feedCollection":{"string":"Kokoelma"},"feedCollectionAll":{"string":"Kaikki"},"feedEmpty":{"string":"Ei hakutuloksia."},"feedLoadingError":{"string":"Luettelon lataamisessa tapahtui virhe."},"feedNavigationNotSupported":{"string":"Siirtymissyötteitä ei tueta tällä hetkellä. Pahoittelut!"},"feedShow":{"string":"Näytä"},"feedShowAll":{"string":"Kaikki"},"feedShowOnLoan":{"string":"Lainassa"},"feedSortBy":{"string":"Lajitteluperuste"},"feedTitleBooks":{"string":"Kirjat"},"feedTitleCatalog":{"string":"Selaa kirjoja"},"feedTitleHolds":{"string":"Varaukset"},"feedWithGroupsEmptyHolds":{"string":"Kun varaat kirjan luettelosta, se näkyy täällä. Katso täältä aika ajoin, onko kirjasi ladattavissa."},"feedWithGroupsEmptyLoaned":{"string":"Siirry luetteloon ja lisää kirjoja Omiin kirjoihin."},"ageGateBirthYearPrompt":{"string":"Anna syntymävuotesi"},"selectYear":{"string":"Valitse vuosi"},"ageVerification":{"string":"Iän vahvistus"},"next":{"string":"Seuraava"},"loginEULA":{"string":"Hyväksyn loppukäyttäjän lisenssisopimuksen ehdot."},"loginLibraryCard":{"string":"Kirjastokortti"},"loginLogin":{"string":"Kirjaudu sisään"},"loginPassword":{"string":"Salasana"},"loginUserName":{"string":"Käyttäjänimi"},"catalogAccessibilityBookBorrow":{"string":"Hae-painike"},"catalogAccessibilityBookDelete":{"string":"Poista-painike"},"catalogAccessibilityBookDownload":{"string":"Lataa-painike"},"catalogAccessibilityBookDownloadCancel":{"string":"Peruuta lataus -painike"},"catalogAccessibilityBookErrorDetails":{"string":"Tiedot-painike"},"catalogAccessibilityBookErrorDismiss":{"string":"Ohita-painike"},"catalogAccessibilityBookErrorRetry":{"string":"Yritä uudelleen -painike"},"catalogAccessibilityBookListen":{"string":"Kuuntele-painike"},"catalogAccessibilityBookPreviewPlay":{"string":"Toista näyte"},"catalogAccessibilityBookPreviewRead":{"string":"Lue näyte"},"catalogAccessibilityBookRead":{"string":"Lue-painike"},"catalogAccessibilityBookReserve":{"string":"Varaa-painike"},"catalogAccessibilityBookRevokeHold":{"string":"Poista-painike"},"catalogAccessibilityBookRevokeLoan":{"string":"Palauta nyt -painike"},"catalogAccessibilityBookSync":{"string":"Synkronoi-painike"},"catalogAccessibilityCoverAudiobook":{"string":"%1$s, äänikirja, tekijä %2$s"},"catalogAccessibilityCoverEpub":{"string":"%1$s, e-kirja, tekijä %2$s"},"catalogAccessibilityCoverPdf":{"string":"%1$s, pdf, tekijä %2$s"},"catalogAccessibilityCoverUnknownFormat":{"string":"%1$s, tekijä %2$s"},"catalogAccounts":{"string":"Valitse toinen kirjaston luettelo…"},"catalogBookAvailabilityHeldIndefinite":{"string":"Jonotat tätä kirjaa."},"catalogBookAvailabilityHeldQueue":{"string":"Olet tämän kirjan jonossa sijalla %1$d."},"catalogBookAvailabilityHeldTimed":{"string":"Voit lainata tämän kirjan seuraavan ajan kuluttua: %1$s."},"catalogBookAvailabilityHoldable":{"string":"Kaikki tämän kirjan kappaleet ovat tällä hetkellä lainassa."},"catalogBookAvailabilityLoanable":{"string":"Tämän kirjan voi lainata."},"catalogBookAvailabilityLoanedIndefinite":{"string":"Sinulla on tämä kirja lainassa."},"catalogBookAvailabilityLoanedTimed":{"string":"Sinulla on tämä kirja lainassa %1$s."},"catalogBookAvailabilityOpenAccess":{"string":"Voit pitää tämän kirjan."},"catalogBookAvailabilityReservedIndefinite":{"string":"Olet varannut tämän kirjan."},"catalogBookAvailabilityReservedTimed":{"string":"Varauksesi vanhenee seuraavan ajan kuluttua: %1$s."},"catalogBookAvailabilityRevoked":{"string":"Tämä kirja odottaa palauttamista."},"catalogBookCoverDescription":{"string":"Kirjan kansikuva"},"catalogBookFormatAudioBook":{"string":"Äänikirja"},"catalogBookFormatEPUB":{"string":"E-kirja"},"catalogBookFormatPDF":{"string":"PDF"},"catalogBookIntervalDays":{"string":"päivää"},"catalogBookIntervalDaysShort":{"string":"pv"},"catalogBookIntervalHours":{"string":"tuntia"},"catalogBookIntervalHoursShort":{"string":"h"},"catalogBookIntervalMonthsShort":{"string":"kk"},"catalogBookIntervalSubHour":{"string":"alle tunti"},"catalogBookIntervalWeeksShort":{"string":"vk"},"catalogBookIntervalYearsShort":{"string":"v"},"catalogBookPreviewAudioBook":{"string":"Toista näyte"},"catalogBookPreviewBook":{"string":"Lue näyte"},"catalogCancel":{"string":"Peruuta"},"catalogDone":{"string":"Valmis"},"catalogCancelHold":{"string":"Poista"},"catalogCancelling":{"string":"Peruutetaan…"},"catalogCorrupted":{"string":"Tämän kirjan metatiedot ovat vioittuneet, eikä niitä voida näyttää. Syötteen lataaminen uudelleen tai tilisi synkronointi saattaa korjata ongelman."},"catalogDescription":{"string":"Kuvaus"},"catalogDetails":{"string":"Tiedot"},"catalogDismiss":{"string":"Ohita"},"catalogDownload":{"string":"Lataa"},"catalogLoginRequired":{"string":"Jatka kirjautumalla sisään."},"catalogGet":{"string":"Hae"},"catalogHoldCannotCancel":{"string":"Tätä varausta ei voi peruuttaa."},"catalogInformation":{"string":"Tiedot"},"catalogListen":{"string":"Kuuntele"},"catalogMetaCategories":{"string":"Luokat"},"catalogMetaFormat":{"string":"Muoto"},"catalogMetaNarrators":{"string":"Lukijat"},"catalogMetaDistributor":{"string":"Jakelija"},"catalogMetaPublicationDate":{"string":"Julkaistu"},"catalogMetaPublisher":{"string":"Kustantaja"},"catalogMetaUpdatedDate":{"string":"Päivitetty"},"catalogMetaDuration":{"string":"Kesto"},"catalogMore":{"string":"Lisää"},"catalogOperationFailed":{"string":"Toimintoa ei voitu suorittaa loppuun."},"catalogPlaceholder":{"string":"Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."},"catalogRead":{"string":"Lue"},"catalogRelatedBooks":{"string":"Aiheeseen liittyvät kirjat…"},"catalogReload":{"string":"Lataa uudelleen"},"catalogReportIssue":{"string":"Ilmoita ongelmasta…"},"catalogRequesting":{"string":"Pyydetään…"},"catalogDownloading":{"string":"Ladataan…"},"catalogReserve":{"string":"Varaa"},"catalogRetry":{"string":"Yritä uudelleen"},"catalogReturn":{"string":"Palauta"},"catalogSearch":{"string":"Hae"},"catalogDurationFormat":{"string":"%1$s tuntia, %2$s minuuttia"},"catalogDetailsMore":{"string":"Lue lisää"},"bookReachedLoanLimitDialogMessage":{"string":"Olet saavuttanut lainarajasi. Et voi lainata enää mitään ennen kuin palautat jotain."},"bookReachedLoanLimitDialogTitle":{"string":"Lainaraja saavutettu."},"bookReachedLoanLimitDialogButton":{"string":"OK"},"bookFailedLoan":{"string":"Kirjaa %1$s ei voitu ladata"},"bookFailedReturn":{"string":"Kirjaa %1$s ei voitu palauttaa"},"bookHasDownloaded":{"string":"Kirjan %1$s lataus on päättynyt"},"bookIsDownloading":{"string":"Kirjan %1$s lataus on alkanut"},"bookIsOnHold":{"string":"Kirjasta %1$s on tehty varaus"},"bookReturned":{"string":"Kirja %1$s on palautettu onnistuneesti"},"reachedLoanLimit":{"string":"Olet saavuttanut lainarajasi"},"accountAdd":{"string":"Lisää kirjasto"},"accountCancel":{"string":"Peruuta"},"accountCardCreatorLabel":{"string":"Eikö sinulla ole kirjastokorttia?"},"accountCardCreatorSignUp":{"string":"Luo kortti"},"accountCardCreatorSignUpMessage":{"string":"Palace-sovellus käyttää sijaintiasi yhden kerran kirjastopalvelualueesi vahvistamiseksi."},"accountCardCreatorDialogCancel":{"string":"Peruuta"},"accountCardCreatorDialogOpenSettings":{"string":"Avaa asetukset"},"accountCardCreatorDialogOpenSettingsMessage":{"string":"Palace-sovellus vaatii kertaluonteisen sijainnin tarkistuksen virtuaalisen kirjastokortin luomiseksi. Sijaintiasi ei jaeta tällä hetkellä. Ota sijaintitiedot käyttöön Palace-sovelluksessa muuttamalla sijaintiasetuksiasi."},"accountCardCreatorDialogPermissionsMessage":{"string":"Palace-sovellus käyttää sijaintiasi yhden kerran kirjastopalvelualueesi vahvistamiseksi, jotta virtuaalinen kirjastokorttisi voidaan luoda. Jatka valitsemalla OK."},"accountCardCreatorLocationFailed":{"string":"Sijaintisi hakemisessa tapahtui virhe."},"accountCOPPADeleteBooks":{"string":"Poistetaanko kirjat?"},"accountCOPPADeleteBooksConfirm":{"string":"Jos muutat ikäsi, kaikki nykyiseltä tililtä ladatut kirjat poistetaan."},"accountAgeVerification":{"string":"Iän vahvistus"},"accountCreationFailed":{"string":"Kirjaston luominen epäonnistui"},"accountCreationFailedMessage":{"string":"Kirjastoa ei voitu luoda."},"accountDelete":{"string":"Poista"},"accountEULAStatement":{"string":"Kirjautumalla sisään hyväksyt loppukäyttäjän lisenssisopimuksen."},"accountLogin":{"string":"Kirjaudu sisään"},"accountForgotPassword":{"string":"Unohditko salasanasi?"},"accountWantChildCard":{"string":"Haluatko kortin lapsellesi?"},"accountCreateCard":{"string":"Luo kortti"},"accountLoginAlternatives":{"string":"Vaihtoehtoiset kirjautumistavat"},"accountLoginRequired":{"string":"Jatka kirjautumalla sisään."},"accountLoginWith":{"string":"Kirjaudu sisään käyttämällä %1$s"},"accountLogout":{"string":"Kirjaudu ulos"},"accountPassword":{"string":"Salasana"},"accountPasswordShow":{"string":"Näytä %1$s"},"accountPickerTitle":{"string":"Etsi kirjastosi"},"accountPlaceholder":{"string":"Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."},"accountRegistryCreating":{"string":"Luodaan kirjastoa…"},"accountRegistryEmpty":{"string":"Kirjastoja ei ole saatavilla."},"accountRegistryRefresh":{"string":"Päivitä"},"accountRegistryRetrieving":{"string":"Haetaan kirjastoja rekisteristä…"},"accountRegistrySelect":{"string":"Valitse kirjasto…"},"accountRegistryNoLocation":{"string":"Voit hakea kirjastoasi nimen, sivukirjaston sijainnin tai oman sijaintisi perusteella."},"accountReportIssue":{"string":"Ilmoita ongelmasta…"},"accounts":{"string":"Kirjastot"},"accountsDeleteConfirm":{"string":"Haluatko varmasti poistaa %1$s tältä laitteelta?"},"accountsDeleteConfirmTitle":{"string":"Poista kirjasto"},"accountsDeletionFailed":{"string":"Kirjaston poistaminen epäonnistui"},"accountsDeletionFailedMessage":{"string":"Kirjastoa ei voitu poistaa."},"accountsDetails":{"string":"Tiedot"},"accountSyncBookmarks":{"string":"Synkronoi kirjanmerkit"},"accountUserName":{"string":"Käyttäjänimi"},"accountCustomOPDS":{"string":"Mukautetun OPDS-syötteen URL-osoite"},"currentlyBrowsing":{"string":"Selaat tällä hetkellä"},"accountSAML20LoginLabel":{"string":"Kirjaudu sisään käyttämällä SAML 2.0 WEB SSO:ta"},"accountSAML20NoAccessToken":{"string":"Käyttötunnuksen hakeminen URIsta epäonnistui: %1$s"},"accountSAML20NoPatronInfo":{"string":"Asiakkaan tietojen hakeminen URIsta epäonnistui: %1$s"},"accountSearchHint":{"string":"Hae tilejä…"},"accountMore":{"string":"Lisää vaihtoehtoja"},"accountPasswordResetFailed":{"string":"Emme valitettavasti löytäneet käyttökelpoista sovellusta salasanasi nollaamiseen. Lähetä sähköpostia osoitteeseen %1$s, jos haluat ilmoittaa ongelmasta."},"accountReportFailed":{"string":"Emme valitettavasti löytäneet käyttökelpoista sovellusta yhteyden ottamiseksi tukeen. Lähetä sähköpostia osoitteeseen %1$s, jos haluat ilmoittaa ongelmasta."},"accountPrivacyPolicy":{"string":"Tietosuojakäytäntö"},"accountLicenses":{"string":"Sisältölisenssit"},"accountEULA":{"string":"Loppukäyttäjän lisenssisopimus"},"accountMenuSearch":{"string":"Hae"},"accountMenuRefresh":{"string":"Lataa uudelleen"},"eula_disagree":{"string":"dissentire"},"eula_agree":{"string":"concordare"},"migrationFailure":{"string":"Tietojesi siirtämisessä oli yksi tai useampi ongelma…"},"migrationSuccess":{"string":"Tietosi siirrettiin onnistuneesti!"},"migrationSendReport":{"string":"Lähetä ilmoitus"},"migrationOK":{"string":"OK"},"selectionTitle":{"string":"Lue e-kirjoja kirjastostasi"},"selectionButton":{"string":"Etsi kirjastosi"},"selectionAlternateTitle":{"string":"Selaa SimplyE-kokoelmaa"},"selectionAlternateButton":{"string":"Lisää kirjasto myöhemmin"},"announcementTitle":{"string":"%1$s (%2$d/%3$d)"},"ok":{"string":"OK"},"tabBooks":{"string":"Omat kirjat"},"tabCatalog":{"string":"Selaa kirjoja"},"tabHolds":{"string":"Varaukset"},"tabProfile":{"string":"Profiili"},"tabSettings":{"string":"Asetukset"}}}
+{
+   "data" : {
+      "accessibility_settings" : {
+         "string" : "Avaa asetusvalikko"
+      },
+      "accessibility_table_of_contents" : {
+         "string" : "Avaa sisällysluettelo"
+      },
+      "accountAdd" : {
+         "string" : "Lisää kirjasto"
+      },
+      "accountAgeVerification" : {
+         "string" : "Iän vahvistus"
+      },
+      "accountCOPPADeleteBooks" : {
+         "string" : "Poistetaanko kirjat?"
+      },
+      "accountCOPPADeleteBooksConfirm" : {
+         "string" : "Jos muutat ikäsi, kaikki nykyiseltä tililtä ladatut kirjat poistetaan."
+      },
+      "accountCancel" : {
+         "string" : "Peruuta"
+      },
+      "accountCardCreatorDialogCancel" : {
+         "string" : "Peruuta"
+      },
+      "accountCardCreatorDialogOpenSettings" : {
+         "string" : "Avaa asetukset"
+      },
+      "accountCardCreatorDialogOpenSettingsMessage" : {
+         "string" : "Palace-sovellus vaatii kertaluonteisen sijainnin tarkistuksen, jotta virtuaalinen kirjastokortti voidaan luoda. Sijaintiasi ei jaeta tällä hetkellä. Ota sijaintitiedot käyttöön Palace-sovelluksessa muuttamalla sijaintiasetuksiasi."
+      },
+      "accountCardCreatorDialogPermissionsMessage" : {
+         "string" : "Palace-sovellus käyttää sijaintiasi yhden kerran kirjastopalvelualueesi vahvistamiseen, jotta virtuaalinen kirjastokorttisi voidaan luoda. Jatka valitsemalla OK."
+      },
+      "accountCardCreatorLabel" : {
+         "string" : "Eikö sinulla ole kirjastokorttia?"
+      },
+      "accountCardCreatorLocationFailed" : {
+         "string" : "Sijaintisi hakemisessa tapahtui virhe."
+      },
+      "accountCardCreatorSignUp" : {
+         "string" : "Luo kortti"
+      },
+      "accountCardCreatorSignUpMessage" : {
+         "string" : "Palace-sovellus käyttää sijaintiasi yhden kerran kirjastopalvelualueesi vahvistamiseksi."
+      },
+      "accountCreateCard" : {
+         "string" : "Luo kortti"
+      },
+      "accountCreationFailed" : {
+         "string" : "Kirjaston luominen epäonnistui"
+      },
+      "accountCreationFailedMessage" : {
+         "string" : "Kirjastoa ei voitu luoda."
+      },
+      "accountCustomOPDS" : {
+         "string" : "Mukautetun OPDS-syötteen URL-osoite"
+      },
+      "accountDelete" : {
+         "string" : "Poista"
+      },
+      "accountEULA" : {
+         "string" : "Loppukäyttäjän lisenssisopimus"
+      },
+      "accountEULAStatement" : {
+         "string" : "Kirjautumalla sisään hyväksyt loppukäyttäjän lisenssisopimuksen."
+      },
+      "accountForgotPassword" : {
+         "string" : "Unohditko salasanasi?"
+      },
+      "accountLicenses" : {
+         "string" : "Sisältölisenssit"
+      },
+      "accountLogin" : {
+         "string" : "Kirjaudu sisään"
+      },
+      "accountLoginAlternatives" : {
+         "string" : "Vaihtoehtoiset kirjautumistavat"
+      },
+      "accountLoginRequired" : {
+         "string" : "Jatka kirjautumalla sisään."
+      },
+      "accountLoginWith" : {
+         "string" : "Kirjaudu sisään palvelussa %1$s"
+      },
+      "accountLogout" : {
+         "string" : "Kirjaudu ulos"
+      },
+      "accountMenuRefresh" : {
+         "string" : "Lataa uudelleen"
+      },
+      "accountMenuSearch" : {
+         "string" : "Hae"
+      },
+      "accountMore" : {
+         "string" : "Lisää vaihtoehtoja"
+      },
+      "accountPassword" : {
+         "string" : "Salasana"
+      },
+      "accountPasswordResetFailed" : {
+         "string" : "Emme valitettavasti löytäneet käyttökelpoista sovellusta salasanasi nollaamiseen. Lähetä sähköpostia osoitteeseen %1$s, jos haluat ilmoittaa ongelmasta."
+      },
+      "accountPasswordShow" : {
+         "string" : "Näytä %1$s"
+      },
+      "accountPickerTitle" : {
+         "string" : "Etsi kirjastosi"
+      },
+      "accountPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
+      },
+      "accountPrivacyPolicy" : {
+         "string" : "Tietosuojakäytäntö"
+      },
+      "accountRegistryCreating" : {
+         "string" : "Luodaan kirjastoa…"
+      },
+      "accountRegistryEmpty" : {
+         "string" : "Kirjastoja ei ole saatavilla."
+      },
+      "accountRegistryNoLocation" : {
+         "string" : "Voit hakea kirjastoasi nimen, sivukirjaston sijainnin tai oman sijaintisi perusteella."
+      },
+      "accountRegistryRefresh" : {
+         "string" : "Päivitä"
+      },
+      "accountRegistryRetrieving" : {
+         "string" : "Haetaan kirjastoja rekisteristä…"
+      },
+      "accountRegistrySelect" : {
+         "string" : "Valitse kirjasto…"
+      },
+      "accountReportFailed" : {
+         "string" : "Emme valitettavasti löytäneet käyttökelpoista sovellusta yhteyden ottamiseksi tukeen. Lähetä sähköpostia osoitteeseen %1$s, jos haluat ilmoittaa ongelmasta."
+      },
+      "accountReportIssue" : {
+         "string" : "Ilmoita ongelmasta…"
+      },
+      "accountSAML20LoginLabel" : {
+         "string" : "Kirjaudu sisään käyttämällä SAML 2.0 WEB SSO:ta"
+      },
+      "accountSAML20NoAccessToken" : {
+         "string" : "Käyttötunnuksen hakeminen URIsta epäonnistui: %1$s"
+      },
+      "accountSAML20NoPatronInfo" : {
+         "string" : "Asiakkaan tietojen hakeminen URIsta epäonnistui: %1$s"
+      },
+      "accountSearchHint" : {
+         "string" : "Hae tilejä…"
+      },
+      "accountSyncBookmarks" : {
+         "string" : "Synkronoi kirjanmerkit"
+      },
+      "accountUserName" : {
+         "string" : "Käyttäjänimi"
+      },
+      "accountWantChildCard" : {
+         "string" : "Haluatko kortin lapsellesi?"
+      },
+      "accounts" : {
+         "string" : "Kirjastot"
+      },
+      "accountsDeleteConfirm" : {
+         "string" : "Haluatko varmasti poistaa kohteen %1$s tältä laitteelta?"
+      },
+      "accountsDeleteConfirmTitle" : {
+         "string" : "Poista kirjasto"
+      },
+      "accountsDeletionFailed" : {
+         "string" : "Kirjaston poistaminen epäonnistui"
+      },
+      "accountsDeletionFailedMessage" : {
+         "string" : "Kirjastoa ei voitu poistaa."
+      },
+      "accountsDetails" : {
+         "string" : "Tiedot"
+      },
+      "ageGateBirthYearPrompt" : {
+         "string" : "Anna syntymävuotesi"
+      },
+      "ageVerification" : {
+         "string" : "Iän vahvistus"
+      },
+      "announcementTitle" : {
+         "string" : "%1$s (%2$d/%3$d)"
+      },
+      "app_name" : {
+         "string" : "Vanilla-profiilit"
+      },
+      "audio_book_player" : {
+         "string" : "Äänikirjasoitin"
+      },
+      "audio_book_player_bookmark_added" : {
+         "string" : "Kirjanmerkki lisättiin"
+      },
+      "audio_book_player_bookmark_adding" : {
+         "string" : "Lisätään kirjanmerkkiä…"
+      },
+      "audio_book_player_bookmark_already_added" : {
+         "string" : "Tähän kohtaan on jo tallennettu kirjanmerkki."
+      },
+      "audio_book_player_bookmark_error_adding" : {
+         "string" : "Kirjanmerkin lisäämisessä tapahtui virhe"
+      },
+      "audio_book_player_do_keep" : {
+         "string" : "Säilytä"
+      },
+      "audio_book_player_do_return" : {
+         "string" : "Palauta"
+      },
+      "audio_book_player_error_book_open" : {
+         "string" : "Äänikirjaa ei voida avata"
+      },
+      "audio_book_player_error_engine_open" : {
+         "string" : "Äänimoottoria ei voida alustaa"
+      },
+      "audio_book_player_return_question" : {
+         "string" : "Haluatko palauttaa sen?"
+      },
+      "audio_book_player_return_title" : {
+         "string" : "Äänikirjasi on päättynyt"
+      },
+      "audio_book_player_toc_title" : {
+         "string" : "Sisällysluettelo"
+      },
+      "bookFailedLoan" : {
+         "string" : "Kirjaa %1$s ei voitu ladata"
+      },
+      "bookFailedReturn" : {
+         "string" : "Kirjaa %1$s ei voitu palauttaa"
+      },
+      "bookHasDownloaded" : {
+         "string" : "Kirjan %1$s lataus on päättynyt"
+      },
+      "bookIsDownloading" : {
+         "string" : "Kirjan %1$s lataus on alkanut"
+      },
+      "bookIsOnHold" : {
+         "string" : "Kirjasta %1$s on tehty varaus"
+      },
+      "bookOpenFailedMessage" : {
+         "string" : "Kirjan avaamisessa tapahtui virhe: (%1$s): %2$s."
+      },
+      "bookOpenFailedTitle" : {
+         "string" : "Kirjan lataaminen epäonnistui"
+      },
+      "bookPreviewAccessibilityBack" : {
+         "string" : "Takaisin"
+      },
+      "bookPreviewAccessibilityBackward30" : {
+         "string" : "Kelaa taaksepäin 30 sekuntia"
+      },
+      "bookPreviewAccessibilityCover" : {
+         "string" : "Kirjan kansi"
+      },
+      "bookPreviewAccessibilityForward30" : {
+         "string" : "Kelaa eteenpäin 30 sekuntia"
+      },
+      "bookPreviewAccessibilityHour" : {
+         "string" : "tunti"
+      },
+      "bookPreviewAccessibilityHours" : {
+         "string" : "tuntia"
+      },
+      "bookPreviewAccessibilityMinute" : {
+         "string" : "minuutti"
+      },
+      "bookPreviewAccessibilityMinutes" : {
+         "string" : "minuuttia"
+      },
+      "bookPreviewAccessibilityPause" : {
+         "string" : "Keskeytä"
+      },
+      "bookPreviewAccessibilityPlay" : {
+         "string" : "Toista"
+      },
+      "bookPreviewAccessibilitySecond" : {
+         "string" : "sekunti"
+      },
+      "bookPreviewAccessibilitySeconds" : {
+         "string" : "sekuntia"
+      },
+      "bookPreviewAccessibilityTimeCurrent" : {
+         "string" : "%s toistettu"
+      },
+      "bookPreviewAccessibilityTimeRemaining" : {
+         "string" : "%s jäljellä"
+      },
+      "bookPreviewFailedMessage" : {
+         "string" : "Tämän kirjan esikatselun lataamisessa tapahtui virhe. Yritä myöhemmin uudelleen."
+      },
+      "bookPreviewFailedTitle" : {
+         "string" : "Kirjan esikatselun lataaminen epäonnistui"
+      },
+      "bookPreviewPlayerInitialTime" : {
+         "string" : "00:00:00"
+      },
+      "bookPreviewPlayerSeek30" : {
+         "string" : "30"
+      },
+      "bookReachedLoanLimitDialogButton" : {
+         "string" : "OK"
+      },
+      "bookReachedLoanLimitDialogMessage" : {
+         "string" : "Olet saavuttanut lainarajasi. Et voi lainata enää mitään ennen kuin palautat jotain."
+      },
+      "bookReachedLoanLimitDialogTitle" : {
+         "string" : "Lainaraja saavutettu."
+      },
+      "bookReturned" : {
+         "string" : "Kirja %1$s on palautettu onnistuneesti"
+      },
+      "bootAdobeDRMFailed" : {
+         "string" : "Jokin meni pieleen Adobe DRM -järjestelmässä. Jotkin kirjat eivät ole saatavilla tässä sovelluksen versiossa. Kokeile päivittää sovelluksen uusimpaan versioon."
+      },
+      "bootFailedGeneric" : {
+         "string" : "Havaitsimme ongelman. Tarkista internetyhteys tai yritä uudelleen sulkemalla sovellus ja avaamalla se uudelleen."
+      },
+      "catalogAccessibilityBookBorrow" : {
+         "string" : "Hae-painike"
+      },
+      "catalogAccessibilityBookDelete" : {
+         "string" : "Poista-painike"
+      },
+      "catalogAccessibilityBookDownload" : {
+         "string" : "Lataa-painike"
+      },
+      "catalogAccessibilityBookDownloadCancel" : {
+         "string" : "Peruuta lataus -painike"
+      },
+      "catalogAccessibilityBookErrorDetails" : {
+         "string" : "Tiedot-painike"
+      },
+      "catalogAccessibilityBookErrorDismiss" : {
+         "string" : "Ohita-painike"
+      },
+      "catalogAccessibilityBookErrorRetry" : {
+         "string" : "Yritä uudelleen -painike"
+      },
+      "catalogAccessibilityBookListen" : {
+         "string" : "Kuuntele-painike"
+      },
+      "catalogAccessibilityBookPreviewPlay" : {
+         "string" : "Toista näyte"
+      },
+      "catalogAccessibilityBookPreviewRead" : {
+         "string" : "Lue näyte"
+      },
+      "catalogAccessibilityBookRead" : {
+         "string" : "Lue-painike"
+      },
+      "catalogAccessibilityBookReserve" : {
+         "string" : "Varaa-painike"
+      },
+      "catalogAccessibilityBookRevokeHold" : {
+         "string" : "Poista-painike"
+      },
+      "catalogAccessibilityBookRevokeLoan" : {
+         "string" : "Palauta nyt -painike"
+      },
+      "catalogAccessibilityBookSync" : {
+         "string" : "Synkronoi-painike"
+      },
+      "catalogAccessibilityCoverAudiobook" : {
+         "string" : "%1$s, äänikirja, tekijä %2$s"
+      },
+      "catalogAccessibilityCoverEpub" : {
+         "string" : "%1$s, e-kirja, tekijä %2$s"
+      },
+      "catalogAccessibilityCoverPdf" : {
+         "string" : "%1$s, pdf, tekijä %2$s"
+      },
+      "catalogAccessibilityCoverUnknownFormat" : {
+         "string" : "%1$s, tekijä %2$s"
+      },
+      "catalogAccounts" : {
+         "string" : "Valitse toinen kirjaston luettelo…"
+      },
+      "catalogBookAvailabilityHeldIndefinite" : {
+         "string" : "Jonotat tätä kirjaa."
+      },
+      "catalogBookAvailabilityHeldQueue" : {
+         "string" : "Olet tämän kirjan jonossa sijalla %1$d."
+      },
+      "catalogBookAvailabilityHeldTimed" : {
+         "string" : "Voit lainata tämän kirjan seuraavan ajan kuluttua: %1$s."
+      },
+      "catalogBookAvailabilityHoldable" : {
+         "string" : "Kaikki tämän kirjan kappaleet ovat tällä hetkellä lainassa."
+      },
+      "catalogBookAvailabilityLoanable" : {
+         "string" : "Tämän kirjan voi lainata."
+      },
+      "catalogBookAvailabilityLoanedIndefinite" : {
+         "string" : "Sinulla on tämä kirja lainassa."
+      },
+      "catalogBookAvailabilityLoanedTimed" : {
+         "string" : "Sinulla on tämä kirja lainassa %1$s."
+      },
+      "catalogBookAvailabilityOpenAccess" : {
+         "string" : "Voit pitää tämän kirjan."
+      },
+      "catalogBookAvailabilityReservedIndefinite" : {
+         "string" : "Olet varannut tämän kirjan."
+      },
+      "catalogBookAvailabilityReservedTimed" : {
+         "string" : "Varauksesi vanhenee seuraavan ajan kuluttua: %1$s."
+      },
+      "catalogBookAvailabilityRevoked" : {
+         "string" : "Tämä kirja odottaa palauttamista."
+      },
+      "catalogBookCoverDescription" : {
+         "string" : "Kirjan kansikuva"
+      },
+      "catalogBookFormatAudioBook" : {
+         "string" : "Äänikirja"
+      },
+      "catalogBookFormatEPUB" : {
+         "string" : "E-kirja"
+      },
+      "catalogBookFormatPDF" : {
+         "string" : "PDF"
+      },
+      "catalogBookIntervalDays" : {
+         "string" : "päivää"
+      },
+      "catalogBookIntervalDaysShort" : {
+         "string" : "pv"
+      },
+      "catalogBookIntervalHours" : {
+         "string" : "tuntia"
+      },
+      "catalogBookIntervalHoursShort" : {
+         "string" : "h"
+      },
+      "catalogBookIntervalMonthsShort" : {
+         "string" : "kk"
+      },
+      "catalogBookIntervalSubHour" : {
+         "string" : "alle tunti"
+      },
+      "catalogBookIntervalWeeksShort" : {
+         "string" : "vk"
+      },
+      "catalogBookIntervalYearsShort" : {
+         "string" : "v"
+      },
+      "catalogBookPreviewAudioBook" : {
+         "string" : "Toista näyte"
+      },
+      "catalogBookPreviewBook" : {
+         "string" : "Lue näyte"
+      },
+      "catalogCancel" : {
+         "string" : "Peruuta"
+      },
+      "catalogCancelHold" : {
+         "string" : "Poista"
+      },
+      "catalogCancelling" : {
+         "string" : "Peruutetaan…"
+      },
+      "catalogCorrupted" : {
+         "string" : "Tämän kirjan metatiedot ovat vioittuneet, eikä niitä voida näyttää. Syötteen lataaminen uudelleen tai tilisi synkronointi saattaa korjata ongelman."
+      },
+      "catalogDescription" : {
+         "string" : "Kuvaus"
+      },
+      "catalogDetails" : {
+         "string" : "Tiedot"
+      },
+      "catalogDetailsMore" : {
+         "string" : "Lue lisää"
+      },
+      "catalogDismiss" : {
+         "string" : "Ohita"
+      },
+      "catalogDone" : {
+         "string" : "Valmis"
+      },
+      "catalogDownload" : {
+         "string" : "Lataa"
+      },
+      "catalogDownloading" : {
+         "string" : "Ladataan…"
+      },
+      "catalogDurationFormat" : {
+         "string" : "%1$s tuntia, %2$s minuuttia"
+      },
+      "catalogFeedLoading" : {
+         "string" : "Ladataan syötettä…"
+      },
+      "catalogGet" : {
+         "string" : "Hae"
+      },
+      "catalogHoldCannotCancel" : {
+         "string" : "Tätä varausta ei voi peruuttaa."
+      },
+      "catalogInformation" : {
+         "string" : "Tiedot"
+      },
+      "catalogListen" : {
+         "string" : "Kuuntele"
+      },
+      "catalogLoginRequired" : {
+         "string" : "Jatka kirjautumalla sisään."
+      },
+      "catalogMetaCategories" : {
+         "string" : "Luokat"
+      },
+      "catalogMetaDistributor" : {
+         "string" : "Jakelija"
+      },
+      "catalogMetaDuration" : {
+         "string" : "Kesto"
+      },
+      "catalogMetaFormat" : {
+         "string" : "Muoto"
+      },
+      "catalogMetaNarrators" : {
+         "string" : "Lukijat"
+      },
+      "catalogMetaPublicationDate" : {
+         "string" : "Julkaistu"
+      },
+      "catalogMetaPublisher" : {
+         "string" : "Kustantaja"
+      },
+      "catalogMetaUpdatedDate" : {
+         "string" : "Päivitetty"
+      },
+      "catalogMore" : {
+         "string" : "Lisää"
+      },
+      "catalogOperationFailed" : {
+         "string" : "Toimintoa ei voitu suorittaa loppuun."
+      },
+      "catalogPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
+      },
+      "catalogRead" : {
+         "string" : "Lue"
+      },
+      "catalogRelatedBooks" : {
+         "string" : "Aiheeseen liittyvät kirjat…"
+      },
+      "catalogReload" : {
+         "string" : "Lataa uudelleen"
+      },
+      "catalogReportIssue" : {
+         "string" : "Ilmoita ongelmasta…"
+      },
+      "catalogRequesting" : {
+         "string" : "Pyydetään…"
+      },
+      "catalogReserve" : {
+         "string" : "Varaa"
+      },
+      "catalogRetry" : {
+         "string" : "Yritä uudelleen"
+      },
+      "catalogReturn" : {
+         "string" : "Palauta"
+      },
+      "catalogSearch" : {
+         "string" : "Hae"
+      },
+      "contentDescriptionBack" : {
+         "string" : "Takaisin"
+      },
+      "contentDescriptionLogo" : {
+         "string" : "Logo"
+      },
+      "contentDescriptionSkipButton" : {
+         "string" : "Ohita-painike"
+      },
+      "contentDescriptionStep1" : {
+         "string" : "Vaihe 1 - Etsi kirjastosi"
+      },
+      "contentDescriptionStep2" : {
+         "string" : "Vaihe 2 - Etkö löydä kirjastoasi? Palacen kirjahyllystä löydät yli 10 000 ilmaista kirjaa, joista voit nauttia nyt"
+      },
+      "contentDescriptionStep3" : {
+         "string" : "Vaihe 3 - Lue. Kuuntele. Nauti!"
+      },
+      "contentDescriptionTutorialPage" : {
+         "string" : "Tutoriaalisivu"
+      },
+      "content_description_back" : {
+         "string" : "Takaisin"
+      },
+      "currentlyBrowsing" : {
+         "string" : "Selaat tällä hetkellä"
+      },
+      "dialog_manual_passphrase_cancel" : {
+         "string" : "Peruuta"
+      },
+      "dialog_manual_passphrase_done" : {
+         "string" : "Valmis"
+      },
+      "dialog_manual_passphrase_hint" : {
+         "string" : "Salasana"
+      },
+      "dialog_manual_passphrase_title" : {
+         "string" : "Anna LCP-salasana"
+      },
+      "errorDetailsTitle" : {
+         "string" : "Virheen tiedot"
+      },
+      "errorSendReport" : {
+         "string" : "Lähetä tukeen"
+      },
+      "errorStepsTitle" : {
+         "string" : "Vaiheet"
+      },
+      "errorTitle" : {
+         "string" : "Tässä on ongelmastasi luotu virheloki:"
+      },
+      "eula_agree" : {
+         "string" : "concordare"
+      },
+      "eula_disagree" : {
+         "string" : "dissentire"
+      },
+      "feedByAuthor" : {
+         "string" : "Tekijä"
+      },
+      "feedByTitle" : {
+         "string" : "Nimi"
+      },
+      "feedCollection" : {
+         "string" : "Kokoelma"
+      },
+      "feedCollectionAll" : {
+         "string" : "Kaikki"
+      },
+      "feedEmpty" : {
+         "string" : "Ei hakutuloksia."
+      },
+      "feedLoadingError" : {
+         "string" : "Luettelon lataamisessa tapahtui virhe."
+      },
+      "feedNavigationNotSupported" : {
+         "string" : "Siirtymissyötteitä ei tueta tällä hetkellä. Pahoittelut!"
+      },
+      "feedShow" : {
+         "string" : "Näytä"
+      },
+      "feedShowAll" : {
+         "string" : "Kaikki"
+      },
+      "feedShowOnLoan" : {
+         "string" : "Lainassa"
+      },
+      "feedSortBy" : {
+         "string" : "Lajitteluperuste"
+      },
+      "feedTitleBooks" : {
+         "string" : "Kirjat"
+      },
+      "feedTitleCatalog" : {
+         "string" : "Selaa kirjoja"
+      },
+      "feedTitleHolds" : {
+         "string" : "Varaukset"
+      },
+      "feedWithGroupsEmptyHolds" : {
+         "string" : "Kun varaat kirjan luettelosta, se näkyy täällä. Katso täältä aika ajoin, onko kirjasi ladattavissa."
+      },
+      "feedWithGroupsEmptyLoaned" : {
+         "string" : "Siirry luetteloon ja lisää kirjoja Omat kirjat -kohtaan."
+      },
+      "loginAuthRequired" : {
+         "string" : "Todennus vaaditaan. Jatketaan..."
+      },
+      "loginCheckingAuthenticationRequirement" : {
+         "string" : "Tarkistetaan todennusvaatimusta..."
+      },
+      "loginDeviceActivated" : {
+         "string" : "Laite aktivoitu"
+      },
+      "loginDeviceActivating" : {
+         "string" : "Yritetään aktivoida laitetta..."
+      },
+      "loginDeviceActivationFailed" : {
+         "string" : "Laitteen aktivointi epäonnistui: %1$s (%2$s)"
+      },
+      "loginDeviceActivationPostDeviceManager" : {
+         "string" : "Otetaan yhteyttä laitehallintaan..."
+      },
+      "loginDeviceActivationPostDeviceManagerDone" : {
+         "string" : "Lähetetty laitehallinnan URIin."
+      },
+      "loginDeviceDRMNotSupported" : {
+         "string" : "Tämä tili edellyttää Adobe ACS DRM:ää, mutta tämä sovelluksen versio ei tue sitä."
+      },
+      "loginEULA" : {
+         "string" : "Hyväksyn loppukäyttäjän lisenssisopimuksen ehdot."
+      },
+      "loginErrorAuthNotRequired" : {
+         "string" : "Todennusta ei vaadita!"
+      },
+      "loginErrorConnectionFailed" : {
+         "string" : "Tapahtui verkkovirhe. Tarkista internetyhteys tai yritä myöhemmin uudelleen."
+      },
+      "loginErrorInvalidCredentials" : {
+         "string" : "Sisäänkirjautumisesi on virheellinen. Yritä uudelleen."
+      },
+      "loginErrorNoPatronURI" : {
+         "string" : "Asiakkaan asetusten URIa ei ole määritetty!"
+      },
+      "loginErrorPatronSettingsParseError" : {
+         "string" : "Palvelimen palauttamia asiakkaan asetuksia ei voitu jäsentää!"
+      },
+      "loginErrorServer" : {
+         "string" : "Palvelin palautti virheen: %1$d %2$s"
+      },
+      "loginLibraryCard" : {
+         "string" : "Kirjastokortti"
+      },
+      "loginLogin" : {
+         "string" : "Kirjaudu sisään"
+      },
+      "loginPassword" : {
+         "string" : "Salasana"
+      },
+      "loginPatronSettingsOK" : {
+         "string" : "Asiakkaan asetukset vastaanotettiin"
+      },
+      "loginPatronSettingsRequesting" : {
+         "string" : "Pyydetään asiakkaan asetuksia..."
+      },
+      "loginUserName" : {
+         "string" : "Käyttäjänimi"
+      },
+      "logoutClearingBookDatabase" : {
+         "string" : "Tyhjennetään kirjatietokantaa..."
+      },
+      "logoutClearingBookDatabaseFailed" : {
+         "string" : "Kirjatietokannan tyhjentäminen epäonnistui!"
+      },
+      "logoutDeactivatingDeviceAdobe" : {
+         "string" : "Deaktivoidaan laitetta..."
+      },
+      "logoutDeactivatingDeviceAdobeDeactivated" : {
+         "string" : "Laite deaktivoitu."
+      },
+      "logoutDeactivatingDeviceAdobeFailed" : {
+         "string" : "Laitteen deaktivointi epäonnistui: %1$s (%2$s)"
+      },
+      "logoutDeactivatingDeviceAdobeNotActive" : {
+         "string" : "Laite ei näytä olevan aktivoitu."
+      },
+      "logoutDeactivatingDeviceAdobeUnsupported" : {
+         "string" : "Tämä sovelluksen versio ei tue Adobe ACS DRM:ää."
+      },
+      "logoutDeviceDeactivationPostDeviceManager" : {
+         "string" : "Otetaan yhteyttä laitehallintaan…"
+      },
+      "logoutDeviceDeactivationPostDeviceManagerFinished" : {
+         "string" : "Lähetetty laitehallinnan URIin."
+      },
+      "logoutNoAlternateLinkInDatabase" : {
+         "string" : "Tietokannassa ei ole saatavilla vaihtoehtoista linkkiä."
+      },
+      "logoutNotLoggedIn" : {
+         "string" : "Tili ei näytä olevan kirjautuneena sisään!"
+      },
+      "logoutOPDSFeedCorrupt" : {
+         "string" : "Palvelin palautti syötteen, jossa oli vioittunut merkintä."
+      },
+      "logoutOPDSFeedEmpty" : {
+         "string" : "Palvelin palautti tyhjän peruutussyötteen."
+      },
+      "logoutOPDSFeedFailed" : {
+         "string" : "OPDS-merkinnän haku epäonnistui."
+      },
+      "logoutOPDSFeedTimedOut" : {
+         "string" : "Aikakatkaisu palvelimen OPDS-syötettä odotettaessa"
+      },
+      "logoutOPDSFeedWithGroups" : {
+         "string" : "Palvelin palautti peruutussyötteen ryhmien kanssa."
+      },
+      "logoutStarted" : {
+         "string" : "Kirjaudutaan ulos…"
+      },
+      "logoutUpdatingOpdsEntry" : {
+         "string" : "Päivitetään kirjan %1$s OPDS-merkintää…"
+      },
+      "migrationFailure" : {
+         "string" : "Tietojesi siirtämisessä oli yksi tai useampi ongelma…"
+      },
+      "migrationOK" : {
+         "string" : "OK"
+      },
+      "migrationSendReport" : {
+         "string" : "Lähetä ilmoitus"
+      },
+      "migrationSuccess" : {
+         "string" : "Tietosi siirrettiin onnistuneesti!"
+      },
+      "next" : {
+         "string" : "Seuraava"
+      },
+      "notification_channel_description_loans" : {
+         "string" : "Lainoihisi liittyvät ilmoitukset."
+      },
+      "notification_channel_description_reservations" : {
+         "string" : "Varauksiisi liittyvät ilmoitukset."
+      },
+      "notification_channel_id_loans" : {
+         "string" : "channel_id_loans"
+      },
+      "notification_channel_id_reservations" : {
+         "string" : "channel_id_reservations"
+      },
+      "notification_channel_name_loans" : {
+         "string" : "Lainat"
+      },
+      "notification_channel_name_old" : {
+         "string" : "Kohde saatavilla"
+      },
+      "notification_channel_name_reservations" : {
+         "string" : "Varaukset"
+      },
+      "ok" : {
+         "string" : "OK"
+      },
+      "profileAccountCreatingAnAccountProviderDescription" : {
+         "string" : "Luodaan tilintarjoajan kuvausta..."
+      },
+      "profileAccountCreationCreatingAccount" : {
+         "string" : "Luodaan tiliä…"
+      },
+      "profileAccountCreationCreatingAccountFailed" : {
+         "string" : "Tilin luominen epäonnistui."
+      },
+      "profileAccountCreationResolvingAccountProvider" : {
+         "string" : "Selvitetään tilintarjoajaa..."
+      },
+      "profileAccountCreationResolvingAccountProviderFailed" : {
+         "string" : "Tilintarjoajan selvittäminen epäonnistui."
+      },
+      "profileAccountCreationSucceeded" : {
+         "string" : "Tilin luominen onnistui."
+      },
+      "profileAccountDeleting" : {
+         "string" : "Poistetaan tiliä…"
+      },
+      "profileAccountDeletionFailed" : {
+         "string" : "Tilin poistaminen epäonnistui."
+      },
+      "profileAccountDeletionOnlyOneAccountRemaining" : {
+         "string" : "Yhtä jäljellä olevaa tiliä ei voida poistaa. Vähintään yksi tili on oltava olemassa."
+      },
+      "profileAccountDeletionSucceeded" : {
+         "string" : "Tilin poistaminen onnistui."
+      },
+      "profileAccountFetchingOPDSFeed" : {
+         "string" : "Haetaan OPDS-syötettä…"
+      },
+      "profileAccountFetchingOPDSFeedFailed" : {
+         "string" : "OPDS-syötteen hakeminen epäonnistui!"
+      },
+      "profileAccountFindingAuthDocumentURI" : {
+         "string" : "Etsitään todennusdokumentin URIa..."
+      },
+      "profileAccountParsingOPDSFeed" : {
+         "string" : "Jäsennetään OPDS-syötettä…"
+      },
+      "profileAccountParsingOPDSFeedFailed" : {
+         "string" : "OPDS-syötteen jäsentäminen epäonnistui!"
+      },
+      "profileAccountSearchingFeedForAuthenticationDocument" : {
+         "string" : "Haetaan todennusdokumentin syötettä…"
+      },
+      "reachedLoanLimit" : {
+         "string" : "Olet saavuttanut lainarajasi"
+      },
+      "reader_bookmark_added" : {
+         "string" : "Kirjanmerkki lisättiin"
+      },
+      "reader_bookmark_adding" : {
+         "string" : "Lisätään kirjanmerkkiä…"
+      },
+      "reader_bookmark_error_adding" : {
+         "string" : "Kirjanmerkin lisäämisessä tapahtui virhe"
+      },
+      "reader_position_message" : {
+         "string" : "Haluatko siirtyä sivulle, jolle jäit?"
+      },
+      "reader_position_move" : {
+         "string" : "Siirry"
+      },
+      "reader_position_stay" : {
+         "string" : "Pysy"
+      },
+      "reader_position_title" : {
+         "string" : "Synkronoi lukukohta"
+      },
+      "resolving" : {
+         "string" : "Selvitetään tilintarjoajaa..."
+      },
+      "resolvingAuthDocument" : {
+         "string" : "Selvitetään todennusdokumenttia…"
+      },
+      "resolvingAuthDocumentBasicTokenMalformed" : {
+         "string" : "Perustunnistejärjestelmän kuvauksen on sisällettävä todennuksen URI."
+      },
+      "resolvingAuthDocumentCOPPAAgeGateMalformed" : {
+         "string" : "COPPA-säännön ikäportin kuvauksessa on eriteltävä yli ja alle 13-vuotiaiden URI."
+      },
+      "resolvingAuthDocumentMissingURI" : {
+         "string" : "Todennusdokumentille ei annettu URIa."
+      },
+      "resolvingAuthDocumentNoStartURI" : {
+         "string" : "Todennusdokumentissa ei annettu aloitusluettelon URIa."
+      },
+      "resolvingAuthDocumentNoUsableAuthenticationTypes" : {
+         "string" : "Tili ei määrittänyt sellaista todennustyyppiä, jonka ymmärtäisimme."
+      },
+      "resolvingAuthDocumentOAuthMalformed" : {
+         "string" : "OAuth-järjestelmän kuvauksen on sisällettävä todennuksen URI."
+      },
+      "resolvingAuthDocumentParseFailed" : {
+         "string" : "Todennusdokumentti oli virheellisesti muodostettu eikä sitä voitu jäsentää."
+      },
+      "resolvingAuthDocumentRetrievalFailed" : {
+         "string" : "Todennusdokumenttia ei voitu noutaa palvelimelta."
+      },
+      "resolvingAuthDocumentRetrievalFailedWithProblem" : {
+         "string" : "Todennusdokumenttia ei voitu noutaa palvelimelta."
+      },
+      "resolvingAuthDocumentSAML20Malformed" : {
+         "string" : "SAML 2.0 -järjestelmän kuvauksen on sisällettävä todennuksen URI."
+      },
+      "resolvingAuthDocumentUnusableLink" : {
+         "string" : "Emme ymmärtäneet todennusdokumentin linkkiä."
+      },
+      "resolvingUnexpectedException" : {
+         "string" : "Odottamaton poikkeus vastaanotettiin ratkaisun aikana!"
+      },
+      "revokeACSDeleteRights" : {
+         "string" : "Poistetaan Adobe ACS:n oikeuksia koskevia tietoja…"
+      },
+      "revokeACSDeleteRightsFailed" : {
+         "string" : "Adobe ACS:n oikeuksia koskevien tietojen poistaminen epäonnistui."
+      },
+      "revokeACSExecute" : {
+         "string" : "Suoritetaan Adobe ACS:n peruutuskomentoja…"
+      },
+      "revokeACSExecuteOK" : {
+         "string" : "Adobe ACS:n peruutuskomennot suoritettiin onnistuneesti."
+      },
+      "revokeACSGettingDeviceCredentials" : {
+         "string" : "Noudetaan Adobe ACS -laitteen tunnistetiedot…"
+      },
+      "revokeACSGettingDeviceCredentialsNotActivated" : {
+         "string" : "Adobe ACS -laitetta ei ole aktivoitu."
+      },
+      "revokeACSGettingDeviceCredentialsOK" : {
+         "string" : "Adobe ACS -laitteen tunnistetiedot on noudettu."
+      },
+      "revokeACSLoan" : {
+         "string" : "Peruutetaan laina Adobe ACS:n kautta..."
+      },
+      "revokeACSLoanNotReturnable" : {
+         "string" : "Adobe ACS uskoo, että tätä lainaa ei voi palauttaa."
+      },
+      "revokeACSLoanNotSupported" : {
+         "string" : "Adobe ACS:ää ei tueta."
+      },
+      "revokeACSTimedOut" : {
+         "string" : "Aikakatkaisu Adobe ACS:ää odotettaessa."
+      },
+      "revokeBookACSConnectorFailed" : {
+         "string" : "Adobe ACS:n komennot epäonnistuivat, virhekoodi %1$s."
+      },
+      "revokeBookACSFailed" : {
+         "string" : "Adobe ACS:n komentojen suorittaminen epäonnistui yhtä poikkeusta lukuun ottamatta."
+      },
+      "revokeBookCancelled" : {
+         "string" : "Peruuttaminen peruutettiin."
+      },
+      "revokeBookDatabaseLookup" : {
+         "string" : "Avataan kirjatietokannan merkintää..."
+      },
+      "revokeBookDatabaseLookupFailed" : {
+         "string" : "Kirjatietokannan merkinnän avaaminen epäonnistui."
+      },
+      "revokeBookDatabaseLookupOK" : {
+         "string" : "Kirjatietokannan merkintä avattiin onnistuneesti."
+      },
+      "revokeCredentialsRequired" : {
+         "string" : "Tunnistetiedot vaaditaan, mutta niitä ei ole annettu."
+      },
+      "revokeDeleteBook" : {
+         "string" : "Poistetaan kirjatietokannan merkintää."
+      },
+      "revokeDeleteBookFailed" : {
+         "string" : "Kirjatietokannan merkinnän poistaminen epäonnistui."
+      },
+      "revokeFormat" : {
+         "string" : "Suoritetaan muotokohtaista peruuttamista..."
+      },
+      "revokeFormatNothingToDo" : {
+         "string" : "Tämä muoto ei edellytä erityistoimintoja."
+      },
+      "revokeFormatSpecific" : {
+         "string" : "Suoritetaan muodon %1$s peruuttamista…"
+      },
+      "revokeNotRevocable" : {
+         "string" : "Kirjaa ei voi peruuttaa!"
+      },
+      "revokeServerNotify" : {
+         "string" : "Ilmoitetaan palvelimelle peruuttamisesta..."
+      },
+      "revokeServerNotifyFeedCorrupt" : {
+         "string" : "Palvelin palautti syötteen, jossa oli vioittunut merkintä."
+      },
+      "revokeServerNotifyFeedEmpty" : {
+         "string" : "Palvelin palautti tyhjän peruutussyötteen."
+      },
+      "revokeServerNotifyFeedFailed" : {
+         "string" : "Palvelimen peruutussyötteen käsittely epäonnistui."
+      },
+      "revokeServerNotifyFeedOK" : {
+         "string" : "Palvelimen peruutussyöte käsiteltiin onnistuneesti."
+      },
+      "revokeServerNotifyFeedTimedOut" : {
+         "string" : "Aikakatkaisu palvelimen peruutussyötettä odotettaessa."
+      },
+      "revokeServerNotifyFeedWithGroups" : {
+         "string" : "Palvelin palautti peruutussyötteen ryhmien kanssa."
+      },
+      "revokeServerNotifyNoURI" : {
+         "string" : "Palvelimen ilmoitukselle ei annettu URIa."
+      },
+      "revokeServerNotifyNotRevocable" : {
+         "string" : "Lainaa, jonka saatavuus on %1$s, ei voi peruuttaa."
+      },
+      "revokeServerNotifyProcessingFeed" : {
+         "string" : "Käsitellään palvelimen peruutussyötettä…"
+      },
+      "revokeServerNotifySavingEntry" : {
+         "string" : "Tallennetaan peruutussyötteen merkintää…"
+      },
+      "revokeServerNotifySavingEntryFailed" : {
+         "string" : "Palvelimen peruutussyötteen tallentaminen epäonnistui."
+      },
+      "revokeServerNotifyURI" : {
+         "string" : "Ilmoitetaan palvelimelle %1$s kautta."
+      },
+      "revokeStarted" : {
+         "string" : "Peruuttaminen aloitettiin…"
+      },
+      "search" : {
+         "string" : "Hae…"
+      },
+      "selectYear" : {
+         "string" : "Valitse vuosi"
+      },
+      "selectionAlternateButton" : {
+         "string" : "Lisää kirjasto myöhemmin"
+      },
+      "selectionAlternateTitle" : {
+         "string" : "Selaa SimplyE-kokoelmaa"
+      },
+      "selectionButton" : {
+         "string" : "Etsi kirjastosi"
+      },
+      "selectionTitle" : {
+         "string" : "Lue e-kirjoja kirjastostasi"
+      },
+      "settings" : {
+         "string" : "Asetukset"
+      },
+      "settingsAbout" : {
+         "string" : "Tietoja Palacesta"
+      },
+      "settingsAccounts" : {
+         "string" : "Kirjastot"
+      },
+      "settingsAccountsSummary" : {
+         "string" : "Lisää, poista tai määritä kirjastoja"
+      },
+      "settingsAcknowledgements" : {
+         "string" : "Kiitokset"
+      },
+      "settingsCOPPADeleteBooks" : {
+         "string" : "Poistetaanko kirjat?"
+      },
+      "settingsCOPPADeleteBooksConfirm" : {
+         "string" : "Jos muutat ikäsi, kaikki nykyiseltä tililtä ladatut kirjat poistetaan."
+      },
+      "settingsCOPPAOver13" : {
+         "string" : "Olen yli 13"
+      },
+      "settingsCancel" : {
+         "string" : "Peruuta"
+      },
+      "settingsCardCreatorLabel" : {
+         "string" : "Eikö sinulla ole kirjastokorttia?"
+      },
+      "settingsCardCreatorSignUp" : {
+         "string" : "Rekisteröidy"
+      },
+      "settingsCommit" : {
+         "string" : "Tee"
+      },
+      "settingsCustomOPDS" : {
+         "string" : "Mukautettu OPDS-syöte"
+      },
+      "settingsCustomOPDSCreate" : {
+         "string" : "Luo"
+      },
+      "settingsCustomOPDSInvalidURI" : {
+         "string" : "URI ei ole kelvollinen."
+      },
+      "settingsCustomOPDSURL" : {
+         "string" : "Mukautetun syötteen URL-osoite…"
+      },
+      "settingsDebug" : {
+         "string" : "Virheenkorjausasetukset"
+      },
+      "settingsDebugTransifex" : {
+         "string" : "Transifexin olisi pitänyt kääntää tämä merkkijono."
+      },
+      "settingsDelete" : {
+         "string" : "Poista"
+      },
+      "settingsDetails" : {
+         "string" : "Tiedot"
+      },
+      "settingsDevAddCustomOpdsFeed" : {
+         "string" : "Lisää mukautettu OPDS-syöte"
+      },
+      "settingsDevAdobeDrmActivations" : {
+         "string" : "Adobe DRM:n aktivoinnit"
+      },
+      "settingsDevCacheDir" : {
+         "string" : "Näytä välimuistihakemisto"
+      },
+      "settingsDevCardCreatorUserNewYork" : {
+         "string" : "Kortin luoja: kuvittele, että käyttäjä on New Yorkissa"
+      },
+      "settingsDevCrash" : {
+         "string" : "Kaatuminen"
+      },
+      "settingsDevCrashlytics" : {
+         "string" : "Crashlytics"
+      },
+      "settingsDevCrashlyticsCurrentUserId" : {
+         "string" : "Nykyinen Crashlytics-käyttäjätunnus"
+      },
+      "settingsDevDrmSupport" : {
+         "string" : "DRM-tuki"
+      },
+      "settingsDevEnableHiddenLibraries" : {
+         "string" : "Ota piilotetut kirjastot käyttöön"
+      },
+      "settingsDevEnableManualLCPPassphrase" : {
+         "string" : "Ota käyttöön manuaalinen LCP-salasana"
+      },
+      "settingsDevEnableTimeTracking" : {
+         "string" : "Ota ajanseuranta käyttöön"
+      },
+      "settingsDevFailNextStartup" : {
+         "string" : "Aiheuttaa sovelluksen seuraavan käynnistyksen epäonnistumisen"
+      },
+      "settingsDevForgetAllAnnouncements" : {
+         "string" : "Unohda kaikki ilmoitukset"
+      },
+      "settingsDevPlaceholder" : {
+         "string" : "Paikkamerkki"
+      },
+      "settingsDevSendAnalytics" : {
+         "string" : "Lähetä analytiikka"
+      },
+      "settingsDevSendErrorLogs" : {
+         "string" : "Lähetä virhelokit"
+      },
+      "settingsDevShowErrorPage" : {
+         "string" : "Näytä virhesivu"
+      },
+      "settingsDevShowSupportedBooks" : {
+         "string" : "Näytä vain tuetut kirjat (näytä kirjat, joita ei tueta, poistamalla valinta)"
+      },
+      "settingsDevSyncAccounts" : {
+         "string" : "Synkronoi tilit"
+      },
+      "settingsDevTestingFeatures" : {
+         "string" : "Testausominaisuudet"
+      },
+      "settingsDevToggleOpenEBooksQAAccount" : {
+         "string" : "Valitse OpenEBooks QA -tili"
+      },
+      "settingsDevUserSeenLibrarySelection" : {
+         "string" : "Onko käyttäjä nähnyt kirjaston valintanäytön?"
+      },
+      "settingsDocumentation" : {
+         "string" : "Dokumentaatio"
+      },
+      "settingsEULA" : {
+         "string" : "Käyttäjäsopimus"
+      },
+      "settingsEULAStatement" : {
+         "string" : "Hyväksyn loppukäyttäjän lisenssisopimuksen ehdot."
+      },
+      "settingsFaq" : {
+         "string" : "Usein kysytyt kysymykset"
+      },
+      "settingsInfo" : {
+         "string" : "Sovelluksen tiedot"
+      },
+      "settingsLicense" : {
+         "string" : "Ohjelmistolisenssit"
+      },
+      "settingsLogin" : {
+         "string" : "Kirjaudu sisään"
+      },
+      "settingsLoginAlternatives" : {
+         "string" : "Vaihtoehtoiset kirjautumistavat"
+      },
+      "settingsLoginWith" : {
+         "string" : "Kirjaudu sisään palvelussa %1$s"
+      },
+      "settingsLogout" : {
+         "string" : "Kirjaudu ulos"
+      },
+      "settingsPassword" : {
+         "string" : "Salasana"
+      },
+      "settingsPasswordHide" : {
+         "string" : "Piilota salasana"
+      },
+      "settingsPasswordShow" : {
+         "string" : "Näytä salasana"
+      },
+      "settingsPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
+      },
+      "settingsPrivacy" : {
+         "string" : "Tietosuojakäytäntö"
+      },
+      "settingsReportIssue" : {
+         "string" : "Ilmoita ongelmasta…"
+      },
+      "settingsSyncBookmarks" : {
+         "string" : "Synkronoi kirjanmerkit"
+      },
+      "settingsTapToDebug" : {
+         "string" : "Virheenkorjaustila %1$d…"
+      },
+      "settingsUserName" : {
+         "string" : "Käyttäjänimi"
+      },
+      "settingsVersion" : {
+         "string" : "Sovellusversio"
+      },
+      "settingsVersionCore" : {
+         "string" : "Ydinversio"
+      },
+      "settings_title" : {
+         "string" : "Asetukset"
+      },
+      "tabBooks" : {
+         "string" : "Omat kirjat"
+      },
+      "tabCatalog" : {
+         "string" : "Selaa kirjoja"
+      },
+      "tabHolds" : {
+         "string" : "Varaukset"
+      },
+      "tabProfile" : {
+         "string" : "Profiili"
+      },
+      "tabSettings" : {
+         "string" : "Asetukset"
+      },
+      "table_of_contents_empty_message" : {
+         "string" : "Tälle teokselle ei ole saatavilla sisällysluetteloa"
+      },
+      "table_of_contents_title" : {
+         "string" : "Sisällysluettelo"
+      },
+      "unexpectedException" : {
+         "string" : "Tapahtui odottamaton poikkeus."
+      },
+      "viewer_position_message" : {
+         "string" : "Haluatko siirtyä sivulle, jolle jäit?"
+      },
+      "viewer_position_move" : {
+         "string" : "Siirry"
+      },
+      "viewer_position_stay" : {
+         "string" : "Pysy"
+      },
+      "viewer_position_title" : {
+         "string" : "Synkronoi lukukohta"
+      }
+   }
+}

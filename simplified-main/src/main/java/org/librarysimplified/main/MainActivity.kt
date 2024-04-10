@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.TxContextWrappingDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentManager
@@ -16,6 +15,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
+import com.transifex.txnative.TxNative
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.login.LoginEvent
 import org.librarysimplified.ui.login.LoginFragment
@@ -54,10 +54,6 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
   private val logger = LoggerFactory.getLogger(MainActivity::class.java)
   private val listenerRepo: ListenerRepository<MainActivityListenedEvent, Unit> by listenerRepositories()
-
-  private val appCompatDelegate: TxContextWrappingDelegate by lazy {
-    TxContextWrappingDelegate(super.getDelegate())
-  }
 
   private val defaultViewModelFactory: ViewModelProvider.Factory by lazy {
     MainActivityDefaultViewModelFactory(super.defaultViewModelProviderFactory)
@@ -175,8 +171,13 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override val defaultViewModelProviderFactory: ViewModelProvider.Factory
     get() = this.defaultViewModelFactory
 
+  private var mAppCompatDelegate: AppCompatDelegate? = null
   override fun getDelegate(): AppCompatDelegate {
-    return this.appCompatDelegate
+    if (mAppCompatDelegate == null) {
+      mAppCompatDelegate = TxNative.wrapAppCompatDelegate(super.getDelegate(), this)
+    }
+
+    return mAppCompatDelegate!!
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
