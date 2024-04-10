@@ -95,7 +95,6 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
         accountId = this.parameters.accountID,
         description = this.parameters.authenticationDescription,
         ekirjastoToken = authInfo.token,
-        username = this.parameters.loginMethod.username?.value
       )
     )
     this.listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
@@ -133,24 +132,23 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     logger.debug("$tag Passkey Fragment OnStart")
 
     val loginState = parameters.loginMethod.loginState
-    val username = parameters.loginMethod.username!!.value
 
     logger.debug("loginstate: {}", loginState)
 
     //todo: register events
 
     when (loginState) {
-      EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable -> passkeyRegisterAsync(username)
-      EkirjastoLoginMethod.Passkey.LoginState.LoggingIn -> passkeyLoginAsync(username)
+      EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable -> passkeyRegisterAsync()
+      EkirjastoLoginMethod.Passkey.LoginState.LoggingIn -> passkeyLoginAsync()
       else -> this.logger.warn("Unhandled login state: {}", loginState)
     }
   }
 
-  private fun passkeyLoginAsync(username: String) {
+  private fun passkeyLoginAsync() {
     this.logger.debug("Passkey Login Async")
 
     lifecycleScope.launch {
-      val result = viewModel.passkeyLogin(username)
+      val result = viewModel.passkeyLogin()
       when (result){
         is TaskResult.Success<PasskeyAuth> -> postPasskeySuccessful(result.result)
         is TaskResult.Failure<PasskeyAuth> -> postPasskeyFailed(result)
@@ -158,14 +156,14 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     }
   }
 
-  private fun passkeyRegisterAsync(username: String) {
+  private fun passkeyRegisterAsync() {
     logger.debug("Passkey Register Async")
     if (parameters.loginMethod.circulationToken == null) {
       //handleFailure(Exception("Missing token. Cannot complete passkey registration"))
       return
     }
     lifecycleScope.launch {
-      val result = viewModel.passkeyRegister(username)
+      val result = viewModel.passkeyRegister()
       when (result){
         is TaskResult.Success<PasskeyAuth> -> listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
         is TaskResult.Failure<PasskeyAuth> -> postPasskeyFailed(result)

@@ -81,7 +81,6 @@ class ViewsForEkirjasto(
           this.passkeyState = EkirjastoLoginMethod.Passkey.LoginState.LoggingIn
           this.activeLoginMethod = EkirjastoLoginMethod.Passkey(
             loginState = this.passkeyState,
-            username = getUsername(),
             circulationToken = null)
           status.onClick.invoke()
         }
@@ -96,7 +95,7 @@ class ViewsForEkirjasto(
         this.username.isEnabled = true
         this.passkeyRegisterButton.visibility = VISIBLE
         this.passkeyRegisterButton.setOnClickListener {
-          this.activeLoginMethod = EkirjastoLoginMethod.Passkey(passkeyState, null, null)
+          this.activeLoginMethod = EkirjastoLoginMethod.Passkey(passkeyState, null)
           status.onClick.invoke()
         }
       }
@@ -248,7 +247,6 @@ class ViewsForEkirjasto(
         activeLoginMethod = EkirjastoLoginMethod.Passkey(
           loginState = state,
           circulationToken = method.circulationToken,
-          username = method.username
         )
       }
       else -> return

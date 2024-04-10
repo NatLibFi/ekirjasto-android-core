@@ -125,7 +125,6 @@ sealed class ProfileAccountLoginRequest {
     override val accountId: AccountID,
     val description: AccountProviderAuthenticationDescription.Ekirjasto,
     val ekirjastoToken: String,
-    val username:String?
   ) : ProfileAccountLoginRequest()
 
   /**
@@ -135,6 +134,5 @@ sealed class ProfileAccountLoginRequest {
   data class EkirjastoCancel(
     override val accountId: AccountID,
     val description: AccountProviderAuthenticationDescription.Ekirjasto,
-    val username:String?
   ) : ProfileAccountLoginRequest()
 }

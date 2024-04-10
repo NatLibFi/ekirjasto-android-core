@@ -30,10 +30,10 @@ import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.PasskeyAuth
-import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.authenticate.AuthenticatePublicKey
-import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.authenticate.AuthenticateResult
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.authenticate.AuthenticateFinishRequest
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.authenticate.AuthenticateParameters
+import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.authenticate.AuthenticatePublicKey
+import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.authenticate.AuthenticateResult
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.register.FinishRegisterRequest
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.register.RegisterParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.datamodels.register.RegisterResult
@@ -128,14 +128,13 @@ class AccountEkirjastoPasskeyViewModel (
     this.profiles.profileAccountLogin(
       ProfileAccountLoginRequest.EkirjastoCancel(
         accountId = account,
-        description = description,
-        username = "no username"
+        description = description
       )
     )
 
   }
 
-  suspend fun passkeyLogin(username: String): TaskResult<PasskeyAuth> {
+  suspend fun passkeyLogin(): TaskResult<PasskeyAuth> {
 
     lateinit var startResponse : AuthenticatePublicKey
     lateinit var challengeResponse : AuthenticateResult
@@ -144,7 +143,6 @@ class AccountEkirjastoPasskeyViewModel (
 
     try {
       steps.beginNewStep("Passkey Login Start")
-      steps.addAttribute("username", username)
       this.logger.debug("Passkey Login Start")
       startResponse = requestPasskeyLoginStart()
       this.logger.debug("Passkey Login Start responded")
@@ -248,9 +246,9 @@ class AccountEkirjastoPasskeyViewModel (
     return PasskeyAuth(token,exp)
   }
 
-  suspend fun passkeyRegister(username: String) : TaskResult<PasskeyAuth> {
+  suspend fun passkeyRegister() : TaskResult<PasskeyAuth> {
     val uri = description.passkey_register_start
-    val body = mapToJson(mapOf("username" to username))
+    val body = mapToJson(mapOf("username" to ""))
     lateinit var registerStartResponse: JsonNode
     lateinit var challengeResponse: RegisterResult
     lateinit var authResponse: PasskeyAuth
@@ -279,7 +277,7 @@ class AccountEkirjastoPasskeyViewModel (
     try {
       logger.debug("Register Finish")
       steps.beginNewStep("Passkey Register Finish start")
-      authResponse = passkeyRegisterFinish(username, challengeResponse)
+      authResponse = passkeyRegisterFinish(challengeResponse)
       logger.debug("Register Finish Complete")
       steps.currentStepSucceeded("Passkey Register Finished successfully")
     } catch (e: Exception){
@@ -309,9 +307,9 @@ class AccountEkirjastoPasskeyViewModel (
     return authenticator.register(params)
   }
 
-  private fun passkeyRegisterFinish(username: String, registerResult: RegisterResult): PasskeyAuth {
+  private fun passkeyRegisterFinish(registerResult: RegisterResult): PasskeyAuth {
     val body = FinishRegisterRequest(
-      username = username,
+      username = "",
       data = RegisterSignedChallengeRequest(
         id = registerResult.id,
         rawId = registerResult.rawId,
