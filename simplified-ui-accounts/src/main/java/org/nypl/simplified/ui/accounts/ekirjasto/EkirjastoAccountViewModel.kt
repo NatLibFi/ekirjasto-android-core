@@ -25,6 +25,7 @@ import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskStep
 import org.nypl.simplified.ui.accounts.AccountDetailEvent
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
+import org.slf4j.LoggerFactory
 
 class EkirjastoAccountViewModel(
   private val accountId: AccountID,
@@ -38,6 +39,8 @@ class EkirjastoAccountViewModel(
 
   private val bookmarkService =
     services.requireService(BookmarkServiceType::class.java)
+
+  private val logger = LoggerFactory.getLogger(EkirjastoAccountViewModel::class.java)
 
   /**
    * Logging in was explicitly requested. This is tracked in order to allow for optionally
@@ -62,9 +65,9 @@ class EkirjastoAccountViewModel(
   val account: AccountType =
     this.accountLive.value!!
 
+  val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto
+    get() = this.account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
 
-  val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto =
-    this.account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
 
   /**
    * A live data element that tracks the status of the bookmark syncing switch for the
@@ -99,11 +102,13 @@ class EkirjastoAccountViewModel(
   private fun onAccountEvent(accountEvent: AccountEvent) {
     when (accountEvent) {
       is AccountEventUpdated -> {
+        logger.debug("Account Updated")
         if (accountEvent.accountID == this.accountId) {
           this.handleAccountUpdated(accountEvent)
         }
       }
       is AccountEventLoginStateChanged -> {
+        logger.debug("Login State Updated: {}",accountEvent.state)
         if (accountEvent.accountID == this.accountId) {
           this.handleLoginStateChanged(accountEvent)
         }
@@ -192,12 +197,15 @@ class EkirjastoAccountViewModel(
     if (this.account.loginState is AccountLoginState.AccountLoggedIn ||
       this.account.loginState is AccountLoginState.AccountLogoutFailed
     ) {
+      this.logger.debug("Account Logging Out")
       this.account.setLoginState(
         AccountLoginState.AccountLoggingOut(
           this.account.loginState.credentials!!,
           ""
         )
       )
+    } else {
+      this.logger.warn("Invalid AccountLoginState for logout: {}",this.account.loginState)
     }
 
     this.profilesController.profileAccountLogout(this.accountId)

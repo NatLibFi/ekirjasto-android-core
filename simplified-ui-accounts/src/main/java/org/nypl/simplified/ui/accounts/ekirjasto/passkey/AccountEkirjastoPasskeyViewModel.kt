@@ -118,10 +118,14 @@ class AccountEkirjastoPasskeyViewModel (
         logger.error("GetCredentialUnsupportedException", e)
         steps.currentStepFailed(e.message?:"Credentials not Supported", "", e)
       }
+      is PasskeyFinishException -> {
+        logger.error("PasskeyFinishException",e)
+        steps.currentStepFailed("${e.message}: ${e.responseProperties.status}", e.message?:"", e)
+      }
       else -> {
         logger.error("Unexpected exception type ${e::class.java.name}: ${e.message}")
         logger.error(e.stackTraceToString())
-        steps.currentStepFailed("Unexpected Error", e.message?:"", e)
+        steps.currentStepFailed("${e.message}", "", e)
       }
     }
 
@@ -233,7 +237,7 @@ class AccountEkirjastoPasskeyViewModel (
         responseBodyNode = bodyAsJsonNode(status.bodyStream!!)
       }
       is LSHTTPResponseStatus.Responded.Error -> {
-        throw Exception("Login Finish request errror $status")
+        throw PasskeyFinishException("Login Finish request error",status.properties)
       }
       is LSHTTPResponseStatus.Failed -> {
         throw status.exception

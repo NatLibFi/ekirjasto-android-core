@@ -3,8 +3,11 @@ package org.nypl.simplified.ui.accounts.ekirjasto
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
+import android.widget.ProgressBar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,9 +36,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     LoggerFactory.getLogger(EKirjastoAccountFragment::class.java)
   private val subscriptions: CompositeDisposable =
     CompositeDisposable()
-
   private val listener: FragmentListenerType<AccountDetailEvent> by fragmentListeners()
-
   private val parameters: AccountFragmentParameters by lazy {
     this.requireArguments()[PARAMETERS_ID] as AccountFragmentParameters
   }
@@ -53,12 +54,16 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   //elements
   private lateinit var buttonLogout: Button
+
   private lateinit var buttonLoginSuomiFi: Button
+
   private lateinit var buttonLoginPasskey: Button
   private lateinit var buttonRegisterPasskey: Button
-
   //inherited elements
   private lateinit var toolbar: PalaceToolbar
+  private lateinit var bookmarkSyncProgress: ProgressBar
+
+  private lateinit var syncBookmarks: ConstraintLayout
 
 
   companion object {
@@ -83,24 +88,37 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginSuomiFi = view.findViewById(R.id.buttonLoginSuomiFi)
     this.buttonLoginPasskey = view.findViewById(R.id.buttonLoginPasskey)
     this.buttonRegisterPasskey = view.findViewById(R.id.buttonRegisterPasskey)
+    this.syncBookmarks = view.findViewById(R.id.accountSyncBookmarks)
 
     this.toolbar =
       view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
+    this.bookmarkSyncProgress =
+      view.findViewById(R.id.accountSyncProgress)
+
+    this.viewModel.accountLive.observe(this.viewLifecycleOwner) {
+      this.reconfigureAccountUI()
+    }
+
+    this.reconfigureAccountUI()
   }
 
   override fun onStart() {
     super.onStart()
     this.configureToolbar()
     this.buttonLogout.setOnClickListener(){
+      this.logger.debug("Logout clicked")
       this.viewModel.tryLogout()
     }
     this.buttonLoginSuomiFi.setOnClickListener {
+      this.logger.debug("Login with Suomi.Fi clicked")
       onTryLoginSuomiFi()
     }
     this.buttonLoginPasskey.setOnClickListener {
+      this.logger.debug("Login with Passkey clicked")
       onTryLoginPasskey()
     }
     this.buttonRegisterPasskey.setOnClickListener {
+      this.logger.debug("Register Passkey clicked")
       onTryRegisterPasskey()
     }
 
@@ -134,7 +152,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     actionBar.show()
     actionBar.setDisplayHomeAsUpEnabled(true)
     actionBar.setHomeActionContentDescription(null)
-    actionBar.setTitle(providerName)
+    actionBar.setTitle(R.string.AccountTitle)
+    this.toolbar.logo
     this.toolbar.setLogoOnClickListener {
       this.listener.post(AccountDetailEvent.GoUpwards)
     }
@@ -142,7 +161,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private fun reconfigureAccountUI() {
 
-    when (val loginState = this.viewModel.account.loginState){
+    val loginState = this.viewModel.account.loginState
+    this.logger.debug("Configure UI Account Login State: {}",loginState)
+    when (loginState){
       is AccountNotLoggedIn -> OnConfigureNotLoggedIn(loginState)
       is AccountLoggingIn -> OnConfigureAccountLoggingIn(loginState)
       is AccountLoggingInWaitingForExternalAuthentication -> OnConfigureWaitingForExternalAuth(loginState)
@@ -154,22 +175,41 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   }
 
   private fun OnConfigureNotLoggedIn(loginState: AccountNotLoggedIn) {
+    this.buttonLoginPasskey.isEnabled = true
+    this.buttonLoginSuomiFi.isEnabled = true
+    buttonLogout.visibility = GONE
+    buttonLoginSuomiFi.visibility = VISIBLE
+    buttonLoginPasskey.visibility = VISIBLE
+    buttonRegisterPasskey.visibility = GONE
+    this.syncBookmarks.visibility = GONE
+  }
+
+  private fun OnConfigureAccountLoggingIn(loginState: AccountLoggingIn) {
+    this.buttonLoginSuomiFi.isEnabled = false
+    this.buttonLoginPasskey.isEnabled = false
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
     buttonLoginPasskey.visibility = VISIBLE
     buttonRegisterPasskey.visibility = GONE
   }
 
-  private fun OnConfigureAccountLoggingIn(loginState: AccountLoggingIn) {
-    TODO("Not yet implemented")
-  }
-
   private fun OnConfigureWaitingForExternalAuth(loginState: AccountLoggingInWaitingForExternalAuthentication) {
-    TODO("Not yet implemented")
+    this.buttonLoginSuomiFi.isEnabled = false
+    this.buttonLoginPasskey.isEnabled = false
+    buttonLogout.visibility = GONE
+    buttonLoginSuomiFi.visibility = VISIBLE
+    buttonLoginPasskey.visibility = VISIBLE
+    buttonRegisterPasskey.visibility = GONE
   }
 
   private fun OnConfigureAccountLoginFailed(loginState: AccountLoginFailed) {
-    TODO("Not yet implemented")
+    this.buttonLoginSuomiFi.isEnabled = true
+    this.buttonLoginPasskey.isEnabled = true
+    buttonLogout.visibility = GONE
+    buttonLoginSuomiFi.visibility = VISIBLE
+    buttonLoginPasskey.visibility = VISIBLE
+    buttonRegisterPasskey.visibility = GONE
+
   }
 
   private fun OnConfigureAccountLoggedIn(loginState: AccountLoggedIn) {
@@ -177,14 +217,22 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     buttonLoginSuomiFi.visibility = GONE
     buttonLoginPasskey.visibility = GONE
     buttonRegisterPasskey.visibility = VISIBLE
+    this.syncBookmarks.visibility = VISIBLE
+    this.bookmarkSyncProgress.visibility = INVISIBLE
   }
 
   private fun OnConfigureAccountLoggingOut(loginState: AccountLoginState.AccountLoggingOut) {
-    TODO("Not yet implemented")
+    buttonLogout.visibility = GONE
+    buttonLoginSuomiFi.visibility = GONE
+    buttonLoginPasskey.visibility = GONE
+    buttonRegisterPasskey.visibility = GONE
   }
 
   private fun OnConfigureAccountLogoutFailed(loginState: AccountLoginState.AccountLogoutFailed) {
-    TODO("Not yet implemented")
+    buttonLogout.visibility = VISIBLE
+    buttonLoginSuomiFi.visibility = GONE
+    buttonLoginPasskey.visibility = GONE
+    buttonRegisterPasskey.visibility = VISIBLE
   }
 
   private fun onTryRegisterPasskey() {

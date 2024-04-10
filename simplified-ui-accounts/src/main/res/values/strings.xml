@@ -67,4 +67,5 @@
   <string name="accountEkirjastoLoggingInLabel">Logging in with %1$s</string>
   <string name="accountEkirjastoLoggedInLabel">Logged in the E-kirjasto.</string>
   <string name="accountPasskeyCreate">Register Passkey</string>
+    <string name="AccountTitle">Settings</string>
 </resources>

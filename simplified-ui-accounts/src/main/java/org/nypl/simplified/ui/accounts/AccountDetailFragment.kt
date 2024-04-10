@@ -964,7 +964,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
+            //nothing
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -998,7 +998,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
+            //nothing
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,

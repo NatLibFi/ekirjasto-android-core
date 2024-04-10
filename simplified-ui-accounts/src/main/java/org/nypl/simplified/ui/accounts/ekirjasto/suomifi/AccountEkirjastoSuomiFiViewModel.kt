@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.view.View
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -113,7 +114,8 @@ class AccountEkirjastoSuomiFiViewModel(
       url?.let {
         if (it.startsWith(this.description.tunnistus_finish.toString())) {
           logger.debug("sending accessTokenStartReceive event")
-          this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.AccessTokenStartReceive())
+          view?.visibility = View.GONE
+          //this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.AccessTokenStartReceive())
         }
       }
     }
@@ -122,6 +124,7 @@ class AccountEkirjastoSuomiFiViewModel(
       logger.debug("onPageFinished $url")
       url?.let {
         if (it.startsWith(this.description.tunnistus_finish.toString())) {
+          view?.visibility = View.GONE
           view?.evaluateJavascript(
             "(function() {return document.querySelector('pre').innerText; })();"
           ) { json -> parseAuthToken(json.trim()
@@ -167,19 +170,28 @@ class AccountEkirjastoSuomiFiViewModel(
         )
       )
 
-      this.profiles.profileAccountLogin(
-        ProfileAccountLoginRequest.EkirjastoComplete(
-          accountId = this.account,
-          description = this.description,
-          ekirjastoToken = ekirjastoToken,
+      try {
+        this.profiles.profileAccountLogin(
+          ProfileAccountLoginRequest.EkirjastoComplete(
+            accountId = this.account,
+            description = this.description,
+            ekirjastoToken = ekirjastoToken,
+          )
         )
-      )
-      this.eventSubject.onNext(
-        AccountEkirjastoSuomiFiInternalEvent.AccessTokenObtained(
-          token = ekirjastoToken,
-          cookies = cookies
+        this.eventSubject.onNext(
+          AccountEkirjastoSuomiFiInternalEvent.AccessTokenObtained(
+            token = ekirjastoToken,
+            cookies = cookies
+          )
         )
-      )
+      } catch (e:Exception){
+        this.logger.error(e.message, e)
+        this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.Failed(
+          e.message?:"Error when finalizing suomi.fi login"
+        ))
+      }
+
+
     }
   }
 

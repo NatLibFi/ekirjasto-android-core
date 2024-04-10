@@ -27,9 +27,9 @@ import org.nypl.simplified.accounts.api.AccountLoginState.AccountLogoutFailed
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountNotLoggedIn
 import org.nypl.simplified.accounts.api.AccountLoginStringResourcesType
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Ekirjasto
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.OAuthWithIntermediary
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.SAML2_0
-import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Ekirjasto
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.adobe.extensions.AdobeDRMExtensions
 import org.nypl.simplified.notifications.NotificationTokenHTTPCallsType
@@ -38,7 +38,18 @@ import org.nypl.simplified.patron.api.PatronDRMAdobe
 import org.nypl.simplified.patron.api.PatronUserProfileParsersType
 import org.nypl.simplified.profiles.api.ProfileReadableType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
-import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.*
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.Basic
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.BasicToken
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoCancel
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoComplete
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoInitiatePassKey
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryCancel
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryComplete
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryInitiate
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.SAML20Cancel
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.SAML20Complete
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.SAML20Initiate
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
 import org.nypl.simplified.taskrecorder.api.TaskResult
@@ -258,7 +269,6 @@ class ProfileAccountLoginTask(
               node = ObjectMapper().readTree(status.bodyStream)
             ),
             ekirjastoToken = request.ekirjastoToken,
-            username = request.username,
             adobeCredentials = null,
             authenticationDescription = request.description.description,
             annotationsURI = null,

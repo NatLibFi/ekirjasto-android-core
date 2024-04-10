@@ -168,7 +168,6 @@ sealed class AccountAuthenticationCredentials {
   data class Ekirjasto(
     val accessToken: String,
     val ekirjastoToken: String?,
-    val username: String?,
     override val adobeCredentials: AccountAuthenticationAdobePreActivationCredentials?,
     override val authenticationDescription: String?,
     override val annotationsURI: URI?,
