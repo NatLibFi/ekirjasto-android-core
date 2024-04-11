@@ -1,10 +1,13 @@
 package org.nypl.simplified.ui.accounts.ekirjasto
 
+import android.app.Application
+import android.content.pm.PackageManager
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import org.librarysimplified.documents.DocumentStoreType
 import org.librarysimplified.documents.DocumentType
 import org.librarysimplified.documents.internal.SimpleDocument
 import org.librarysimplified.services.api.Services
@@ -29,8 +32,9 @@ import org.slf4j.LoggerFactory
 
 class EkirjastoAccountViewModel(
   private val accountId: AccountID,
-  private val listener: FragmentListenerType<AccountDetailEvent>
-) : ViewModel() {
+  private val listener: FragmentListenerType<AccountDetailEvent>,
+  private val application: Application,
+) : AndroidViewModel(application) {
   private val services =
     Services.serviceDirectory()
 
@@ -41,6 +45,7 @@ class EkirjastoAccountViewModel(
     services.requireService(BookmarkServiceType::class.java)
 
   private val logger = LoggerFactory.getLogger(EkirjastoAccountViewModel::class.java)
+  val documents = services.requireService(DocumentStoreType::class.java)
 
   /**
    * Logging in was explicitly requested. This is tracked in order to allow for optionally
@@ -79,6 +84,19 @@ class EkirjastoAccountViewModel(
 
   val accountSyncingSwitchStatus: LiveData<BookmarkSyncEnableStatus> =
     this.accountSyncingSwitchStatusMutable
+
+  val appVersion: String by lazy {
+    try {
+      val context = this.getApplication<Application>()
+      val pkgManager = context.packageManager
+      val pkgInfo = pkgManager.getPackageInfo(context.packageName, 0)
+      val versionName = pkgInfo.versionName
+      val versionCode = pkgInfo.versionCode
+      "$versionName (${versionCode})"
+    } catch (e: PackageManager.NameNotFoundException) {
+      "Unknown"
+    }
+  }
 
   init {
     this.subscriptions.add(

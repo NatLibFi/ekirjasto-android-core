@@ -7,11 +7,14 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.reactivex.disposables.CompositeDisposable
+import org.librarysimplified.documents.DocumentType
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
@@ -47,7 +50,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     factoryProducer = {
       EkirjastoAccountViewModelFactory(
         account = this.parameters.accountID,
-        listener = this.listener
+        listener = this.listener,
+        application = this.requireActivity().application
       )
     }
   )
@@ -59,11 +63,21 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private lateinit var buttonLoginPasskey: Button
   private lateinit var buttonRegisterPasskey: Button
+  private lateinit var eulaStatement: TextView
+  private lateinit var syncBookmarks: ConstraintLayout
+  private lateinit var buttonFeedback: Button
+  private lateinit var buttonAboutApp: Button
+  private lateinit var buttonPrivacyPolicy: Button
+  private lateinit var buttonUserAgreement: Button
+  private lateinit var buttonLicenses: Button
+  private lateinit var versionText: TextView
+
+  private lateinit var bookmarkSyncProgress: ProgressBar
+  private lateinit var bookmarkSyncCheck: SwitchCompat
+  private lateinit var bookmarkStatement: TextView
+
   //inherited elements
   private lateinit var toolbar: PalaceToolbar
-  private lateinit var bookmarkSyncProgress: ProgressBar
-
-  private lateinit var syncBookmarks: ConstraintLayout
 
 
   companion object {
@@ -88,7 +102,17 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginSuomiFi = view.findViewById(R.id.buttonLoginSuomiFi)
     this.buttonLoginPasskey = view.findViewById(R.id.buttonLoginPasskey)
     this.buttonRegisterPasskey = view.findViewById(R.id.buttonRegisterPasskey)
+    this.eulaStatement = view.findViewById(R.id.eulaStatement)
+
     this.syncBookmarks = view.findViewById(R.id.accountSyncBookmarks)
+    this.bookmarkStatement = view.findViewById(R.id.accountSyncBookmarksStatement)
+    this.buttonFeedback = view.findViewById(R.id.buttonFeedback)
+    this.buttonAboutApp = view.findViewById(R.id.buttonAboutApp)
+    this.buttonPrivacyPolicy = view.findViewById(R.id.buttonPrivacyPolicy)
+    this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
+    this.buttonLicenses = view.findViewById(R.id.buttonLicenses)
+    this.versionText = view.findViewById(R.id.appVersion)
+
 
     this.toolbar =
       view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
@@ -122,6 +146,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       onTryRegisterPasskey()
     }
 
+
     /*
      * Configure the bookmark syncing switch to enable/disable syncing permissions.
      */
@@ -144,6 +169,23 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
      */
 
     this.reconfigureAccountUI()
+  }
+
+  private fun configureDocViewButton(button: Button, document: DocumentType?){
+    button.isEnabled = document != null
+    if (document != null) {
+      button.setOnClickListener {
+        var title = button.text
+        this.listener.post(
+          AccountDetailEvent.OpenDocViewer(
+            title = title.toString(),
+            url = document.readableURL
+          )
+        )
+      }
+    } else {
+      this.logger.warn("{} document not found!", button.text.toString())
+    }
   }
 
   private fun configureToolbar() {
@@ -172,6 +214,15 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       is AccountLoginState.AccountLoggingOut -> OnConfigureAccountLoggingOut(loginState)
       is AccountLoginState.AccountLogoutFailed -> OnConfigureAccountLogoutFailed(loginState)
     }
+
+    configureDocViewButton(buttonAboutApp, this.viewModel.documents.about)
+    configureDocViewButton(buttonFeedback, this.viewModel.documents.feedback)
+    configureDocViewButton(buttonPrivacyPolicy, this.viewModel.documents.privacyPolicy)
+    configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
+    configureDocViewButton(buttonLicenses, this.viewModel.documents.licenses)
+
+    val versionString = this.requireContext().getString(R.string.app_version_string, this.viewModel.appVersion)
+    this.versionText.text = versionString
   }
 
   private fun OnConfigureNotLoggedIn(loginState: AccountNotLoggedIn) {
@@ -182,6 +233,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     buttonLoginPasskey.visibility = VISIBLE
     buttonRegisterPasskey.visibility = GONE
     this.syncBookmarks.visibility = GONE
+    this.bookmarkStatement.visibility = GONE
+    this.eulaStatement.visibility = VISIBLE
   }
 
   private fun OnConfigureAccountLoggingIn(loginState: AccountLoggingIn) {
@@ -218,7 +271,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     buttonLoginPasskey.visibility = GONE
     buttonRegisterPasskey.visibility = VISIBLE
     this.syncBookmarks.visibility = VISIBLE
+    this.bookmarkStatement.visibility = VISIBLE
     this.bookmarkSyncProgress.visibility = INVISIBLE
+    this.eulaStatement.visibility = GONE
   }
 
   private fun OnConfigureAccountLoggingOut(loginState: AccountLoginState.AccountLoggingOut) {
