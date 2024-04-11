@@ -707,7 +707,6 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         }
       )
     )
-    this.buttons.addView(this.buttonCreator.createButtonSpace())
     this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
 
     this.checkButtonViewCount()
