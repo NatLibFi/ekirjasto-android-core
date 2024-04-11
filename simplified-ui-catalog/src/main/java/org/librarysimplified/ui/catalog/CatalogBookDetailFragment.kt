@@ -700,14 +700,6 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   ) {
     this.buttons.removeAllViews()
 
-    val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
-
-    if (createPreviewButton) {
-      this.buttons.addView(this.buttonCreator.createButtonSpace())
-    } else {
-      this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
-    }
-
     this.buttons.addView(
       this.buttonCreator.createReserveButton(
         onClick = {
@@ -715,21 +707,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         }
       )
     )
-
-    if (createPreviewButton) {
-      this.buttons.addView(this.buttonCreator.createButtonSpace())
-      this.buttons.addView(
-        this.buttonCreator.createReadPreviewButton(
-          bookFormat = parameters.feedEntry.probableFormat,
-          onClick = {
-            viewModel.openBookPreview(parameters.feedEntry)
-          }
-        )
-      )
-      this.buttons.addView(this.buttonCreator.createButtonSpace())
-    } else {
-      this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
-    }
+    this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
 
     this.checkButtonViewCount()
 
