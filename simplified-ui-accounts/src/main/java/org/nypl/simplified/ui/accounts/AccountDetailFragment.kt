@@ -877,7 +877,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.authenticationAlternativesShow()
       }
 
-      is AccountLoggedIn -> { //TODO handle passkey register
+      is AccountLoggedIn -> {
         when (val creds = loginState.credentials) {
           is AccountAuthenticationCredentials.Basic -> {
             this.authenticationViews.setBasicUserAndPass(
