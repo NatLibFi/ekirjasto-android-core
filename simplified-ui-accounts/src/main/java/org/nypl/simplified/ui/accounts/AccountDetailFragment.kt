@@ -611,34 +611,20 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     this.viewModel.tryLogin(request)
   }
 
-  private fun tryEkirjastoPasskeyLogin(credentials: AccountAuthenticationCredentials?) {
-    val state = this.authenticationViews.getEkirjastoPasskeyState()
-    this.logger.debug("TryEkirjastoPasskeyLogin: ${state}")
+  private fun tryEkirjastoPasskeyLogin(credentials: AccountAuthenticationCredentials) {
     val description = this.viewModel.account.provider.authentication
-    val token: String? = credentials?.let {
-      if (it is AccountAuthenticationCredentials.Ekirjasto) {
-        it.accessToken
-      } else {
-        null
-      }
-    }
-    if ( description is AccountProviderAuthenticationDescription.Ekirjasto) {
-      this.viewModel.tryLogin(ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
-        accountId = this.parameters.accountID,
-        description = description
-      ))
+    if (credentials is AccountAuthenticationCredentials.Ekirjasto &&
+      description is AccountProviderAuthenticationDescription.Ekirjasto) {
       this.listener.post(
         AccountDetailEvent.OpenEkirjastoPasskeyLogin(
           this.parameters.accountID,
           description,
           EkirjastoLoginMethod.Passkey(
             loginState = this.authenticationViews.getEkirjastoPasskeyState(),
-            circulationToken = token,
+            circulationToken = credentials.accessToken
           )
         )
       )
-    } else {
-      this.logger.error("Invalid accountProviderDescription for ekirjasto: $description")
     }
   }
   // Finland
@@ -731,7 +717,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
   }
 
   private fun reconfigureAccountUI() {
-    logger.debug("ReconfigureAccountUI: authentication type: ${viewModel.account.provider.authentication.description}")
+    logger.debug("account authentication type: ${viewModel.account.provider.authentication.description}")
     this.authenticationViews.showFor(this.viewModel.account.provider.authentication)
 
     if (this.viewModel.account.provider.cardCreatorURI != null) {
@@ -891,7 +877,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.authenticationAlternativesShow()
       }
 
-      is AccountLoggedIn -> {
+      is AccountLoggedIn -> { //TODO handle passkey register
         when (val creds = loginState.credentials) {
           is AccountAuthenticationCredentials.Basic -> {
             this.authenticationViews.setBasicUserAndPass(
@@ -910,17 +896,9 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           is AccountAuthenticationCredentials.Ekirjasto -> {
             logger.debug("Account Logged In as Ekirjasto")
             val loginMethod = this.authenticationViews.getEkirjastoLoginMethod();
-            when (loginMethod) {
-              is EkirjastoLoginMethod.SuomiFi -> {
-                this.logger.debug("Ekirjasto logged in as suomi.fi. Passkey registering is available")
-                this.authenticationViews.setEkirjastoPasskeyState(EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable)
-              }
-              is EkirjastoLoginMethod.Passkey -> {
-                this.logger.debug("Ekirjasto logged in with passkey")
-                this.authenticationViews.setEkirjastoPasskeyState(EkirjastoLoginMethod.Passkey.LoginState.LoggedIn)
-              }
+            if (loginMethod is EkirjastoLoginMethod.SuomiFi){
+              this.authenticationViews.setEkirjastoPasskeyState(EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable)
             }
-//            logger.warn("loginMethod=$loginMethod, username=${creds.username} token=${creds.accessToken}, ekirjastoToken=${creds.ekirjastoToken}")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -941,6 +919,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           this.setLoginButtonStatus(AsLoginButtonEnabled {
             logger.warn("Passkey: Login button should be configured as passkey register")
             this.loginFormLock()
+            //this.tryLogin()
             this.tryEkirjastoPasskeyLogin(loginState.credentials)
           })
         }
@@ -964,7 +943,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            //nothing
+//            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -998,7 +977,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            //nothing
+//            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -1197,14 +1176,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       is AccountProviderAuthenticationDescription.BasicToken ->
         this.onTryBasicTokenLogin(description)
 
-      is AccountProviderAuthenticationDescription.Ekirjasto -> {
-        val method = this.authenticationViews.getEkirjastoLoginMethod()
-        this.logger.debug("")
-        when (method) {
-         is EkirjastoLoginMethod.SuomiFi -> this.onTryEkirjastoSuomiFiLogin(description)
-         is EkirjastoLoginMethod.Passkey -> this.tryEkirjastoPasskeyLogin(null)
-        }
-      }
+      is AccountProviderAuthenticationDescription.Ekirjasto ->
+        this.onTryEkirjastoSuomiFiLogin(description)
 
       is AccountProviderAuthenticationDescription.Anonymous,
       is AccountProviderAuthenticationDescription.COPPAAgeGate ->
