@@ -919,7 +919,6 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
      */
 
     this.buttons.removeAllViews()
-    this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
     this.buttons.addView(
       this.buttonCreator.createCancelDownloadButton(
         onClick = {
