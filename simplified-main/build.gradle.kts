@@ -141,6 +141,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.stdlib)
     implementation(libs.logback.android)
+    implementation(libs.okhttp3)
     implementation(libs.palace.audiobook.feedbooks)
     implementation(libs.palace.drm.core)
     implementation(libs.palace.http.api)
