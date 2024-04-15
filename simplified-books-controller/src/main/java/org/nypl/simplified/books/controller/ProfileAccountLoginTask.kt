@@ -44,6 +44,7 @@ import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.Ek
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoComplete
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoInitiatePassKey
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoPasskeyComplete
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryCancel
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryComplete
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryInitiate
@@ -173,6 +174,10 @@ class ProfileAccountLoginTask(
           this.runEkirjastoInitiatePassKey(this.request)
         }
 
+        is EkirjastoPasskeyComplete -> {
+          this.runEkirjastoPasskeyComplete(this.request)
+        }
+
         is EkirjastoComplete -> {
           this.runEkirjastoComplete(this.request)
         }
@@ -247,11 +252,17 @@ class ProfileAccountLoginTask(
     }
   }
 
+
+  private fun runEkirjastoPasskeyComplete(request: EkirjastoPasskeyComplete): TaskResult<Unit> {
+    this.logger.warn("ProfileAccountLogin EKirjastoPasskeyComplete: request=$request")
+    this.account.setLoginState(AccountLoggedIn(this.credentials))
+    return this.steps.finishSuccess(Unit)
+  }
   // Finland
   private fun runEkirjastoComplete(
     request: EkirjastoComplete
   ): TaskResult<Unit> {
-    this.logger.warn("ProfileAccountLogin EKirjastoComplete: request=$request")
+    this.logger.warn("ProfileAccountLogin EKirjastoComplete")
     val authenticationURI = request.description.authenticate
 
     val httpRequest = this.http.newRequest(authenticationURI)
@@ -260,7 +271,7 @@ class ProfileAccountLoginTask(
       )
       .setMethod(Post(ByteArray(0), MIMECompatibility.applicationOctetStream))
       .build()
-
+    this.steps.beginNewStep("Authenticating Ekirjasto")
     httpRequest.execute().use { response ->
       when (val status = response.status) {
         is LSHTTPResponseStatus.Responded.OK -> {
@@ -274,11 +285,16 @@ class ProfileAccountLoginTask(
             annotationsURI = null,
             deviceRegistrationURI = null
           )
-          this.logger.warn("ekirjastoComplete Response OK, credentials updated: $credentials")
-
+          //this.logger.warn("ekirjastoComplete Response OK, credentials updated: $credentials")
+          this.steps.currentStepSucceeded("Ekirjasto authenticate successful")
+          this.steps.beginNewStep("Handle Patron User Profile")
           this.handlePatronUserProfile()
+          this.steps.beginNewStep("Device Activation")
           this.runDeviceActivation()
+          this.steps.currentStepSucceeded("Device Activation complete")
+          this.steps.beginNewStep("Update LoginState to Logged in")
           this.account.setLoginState(AccountLoggedIn(this.credentials))
+          this.steps.currentStepSucceeded("Login State updated")
           notificationTokenHttpCalls.registerFCMTokenForProfileAccount(
             account = account,
           )
@@ -665,6 +681,7 @@ class ProfileAccountLoginTask(
       }
 
       is EkirjastoComplete,
+      is EkirjastoPasskeyComplete,
       is EkirjastoCancel -> {
           this.account.provider.authentication is Ekirjasto ||
             (this.account.provider.authenticationAlternatives.any { it is Ekirjasto })
@@ -681,8 +698,6 @@ class ProfileAccountLoginTask(
   }
 
   private fun runDeviceActivation() {
-    this.debug("running device activation")
-
     val adobeDRMValues = this.adobeDRM
     if (adobeDRMValues != null) {
       this.runDeviceActivationAdobe(adobeDRMValues)
@@ -894,6 +909,10 @@ class ProfileAccountLoginTask(
           }
         }
       }
+      is EkirjastoPasskeyComplete -> {
+        this.logger.debug("Ignoring Logging In State when registering passkey")
+        true
+      }
     }
   }
 
@@ -977,6 +996,7 @@ class ProfileAccountLoginTask(
         this.request.description
       }
 
+      is EkirjastoPasskeyComplete,
       is EkirjastoComplete -> {
         when (val loginState = this.account.loginState) {
           is AccountLoggingIn -> {

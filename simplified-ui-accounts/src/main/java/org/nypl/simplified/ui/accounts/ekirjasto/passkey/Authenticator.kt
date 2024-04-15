@@ -22,10 +22,10 @@ import org.slf4j.LoggerFactory
 /**
  * Wrapper for android credential manager
  */
-class Authenticator (
+class Authenticator(
   val application: Application,
-  val credentialManager: CredentialManager )
-{
+  val credentialManager: CredentialManager
+) {
   val objectMapper = jacksonObjectMapper()
   val logger: Logger = LoggerFactory.getLogger(Authenticator::class.java)
 
@@ -42,6 +42,7 @@ class Authenticator (
         is PublicKeyCredential -> {
           return AuthenticateResult.parseJson(cred)
         }
+
         else -> throw Exception("Invalid credential type: ${cred.javaClass.name}")
       }
     }
@@ -54,17 +55,14 @@ class Authenticator (
       requestJson = objectMapper.writeValueAsString(parameters)
     )
 
-    try {
-      val result = credentialManager.createCredential(
-        context = application,
-        request = createPublicKeyCredentialRequest,
-      )
-      val response : String = result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
-      logger.debug("Authenticator Response: {}",response)
-      responseJson = this.objectMapper.readValue(response)
-    } catch (e : Exception) {
-      throw Exception("Error on Passkey Register Challenge", e)
-    }
+    val result = credentialManager.createCredential(
+      context = application,
+      request = createPublicKeyCredentialRequest,
+    )
+    val response: String =
+      result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
+    logger.debug("Authenticator Response: {}", response)
+    responseJson = this.objectMapper.readValue(response)
 
     return RegisterResult(
       id = responseJson["id"].asText(),

@@ -262,6 +262,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     buttonLoginSuomiFi.visibility = VISIBLE
     buttonLoginPasskey.visibility = VISIBLE
     buttonRegisterPasskey.visibility = GONE
+    this.syncBookmarks.visibility = GONE
 
   }
 
@@ -300,12 +301,12 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
         null
       }
     }
-    this.viewModel.tryLogin(
-      ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
-        accountId = this.parameters.accountID,
-        description = description
-      )
-    )
+//    this.viewModel.tryLogin(
+//      ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
+//        accountId = this.parameters.accountID,
+//        description = description
+//      )
+//    )
     this.listener.post(
       AccountDetailEvent.OpenEkirjastoPasskeyLogin(
         this.parameters.accountID,

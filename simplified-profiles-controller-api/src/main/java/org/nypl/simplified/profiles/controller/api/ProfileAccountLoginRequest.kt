@@ -116,6 +116,10 @@ sealed class ProfileAccountLoginRequest {
     val description: AccountProviderAuthenticationDescription.Ekirjasto
   ) : ProfileAccountLoginRequest()
 
+  data class EkirjastoPasskeyComplete(
+    override val accountId: AccountID,
+    val description: AccountProviderAuthenticationDescription.Ekirjasto
+  ) : ProfileAccountLoginRequest()
   /**
    * A request to complete a login using E-kirjasto authentication. In other
    * words, a set of E-kirjasto information has been passed to the application.
@@ -134,5 +138,6 @@ sealed class ProfileAccountLoginRequest {
   data class EkirjastoCancel(
     override val accountId: AccountID,
     val description: AccountProviderAuthenticationDescription.Ekirjasto,
+    val registering: Boolean = false
   ) : ProfileAccountLoginRequest()
 }

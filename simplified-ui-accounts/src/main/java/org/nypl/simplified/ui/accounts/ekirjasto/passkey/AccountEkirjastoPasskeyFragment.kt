@@ -40,19 +40,21 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
      * Create a new account fragment for the given parameters.
      */
 
-    fun create(parameters: org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters): org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragment {
+    fun create(parameters: AccountEkirjastoPasskeyFragmentParameters): AccountEkirjastoPasskeyFragment {
       val fragment =
-        org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragment()
-      fragment.arguments = bundleOf(org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragment.Companion.PARAMETERS_ID to parameters)
+        AccountEkirjastoPasskeyFragment()
+      fragment.arguments =
+        bundleOf(PARAMETERS_ID to parameters)
       return fragment
     }
   }
 
-  private val parameters: org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters by lazy {
-    this.requireArguments()[org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragment.Companion.PARAMETERS_ID] as org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters
+  private val parameters: AccountEkirjastoPasskeyFragmentParameters by lazy {
+    this.requireArguments()[PARAMETERS_ID] as AccountEkirjastoPasskeyFragmentParameters
   }
 
-  private val logger = LoggerFactory.getLogger(org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragment::class.java)
+  private val logger =
+    LoggerFactory.getLogger(AccountEkirjastoPasskeyFragment::class.java)
 
   private val listener: FragmentListenerType<AccountEkirjastoSuomiFiEvent> by fragmentListeners()
 
@@ -149,7 +151,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
 
     lifecycleScope.launch {
       val result = viewModel.passkeyLogin()
-      when (result){
+      when (result) {
         is TaskResult.Success<PasskeyAuth> -> postPasskeySuccessful(result.result)
         is TaskResult.Failure<PasskeyAuth> -> postPasskeyFailed(result)
       }
@@ -164,7 +166,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     }
     lifecycleScope.launch {
       val result = viewModel.passkeyRegister()
-      when (result){
+      when (result) {
         is TaskResult.Success<PasskeyAuth> -> listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
         is TaskResult.Failure<PasskeyAuth> -> postPasskeyFailed(result)
       }

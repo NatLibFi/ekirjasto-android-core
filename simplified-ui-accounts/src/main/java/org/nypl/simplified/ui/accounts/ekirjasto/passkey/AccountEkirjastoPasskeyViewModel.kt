@@ -62,6 +62,7 @@ class AccountEkirjastoPasskeyViewModel (
   private val buildConfig =
     services.requireService(BuildConfigurationServiceType::class.java)
   private val steps: TaskRecorderType = TaskRecorder.create()
+  private var registering: Boolean = false
 
 
 
@@ -79,7 +80,7 @@ class AccountEkirjastoPasskeyViewModel (
         // The user intentionally canceled the operation and chose not
         // to register the credential.
         logger.error("CreateCredentialCancellationException")
-        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
+        steps.currentStepSucceeded("User cancelled request")
       }
       is CreateCredentialInterruptedException -> {
         // Retry-able error. Consider retrying the call.
@@ -132,7 +133,8 @@ class AccountEkirjastoPasskeyViewModel (
     this.profiles.profileAccountLogin(
       ProfileAccountLoginRequest.EkirjastoCancel(
         accountId = account,
-        description = description
+        description = description,
+        registering = this.registering
       )
     )
 
@@ -140,10 +142,9 @@ class AccountEkirjastoPasskeyViewModel (
 
   suspend fun passkeyLogin(): TaskResult<PasskeyAuth> {
 
+    this.registering = false
     lateinit var startResponse : AuthenticatePublicKey
     lateinit var challengeResponse : AuthenticateResult
-
-    //TODO TaskRecording
 
     try {
       steps.beginNewStep("Passkey Login Start")
@@ -251,6 +252,7 @@ class AccountEkirjastoPasskeyViewModel (
   }
 
   suspend fun passkeyRegister() : TaskResult<PasskeyAuth> {
+    this.registering = true
     val uri = description.passkey_register_start
     val body = mapToJson(mapOf("username" to ""))
     lateinit var registerStartResponse: JsonNode
@@ -288,6 +290,16 @@ class AccountEkirjastoPasskeyViewModel (
       handleFailure(e)
       return steps.finishFailure()
     }
+//    try {
+//      this.profiles.profileAccountLogin(ProfileAccountLoginRequest.EkirjastoPasskeyComplete(
+//        accountId = this.account,
+//        description = this.description
+//      ))
+//    } catch (e: Exception){
+//      handleFailure(e)
+//      return steps.finishFailure()
+//    }
+
     return steps.finishSuccess(authResponse)
 
   }
