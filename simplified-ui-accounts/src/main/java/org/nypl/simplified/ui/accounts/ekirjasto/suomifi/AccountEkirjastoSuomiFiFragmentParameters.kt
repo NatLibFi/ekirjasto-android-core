@@ -1,4 +1,4 @@
-package org.nypl.simplified.ui.accounts.ekirjastosuomifi
+package org.nypl.simplified.ui.accounts.ekirjasto.suomifi
 
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription

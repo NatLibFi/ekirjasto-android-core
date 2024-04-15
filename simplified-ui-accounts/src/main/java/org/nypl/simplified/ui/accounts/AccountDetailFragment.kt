@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -23,10 +22,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.io7m.junreachable.UnimplementedCodeException
 import com.io7m.junreachable.UnreachableCodeException
 import io.reactivex.disposables.CompositeDisposable
 import org.librarysimplified.services.api.Services
+import org.librarysimplified.ui.accounts.R
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
 import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoggedIn
@@ -40,6 +41,10 @@ import org.nypl.simplified.accounts.api.AccountPassword
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountUsername
 import org.nypl.simplified.android.ktx.supportActionBar
+import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult.SYNC_DISABLED
+import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult.SYNC_ENABLED
+import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult.SYNC_ENABLE_NOT_SUPPORTED
+import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableStatus
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.oauth.OAuthCallbackIntentParsing
@@ -48,23 +53,18 @@ import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.Ba
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.BasicToken
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryCancel
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryInitiate
-import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult.SYNC_DISABLED
-import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult.SYNC_ENABLED
-import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult.SYNC_ENABLE_NOT_SUPPORTED
-import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableStatus
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsCancelButtonDisabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsCancelButtonEnabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLoginButtonDisabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLoginButtonEnabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLogoutButtonDisabled
 import org.nypl.simplified.ui.accounts.AccountLoginButtonStatus.AsLogoutButtonEnabled
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.images.ImageAccountIcons
 import org.nypl.simplified.ui.images.ImageLoaderType
 import org.slf4j.LoggerFactory
-import java.net.URI
-import org.librarysimplified.ui.accounts.R
 import org.thepalaceproject.theme.core.PalaceToolbar
-import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
+import java.net.URI
 
 /**
  * A fragment that shows settings for a single account.
@@ -326,6 +326,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.tryLogin()
       }
     } else {
+      logger.debug("LoginButtonDisable 1")
       AsLoginButtonDisabled
     }
   }
@@ -405,7 +406,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           )
         }
         is AccountProviderAuthenticationDescription.Ekirjasto -> {
-          this.authenticationViews.setEkirjastoEmail("")
+          this.authenticationViews.setEkirjastoUsername("")
         }
         AccountProviderAuthenticationDescription.Anonymous,
         is AccountProviderAuthenticationDescription.COPPAAgeGate,
@@ -610,16 +611,32 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     this.viewModel.tryLogin(request)
   }
 
+  private fun tryEkirjastoPasskeyLogin(credentials: AccountAuthenticationCredentials) {
+    val description = this.viewModel.account.provider.authentication
+    if (credentials is AccountAuthenticationCredentials.Ekirjasto &&
+      description is AccountProviderAuthenticationDescription.Ekirjasto) {
+      this.listener.post(
+        AccountDetailEvent.OpenEkirjastoPasskeyLogin(
+          this.parameters.accountID,
+          description,
+          EkirjastoLoginMethod.Passkey(
+            loginState = this.authenticationViews.getEkirjastoPasskeyState(),
+            circulationToken = credentials.accessToken
+          )
+        )
+      )
+    }
+  }
   // Finland
-  private fun onTryEkirjastoLogin(
+  private fun onTryEkirjastoSuomiFiLogin(
     authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto
   ) {
-    val loginMethod: ViewsForEkirjasto.LoginMethod =
+    val loginMethod: EkirjastoLoginMethod =
       this.authenticationViews.getEkirjastoLoginMethod()
-    val email: String? =
-      this.authenticationViews.getEkirjastoLoginEmail()
-
-    if (loginMethod == ViewsForEkirjasto.LoginMethod.SuomiFi) {
+//    val username: String? =
+//      this.authenticationViews.getEkirjastoLoginUsername()
+    logger.warn("On Try EKirjasto Suomi.fi Login: Loginmethod=$loginMethod")
+    if (loginMethod is EkirjastoLoginMethod.SuomiFi) {
       this.viewModel.tryLogin(
         ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi(
           accountId = this.parameters.accountID,
@@ -627,20 +644,22 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         )
       )
       this.listener.post(
-        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, email)
+        AccountDetailEvent.OpenEkirjastoSuomiFiLogin(this.parameters.accountID, authenticationDescription, loginMethod)
       )
+    } else {
+      this.logger.warn("Invalid login method for suomi.fi login")
     }
-    else if (loginMethod == ViewsForEkirjasto.LoginMethod.Passkey) {
-      this.viewModel.tryLogin(
-        ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
-          accountId = this.parameters.accountID,
-          description = authenticationDescription
-        )
-      )
-      this.listener.post(
-        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, email)
-      )
-    }
+//    else if (loginMethod == ViewsForEkirjasto.LoginMethod.Passkey) {
+//      this.viewModel.tryLogin(
+//        ProfileAccountLoginRequest.EkirjastoInitiatePassKey(
+//          accountId = this.parameters.accountID,
+//          description = authenticationDescription
+//        )
+//      )
+//      this.listener.post(
+//        AccountDetailEvent.OpenEkirjastoLogin(this.parameters.accountID, authenticationDescription, loginMethod, username)
+//      )
+//    }
   }
 
   private fun sendOAuthIntent(
@@ -698,6 +717,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
   }
 
   private fun reconfigureAccountUI() {
+    logger.debug("account authentication type: ${viewModel.account.provider.authentication.description}")
     this.authenticationViews.showFor(this.viewModel.account.provider.authentication)
 
     if (this.viewModel.account.provider.cardCreatorURI != null) {
@@ -786,11 +806,12 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
     this.disableSyncSwitchForLoginState(this.viewModel.account.loginState)
 
+    logger.debug("Account Login State: ${this.viewModel.account.loginState}")
+
     return when (val loginState = this.viewModel.account.loginState) {
       AccountNotLoggedIn -> {
         this.loginProgress.visibility = View.GONE
-        this.setLoginButtonStatus(
-          AsLoginButtonEnabled {
+        this.setLoginButtonStatus(AsLoginButtonEnabled {
             this.loginFormLock()
             this.tryLogin()
           }
@@ -811,8 +832,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginFormLock()
 
         if (loginState.cancellable) {
-          this.setLoginButtonStatus(
-            AsCancelButtonEnabled {
+          this.setLoginButtonStatus(AsCancelButtonEnabled {
               // We don't really support this yet.
               throw UnimplementedCodeException()
             }
@@ -828,8 +848,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginProgressText.text = loginState.status
         this.loginButtonErrorDetails.visibility = View.GONE
         this.loginFormLock()
-        this.setLoginButtonStatus(
-          AsCancelButtonEnabled {
+        this.setLoginButtonStatus(AsCancelButtonEnabled {
             this.viewModel.tryLogin(
               OAuthWithIntermediaryCancel(
                 accountId = this.viewModel.account.id,
@@ -846,8 +865,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginProgressText.text = loginState.taskResult.steps.last().resolution.message
         this.loginFormUnlock()
         this.cancelImageButtonLoading()
-        this.setLoginButtonStatus(
-          AsLoginButtonEnabled {
+        this.setLoginButtonStatus(AsLoginButtonEnabled {
             this.loginFormLock()
             this.tryLogin()
           }
@@ -876,7 +894,11 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
+            logger.debug("Account Logged In as Ekirjasto")
+            val loginMethod = this.authenticationViews.getEkirjastoLoginMethod();
+            if (loginMethod is EkirjastoLoginMethod.SuomiFi){
+              this.authenticationViews.setEkirjastoPasskeyState(EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable)
+            }
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -888,12 +910,19 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginProgress.visibility = View.GONE
         this.loginFormLock()
         this.loginButtonErrorDetails.visibility = View.GONE
-        this.setLoginButtonStatus(
-          AsLogoutButtonEnabled {
+        this.setLoginButtonStatus(AsLogoutButtonEnabled {
             this.loginFormLock()
             this.viewModel.tryLogout()
           }
         )
+        if (authenticationViews.getEkirjastoPasskeyState() == EkirjastoLoginMethod.Passkey.LoginState.RegisterAvailable) {
+          this.setLoginButtonStatus(AsLoginButtonEnabled {
+            logger.warn("Passkey: Login button should be configured as passkey register")
+            this.loginFormLock()
+            //this.tryLogin()
+            this.tryEkirjastoPasskeyLogin(loginState.credentials)
+          })
+        }
         this.authenticationAlternativesHide()
       }
 
@@ -914,7 +943,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
+//            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -948,7 +977,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
           }
 
           is AccountAuthenticationCredentials.Ekirjasto -> {
-            this.authenticationViews.setEkirjastoEmail(if (creds.email != null) creds.email!! else "")
+//            this.authenticationViews.setEkirjastoUsername(if (creds.username != null) creds.username!! else "")
           }
 
           is AccountAuthenticationCredentials.OAuthWithIntermediary,
@@ -962,8 +991,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.loginProgressText.text = loginState.taskResult.steps.last().resolution.message
         this.cancelImageButtonLoading()
         this.loginFormLock()
-        this.setLoginButtonStatus(
-          AsLogoutButtonEnabled {
+        this.setLoginButtonStatus(AsLogoutButtonEnabled {
             this.loginFormLock()
             this.viewModel.tryLogout()
           }
@@ -976,6 +1004,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       }
     }
   }
+
+
 
   private fun disableSyncSwitchForLoginState(loginState: AccountLoginState) {
     return when (loginState) {
@@ -1031,6 +1061,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       }
 
       is AsLoginButtonDisabled -> {
+        logger.debug("LoginButtonDisable 2")
         this.signUpLabel.setText(R.string.accountCardCreatorLabel)
         this.signUpLabel.isEnabled = true
       }
@@ -1089,6 +1120,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
     this.authenticationViews.lock()
 
+    logger.debug("LoginButtonDisable 3")
     this.setLoginButtonStatus(AsLoginButtonDisabled)
     this.authenticationAlternativesHide()
   }
@@ -1145,7 +1177,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         this.onTryBasicTokenLogin(description)
 
       is AccountProviderAuthenticationDescription.Ekirjasto ->
-        this.onTryEkirjastoLogin(description)
+        this.onTryEkirjastoSuomiFiLogin(description)
 
       is AccountProviderAuthenticationDescription.Anonymous,
       is AccountProviderAuthenticationDescription.COPPAAgeGate ->

@@ -12,19 +12,19 @@ import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Basic
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.BasicToken
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.COPPAAgeGate
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Ekirjasto
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.OAuthWithIntermediary
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.SAML2_0
-import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription.Ekirjasto
 import org.nypl.simplified.accounts.api.AccountUsername
-
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.accounts.view_bindings.AccountAuthenticationViewBindings
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForAnonymous
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForBasic
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForBasicToken
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForCOPPAAgeGate
+import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForOAuthWithIntermediary
 import org.nypl.simplified.ui.accounts.view_bindings.ViewsForSAML20
-import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 
 /**
  * A class that handles the visibility for a set of overlapping views.
@@ -65,8 +65,7 @@ class AccountAuthenticationViews(
     )
   private val ekirjasto: ViewsForEkirjasto =
     ViewsForEkirjasto.bind(
-      this.viewGroup.findViewById(R.id.authEkirjasto),
-      onUsernameChangeListener = onUsernamePasswordChangeListener
+      this.viewGroup.findViewById(R.id.authEkirjasto)
     )
 
   private val viewGroups =
@@ -203,8 +202,8 @@ class AccountAuthenticationViews(
   }
 
   // Helsinki
-  fun setEkirjastoEmail(email: String) {
-    this.ekirjasto.setUsername(email)
+  fun setEkirjastoUsername(username: String) {
+    this.ekirjasto.setUsername(username)
   }
 
   /**
@@ -282,8 +281,8 @@ class AccountAuthenticationViews(
    */
 
   // Finland
-  fun getEkirjastoLoginEmail(): String? {
-    return this.ekirjasto.getUsername().value
+  fun getEkirjastoLoginUsername(): AccountUsername? {
+    return this.ekirjasto.getUsername()
   }
 
   /**
@@ -291,8 +290,16 @@ class AccountAuthenticationViews(
    */
 
   // Finland
-  fun getEkirjastoLoginMethod(): ViewsForEkirjasto.LoginMethod {
+  fun getEkirjastoLoginMethod(): EkirjastoLoginMethod {
     return this.ekirjasto.getActiveLoginMethod()
+  }
+
+  fun setEkirjastoPasskeyState(state: EkirjastoLoginMethod.Passkey.LoginState) {
+    this.ekirjasto.updatePasskeyState(state)
+  }
+
+  fun getEkirjastoPasskeyState(): EkirjastoLoginMethod.Passkey.LoginState {
+    return this.ekirjasto.passkeyState
   }
 
 }

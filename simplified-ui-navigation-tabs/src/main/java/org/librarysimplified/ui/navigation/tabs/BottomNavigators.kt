@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomnavigation.LabelVisibilityMode
+import com.google.android.material.navigation.NavigationBarView
 import com.io7m.junreachable.UnreachableCodeException
 import com.pandora.bottomnavigator.BottomNavigator
 import org.joda.time.DateTime
+import org.librarysimplified.ui.catalog.CatalogFeedArguments
+import org.librarysimplified.ui.catalog.CatalogFeedFragment
+import org.librarysimplified.ui.catalog.CatalogFeedOwnership
+import org.librarysimplified.ui.tabs.R
 import org.nypl.simplified.accounts.api.AccountProviderType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryType
@@ -15,11 +19,8 @@ import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.feeds.api.FeedBooksSelection
 import org.nypl.simplified.feeds.api.FeedFacet
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
-import org.librarysimplified.ui.catalog.CatalogFeedArguments
-import org.librarysimplified.ui.catalog.CatalogFeedFragment
-import org.librarysimplified.ui.catalog.CatalogFeedOwnership
-import org.librarysimplified.ui.tabs.R
-import org.nypl.simplified.ui.settings.SettingsMainFragment
+import org.nypl.simplified.ui.accounts.AccountFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjasto.EKirjastoAccountFragment
 import org.slf4j.LoggerFactory
 
 object BottomNavigators {
@@ -79,7 +80,10 @@ object BottomNavigators {
             )
           },
           R.id.tabSettings to {
-            createSettingsFragment(R.id.tabSettings)
+            createSettingsFragment(
+              R.id.tabSettings,
+              profilesController,
+              accountProviders.defaultProvider)
           }
         ),
         defaultTab = R.id.tabCatalog,
@@ -87,7 +91,7 @@ object BottomNavigators {
         instanceOwner = fragment
       )
 
-    navigationView.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+    navigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
 
     return navigator
   }
@@ -150,9 +154,19 @@ object BottomNavigators {
     )
   }
 
-  private fun createSettingsFragment(id: Int): Fragment {
+  private fun createSettingsFragment(
+    id: Int,
+    profilesController: ProfilesControllerType,
+    defaultProvider: AccountProviderType
+    ): Fragment {
+    val account = pickDefaultAccount(profilesController, defaultProvider)
     logger.debug("[{}]: creating settings fragment", id)
-    return SettingsMainFragment()
+    return EKirjastoAccountFragment.create(AccountFragmentParameters(
+      accountID = account.id,
+      showPleaseLogInTitle = false,
+      hideToolbar = false,
+      barcode = null
+    ))
   }
 
   private fun createHoldsFragment(

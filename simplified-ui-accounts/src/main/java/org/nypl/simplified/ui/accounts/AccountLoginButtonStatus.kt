@@ -50,4 +50,5 @@ sealed class AccountLoginButtonStatus {
    */
 
   object AsCancelButtonDisabled : AccountLoginButtonStatus()
+
 }

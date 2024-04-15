@@ -1,7 +1,8 @@
-package org.nypl.simplified.ui.accounts.ekirjastopasskey
+package org.nypl.simplified.ui.accounts.ekirjasto.passkey
 
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import java.io.Serializable
 
 /**
@@ -11,5 +12,5 @@ import java.io.Serializable
 data class AccountEkirjastoPasskeyFragmentParameters(
   val accountID: AccountID,
   val authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
-  val username: String
+  val loginMethod : EkirjastoLoginMethod.Passkey
 ) : Serializable

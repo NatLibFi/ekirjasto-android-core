@@ -27,7 +27,6 @@ import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.ui.accounts.AccountCardCreatorFragment
 import org.nypl.simplified.ui.accounts.AccountCardCreatorParameters
 import org.nypl.simplified.ui.accounts.AccountDetailEvent
-import org.nypl.simplified.ui.accounts.AccountDetailFragment
 import org.nypl.simplified.ui.accounts.AccountFragmentParameters
 import org.nypl.simplified.ui.accounts.AccountListEvent
 import org.nypl.simplified.ui.accounts.AccountListFragment
@@ -35,15 +34,15 @@ import org.nypl.simplified.ui.accounts.AccountListFragmentParameters
 import org.nypl.simplified.ui.accounts.AccountListRegistryEvent
 import org.nypl.simplified.ui.accounts.AccountListRegistryFragment
 import org.nypl.simplified.ui.accounts.AccountPickerEvent
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.AccountEkirjastoPasskeyFragment
-import org.nypl.simplified.ui.accounts.ekirjastopasskey.AccountEkirjastoPasskeyFragmentParameters
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiEvent
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiFragment
-import org.nypl.simplified.ui.accounts.ekirjastosuomifi.AccountEkirjastoSuomiFiFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjasto.EKirjastoAccountFragment
+import org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiEvent
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragment
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragmentParameters
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Event
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Fragment
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20FragmentParameters
-import org.nypl.simplified.ui.accounts.view_bindings.ViewsForEkirjasto
 import org.nypl.simplified.ui.errorpage.ErrorPageEvent
 import org.nypl.simplified.ui.errorpage.ErrorPageFragment
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
@@ -376,8 +375,13 @@ internal class MainFragmentListenerDelegate(
         state
       }
 
-      is AccountDetailEvent.OpenEkirjastoLogin -> {
-        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod, event.email)
+      is AccountDetailEvent.OpenEkirjastoSuomiFiLogin -> {
+        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod)
+        state
+      }
+
+      is AccountDetailEvent.OpenEkirjastoPasskeyLogin -> {
+        this.openEkirjastoLogin(event.account, event.authenticationDescription, event.loginMethod)
         state
       }
 
@@ -667,9 +671,9 @@ internal class MainFragmentListenerDelegate(
     comingFromDeepLink: Boolean,
     barcode: String?
   ) {
-    this.logger.debug("openSettingsAccount called with comingFromDeepLink: $comingFromDeepLink")
+    this.logger.debug("Open Ekirjasto Account: called with comingFromDeepLink: $comingFromDeepLink")
     this.navigator.addFragment(
-      fragment = AccountDetailFragment.create(
+      fragment = EKirjastoAccountFragment.create(
         AccountFragmentParameters(
           accountID = accountID,
           showPleaseLogInTitle = comingFromBookLoanRequest,
@@ -700,11 +704,11 @@ internal class MainFragmentListenerDelegate(
   private fun openEkirjastoLogin(
     account: AccountID,
     authenticationDescription: AccountProviderAuthenticationDescription.Ekirjasto,
-    loginMethod: ViewsForEkirjasto.LoginMethod,
-    email: String?
+    loginMethod: EkirjastoLoginMethod,
   ) {
+    this.logger.debug("Open Ekirjasto Login. loginMethod=$loginMethod")
     when (loginMethod) {
-      ViewsForEkirjasto.LoginMethod.SuomiFi -> {
+      is EkirjastoLoginMethod.SuomiFi -> {
         this.navigator.addFragment(
           fragment = AccountEkirjastoSuomiFiFragment.create(
             AccountEkirjastoSuomiFiFragmentParameters(
@@ -715,13 +719,13 @@ internal class MainFragmentListenerDelegate(
           tab = this.navigator.currentTab()
         )
       }
-      ViewsForEkirjasto.LoginMethod.Passkey -> {
+      is EkirjastoLoginMethod.Passkey -> {
         this.navigator.addFragment(
-          fragment = AccountEkirjastoPasskeyFragment.create(
+          fragment = org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragment.create(
             AccountEkirjastoPasskeyFragmentParameters(
               accountID = account,
               authenticationDescription = authenticationDescription,
-              username = email!!
+              loginMethod
             )
           ),
           tab = this.navigator.currentTab()

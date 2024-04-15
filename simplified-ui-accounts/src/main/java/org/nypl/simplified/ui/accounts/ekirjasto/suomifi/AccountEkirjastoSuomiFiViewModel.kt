@@ -1,24 +1,21 @@
-package org.nypl.simplified.ui.accounts.ekirjastosuomifi
+package org.nypl.simplified.ui.accounts.ekirjasto.suomifi
 
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.view.View
 import android.webkit.CookieManager
-import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.lifecycle.ViewModel
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import hu.akarnokd.rxjava2.subjects.UnicastWorkSubject
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import org.librarysimplified.services.api.Services
+import org.librarysimplified.ui.accounts.R
 import org.nypl.simplified.accounts.api.AccountCookie
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
@@ -30,7 +27,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.concurrent.atomic.AtomicReference
-import org.librarysimplified.ui.accounts.R
 
 /**
  * View state for the E-kirjasto fragment.
@@ -113,20 +109,22 @@ class AccountEkirjastoSuomiFiViewModel(
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+      super.onPageStarted(view, url, favicon)
       logger.debug("onPageStarted $url")
       url?.let {
         if (it.startsWith(this.description.tunnistus_finish.toString())) {
           logger.debug("sending accessTokenStartReceive event")
-          this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.AccessTokenStartReceive())
+          view?.visibility = View.GONE
+          //this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.AccessTokenStartReceive())
         }
       }
-      super.onPageStarted(view, url, favicon)
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
       logger.debug("onPageFinished $url")
       url?.let {
         if (it.startsWith(this.description.tunnistus_finish.toString())) {
+          view?.visibility = View.GONE
           view?.evaluateJavascript(
             "(function() {return document.querySelector('pre').innerText; })();"
           ) { json -> parseAuthToken(json.trim()
@@ -172,20 +170,28 @@ class AccountEkirjastoSuomiFiViewModel(
         )
       )
 
-      this.profiles.profileAccountLogin(
-        ProfileAccountLoginRequest.EkirjastoComplete(
-          accountId = this.account,
-          description = this.description,
-          ekirjastoToken = ekirjastoToken,
-          email = null
+      try {
+        this.profiles.profileAccountLogin(
+          ProfileAccountLoginRequest.EkirjastoComplete(
+            accountId = this.account,
+            description = this.description,
+            ekirjastoToken = ekirjastoToken,
+          )
         )
-      )
-      this.eventSubject.onNext(
-        AccountEkirjastoSuomiFiInternalEvent.AccessTokenObtained(
-          token = ekirjastoToken,
-          cookies = cookies
+        this.eventSubject.onNext(
+          AccountEkirjastoSuomiFiInternalEvent.AccessTokenObtained(
+            token = ekirjastoToken,
+            cookies = cookies
+          )
         )
-      )
+      } catch (e:Exception){
+        this.logger.error(e.message, e)
+        this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.Failed(
+          e.message?:"Error when finalizing suomi.fi login"
+        ))
+      }
+
+
     }
   }
 
@@ -198,7 +204,6 @@ class AccountEkirjastoSuomiFiViewModel(
         ProfileAccountLoginRequest.EkirjastoCancel(
           accountId = this.account,
           description = this.description,
-          email = null
         )
       )
     }

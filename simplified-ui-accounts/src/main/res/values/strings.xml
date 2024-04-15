@@ -67,4 +67,14 @@
   <string name="accountEkirjastoLoggingInLabel">Logging in with %1$s</string>
   <string name="accountEkirjastoLoggedInLabel">Logged in the E-kirjasto.</string>
   <string name="accountPasskeyCreate">Register Passkey</string>
+    <string name="AccountTitle">Settings</string>
+    <string name="app_version_string">E-Kirjasto-version %1$s</string>
+  <string name="account_login_suomifi">Sign in with Suomi.FI</string>
+  <string name="account_login_passkey">Sign in with Passkey</string>
+  <string name="account_register_passkey">Register Passkey</string>
+  <string name="account_eula">User Agreement</string>
+  <string name="account_licenses">Software Licenses</string>
+  <string name="account_leave_feedback">Leave feedback</string>
+  <string name="account_about_app">About App</string>
+  <string name="account_sync_bookmarks_statement">Save your reading position and bookmarks to all your other devices</string>
 </resources>

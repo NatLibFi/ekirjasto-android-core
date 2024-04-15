@@ -1,7 +1,8 @@
-package org.nypl.simplified.ui.accounts.ekirjastosuomifi
+package org.nypl.simplified.ui.accounts.ekirjasto.suomifi
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.INVISIBLE
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
@@ -9,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.reactivex.disposables.CompositeDisposable
+import org.librarysimplified.ui.accounts.R
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
@@ -16,7 +18,7 @@ import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskStep
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
 import org.nypl.simplified.webview.WebViewUtilities
-import org.librarysimplified.ui.accounts.R
+import org.slf4j.LoggerFactory
 
 /**
  * A fragment that performs the E-kirjasto login workflow.
@@ -35,11 +37,12 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
 
     fun create(parameters: AccountEkirjastoSuomiFiFragmentParameters): AccountEkirjastoSuomiFiFragment {
       val fragment = AccountEkirjastoSuomiFiFragment()
-      fragment.arguments = bundleOf(this.PARAMETERS_ID to parameters)
+      fragment.arguments = bundleOf(PARAMETERS_ID to parameters)
       return fragment
     }
   }
 
+  private val logger = LoggerFactory.getLogger(AccountEkirjastoSuomiFiFragment::class.java)
   private val eventSubscriptions: CompositeDisposable =
     CompositeDisposable()
 
@@ -108,7 +111,8 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
   }
 
   private fun onSuomiFiEventAccessTokenStartReceive() {
-    this.webView.visibility = View.GONE;
+    logger.debug("Access token Start Receive - webview should be invisible")
+    this.webView.visibility = INVISIBLE
   }
 
   private fun onWebViewClientReady() {
@@ -145,7 +149,7 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
       ErrorPageParameters(
         emailAddress = this.viewModel.supportEmailAddress,
         body = "",
-        subject = "[simplye-error-report]",
+        subject = "[ekirjasto-error-report]",
         attributes = sortedMapOf(),
         taskSteps = taskSteps
       )

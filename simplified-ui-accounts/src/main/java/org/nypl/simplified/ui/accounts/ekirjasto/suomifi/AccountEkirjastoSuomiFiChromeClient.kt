@@ -1,4 +1,4 @@
-package org.nypl.simplified.ui.accounts.ekirjastosuomifi
+package org.nypl.simplified.ui.accounts.ekirjasto.suomifi
 
 import android.view.View
 import android.webkit.WebChromeClient

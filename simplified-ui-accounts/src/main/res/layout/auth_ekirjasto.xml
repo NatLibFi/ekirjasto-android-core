@@ -9,7 +9,7 @@
   android:paddingEnd="16dp">
 
   <LinearLayout
-      android:id="@+id/ekirjastoLoginContainer"
+      android:id="@+id/suomifiLoginContainer"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical">
@@ -28,18 +28,24 @@
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
         android:text="@string/accountLogin" />
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+  </LinearLayout>
+  <View
+      android:id="@+id/divider"
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?android:attr/listDivider" />
+  <LinearLayout
+      android:id="@+id/passkeyLoginContainer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/accountEkirjastoPassKeyLabel" />
+        android:text="@string/accountEkirjastoPassKeyLabel"
+        android:isCredential="true"/>
 
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/authPassKeyUsernameLabel"

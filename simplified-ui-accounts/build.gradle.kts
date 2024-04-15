@@ -81,9 +81,12 @@ dependencies {
     implementation(libs.rxjava2.extensions)
     implementation(libs.slf4j)
 
-    implementation("androidx.credentials:credentials:1.2.0")
-    //implementation("androidx.credentials:credentials:1.3.0-alpha01")
     // Required for Android 13 and below.
+    implementation("androidx.credentials:credentials:1.2.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
-    //implementation("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
+    // 1.2.1. has fix for when oem is not enabling CredentialManager
+//    implementation("androidx.credentials:credentials:1.2.1")
+//    implementation("androidx.credentials:credentials-play-services-auth:1.2.1")
+//    implementation("androidx.credentials:credentials:1.3.0-alpha01")
+//    implementation("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
 }
