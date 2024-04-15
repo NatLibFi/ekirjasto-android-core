@@ -133,7 +133,10 @@ class CatalogButtons(
     @StringRes res: Int,
     onClick: () -> Unit
   ): View {
-    val button = MaterialButton(this.context)
+    val button = MaterialButton(
+      ContextThemeWrapper(this.context, R.style.PrimaryButton),
+      null, R.style.PrimaryButton
+    )
     button.text = this.context.getString(res)
     button.contentDescription = this.context.getString(res)
     button.layoutParams = this.buttonLayoutParameters(true)
