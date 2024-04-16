@@ -16,18 +16,24 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
     super.onViewCreated(view, savedInstanceState)
 
 
-    val loginButton = view.findViewById<Button>(R.id.ekirjasto_loginButton)
-    val regButton = view.findViewById<Button>(R.id.ekirjasto_regButton)
+    val loginSuomiFiButton = view.findViewById<Button>(R.id.ekirjasto_loginSuomiFi)
+    val loginPasskeyButton = view.findViewById<Button>(R.id.ekirjasto_loginPasskey)
+    val loginSkipButton = view.findViewById<Button>(R.id.ekirjasto_loginSkip)
 
-    loginButton!!.setOnClickListener { ekirjastoLogin() }
-    regButton!!.setOnClickListener { ekirjastoReg() }
+    loginSuomiFiButton!!.setOnClickListener { loginSuomiFi() }
+    loginPasskeyButton!!.setOnClickListener { loginPasskey() }
+    loginSkipButton!!.setOnClickListener { skipLogin() }
   }
 
-  private fun ekirjastoLogin() {
-    this.listener.post(LoginEvent.StartLogin)
+  private fun skipLogin() {
+    this.listener.post(LoginEvent.SkipLogin)
   }
 
-  private fun ekirjastoReg() {
-    this.listener.post(LoginEvent.StartLogin)
+  private fun loginSuomiFi() {
+    this.listener.post(LoginEvent.StartLoginSuomiFi)
+  }
+
+  private fun loginPasskey() {
+    this.listener.post(LoginEvent.StartLoginPasskey)
   }
 }

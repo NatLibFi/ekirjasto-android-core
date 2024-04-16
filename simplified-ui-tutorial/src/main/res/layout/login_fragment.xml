@@ -1,65 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="top|center"
-    android:paddingTop="50dp"
-    android:paddingBottom="50dp">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/login_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:src="@drawable/e_kirjasto_logo_vihrea_fi_sve"/>
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="100dp"
+        android:contentDescription="E-Kirjasto Logo"
+        android:src="@drawable/e_kirjasto_logo_vihrea_fi_sve"
+        app:layout_constraintBottom_toTopOf="@id/login_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/login_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/ekirjasto_loginButton"
-        android:layout_below="@id/login_logo"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="30dp"
-        android:src="@drawable/e_kirjasto_login_background" />
+        android:id="@+id/login_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/e_kirjasto_login_background"
+        app:layout_constraintBottom_toTopOf="@id/login_buttons_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_logo" />
 
-    <Button
-        android:id="@+id/ekirjasto_loginButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/login_buttons_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/ekirjasto_regButton"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="15dp"
-        android:width="300dp"
-        android:height="50dp"
-        android:background="@color/colorEkirjastoLightestGreen"
-        android:drawableEnd="@drawable/elibrary_arrow_right_icon"
-        android:paddingRight="20dp"
+        android:orientation="vertical"
         android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
-        android:text="Kirjaudu palveluun" />
+        android:layout_marginEnd="51dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.90">
 
-    <Button
-        android:id="@+id/ekirjasto_regButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:width="300dp"
-        android:height="50dp"
-        android:background="@color/colorEkirjastoGreen"
-        android:drawableEnd="@drawable/elibrary_arrow_right_icon"
-        android:drawableTint="@color/colorEkirjastoBlack"
-        android:paddingRight="20dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
-        android:text="Rekisteröidy palveluun"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/ekirjasto_loginSuomiFi"
+            style="@style/Palace.Button.Contained.Large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/elibrary_arrow_right_icon"
+            android:paddingRight="20dp"
+            android:text="@string/login_suomifi" />
 
-</RelativeLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/ekirjasto_loginPasskey"
+            style="@style/Palace.Button.Contained.Large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/elibrary_arrow_right_icon"
+            android:paddingRight="20dp"
+            android:text="@string/login_passkey" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/ekirjasto_loginSkip"
+            style="@style/Palace.Button.Contained.Large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/EkirjastoYellow"
+            android:drawableEnd="@drawable/elibrary_arrow_right_icon"
+            android:drawableTint="@color/colorEkirjastoBlack"
+            android:paddingRight="20dp"
+            android:text="@string/skip_login" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,7 @@
 package org.librarysimplified.ui.login
 
 sealed interface LoginEvent {
-  object StartLogin : LoginEvent
+  object StartLoginSuomiFi : LoginEvent
+  object StartLoginPasskey : LoginEvent
+  object SkipLogin : LoginEvent
 }

@@ -266,8 +266,10 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
   private fun handleLoginEvent(event: LoginEvent) {
     return when (event) {
-      LoginEvent.StartLogin ->
+      LoginEvent.SkipLogin ->
         this.openMainFragment()
+      LoginEvent.StartLoginSuomiFi -> {}
+      LoginEvent.StartLoginPasskey -> {}
     }
   }
 
@@ -345,8 +347,8 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   }
 
   private fun onOnboardingFinished() {
-    this.openMainFragment()
-    //this.openLogin()
+    //this.openMainFragment()
+    this.openLogin()
   }
 
   private fun openMainBackStack() {
@@ -384,6 +386,14 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     this.supportFragmentManager.commit {
       replace(R.id.mainFragmentHolder, tutorialFragment)
     }
+  }
+
+  private fun openSuomiFiLogin() {
+    this.logger.debug("From Login Screen open Suomi.Fi login")
+
+  }
+  private fun openPasskeyLogin() {
+    this.logger.debug("From Login Screen open Passkey login")
   }
 
   private fun openLogin() {

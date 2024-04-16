@@ -5,10 +5,13 @@ dependencies {
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.appcompat.resources)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.constraintlayout.core)
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.androidx.core)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.customview)
     implementation(libs.androidx.drawerlayout)
     implementation(libs.androidx.fragment)
@@ -27,4 +30,5 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
     implementation(libs.slf4j)
+    implementation(libs.palace.theme)
 }
