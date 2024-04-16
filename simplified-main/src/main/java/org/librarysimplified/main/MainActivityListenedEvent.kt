@@ -1,5 +1,7 @@
 package org.librarysimplified.main
 
+import org.librarysimplified.ui.login.MainLoginEvent
+
 sealed class MainActivityListenedEvent {
 
   data class SplashEvent(
@@ -15,6 +17,6 @@ sealed class MainActivityListenedEvent {
   ) : MainActivityListenedEvent()
 
   data class LoginEvent(
-    val event: org.librarysimplified.ui.login.LoginEvent
+    val event: MainLoginEvent
   ) : MainActivityListenedEvent()
 }

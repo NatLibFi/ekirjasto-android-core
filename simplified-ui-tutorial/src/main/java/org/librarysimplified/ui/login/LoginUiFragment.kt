@@ -7,15 +7,13 @@ import androidx.fragment.app.Fragment
 import org.librarysimplified.ui.tutorial.R
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
+import org.slf4j.LoggerFactory
 
-
-class LoginFragment : Fragment(R.layout.login_fragment) {
+class LoginUiFragment : Fragment(R.layout.login_fragment) {
+  private val logger = LoggerFactory.getLogger(LoginUiFragment::class.java)
   private val listener: FragmentListenerType<LoginEvent> by fragmentListeners()
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
-
     val loginSuomiFiButton = view.findViewById<Button>(R.id.ekirjasto_loginSuomiFi)
     val loginPasskeyButton = view.findViewById<Button>(R.id.ekirjasto_loginPasskey)
     val loginSkipButton = view.findViewById<Button>(R.id.ekirjasto_loginSkip)
@@ -24,7 +22,6 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
     loginPasskeyButton!!.setOnClickListener { loginPasskey() }
     loginSkipButton!!.setOnClickListener { skipLogin() }
   }
-
   private fun skipLogin() {
     this.listener.post(LoginEvent.SkipLogin)
   }

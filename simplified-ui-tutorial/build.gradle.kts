@@ -2,6 +2,12 @@ dependencies {
     implementation(project(":simplified-services-api"))
     implementation(project(":simplified-ui-listeners-api"))
     implementation(project(":simplified-ui-screen"))
+    implementation(project(":simplified-accounts-database-api"))
+    implementation(project(":simplified-profiles-api"))
+    implementation(project(":simplified-profiles-controller-api"))
+    implementation(project(":simplified-accounts-api"))
+    implementation(project(":simplified-ui-accounts"))
+    implementation(project(":simplified-accounts-registry-api"))
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
@@ -16,6 +22,8 @@ dependencies {
     implementation(libs.androidx.drawerlayout)
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.vectordrawable)
+    implementation(libs.androidx.vectordrawable.animated)
     implementation(libs.androidx.lifecycle.common)
     implementation(libs.androidx.lifecycle.extensions)
     implementation(libs.androidx.lifecycle.viewmodel)
@@ -31,4 +39,5 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.slf4j)
     implementation(libs.palace.theme)
+    implementation(project(":simplified-ui-errorpage"))
 }
