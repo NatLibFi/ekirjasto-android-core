@@ -123,7 +123,7 @@ class SettingsMainFragment : PreferenceFragmentCompat() {
       val resId = resources.getIdentifier(name, "string", requireContext().packageName)
       if (resId != 0) {
         val string = getString(resId)
-        if (string.isNotEmpty() && !string.startsWith("[[")) {
+        if (string.isNotEmpty()) {
           return string
         }
       }

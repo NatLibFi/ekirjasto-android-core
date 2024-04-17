@@ -27,24 +27,29 @@ object MainTransifex {
       this.logger.warn("secrets.conf not found, will insert empty Transifex token")
       null
     } catch (e: Exception) {
-      this.logger.warn("Failed to initialize Transifex", e)
+      this.logger.warn("Could not find Transifex token in secrets.conf, will insert empty token", e)
       null
     }
   }
 
   /**
-   * Configure Transifex. Does nothing if the Transifex token is not present.
+   * Configure Transifex.
+   *
+   * Will insert an empty token for Transifex if a token is not found in assets.
    */
 
   fun configure(applicationContext: Context) {
     this.logger.debug("MainTransifex.configure()")
     val token = loadTransifexToken(applicationContext) ?: ""
 
+    val languages = BuildConfig.LANGUAGES.split(",")
+    this.logger.debug("Languages: " + languages.joinToString(", "))
+
     val localeState =
       LocaleState(
         applicationContext,
-        "en",
-        arrayOf("en", "fi", "sv"),
+        languages.first(),
+        languages.toTypedArray(),
         null
       )
 
