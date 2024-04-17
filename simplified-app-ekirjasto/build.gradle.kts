@@ -137,9 +137,9 @@ android {
     defaultConfig {
         applicationId = "fi.kansalliskirjasto.ekirjasto"
         versionCode = calculateVersionCode()
-        resourceConfigurations.add("en")
-        resourceConfigurations.add("fi")
-        resourceConfigurations.add("sv")
+        val languages = overrideProperty("ekirjasto.languages")
+        println("Configured languages: $languages")
+        resourceConfigurations += languages.split(",")
         setProperty("archivesBaseName", "ekirjasto")
     }
 

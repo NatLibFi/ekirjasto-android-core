@@ -1,1 +1,1306 @@
-{"data":{"contentDescriptionBack":{"string":"Tillbaka"},"contentDescriptionLogo":{"string":"Logotyp"},"search":{"string":"Sök..."},"resolving":{"string":""},"resolvingAuthDocument":{"string":""},"resolvingAuthDocumentBasicTokenMalformed":{"string":""},"resolvingAuthDocumentCOPPAAgeGateMalformed":{"string":""},"resolvingAuthDocumentMissingURI":{"string":"URI för ett autentiseringsdokument saknas."},"resolvingAuthDocumentNoStartURI":{"string":""},"resolvingAuthDocumentNoUsableAuthenticationTypes":{"string":"Kontot angav inte någon typ av autentisering som vi kan förstå."},"resolvingAuthDocumentOAuthMalformed":{"string":""},"resolvingAuthDocumentSAML20Malformed":{"string":""},"resolvingAuthDocumentParseFailed":{"string":"Autentiseringsdokumentet var felaktigt formaterat och parsningen misslyckades."},"resolvingAuthDocumentRetrievalFailed":{"string":"Autentiseringsdokumentet kunde inte hämtas från servern."},"resolvingAuthDocumentRetrievalFailedWithProblem":{"string":"Autentiseringsdokumentet kunde inte hämtas från servern."},"resolvingAuthDocumentUnusableLink":{"string":"Vi kunde inte förstå autentiseringsdokumentets länk."},"resolvingUnexpectedException":{"string":""},"dialog_manual_passphrase_cancel":{"string":"Ångra"},"dialog_manual_passphrase_done":{"string":"Klart"},"dialog_manual_passphrase_hint":{"string":"Lösenfras"},"dialog_manual_passphrase_title":{"string":"Ange LCP-lösenfras"},"bookPreviewPlayerInitialTime":{"string":"00:00:00"},"bookPreviewPlayerSeek30":{"string":"30"},"bookPreviewFailedTitle":{"string":"Det gick inte att ladda förhandsvisningen av boken"},"bookPreviewFailedMessage":{"string":"Det uppstod ett fel när förhandsvisningen av denna bok laddades. Försök på nytt senare."},"bookPreviewAccessibilityBack":{"string":"Tillbaka"},"bookPreviewAccessibilityForward30":{"string":"Spola fram 30 sekunder"},"bookPreviewAccessibilityBackward30":{"string":"Spola tillbaka 30 sekunder"},"bookPreviewAccessibilityPlay":{"string":"Spela upp"},"bookPreviewAccessibilityPause":{"string":"Pausa"},"bookPreviewAccessibilityCover":{"string":"Bokomslag"},"bookPreviewAccessibilityTimeCurrent":{"string":""},"bookPreviewAccessibilityTimeRemaining":{"string":""},"bookPreviewAccessibilityHours":{"string":"timmar"},"bookPreviewAccessibilityMinutes":{"string":"minuter"},"bookPreviewAccessibilitySeconds":{"string":"sekunder"},"bookPreviewAccessibilityHour":{"string":"timme"},"bookPreviewAccessibilityMinute":{"string":"minut"},"bookPreviewAccessibilitySecond":{"string":"sekund"},"contentDescriptionTutorialPage":{"string":"Handledningssida"},"contentDescriptionSkipButton":{"string":"Hoppa över-knapp"},"contentDescriptionStep1":{"string":"Steg 1  - Hitta ditt bibliotek"},"contentDescriptionStep2":{"string":"Steg 2 - Hittar du inte ditt bibliotek? Gå till Palace Bookshelf som innehåller över 10 000 gratis titlar som du kan läsa nu"},"contentDescriptionStep3":{"string":"Steg 3 - Läs. Lyssna. Njut!"},"revokeACSDeleteRights":{"string":"Raderar Adobe ACS-behörighetsinformationen…"},"revokeACSDeleteRightsFailed":{"string":"Det gick inte att radera ACS rights-behörighetsinformationen."},"revokeACSExecute":{"string":"Kör återkallelsekommandon för Adobe ACS…"},"revokeACSExecuteOK":{"string":"Körningen av återkallelsekommandon för Adobe ACS lyckades."},"revokeACSGettingDeviceCredentials":{"string":"Hämtar Adobe ACS-enhetens inloggningsuppgifter..."},"revokeACSGettingDeviceCredentialsNotActivated":{"string":"Adobe ACS-enheten är inte aktiverad."},"revokeACSGettingDeviceCredentialsOK":{"string":"Adobe ACS-enhetens inloggningsuppgifter har hämtats."},"revokeACSLoan":{"string":"Återkallar lånet via Adobe ACS…"},"revokeACSLoanNotReturnable":{"string":"Adobe ACS anser att detta lån inte kan återlämnas."},"revokeACSLoanNotSupported":{"string":"Adobe ACS stöds inte."},"revokeACSTimedOut":{"string":"Tidsgräns överskreds i väntan på Adobe ACS."},"revokeBookACSConnectorFailed":{"string":"Adobe ACS-kommandon misslyckades med felkod %1$s."},"revokeBookACSFailed":{"string":"Körning av Adobe ACS-kommandon misslyckades på grund av ett undnatag."},"revokeBookCancelled":{"string":"Återkallelsen ångrades."},"revokeBookDatabaseLookup":{"string":"Öppnar bokens databaspost..."},"revokeBookDatabaseLookupFailed":{"string":"Det gick inte att öppna bokens databaspost."},"revokeBookDatabaseLookupOK":{"string":"Bokens databaspost öppnades."},"revokeCredentialsRequired":{"string":"Inloggningsuppgifter krävs, men inga har angetts."},"revokeDeleteBook":{"string":"Raderar bokens databaspost."},"revokeDeleteBookFailed":{"string":"Det gick inte att radera bokens databaspost."},"revokeFormat":{"string":"Genomför formatspecifik återkallelse..."},"revokeFormatNothingToDo":{"string":"Detta format kräver inga särskilda operationer."},"revokeFormatSpecific":{"string":"Genomför återkallelse för format %1$s…"},"revokeNotRevocable":{"string":"Boken kan inte återkallas!"},"revokeServerNotify":{"string":"Meddelar servern om återkallelsen..."},"revokeServerNotifyFeedCorrupt":{"string":"Servern returnerade ett flöde med en felaktig post."},"revokeServerNotifyFeedEmpty":{"string":"Servern returnerade ett tomt återkallelseflöde."},"revokeServerNotifyFeedFailed":{"string":"Det gick inte att bearbeta återkallelseflödet från servern."},"revokeServerNotifyFeedOK":{"string":"Återkallelseflödet från servern har bearbetats."},"revokeServerNotifyFeedTimedOut":{"string":"Tidsgräns överskreds i väntan på återkallelseflöde från servern."},"revokeServerNotifyFeedWithGroups":{"string":"Servern returnerade ett återkallelseflöde med grupper."},"revokeServerNotifyNotRevocable":{"string":"Ett lån med tillgängligheten %1$s kan inte återkallas."},"revokeServerNotifyNoURI":{"string":"Ingen URI har uppgetts för servermeddelanden."},"revokeServerNotifyProcessingFeed":{"string":"Bearbetar återkallelseflöden från servern..."},"revokeServerNotifySavingEntry":{"string":"Sparar posten för återkallelseflödet..."},"revokeServerNotifySavingEntryFailed":{"string":"Det gick inte att spara återkallelseflödet från servern."},"revokeServerNotifyURI":{"string":"Meddelar servern via %1$s."},"revokeStarted":{"string":"Återkallelse inleds..."},"profileAccountCreatingAnAccountProviderDescription":{"string":"Skapar en beskrivning för kontoleverantör..."},"profileAccountCreationCreatingAccount":{"string":"Skapar ett konto..."},"profileAccountCreationCreatingAccountFailed":{"string":"Det gick inte att skapa kontot."},"profileAccountCreationResolvingAccountProvider":{"string":""},"profileAccountCreationResolvingAccountProviderFailed":{"string":""},"profileAccountCreationSucceeded":{"string":"Kontot har skapats."},"profileAccountDeleting":{"string":"Raderar konto..."},"profileAccountDeletionFailed":{"string":"Det gick inte att radera ett konto."},"profileAccountDeletionOnlyOneAccountRemaining":{"string":"Det går inte att radera det ena återstående kontot; det måste finnas minst ett konto."},"profileAccountDeletionSucceeded":{"string":"Raderingen av ett konto lyckades."},"profileAccountFetchingOPDSFeed":{"string":"Hämtar ett OPDS-flöde..."},"profileAccountFetchingOPDSFeedFailed":{"string":"Hämtningen av ett OPDS-flöde misslyckades!"},"profileAccountFindingAuthDocumentURI":{"string":"Söker ett autentiseringsdokuments URI..."},"profileAccountParsingOPDSFeed":{"string":"Parsning av ett OPDS-flöde..."},"profileAccountParsingOPDSFeedFailed":{"string":"Parsning av ett OPDS-flöde misslyckades!"},"profileAccountSearchingFeedForAuthenticationDocument":{"string":"Söker efter autentiseringsdokument i flödet..."},"loginDeviceActivated":{"string":"Enheten aktiverad"},"loginDeviceActivating":{"string":"Försöker aktivera enhet..."},"loginAuthRequired":{"string":"Autentisering krävs. Fortsätter..."},"loginCheckingAuthenticationRequirement":{"string":"Kontrollerar autentiseringskrav..."},"loginPatronSettingsRequesting":{"string":""},"loginPatronSettingsOK":{"string":""},"loginErrorServer":{"string":"Servern returnerade ett fel: %1$d %2$s"},"loginErrorAuthNotRequired":{"string":"Autentisering krävs inte!"},"loginErrorNoPatronURI":{"string":"Ingen URI för stamkundens inställningar har definierats!"},"loginErrorInvalidCredentials":{"string":"Felaktig inloggning. Försök på nytt."},"loginErrorConnectionFailed":{"string":"Nätverksfel. Kontrollera din anslutning eller försök på nytt senare."},"loginErrorPatronSettingsParseError":{"string":"Parsning av stamkundens inställningar som returnerades av servern!"},"loginDeviceDRMNotSupported":{"string":"Detta konto kräver Adobe ACS DRM, men denna version av appen stöder inte det."},"loginDeviceActivationPostDeviceManager":{"string":"Kontaktar enhetshanteraren..."},"loginDeviceActivationPostDeviceManagerDone":{"string":""},"loginDeviceActivationFailed":{"string":"Det gick inte att aktivera enheten: %1$s (%2$s)"},"logoutClearingBookDatabase":{"string":"Rensar bokdatabasen..."},"logoutClearingBookDatabaseFailed":{"string":"Det gick inte att rensa bokdatabasen!"},"logoutUpdatingOpdsEntry":{"string":"Uppdaterar OPDS-posten för boken %1$s…"},"logoutOPDSFeedTimedOut":{"string":"Tidsgräns överskreds i väntan på OPDS-flöde från server"},"logoutNoAlternateLinkInDatabase":{"string":"Det finns inte någon alternativ länk i databasen."},"logoutOPDSFeedFailed":{"string":"Det gick inte att hämta OPDS-post."},"logoutOPDSFeedCorrupt":{"string":"Servern returnerade ett flöde med en felaktig post."},"logoutOPDSFeedEmpty":{"string":"Servern returnerade ett tomt återkallelseflöde."},"logoutOPDSFeedWithGroups":{"string":"Servern returnerade ett återkallelseflöde med grupper."},"logoutDeactivatingDeviceAdobe":{"string":"Avaktiverar enhet..."},"logoutDeactivatingDeviceAdobeDeactivated":{"string":"Enheten har avaktiverats."},"logoutDeactivatingDeviceAdobeFailed":{"string":"Det gick inte att avaktivera enheten: %1$s (%2$s)"},"logoutDeactivatingDeviceAdobeNotActive":{"string":"Enheten verkar inte vara aktiverad."},"logoutDeactivatingDeviceAdobeUnsupported":{"string":"Adobe ACS DRM stöds inte av denna version av appen."},"logoutDeviceDeactivationPostDeviceManager":{"string":"Kontaktar enhetshanteraren..."},"logoutDeviceDeactivationPostDeviceManagerFinished":{"string":""},"logoutNotLoggedIn":{"string":"Kontot verkar inte vara inloggat!"},"logoutStarted":{"string":"Loggar ut..."},"notification_channel_name_old":{"string":"Objekt tillgängligt"},"notification_channel_description_reservations":{"string":"Meddelanden som hänför sig till dina reservationer."},"notification_channel_id_reservations":{"string":"channel_id_reservations"},"notification_channel_name_reservations":{"string":"Reservationer"},"notification_channel_description_loans":{"string":"Meddelanden som hänför sig till dina lån."},"notification_channel_id_loans":{"string":"channel_id_loans"},"notification_channel_name_loans":{"string":"Lån"},"bootFailedGeneric":{"string":"Vi upptäckte ett problem. Kontrollera din anslutning eller stäng och starta appen och försök på nytt."},"bootAdobeDRMFailed":{"string":"Något gick fel med Adobe DRM-systemet: Vissa böcker kommer att vara otillgängliga i denna version av appen. Försök uppdatera till den senaste versionen av appen."},"unexpectedException":{"string":"Det inträffade ett oväntat undantag."},"app_name":{"string":"Standardprofiler"},"bookOpenFailedTitle":{"string":"Det gick inte att ladda boken"},"bookOpenFailedMessage":{"string":"Ett fel inträffade när boken skulle öppnas: (%1$s): %2$s."},"reader_bookmark_added":{"string":"Bokmärke lades till"},"reader_bookmark_adding":{"string":"Lägger till bokmärke..."},"reader_bookmark_error_adding":{"string":"Ett fel inträffade när bokmärket lades till"},"reader_position_title":{"string":"Synkronisera läsposition"},"reader_position_message":{"string":"Vill du gå till den sida där du slutade?"},"reader_position_move":{"string":"Gå"},"reader_position_stay":{"string":"Stanna"},"settings":{"string":"Inställningar"},"settingsAbout":{"string":"Om Palace"},"settingsAccounts":{"string":"Bibliotek"},"settingsAccountsSummary":{"string":"Lägg till, ta bort eller konfigurera bibliotek"},"settingsAcknowledgements":{"string":""},"settingsCommit":{"string":""},"settingsCancel":{"string":"Ångra"},"settingsCardCreatorLabel":{"string":"Saknar du ett bibliotekskort?"},"settingsCardCreatorSignUp":{"string":"Registrera dig"},"settingsCOPPADeleteBooks":{"string":"Radera böcker?"},"settingsCOPPADeleteBooksConfirm":{"string":"Om du ändrar din ålder kommer det att ta bort alla böcker som laddats ner från detta konto."},"settingsCOPPAOver13":{"string":"Jag är över 13 år"},"settingsCustomOPDS":{"string":"Anpassat OPDS-flöde"},"settingsCustomOPDSCreate":{"string":"Skapa"},"settingsCustomOPDSInvalidURI":{"string":"Inte en giltig URI."},"settingsCustomOPDSURL":{"string":"URL för anpassat flöde..."},"settingsDebug":{"string":"Felsökningsalternativ"},"settingsDelete":{"string":"Radera"},"settingsDetails":{"string":"Detaljer"},"settingsDevAddCustomOpdsFeed":{"string":"Lägg till anpassat OPDS-flöde"},"settingsDevAdobeDrmActivations":{"string":"Adobe DRM-aktiveringar"},"settingsDevCacheDir":{"string":""},"settingsDevCardCreatorUserNewYork":{"string":""},"settingsDevCrash":{"string":""},"settingsDevCrashlytics":{"string":""},"settingsDevCrashlyticsCurrentUserId":{"string":""},"settingsDevDrmSupport":{"string":""},"settingsDevEnableHiddenLibraries":{"string":""},"settingsDevEnableManualLCPPassphrase":{"string":""},"settingsDevEnableTimeTracking":{"string":""},"settingsDevFailNextStartup":{"string":""},"settingsDevForgetAllAnnouncements":{"string":""},"settingsDevPlaceholder":{"string":""},"settingsDevSendAnalytics":{"string":""},"settingsDevSendErrorLogs":{"string":""},"settingsDevShowErrorPage":{"string":""},"settingsDevShowSupportedBooks":{"string":""},"settingsDevSyncAccounts":{"string":""},"settingsDevTestingFeatures":{"string":""},"settingsDevToggleOpenEBooksQAAccount":{"string":""},"settingsDevUserSeenLibrarySelection":{"string":""},"settingsDocumentation":{"string":""},"settingsEULA":{"string":""},"settingsEULAStatement":{"string":""},"settingsFaq":{"string":""},"settingsPrivacy":{"string":""},"settingsInfo":{"string":""},"settingsLicense":{"string":""},"settingsLogin":{"string":""},"settingsLoginWith":{"string":""},"settingsLoginAlternatives":{"string":""},"settingsLogout":{"string":""},"settingsPassword":{"string":""},"settingsPasswordHide":{"string":""},"settingsPasswordShow":{"string":""},"settingsPlaceholder":{"string":""},"settingsReportIssue":{"string":""},"settingsSyncBookmarks":{"string":""},"settingsTapToDebug":{"string":""},"settingsUserName":{"string":""},"settingsVersion":{"string":""},"settingsVersionCore":{"string":""},"settingsDebugTransifex":{"string":""},"accessibility_table_of_contents":{"string":""},"table_of_contents_title":{"string":""},"table_of_contents_empty_message":{"string":""},"accessibility_settings":{"string":""},"settings_title":{"string":""},"content_description_back":{"string":""},"viewer_position_title":{"string":""},"viewer_position_message":{"string":""},"viewer_position_move":{"string":""},"viewer_position_stay":{"string":""},"errorDetailsTitle":{"string":""},"errorSendReport":{"string":""},"errorStepsTitle":{"string":""},"errorTitle":{"string":""},"audio_book_player":{"string":""},"audio_book_player_bookmark_adding":{"string":""},"audio_book_player_bookmark_added":{"string":""},"audio_book_player_bookmark_already_added":{"string":""},"audio_book_player_bookmark_error_adding":{"string":""},"audio_book_player_do_keep":{"string":""},"audio_book_player_do_return":{"string":""},"audio_book_player_error_book_open":{"string":""},"audio_book_player_error_engine_open":{"string":""},"audio_book_player_return_question":{"string":""},"audio_book_player_return_title":{"string":""},"audio_book_player_toc_title":{"string":""},"catalogFeedLoading":{"string":""},"feedByAuthor":{"string":""},"feedByTitle":{"string":""},"feedCollection":{"string":""},"feedCollectionAll":{"string":""},"feedEmpty":{"string":""},"feedLoadingError":{"string":""},"feedNavigationNotSupported":{"string":""},"feedShow":{"string":""},"feedShowAll":{"string":""},"feedShowOnLoan":{"string":""},"feedSortBy":{"string":""},"feedTitleBooks":{"string":""},"feedTitleCatalog":{"string":""},"feedTitleHolds":{"string":""},"feedWithGroupsEmptyHolds":{"string":""},"feedWithGroupsEmptyLoaned":{"string":""},"ageGateBirthYearPrompt":{"string":""},"selectYear":{"string":""},"ageVerification":{"string":""},"next":{"string":""},"loginEULA":{"string":""},"loginLibraryCard":{"string":""},"loginLogin":{"string":""},"loginPassword":{"string":""},"loginUserName":{"string":""},"catalogAccessibilityBookBorrow":{"string":""},"catalogAccessibilityBookDelete":{"string":""},"catalogAccessibilityBookDownload":{"string":""},"catalogAccessibilityBookDownloadCancel":{"string":""},"catalogAccessibilityBookErrorDetails":{"string":""},"catalogAccessibilityBookErrorDismiss":{"string":""},"catalogAccessibilityBookErrorRetry":{"string":""},"catalogAccessibilityBookListen":{"string":""},"catalogAccessibilityBookPreviewPlay":{"string":""},"catalogAccessibilityBookPreviewRead":{"string":""},"catalogAccessibilityBookRead":{"string":""},"catalogAccessibilityBookReserve":{"string":""},"catalogAccessibilityBookRevokeHold":{"string":""},"catalogAccessibilityBookRevokeLoan":{"string":""},"catalogAccessibilityBookSync":{"string":""},"catalogAccessibilityCoverAudiobook":{"string":""},"catalogAccessibilityCoverEpub":{"string":""},"catalogAccessibilityCoverPdf":{"string":""},"catalogAccessibilityCoverUnknownFormat":{"string":""},"catalogAccounts":{"string":""},"catalogBookAvailabilityHeldIndefinite":{"string":""},"catalogBookAvailabilityHeldQueue":{"string":""},"catalogBookAvailabilityHeldTimed":{"string":""},"catalogBookAvailabilityHoldable":{"string":""},"catalogBookAvailabilityLoanable":{"string":""},"catalogBookAvailabilityLoanedIndefinite":{"string":""},"catalogBookAvailabilityLoanedTimed":{"string":""},"catalogBookAvailabilityOpenAccess":{"string":""},"catalogBookAvailabilityReservedIndefinite":{"string":""},"catalogBookAvailabilityReservedTimed":{"string":""},"catalogBookAvailabilityRevoked":{"string":""},"catalogBookCoverDescription":{"string":""},"catalogBookFormatAudioBook":{"string":""},"catalogBookFormatEPUB":{"string":""},"catalogBookFormatPDF":{"string":""},"catalogBookIntervalDays":{"string":""},"catalogBookIntervalDaysShort":{"string":""},"catalogBookIntervalHours":{"string":""},"catalogBookIntervalHoursShort":{"string":""},"catalogBookIntervalMonthsShort":{"string":""},"catalogBookIntervalSubHour":{"string":""},"catalogBookIntervalWeeksShort":{"string":""},"catalogBookIntervalYearsShort":{"string":""},"catalogBookPreviewAudioBook":{"string":""},"catalogBookPreviewBook":{"string":""},"catalogCancel":{"string":""},"catalogDone":{"string":""},"catalogCancelHold":{"string":""},"catalogCancelling":{"string":""},"catalogCorrupted":{"string":""},"catalogDescription":{"string":""},"catalogDetails":{"string":""},"catalogDismiss":{"string":""},"catalogDownload":{"string":""},"catalogLoginRequired":{"string":""},"catalogGet":{"string":""},"catalogHoldCannotCancel":{"string":""},"catalogInformation":{"string":""},"catalogListen":{"string":""},"catalogMetaCategories":{"string":""},"catalogMetaFormat":{"string":""},"catalogMetaNarrators":{"string":""},"catalogMetaDistributor":{"string":""},"catalogMetaPublicationDate":{"string":""},"catalogMetaPublisher":{"string":""},"catalogMetaUpdatedDate":{"string":""},"catalogMetaDuration":{"string":""},"catalogMore":{"string":""},"catalogOperationFailed":{"string":""},"catalogPlaceholder":{"string":""},"catalogRead":{"string":""},"catalogRelatedBooks":{"string":""},"catalogReload":{"string":""},"catalogReportIssue":{"string":""},"catalogRequesting":{"string":""},"catalogDownloading":{"string":""},"catalogReserve":{"string":""},"catalogRetry":{"string":""},"catalogReturn":{"string":""},"catalogSearch":{"string":""},"catalogDurationFormat":{"string":""},"catalogDetailsMore":{"string":""},"bookReachedLoanLimitDialogMessage":{"string":""},"bookReachedLoanLimitDialogTitle":{"string":""},"bookReachedLoanLimitDialogButton":{"string":""},"bookFailedLoan":{"string":""},"bookFailedReturn":{"string":""},"bookHasDownloaded":{"string":""},"bookIsDownloading":{"string":""},"bookIsOnHold":{"string":""},"bookReturned":{"string":""},"reachedLoanLimit":{"string":""},"accountAdd":{"string":""},"accountCancel":{"string":""},"accountCardCreatorLabel":{"string":""},"accountCardCreatorSignUp":{"string":""},"accountCardCreatorSignUpMessage":{"string":""},"accountCardCreatorDialogCancel":{"string":""},"accountCardCreatorDialogOpenSettings":{"string":""},"accountCardCreatorDialogOpenSettingsMessage":{"string":""},"accountCardCreatorDialogPermissionsMessage":{"string":""},"accountCardCreatorLocationFailed":{"string":""},"accountCOPPADeleteBooks":{"string":""},"accountCOPPADeleteBooksConfirm":{"string":""},"accountAgeVerification":{"string":""},"accountCreationFailed":{"string":""},"accountCreationFailedMessage":{"string":""},"accountDelete":{"string":""},"accountEULAStatement":{"string":""},"accountLogin":{"string":""},"accountForgotPassword":{"string":""},"accountWantChildCard":{"string":""},"accountCreateCard":{"string":""},"accountLoginAlternatives":{"string":""},"accountLoginRequired":{"string":""},"accountLoginWith":{"string":""},"accountLogout":{"string":""},"accountPassword":{"string":""},"accountPasswordShow":{"string":""},"accountPickerTitle":{"string":""},"accountPlaceholder":{"string":""},"accountRegistryCreating":{"string":""},"accountRegistryEmpty":{"string":""},"accountRegistryRefresh":{"string":""},"accountRegistryRetrieving":{"string":""},"accountRegistrySelect":{"string":""},"accountRegistryNoLocation":{"string":""},"accountReportIssue":{"string":""},"accounts":{"string":""},"accountsDeleteConfirm":{"string":""},"accountsDeleteConfirmTitle":{"string":""},"accountsDeletionFailed":{"string":""},"accountsDeletionFailedMessage":{"string":""},"accountsDetails":{"string":""},"accountSyncBookmarks":{"string":""},"accountUserName":{"string":""},"accountCustomOPDS":{"string":""},"currentlyBrowsing":{"string":""},"accountSAML20LoginLabel":{"string":""},"accountSAML20NoAccessToken":{"string":""},"accountSAML20NoPatronInfo":{"string":""},"accountSearchHint":{"string":""},"accountMore":{"string":""},"accountPasswordResetFailed":{"string":""},"accountReportFailed":{"string":""},"accountPrivacyPolicy":{"string":""},"accountLicenses":{"string":""},"accountEULA":{"string":""},"accountMenuSearch":{"string":""},"accountMenuRefresh":{"string":""},"eula_disagree":{"string":""},"eula_agree":{"string":""},"migrationFailure":{"string":""},"migrationSuccess":{"string":""},"migrationSendReport":{"string":""},"migrationOK":{"string":""},"selectionTitle":{"string":""},"selectionButton":{"string":""},"selectionAlternateTitle":{"string":""},"selectionAlternateButton":{"string":""},"announcementTitle":{"string":""},"ok":{"string":""},"tabBooks":{"string":""},"tabCatalog":{"string":""},"tabHolds":{"string":""},"tabProfile":{"string":""},"tabSettings":{"string":""}}}
+{
+   "data" : {
+      "accessibility_settings" : {
+         "string" : "Öppna inställningsmenyn"
+      },
+      "accessibility_table_of_contents" : {
+         "string" : "Öppna innehållsförteckningen"
+      },
+      "accountAdd" : {
+         "string" : "Lägg till bibliotek"
+      },
+      "accountAgeVerification" : {
+         "string" : "Ålderskontroll"
+      },
+      "accountCOPPADeleteBooks" : {
+         "string" : "Radera böcker?"
+      },
+      "accountCOPPADeleteBooksConfirm" : {
+         "string" : "Om du ändrar din ålder kommer det att ta bort alla böcker som laddats ner från detta konto."
+      },
+      "accountCancel" : {
+         "string" : "Ångra"
+      },
+      "accountCardCreatorDialogCancel" : {
+         "string" : "Ångra"
+      },
+      "accountCardCreatorDialogOpenSettings" : {
+         "string" : "Öppna inställningar"
+      },
+      "accountCardCreatorDialogOpenSettingsMessage" : {
+         "string" : "Palace-appen behöver kontrollera positionen en gång för att skapa ett virtuellt bibliotekskort. För närvarande delar du inte din position. Ändra dina positionsinställningar för att ge Palace-appen åtkomst till din position."
+      },
+      "accountCardCreatorDialogPermissionsMessage" : {
+         "string" : "För att skapa ett virtuellt bibliotekskort kommer Palace-appen att använda din position en gång för att verifiera ditt område för bibliotekstjänster. Peka på OK för att fortsätta."
+      },
+      "accountCardCreatorLabel" : {
+         "string" : "Har du inte ett bibliotekskort?"
+      },
+      "accountCardCreatorLocationFailed" : {
+         "string" : "Det inträffade ett fel när din position hämtades."
+      },
+      "accountCardCreatorSignUp" : {
+         "string" : "Skapa kort"
+      },
+      "accountCardCreatorSignUpMessage" : {
+         "string" : "Palace-appen kommer att använda din position en gång för att verifiera ditt område för bibliotekstjänster."
+      },
+      "accountCreateCard" : {
+         "string" : "Skapa kort"
+      },
+      "accountCreationFailed" : {
+         "string" : "Det gick inte att skapa bibliotek"
+      },
+      "accountCreationFailedMessage" : {
+         "string" : "Biblioteket kunde inte skapas."
+      },
+      "accountCustomOPDS" : {
+         "string" : "URL för anpassat OPDS-flöde"
+      },
+      "accountDelete" : {
+         "string" : "Radera"
+      },
+      "accountEULA" : {
+         "string" : "Slutanvändaravtal"
+      },
+      "accountEULAStatement" : {
+         "string" : "Genom att logga in godkänner du slutanvändaravtalet."
+      },
+      "accountForgotPassword" : {
+         "string" : "Glömt ditt lösenord?"
+      },
+      "accountLicenses" : {
+         "string" : "Innehållslicenser"
+      },
+      "accountLogin" : {
+         "string" : "Logga in"
+      },
+      "accountLoginAlternatives" : {
+         "string" : "Alternativa inloggningsmetoder"
+      },
+      "accountLoginRequired" : {
+         "string" : "Logga in för att fortsätta."
+      },
+      "accountLoginWith" : {
+         "string" : "Logga in med %1$s"
+      },
+      "accountLogout" : {
+         "string" : "Logga ut"
+      },
+      "accountMenuRefresh" : {
+         "string" : "Ladda på nytt"
+      },
+      "accountMenuSearch" : {
+         "string" : "Sök"
+      },
+      "accountMore" : {
+         "string" : "Fler alternativ"
+      },
+      "accountPassword" : {
+         "string" : "Lösenord"
+      },
+      "accountPasswordResetFailed" : {
+         "string" : "Vi beklagar, vi kunde inte hitta en lämplig app för att återställa ditt lösenord. Skicka ett e-post till %1$s om du behöver rapportera ett problem."
+      },
+      "accountPasswordShow" : {
+         "string" : "Visa %1$s"
+      },
+      "accountPickerTitle" : {
+         "string" : "Hitta ditt bibliotek"
+      },
+      "accountPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
+      },
+      "accountPrivacyPolicy" : {
+         "string" : "Integritetspolicy"
+      },
+      "accountRegistryCreating" : {
+         "string" : "Skapar ett bibliotek..."
+      },
+      "accountRegistryEmpty" : {
+         "string" : "Det finns inga tillgängliga bibliotek."
+      },
+      "accountRegistryNoLocation" : {
+         "string" : "Du kan söka ditt bibliotek på basis av namn, verksamhetsställe eller din position."
+      },
+      "accountRegistryRefresh" : {
+         "string" : "Uppdatera"
+      },
+      "accountRegistryRetrieving" : {
+         "string" : "Hämtar bibliotek från registret..."
+      },
+      "accountRegistrySelect" : {
+         "string" : "Välj ett bibliotek..."
+      },
+      "accountReportFailed" : {
+         "string" : "Vi beklagar, vi kunde inte hitta en lämplig app för att kontakta supportavdelningen. Skicka ett e-post till %1$s om du behöver rapportera ett problem."
+      },
+      "accountReportIssue" : {
+         "string" : "Rapportera ett problem..."
+      },
+      "accountSAML20LoginLabel" : {
+         "string" : "Logga in med SAML 2.0 WEB SSO"
+      },
+      "accountSAML20NoAccessToken" : {
+         "string" : "Det gick inte att hämta åtkomsttoken från URI: %1$s"
+      },
+      "accountSAML20NoPatronInfo" : {
+         "string" : "Det gick inte att hämta kundinformationen från URI: %1$s"
+      },
+      "accountSearchHint" : {
+         "string" : "Sök konton..."
+      },
+      "accountSyncBookmarks" : {
+         "string" : "Synkronisera bokmärken"
+      },
+      "accountUserName" : {
+         "string" : "Användarnamn"
+      },
+      "accountWantChildCard" : {
+         "string" : "Behöver du ett kort för ditt barn?"
+      },
+      "accounts" : {
+         "string" : "Bibliotek"
+      },
+      "accountsDeleteConfirm" : {
+         "string" : "Är du säker att du vill ta bort \"%1$s\" från denna enhet?"
+      },
+      "accountsDeleteConfirmTitle" : {
+         "string" : "Ta bort bibliotek"
+      },
+      "accountsDeletionFailed" : {
+         "string" : "Det gick inte att radera biblioteket"
+      },
+      "accountsDeletionFailedMessage" : {
+         "string" : "Biblioteket kunde inte raderas."
+      },
+      "accountsDetails" : {
+         "string" : "Detaljer"
+      },
+      "ageGateBirthYearPrompt" : {
+         "string" : "Ange ditt födelseår"
+      },
+      "ageVerification" : {
+         "string" : "Ålderskontroll"
+      },
+      "announcementTitle" : {
+         "string" : "%1$s (%2$d av %3$d)"
+      },
+      "app_name" : {
+         "string" : "Standardprofiler"
+      },
+      "audio_book_player" : {
+         "string" : "Ljudboksspelare"
+      },
+      "audio_book_player_bookmark_added" : {
+         "string" : "Bokmärke lades till"
+      },
+      "audio_book_player_bookmark_adding" : {
+         "string" : "Lägger till bokmärke..."
+      },
+      "audio_book_player_bookmark_already_added" : {
+         "string" : "Ett bokmärke har redan sparats på detta ställe."
+      },
+      "audio_book_player_bookmark_error_adding" : {
+         "string" : "Det inträffade ett fel när bokmärket lades till"
+      },
+      "audio_book_player_do_keep" : {
+         "string" : "Behåll"
+      },
+      "audio_book_player_do_return" : {
+         "string" : "Returnera"
+      },
+      "audio_book_player_error_book_open" : {
+         "string" : "Det går inte att öppna ljudboken"
+      },
+      "audio_book_player_error_engine_open" : {
+         "string" : "Det går inte att initiera ljudmotorn"
+      },
+      "audio_book_player_return_question" : {
+         "string" : "Vill du returnera den?"
+      },
+      "audio_book_player_return_title" : {
+         "string" : "Din ljudbok har tagit slut"
+      },
+      "audio_book_player_toc_title" : {
+         "string" : "Innehållsförteckning"
+      },
+      "bookFailedLoan" : {
+         "string" : "Boken '%1$s' kunde inte laddas ner"
+      },
+      "bookFailedReturn" : {
+         "string" : "Boken '%1$s' kunde inte lämnas tillbaka"
+      },
+      "bookHasDownloaded" : {
+         "string" : "Boken '%1$s' har laddats ner"
+      },
+      "bookIsDownloading" : {
+         "string" : "Nedladdning av boken '%1$s' har börjat"
+      },
+      "bookIsOnHold" : {
+         "string" : "Boken '%1$s' har reserverats"
+      },
+      "bookOpenFailedMessage" : {
+         "string" : "Ett fel inträffade när boken skulle öppnas: (%1$s): %2$s."
+      },
+      "bookOpenFailedTitle" : {
+         "string" : "Det gick inte att ladda boken"
+      },
+      "bookPreviewAccessibilityBack" : {
+         "string" : "Tillbaka"
+      },
+      "bookPreviewAccessibilityBackward30" : {
+         "string" : "Spola tillbaka 30 sekunder"
+      },
+      "bookPreviewAccessibilityCover" : {
+         "string" : "Bokomslag"
+      },
+      "bookPreviewAccessibilityForward30" : {
+         "string" : "Spola fram 30 sekunder"
+      },
+      "bookPreviewAccessibilityHour" : {
+         "string" : "timme"
+      },
+      "bookPreviewAccessibilityHours" : {
+         "string" : "timmar"
+      },
+      "bookPreviewAccessibilityMinute" : {
+         "string" : "minut"
+      },
+      "bookPreviewAccessibilityMinutes" : {
+         "string" : "minuter"
+      },
+      "bookPreviewAccessibilityPause" : {
+         "string" : "Pausa"
+      },
+      "bookPreviewAccessibilityPlay" : {
+         "string" : "Spela upp"
+      },
+      "bookPreviewAccessibilitySecond" : {
+         "string" : "sekund"
+      },
+      "bookPreviewAccessibilitySeconds" : {
+         "string" : "sekunder"
+      },
+      "bookPreviewAccessibilityTimeCurrent" : {
+         "string" : "%s har spelats upp"
+      },
+      "bookPreviewAccessibilityTimeRemaining" : {
+         "string" : "%s återstår"
+      },
+      "bookPreviewFailedMessage" : {
+         "string" : "Det uppstod ett fel när förhandsvisningen av denna bok laddades. Försök på nytt senare."
+      },
+      "bookPreviewFailedTitle" : {
+         "string" : "Det gick inte att ladda förhandsvisningen av boken"
+      },
+      "bookPreviewPlayerInitialTime" : {
+         "string" : "00:00:00"
+      },
+      "bookPreviewPlayerSeek30" : {
+         "string" : "30"
+      },
+      "bookReachedLoanLimitDialogButton" : {
+         "string" : "Ok"
+      },
+      "bookReachedLoanLimitDialogMessage" : {
+         "string" : "Du har nått lånegränsen. Du kan inte låna en ny bok innan du lämnar tillbaka en."
+      },
+      "bookReachedLoanLimitDialogTitle" : {
+         "string" : "Lånegränsen har nåtts."
+      },
+      "bookReturned" : {
+         "string" : "Boken '%1$s' har returnerats"
+      },
+      "bootAdobeDRMFailed" : {
+         "string" : "Något gick fel med Adobe DRM-systemet: Vissa böcker kommer att vara otillgängliga i denna version av appen. Försök uppdatera till den senaste versionen av appen."
+      },
+      "bootFailedGeneric" : {
+         "string" : "Vi upptäckte ett problem. Kontrollera din anslutning eller stäng och starta appen och försök på nytt."
+      },
+      "catalogAccessibilityBookBorrow" : {
+         "string" : "Hämta-knapp"
+      },
+      "catalogAccessibilityBookDelete" : {
+         "string" : "Radera-knapp"
+      },
+      "catalogAccessibilityBookDownload" : {
+         "string" : "Ladda ner-knapp"
+      },
+      "catalogAccessibilityBookDownloadCancel" : {
+         "string" : "Avbryt nedladdning-knapp"
+      },
+      "catalogAccessibilityBookErrorDetails" : {
+         "string" : "Information-knapp"
+      },
+      "catalogAccessibilityBookErrorDismiss" : {
+         "string" : "Avvisa-knapp"
+      },
+      "catalogAccessibilityBookErrorRetry" : {
+         "string" : "Försök på nytt-knapp"
+      },
+      "catalogAccessibilityBookListen" : {
+         "string" : "Lyssna-knapp"
+      },
+      "catalogAccessibilityBookPreviewPlay" : {
+         "string" : "Spela upp utdrag"
+      },
+      "catalogAccessibilityBookPreviewRead" : {
+         "string" : "Läs utdrag"
+      },
+      "catalogAccessibilityBookRead" : {
+         "string" : "Läs-knapp"
+      },
+      "catalogAccessibilityBookReserve" : {
+         "string" : "Reservera-knapp"
+      },
+      "catalogAccessibilityBookRevokeHold" : {
+         "string" : "Ta bort-knapp"
+      },
+      "catalogAccessibilityBookRevokeLoan" : {
+         "string" : "Returnera nu-knapp"
+      },
+      "catalogAccessibilityBookSync" : {
+         "string" : "Synkronisera-knapp"
+      },
+      "catalogAccessibilityCoverAudiobook" : {
+         "string" : "%1$s, ljudbok, av %2$s"
+      },
+      "catalogAccessibilityCoverEpub" : {
+         "string" : "%1$s, e-bok, av %2$s"
+      },
+      "catalogAccessibilityCoverPdf" : {
+         "string" : "%1$s, PDF, av %2$s"
+      },
+      "catalogAccessibilityCoverUnknownFormat" : {
+         "string" : "%1$s, av %2$s"
+      },
+      "catalogAccounts" : {
+         "string" : "Välj en annan bibliotekskatalog..."
+      },
+      "catalogBookAvailabilityHeldIndefinite" : {
+         "string" : "Du har reserverat denna bok."
+      },
+      "catalogBookAvailabilityHeldQueue" : {
+         "string" : "Du är på plats %1$d i kön till denna bok."
+      },
+      "catalogBookAvailabilityHeldTimed" : {
+         "string" : "Du kommer att kunna låna denna bok om %1$s."
+      },
+      "catalogBookAvailabilityHoldable" : {
+         "string" : "Alla kopior av denna bok är för närvarande utlånade."
+      },
+      "catalogBookAvailabilityLoanable" : {
+         "string" : "Denna bok kan lånas."
+      },
+      "catalogBookAvailabilityLoanedIndefinite" : {
+         "string" : "Du har denna bok på lån."
+      },
+      "catalogBookAvailabilityLoanedTimed" : {
+         "string" : "Du har denna bok på lån i %1$s."
+      },
+      "catalogBookAvailabilityOpenAccess" : {
+         "string" : "Du kan behålla denna bok."
+      },
+      "catalogBookAvailabilityReservedIndefinite" : {
+         "string" : "Du har reserverat denna bok."
+      },
+      "catalogBookAvailabilityReservedTimed" : {
+         "string" : "Din reservation löper ut om %1$s."
+      },
+      "catalogBookAvailabilityRevoked" : {
+         "string" : "Denna bok väntar på att returneras."
+      },
+      "catalogBookCoverDescription" : {
+         "string" : "Bild av bokomslaget"
+      },
+      "catalogBookFormatAudioBook" : {
+         "string" : "Ljudbok"
+      },
+      "catalogBookFormatEPUB" : {
+         "string" : "e-bok"
+      },
+      "catalogBookFormatPDF" : {
+         "string" : "PDF"
+      },
+      "catalogBookIntervalDays" : {
+         "string" : "dagar"
+      },
+      "catalogBookIntervalDaysShort" : {
+         "string" : "d"
+      },
+      "catalogBookIntervalHours" : {
+         "string" : "timmar"
+      },
+      "catalogBookIntervalHoursShort" : {
+         "string" : "h"
+      },
+      "catalogBookIntervalMonthsShort" : {
+         "string" : "m"
+      },
+      "catalogBookIntervalSubHour" : {
+         "string" : "mindre än en timme"
+      },
+      "catalogBookIntervalWeeksShort" : {
+         "string" : "v."
+      },
+      "catalogBookIntervalYearsShort" : {
+         "string" : "år"
+      },
+      "catalogBookPreviewAudioBook" : {
+         "string" : "Spela upp utdrag"
+      },
+      "catalogBookPreviewBook" : {
+         "string" : "Läs utdrag"
+      },
+      "catalogCancel" : {
+         "string" : "Ångra"
+      },
+      "catalogCancelHold" : {
+         "string" : "Ta bort"
+      },
+      "catalogCancelling" : {
+         "string" : "Avbryter..."
+      },
+      "catalogCorrupted" : {
+         "string" : "Metadata för denna bok är skadade och kan inte visas. Problemet kan åtgärdas genom att ladda flödet på nytt eller synkronisera ditt konto."
+      },
+      "catalogDescription" : {
+         "string" : "Beskrivning"
+      },
+      "catalogDetails" : {
+         "string" : "Information"
+      },
+      "catalogDetailsMore" : {
+         "string" : "Läs mer"
+      },
+      "catalogDismiss" : {
+         "string" : "Avfärda"
+      },
+      "catalogDone" : {
+         "string" : "Klart"
+      },
+      "catalogDownload" : {
+         "string" : "Ladda ner"
+      },
+      "catalogDownloading" : {
+         "string" : "Laddar ner..."
+      },
+      "catalogDurationFormat" : {
+         "string" : "%1$s timmar, %2$s minuter"
+      },
+      "catalogFeedLoading" : {
+         "string" : "Laddar flöde..."
+      },
+      "catalogGet" : {
+         "string" : "Hämta"
+      },
+      "catalogHoldCannotCancel" : {
+         "string" : "Denna reservation kan inte ångras."
+      },
+      "catalogInformation" : {
+         "string" : "Information"
+      },
+      "catalogListen" : {
+         "string" : "Lyssna"
+      },
+      "catalogLoginRequired" : {
+         "string" : "Logga in för att fortsätta."
+      },
+      "catalogMetaCategories" : {
+         "string" : "Kategorier"
+      },
+      "catalogMetaDistributor" : {
+         "string" : "Distributör"
+      },
+      "catalogMetaDuration" : {
+         "string" : "Längd"
+      },
+      "catalogMetaFormat" : {
+         "string" : "Format"
+      },
+      "catalogMetaNarrators" : {
+         "string" : "Uppläsare"
+      },
+      "catalogMetaPublicationDate" : {
+         "string" : "Publicerad"
+      },
+      "catalogMetaPublisher" : {
+         "string" : "Utgivare"
+      },
+      "catalogMetaUpdatedDate" : {
+         "string" : "Uppdaterad"
+      },
+      "catalogMore" : {
+         "string" : "Mera"
+      },
+      "catalogOperationFailed" : {
+         "string" : "Åtgärden kunde inte slutföras."
+      },
+      "catalogPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
+      },
+      "catalogRead" : {
+         "string" : "Läs"
+      },
+      "catalogRelatedBooks" : {
+         "string" : "Liknande böcker..."
+      },
+      "catalogReload" : {
+         "string" : "Ladda på nytt"
+      },
+      "catalogReportIssue" : {
+         "string" : "Rapportera ett problem..."
+      },
+      "catalogRequesting" : {
+         "string" : "Begär..."
+      },
+      "catalogReserve" : {
+         "string" : "Reservera"
+      },
+      "catalogRetry" : {
+         "string" : "Försök på nytt"
+      },
+      "catalogReturn" : {
+         "string" : "Returnera"
+      },
+      "catalogSearch" : {
+         "string" : "Sök"
+      },
+      "contentDescriptionBack" : {
+         "string" : "Tillbaka"
+      },
+      "contentDescriptionLogo" : {
+         "string" : "Logotyp"
+      },
+      "contentDescriptionSkipButton" : {
+         "string" : "Hoppa över-knapp"
+      },
+      "contentDescriptionStep1" : {
+         "string" : "Steg 1  - Hitta ditt bibliotek"
+      },
+      "contentDescriptionStep2" : {
+         "string" : "Steg 2 - Hittar du inte ditt bibliotek? Gå till Palace Bookshelf som innehåller över 10 000 gratis titlar som du kan läsa nu"
+      },
+      "contentDescriptionStep3" : {
+         "string" : "Steg 3 - Läs. Lyssna. Njut!"
+      },
+      "contentDescriptionTutorialPage" : {
+         "string" : "Handledningssida"
+      },
+      "content_description_back" : {
+         "string" : "Tillbaka"
+      },
+      "currentlyBrowsing" : {
+         "string" : "Du bläddrar i"
+      },
+      "dialog_manual_passphrase_cancel" : {
+         "string" : "Ångra"
+      },
+      "dialog_manual_passphrase_done" : {
+         "string" : "Klart"
+      },
+      "dialog_manual_passphrase_hint" : {
+         "string" : "Lösenfras"
+      },
+      "dialog_manual_passphrase_title" : {
+         "string" : "Ange LCP-lösenfras"
+      },
+      "errorDetailsTitle" : {
+         "string" : "Felinformation"
+      },
+      "errorSendReport" : {
+         "string" : "Sänd till supportavdelningen"
+      },
+      "errorStepsTitle" : {
+         "string" : "Steg"
+      },
+      "errorTitle" : {
+         "string" : "Här är felloggen som skapats över ditt problem:"
+      },
+      "eula_agree" : {
+         "string" : "concordare"
+      },
+      "eula_disagree" : {
+         "string" : "dissentire"
+      },
+      "feedByAuthor" : {
+         "string" : "Författare"
+      },
+      "feedByTitle" : {
+         "string" : "Titel"
+      },
+      "feedCollection" : {
+         "string" : "Samling"
+      },
+      "feedCollectionAll" : {
+         "string" : "Alla"
+      },
+      "feedEmpty" : {
+         "string" : "Inga resultat hittades."
+      },
+      "feedLoadingError" : {
+         "string" : "Det inträffade ett fel när katalogen laddades."
+      },
+      "feedNavigationNotSupported" : {
+         "string" : "Navigeringsflöden stöds för närvarande inte. Vi beklagar!"
+      },
+      "feedShow" : {
+         "string" : "Visa"
+      },
+      "feedShowAll" : {
+         "string" : "Alla"
+      },
+      "feedShowOnLoan" : {
+         "string" : "Utlånad"
+      },
+      "feedSortBy" : {
+         "string" : "Sortera efter"
+      },
+      "feedTitleBooks" : {
+         "string" : "Böcker"
+      },
+      "feedTitleCatalog" : {
+         "string" : "Bläddra bland böcker"
+      },
+      "feedTitleHolds" : {
+         "string" : "Reservationer"
+      },
+      "feedWithGroupsEmptyHolds" : {
+         "string" : "När du reserverar en bok i katalogen visas den här. Återkom då och då för att se om boken kan laddas ner."
+      },
+      "feedWithGroupsEmptyLoaned" : {
+         "string" : "Besök katalogen för att lägga till böcker i Mina böcker."
+      },
+      "loginAuthRequired" : {
+         "string" : "Autentisering krävs. Fortsätter..."
+      },
+      "loginCheckingAuthenticationRequirement" : {
+         "string" : "Kontrollerar autentiseringskrav..."
+      },
+      "loginDeviceActivated" : {
+         "string" : "Enheten aktiverad"
+      },
+      "loginDeviceActivating" : {
+         "string" : "Försöker aktivera enhet..."
+      },
+      "loginDeviceActivationFailed" : {
+         "string" : "Det gick inte att aktivera enheten: %1$s (%2$s)"
+      },
+      "loginDeviceActivationPostDeviceManager" : {
+         "string" : "Kontaktar enhetshanteraren..."
+      },
+      "loginDeviceActivationPostDeviceManagerDone" : {
+         "string" : "Skickat till enhetshanterarens URI."
+      },
+      "loginDeviceDRMNotSupported" : {
+         "string" : "Detta konto kräver Adobe ACS DRM, men denna version av appen stöder inte det."
+      },
+      "loginEULA" : {
+         "string" : "Jag samtycker till villkoren i slutanvändaravtalet."
+      },
+      "loginErrorAuthNotRequired" : {
+         "string" : "Autentisering krävs inte!"
+      },
+      "loginErrorConnectionFailed" : {
+         "string" : "Nätverksfel. Kontrollera din anslutning eller försök på nytt senare."
+      },
+      "loginErrorInvalidCredentials" : {
+         "string" : "Felaktig inloggning. Försök på nytt."
+      },
+      "loginErrorNoPatronURI" : {
+         "string" : "Ingen URI för inställningar för kund har definierats!"
+      },
+      "loginErrorPatronSettingsParseError" : {
+         "string" : "Parsning av inställningar för kund som returnerades av servern misslyckades!"
+      },
+      "loginErrorServer" : {
+         "string" : "Servern returnerade ett fel: %1$d %2$s"
+      },
+      "loginLibraryCard" : {
+         "string" : "Bibliotekskort"
+      },
+      "loginLogin" : {
+         "string" : "Logga in"
+      },
+      "loginPassword" : {
+         "string" : "Lösenord"
+      },
+      "loginPatronSettingsOK" : {
+         "string" : "Inställningar för kund har tagits emot"
+      },
+      "loginPatronSettingsRequesting" : {
+         "string" : "Begär inställningar för kund..."
+      },
+      "loginUserName" : {
+         "string" : "Användarnamn"
+      },
+      "logoutClearingBookDatabase" : {
+         "string" : "Rensar bokdatabasen..."
+      },
+      "logoutClearingBookDatabaseFailed" : {
+         "string" : "Det gick inte att rensa bokdatabasen!"
+      },
+      "logoutDeactivatingDeviceAdobe" : {
+         "string" : "Avaktiverar enhet..."
+      },
+      "logoutDeactivatingDeviceAdobeDeactivated" : {
+         "string" : "Enheten har avaktiverats."
+      },
+      "logoutDeactivatingDeviceAdobeFailed" : {
+         "string" : "Det gick inte att avaktivera enheten: %1$s (%2$s)"
+      },
+      "logoutDeactivatingDeviceAdobeNotActive" : {
+         "string" : "Enheten verkar inte vara aktiverad."
+      },
+      "logoutDeactivatingDeviceAdobeUnsupported" : {
+         "string" : "Adobe ACS DRM stöds inte av denna version av appen."
+      },
+      "logoutDeviceDeactivationPostDeviceManager" : {
+         "string" : "Kontaktar enhetshanteraren..."
+      },
+      "logoutDeviceDeactivationPostDeviceManagerFinished" : {
+         "string" : "Skickat till enhetshanterarens URI."
+      },
+      "logoutNoAlternateLinkInDatabase" : {
+         "string" : "Det finns inte någon alternativ länk i databasen."
+      },
+      "logoutNotLoggedIn" : {
+         "string" : "Kontot verkar inte vara inloggat!"
+      },
+      "logoutOPDSFeedCorrupt" : {
+         "string" : "Servern returnerade ett flöde med en felaktig post."
+      },
+      "logoutOPDSFeedEmpty" : {
+         "string" : "Servern returnerade ett tomt återkallningsflöde."
+      },
+      "logoutOPDSFeedFailed" : {
+         "string" : "Det gick inte att hämta OPDS-post."
+      },
+      "logoutOPDSFeedTimedOut" : {
+         "string" : "Tidsgräns överskreds i väntan på OPDS-flöde från server"
+      },
+      "logoutOPDSFeedWithGroups" : {
+         "string" : "Servern returnerade ett återkallningsflöde med grupper."
+      },
+      "logoutStarted" : {
+         "string" : "Loggar ut..."
+      },
+      "logoutUpdatingOpdsEntry" : {
+         "string" : "Uppdaterar OPDS-posten för boken %1$s…"
+      },
+      "migrationFailure" : {
+         "string" : "Det uppstod ett eller flera problem med att migrera dina data..."
+      },
+      "migrationOK" : {
+         "string" : "Ok"
+      },
+      "migrationSendReport" : {
+         "string" : "Skicka rapport"
+      },
+      "migrationSuccess" : {
+         "string" : "Dina data har migrerats!"
+      },
+      "next" : {
+         "string" : "Nästa"
+      },
+      "notification_channel_description_loans" : {
+         "string" : "Meddelanden som hänför sig till dina lån."
+      },
+      "notification_channel_description_reservations" : {
+         "string" : "Meddelanden som hänför sig till dina reservationer."
+      },
+      "notification_channel_id_loans" : {
+         "string" : "channel_id_loans"
+      },
+      "notification_channel_id_reservations" : {
+         "string" : "channel_id_reservations"
+      },
+      "notification_channel_name_loans" : {
+         "string" : "Lån"
+      },
+      "notification_channel_name_old" : {
+         "string" : "Objekt tillgängligt"
+      },
+      "notification_channel_name_reservations" : {
+         "string" : "Reservationer"
+      },
+      "ok" : {
+         "string" : "Ok"
+      },
+      "profileAccountCreatingAnAccountProviderDescription" : {
+         "string" : "Skapar en beskrivning för kontoleverantör..."
+      },
+      "profileAccountCreationCreatingAccount" : {
+         "string" : "Skapar ett konto..."
+      },
+      "profileAccountCreationCreatingAccountFailed" : {
+         "string" : "Det gick inte att skapa kontot."
+      },
+      "profileAccountCreationResolvingAccountProvider" : {
+         "string" : "Bestämmer kontoleverantör..."
+      },
+      "profileAccountCreationResolvingAccountProviderFailed" : {
+         "string" : "Det gick inte att bestämma kontoleverantör."
+      },
+      "profileAccountCreationSucceeded" : {
+         "string" : "Kontot har skapats."
+      },
+      "profileAccountDeleting" : {
+         "string" : "Raderar konto..."
+      },
+      "profileAccountDeletionFailed" : {
+         "string" : "Det gick inte att radera ett konto."
+      },
+      "profileAccountDeletionOnlyOneAccountRemaining" : {
+         "string" : "Det går inte att radera det enda återstående kontot; det måste finnas minst ett konto."
+      },
+      "profileAccountDeletionSucceeded" : {
+         "string" : "Raderingen av ett konto lyckades."
+      },
+      "profileAccountFetchingOPDSFeed" : {
+         "string" : "Hämtar ett OPDS-flöde..."
+      },
+      "profileAccountFetchingOPDSFeedFailed" : {
+         "string" : "Hämtningen av ett OPDS-flöde misslyckades!"
+      },
+      "profileAccountFindingAuthDocumentURI" : {
+         "string" : "Söker ett autentiseringsdokuments URI..."
+      },
+      "profileAccountParsingOPDSFeed" : {
+         "string" : "Parsning av ett OPDS-flöde..."
+      },
+      "profileAccountParsingOPDSFeedFailed" : {
+         "string" : "Parsning av ett OPDS-flöde misslyckades!"
+      },
+      "profileAccountSearchingFeedForAuthenticationDocument" : {
+         "string" : "Söker efter autentiseringsdokument i flödet..."
+      },
+      "reachedLoanLimit" : {
+         "string" : "Du har nått din lånegräns"
+      },
+      "reader_bookmark_added" : {
+         "string" : "Bokmärke lades till"
+      },
+      "reader_bookmark_adding" : {
+         "string" : "Lägger till bokmärke..."
+      },
+      "reader_bookmark_error_adding" : {
+         "string" : "Ett fel inträffade när bokmärket lades till"
+      },
+      "reader_position_message" : {
+         "string" : "Vill du gå till den sida där du slutade?"
+      },
+      "reader_position_move" : {
+         "string" : "Gå"
+      },
+      "reader_position_stay" : {
+         "string" : "Stanna"
+      },
+      "reader_position_title" : {
+         "string" : "Synkronisera läsposition"
+      },
+      "resolving" : {
+         "string" : "Bestämmer kontoleverantör..."
+      },
+      "resolvingAuthDocument" : {
+         "string" : "Bestämmer autentiseringsdokumentet..."
+      },
+      "resolvingAuthDocumentBasicTokenMalformed" : {
+         "string" : "Beskrivningen av ett grundläggande tokensystem måste innehålla en autentiserings-URI."
+      },
+      "resolvingAuthDocumentCOPPAAgeGateMalformed" : {
+         "string" : "Beskrivningen av åldersgränsen enligt COPPA måste innehålla URI för personer över 13 år och under 13 år."
+      },
+      "resolvingAuthDocumentMissingURI" : {
+         "string" : "URI för ett autentiseringsdokument saknas."
+      },
+      "resolvingAuthDocumentNoStartURI" : {
+         "string" : "Autentiseringsdokumentet innehöll ingen URI för startkatalog."
+      },
+      "resolvingAuthDocumentNoUsableAuthenticationTypes" : {
+         "string" : "Kontot angav inte någon typ av autentisering som vi kan förstå."
+      },
+      "resolvingAuthDocumentOAuthMalformed" : {
+         "string" : "Beskrivningen av ett OAuth-system måste innehålla en autentiserings-URI."
+      },
+      "resolvingAuthDocumentParseFailed" : {
+         "string" : "Autentiseringsdokumentet var felaktigt formaterat och parsningen misslyckades."
+      },
+      "resolvingAuthDocumentRetrievalFailed" : {
+         "string" : "Autentiseringsdokumentet kunde inte hämtas från servern."
+      },
+      "resolvingAuthDocumentRetrievalFailedWithProblem" : {
+         "string" : "Autentiseringsdokumentet kunde inte hämtas från servern."
+      },
+      "resolvingAuthDocumentSAML20Malformed" : {
+         "string" : "Beskrivningen av ett SAML2.0-system måste innehålla en autentiserings-URI."
+      },
+      "resolvingAuthDocumentUnusableLink" : {
+         "string" : "Vi kunde inte förstå autentiseringsdokumentets länk."
+      },
+      "resolvingUnexpectedException" : {
+         "string" : "Det uppstod ett oväntat undantag vid matchning!"
+      },
+      "revokeACSDeleteRights" : {
+         "string" : "Raderar Adobe ACS-behörighetsinformation…"
+      },
+      "revokeACSDeleteRightsFailed" : {
+         "string" : "Det gick inte att radera Adobe ACS-behörighetsinformationen."
+      },
+      "revokeACSExecute" : {
+         "string" : "Kör återkallningskommandon för Adobe ACS…"
+      },
+      "revokeACSExecuteOK" : {
+         "string" : "Körningen av återkallningskommandon för Adobe ACS lyckades."
+      },
+      "revokeACSGettingDeviceCredentials" : {
+         "string" : "Hämtar Adobe ACS-enhetens identifieringsuppgifter..."
+      },
+      "revokeACSGettingDeviceCredentialsNotActivated" : {
+         "string" : "Adobe ACS-enheten är inte aktiverad."
+      },
+      "revokeACSGettingDeviceCredentialsOK" : {
+         "string" : "Adobe ACS-enhetens identifieringsuppgifter har hämtats."
+      },
+      "revokeACSLoan" : {
+         "string" : "Återkallar lånet via Adobe ACS…"
+      },
+      "revokeACSLoanNotReturnable" : {
+         "string" : "Adobe ACS anser att detta lån inte kan returneras."
+      },
+      "revokeACSLoanNotSupported" : {
+         "string" : "Adobe ACS stöds inte."
+      },
+      "revokeACSTimedOut" : {
+         "string" : "Tidsgräns överskreds i väntan på Adobe ACS."
+      },
+      "revokeBookACSConnectorFailed" : {
+         "string" : "Adobe ACS-kommandon misslyckades med felkod %1$s."
+      },
+      "revokeBookACSFailed" : {
+         "string" : "Körning av Adobe ACS-kommandon misslyckades på grund av ett undantag."
+      },
+      "revokeBookCancelled" : {
+         "string" : "Återkallelsen ångrades."
+      },
+      "revokeBookDatabaseLookup" : {
+         "string" : "Öppnar bokens databaspost..."
+      },
+      "revokeBookDatabaseLookupFailed" : {
+         "string" : "Det gick inte att öppna bokens databaspost."
+      },
+      "revokeBookDatabaseLookupOK" : {
+         "string" : "Bokens databaspost öppnades."
+      },
+      "revokeCredentialsRequired" : {
+         "string" : "Identifieringsuppgifter krävs, men inga har angetts."
+      },
+      "revokeDeleteBook" : {
+         "string" : "Raderar bokens databaspost."
+      },
+      "revokeDeleteBookFailed" : {
+         "string" : "Det gick inte att radera bokens databaspost."
+      },
+      "revokeFormat" : {
+         "string" : "Genomför formatspecifik återkallelse..."
+      },
+      "revokeFormatNothingToDo" : {
+         "string" : "Detta format kräver inga särskilda åtgärder."
+      },
+      "revokeFormatSpecific" : {
+         "string" : "Genomför återkallelse för format %1$s…"
+      },
+      "revokeNotRevocable" : {
+         "string" : "Boken kan inte återkallas!"
+      },
+      "revokeServerNotify" : {
+         "string" : "Meddelar servern om återkallelsen..."
+      },
+      "revokeServerNotifyFeedCorrupt" : {
+         "string" : "Servern returnerade ett flöde med en felaktig post."
+      },
+      "revokeServerNotifyFeedEmpty" : {
+         "string" : "Servern returnerade ett tomt återkallelseflöde."
+      },
+      "revokeServerNotifyFeedFailed" : {
+         "string" : "Det gick inte att bearbeta återkallelseflödet från servern."
+      },
+      "revokeServerNotifyFeedOK" : {
+         "string" : "Återkallelseflödet från servern har bearbetats."
+      },
+      "revokeServerNotifyFeedTimedOut" : {
+         "string" : "Tidsgräns överskreds i väntan på återkallelseflöde från servern."
+      },
+      "revokeServerNotifyFeedWithGroups" : {
+         "string" : "Servern returnerade ett återkallelseflöde med grupper."
+      },
+      "revokeServerNotifyNoURI" : {
+         "string" : "Ingen URI har uppgetts för servermeddelanden."
+      },
+      "revokeServerNotifyNotRevocable" : {
+         "string" : "Ett lån med tillgängligheten %1$s kan inte återkallas."
+      },
+      "revokeServerNotifyProcessingFeed" : {
+         "string" : "Bearbetar återkallelseflöden från servern..."
+      },
+      "revokeServerNotifySavingEntry" : {
+         "string" : "Sparar posten för återkallelseflödet..."
+      },
+      "revokeServerNotifySavingEntryFailed" : {
+         "string" : "Det gick inte att spara återkallelseflödet från servern."
+      },
+      "revokeServerNotifyURI" : {
+         "string" : "Meddelar servern via %1$s."
+      },
+      "revokeStarted" : {
+         "string" : "Återkallelse inleds..."
+      },
+      "search" : {
+         "string" : "Sök..."
+      },
+      "selectYear" : {
+         "string" : "Välj år"
+      },
+      "selectionAlternateButton" : {
+         "string" : "Lägg till ett bibliotek senare"
+      },
+      "selectionAlternateTitle" : {
+         "string" : "Bläddra i SimplyE-samlingen"
+      },
+      "selectionButton" : {
+         "string" : "Hitta ditt bibliotek"
+      },
+      "selectionTitle" : {
+         "string" : "Läs e-böcker från ditt bibliotek"
+      },
+      "settings" : {
+         "string" : "Inställningar"
+      },
+      "settingsAbout" : {
+         "string" : "Om Palace"
+      },
+      "settingsAccounts" : {
+         "string" : "Bibliotek"
+      },
+      "settingsAccountsSummary" : {
+         "string" : "Lägg till, ta bort eller konfigurera bibliotek"
+      },
+      "settingsAcknowledgements" : {
+         "string" : "Tillkännagivanden"
+      },
+      "settingsCOPPADeleteBooks" : {
+         "string" : "Radera böcker?"
+      },
+      "settingsCOPPADeleteBooksConfirm" : {
+         "string" : "Om du ändrar din ålder kommer det att ta bort alla böcker som laddats ner från detta konto."
+      },
+      "settingsCOPPAOver13" : {
+         "string" : "Jag är över 13 år"
+      },
+      "settingsCancel" : {
+         "string" : "Ångra"
+      },
+      "settingsCardCreatorLabel" : {
+         "string" : "Har du inte ett bibliotekskort?"
+      },
+      "settingsCardCreatorSignUp" : {
+         "string" : "Registrera dig"
+      },
+      "settingsCommit" : {
+         "string" : "Bekräfta"
+      },
+      "settingsCustomOPDS" : {
+         "string" : "Anpassat OPDS-flöde"
+      },
+      "settingsCustomOPDSCreate" : {
+         "string" : "Skapa"
+      },
+      "settingsCustomOPDSInvalidURI" : {
+         "string" : "Inte en giltig URI."
+      },
+      "settingsCustomOPDSURL" : {
+         "string" : "URL för anpassat flöde..."
+      },
+      "settingsDebug" : {
+         "string" : "Felsökningsalternativ"
+      },
+      "settingsDebugTransifex" : {
+         "string" : "Denna sträng borde ha översatts av Transifex."
+      },
+      "settingsDelete" : {
+         "string" : "Radera"
+      },
+      "settingsDetails" : {
+         "string" : "Detaljer"
+      },
+      "settingsDevAddCustomOpdsFeed" : {
+         "string" : "Lägg till anpassat OPDS-flöde"
+      },
+      "settingsDevAdobeDrmActivations" : {
+         "string" : "Adobe DRM-aktiveringar"
+      },
+      "settingsDevCacheDir" : {
+         "string" : "Visa cachekatalog"
+      },
+      "settingsDevCardCreatorUserNewYork" : {
+         "string" : "Kortskapare: Låtsas att användaren är i New York"
+      },
+      "settingsDevCrash" : {
+         "string" : "Krasch"
+      },
+      "settingsDevCrashlytics" : {
+         "string" : "Crashlytics"
+      },
+      "settingsDevCrashlyticsCurrentUserId" : {
+         "string" : "Nuvarande användar-ID för Crashlytics"
+      },
+      "settingsDevDrmSupport" : {
+         "string" : "DRM-stöd"
+      },
+      "settingsDevEnableHiddenLibraries" : {
+         "string" : "Aktivera dolda bibliotek"
+      },
+      "settingsDevEnableManualLCPPassphrase" : {
+         "string" : "Aktivera manuell LCP-lösenfras"
+      },
+      "settingsDevEnableTimeTracking" : {
+         "string" : "Aktivera tidsspårning"
+      },
+      "settingsDevFailNextStartup" : {
+         "string" : "Gör att följande start av appen misslyckas"
+      },
+      "settingsDevForgetAllAnnouncements" : {
+         "string" : "Glöm alla meddelanden"
+      },
+      "settingsDevPlaceholder" : {
+         "string" : "Platshållare"
+      },
+      "settingsDevSendAnalytics" : {
+         "string" : "Sänd analys"
+      },
+      "settingsDevSendErrorLogs" : {
+         "string" : "Sänd felloggar"
+      },
+      "settingsDevShowErrorPage" : {
+         "string" : "Visa felsida"
+      },
+      "settingsDevShowSupportedBooks" : {
+         "string" : "Visa endast böcker som stöds (Avmarkera för att visa böcker som inte stöds)"
+      },
+      "settingsDevSyncAccounts" : {
+         "string" : "Synkronisera konton"
+      },
+      "settingsDevTestingFeatures" : {
+         "string" : "Testfunktioner"
+      },
+      "settingsDevToggleOpenEBooksQAAccount" : {
+         "string" : "Växla till Open eBooks QA-konto"
+      },
+      "settingsDevUserSeenLibrarySelection" : {
+         "string" : "Har användaren sett vyn för val av bibliotek?"
+      },
+      "settingsDocumentation" : {
+         "string" : "Dokumentation"
+      },
+      "settingsEULA" : {
+         "string" : "Användaravtal"
+      },
+      "settingsEULAStatement" : {
+         "string" : "Jag samtycker till villkoren i slutanvändaravtalet."
+      },
+      "settingsFaq" : {
+         "string" : "Frågor och svar"
+      },
+      "settingsInfo" : {
+         "string" : "Information om appen"
+      },
+      "settingsLicense" : {
+         "string" : "Mjukvarulicenser"
+      },
+      "settingsLogin" : {
+         "string" : "Logga in"
+      },
+      "settingsLoginAlternatives" : {
+         "string" : "Alternativa inloggningsmetoder"
+      },
+      "settingsLoginWith" : {
+         "string" : "Logga in med %1$s"
+      },
+      "settingsLogout" : {
+         "string" : "Logga ut"
+      },
+      "settingsPassword" : {
+         "string" : "Lösenord"
+      },
+      "settingsPasswordHide" : {
+         "string" : "Dölj lösenord"
+      },
+      "settingsPasswordShow" : {
+         "string" : "Visa lösenord"
+      },
+      "settingsPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
+      },
+      "settingsPrivacy" : {
+         "string" : "Integritetspolicy"
+      },
+      "settingsReportIssue" : {
+         "string" : "Rapportera ett problem..."
+      },
+      "settingsSyncBookmarks" : {
+         "string" : "Synkronisera bokmärken"
+      },
+      "settingsTapToDebug" : {
+         "string" : "Felssökningsläge i %1$d…"
+      },
+      "settingsUserName" : {
+         "string" : "Användarnamn"
+      },
+      "settingsVersion" : {
+         "string" : "Appversion"
+      },
+      "settingsVersionCore" : {
+         "string" : "Kärnversion"
+      },
+      "settings_title" : {
+         "string" : "Inställningar"
+      },
+      "tabBooks" : {
+         "string" : "Mina böcker"
+      },
+      "tabCatalog" : {
+         "string" : "Bläddra bland böcker"
+      },
+      "tabHolds" : {
+         "string" : "Reservationer"
+      },
+      "tabProfile" : {
+         "string" : "Profil"
+      },
+      "tabSettings" : {
+         "string" : "Inställningar"
+      },
+      "table_of_contents_empty_message" : {
+         "string" : "Det finns ingen innehållsförteckning för detta verk"
+      },
+      "table_of_contents_title" : {
+         "string" : "Innehållsförteckning"
+      },
+      "unexpectedException" : {
+         "string" : "Det inträffade ett oväntat undantag."
+      },
+      "viewer_position_message" : {
+         "string" : "Vill du gå till den sida där du slutade?"
+      },
+      "viewer_position_move" : {
+         "string" : "Gå"
+      },
+      "viewer_position_stay" : {
+         "string" : "Stanna"
+      },
+      "viewer_position_title" : {
+         "string" : "Synkronisera läsposition"
+      }
+   }
+}

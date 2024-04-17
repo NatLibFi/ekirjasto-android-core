@@ -1,3 +1,27 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+
+val localProp: Properties = Properties().apply{
+    try {
+        load(FileInputStream(File(rootDir, "local.properties")))
+    } catch (exception: Exception) {
+        println(exception)
+    }
+}
+
+
+/**
+ * Overrides property from gradle.properties with same prop in local.properties if present
+ */
+fun overrideProperty(name: String) : String {
+    val value = localProp.getOrElse(name){
+        providers.gradleProperty(name).orNull
+    }?.toString() ?: throw Exception("Property not found: $name")
+    return value
+}
+
+
 fun getGitHash(): String {
     // Ekirjasto: required for Gradle Configuration cache, to prevent reconfiguration
     //   if hash was not changed.
@@ -14,6 +38,8 @@ android {
     defaultConfig {
         buildConfigField("String", "SIMPLIFIED_GIT_COMMIT", "\"${getGitHash()}\"")
         buildConfigField("String", "SIMPLIFIED_VERSION", "\"${rootProject.ext["VERSION_NAME"]}\"")
+        val languages = overrideProperty("ekirjasto.languages")
+        buildConfigField("String", "LANGUAGES", "\"$languages\"")
     }
 }
 
