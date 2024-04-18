@@ -13,4 +13,8 @@ sealed class LoginListenedEvent {
   data class AccountDetailEvent(
     val event: org.nypl.simplified.ui.accounts.AccountDetailEvent
   ) : LoginListenedEvent()
+
+  data class ErrorPageEvent(
+    val event : org.nypl.simplified.ui.errorpage.ErrorPageEvent
+  ) : LoginListenedEvent()
 }

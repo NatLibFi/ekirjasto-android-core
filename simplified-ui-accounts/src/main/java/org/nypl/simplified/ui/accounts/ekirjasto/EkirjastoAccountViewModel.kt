@@ -236,7 +236,8 @@ class EkirjastoAccountViewModel(
         body = "",
         subject = "[simplye-error-report]",
         attributes = sortedMapOf(),
-        taskSteps = taskSteps
+        taskSteps = taskSteps,
+        popPrevious = true
       )
 
     this.listener.post(AccountDetailEvent.OpenErrorPage(parameters))

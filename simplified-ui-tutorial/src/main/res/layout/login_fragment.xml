@@ -48,7 +48,7 @@
 
         <Button
             android:id="@+id/ekirjasto_loginSuomiFi"
-            style="@style/Palace.Button.Contained.Large"
+            style="@style/Palace.Button.Contained.LoginPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/elibrary_arrow_right_icon"
@@ -57,7 +57,7 @@
 
         <Button
             android:id="@+id/ekirjasto_loginPasskey"
-            style="@style/Palace.Button.Contained.Large"
+            style="@style/Palace.Button.Contained.LoginPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/elibrary_arrow_right_icon"
@@ -66,12 +66,10 @@
 
         <Button
             android:id="@+id/ekirjasto_loginSkip"
-            style="@style/Palace.Button.Contained.Large"
+            style="@style/Palace.Button.Contained.LoginSecondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/EkirjastoYellow"
             android:drawableEnd="@drawable/elibrary_arrow_right_icon"
-            android:drawableTint="@color/colorEkirjastoBlack"
             android:paddingRight="20dp"
             android:text="@string/skip_login" />
     </LinearLayout>
