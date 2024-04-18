@@ -7,7 +7,7 @@
   <string name="contentDescriptionStep1">Step 1 - Find your library</string>
   <string name="contentDescriptionStep2">Step 2 - Can\'t find your library? Go to the E-kirjasto Bookshelf for more than 10000 free titles that you can enjoy now</string>
   <string name="contentDescriptionStep3">Step 3 - Read. Listen. Enjoy!</string>
-    <string name="login_suomifi">Sign in with suomi.fi</string>
+    <string name="login_suomifi">Sign in with Suomi.fi</string>
   <string name="login_passkey">Sign in with a passkey</string>
   <string name="skip_login">Continue without signing in</string>
 
