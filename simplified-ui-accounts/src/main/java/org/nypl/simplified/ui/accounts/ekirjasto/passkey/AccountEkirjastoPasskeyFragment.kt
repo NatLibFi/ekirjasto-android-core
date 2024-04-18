@@ -110,7 +110,11 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
         .setPositiveButton(R.string.accountsDetails) { dialog, _ ->
           this.showErrorPage(result.steps)
           dialog.dismiss()
-        }.create()
+        }
+        .setOnCancelListener{
+          this.listener.post(AccountEkirjastoSuomiFiEvent.Cancel)
+        }
+          .create()
     newDialog.show()
   }
 
@@ -123,7 +127,8 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
         body = "",
         subject = "[ekirjasto-error-report]",
         attributes = sortedMapOf(),
-        taskSteps = taskSteps
+        taskSteps = taskSteps,
+        popPrevious = true
       )
 
     this.listener.post(AccountEkirjastoSuomiFiEvent.OpenErrorPage(parameters))

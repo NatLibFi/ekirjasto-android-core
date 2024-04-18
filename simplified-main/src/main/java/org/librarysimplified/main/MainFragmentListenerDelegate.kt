@@ -434,6 +434,10 @@ internal class MainFragmentListenerDelegate(
         this.openErrorPage(event.parameters)
         state
       }
+      AccountEkirjastoSuomiFiEvent.Cancel -> {
+        this.goUpwards()
+        state
+      }
     }
   }
 
@@ -648,6 +652,9 @@ internal class MainFragmentListenerDelegate(
   }
 
   private fun openErrorPage(parameters: ErrorPageParameters) {
+    if (parameters.popPrevious){
+      this.navigator.popBackStack()
+    }
     this.navigator.addFragment(
       fragment = ErrorPageFragment.create(parameters),
       tab = this.navigator.currentTab()

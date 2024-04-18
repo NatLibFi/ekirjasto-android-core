@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
@@ -17,8 +18,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.transifex.txnative.TxNative
 import org.librarysimplified.services.api.Services
-import org.librarysimplified.ui.login.LoginEvent
-import org.librarysimplified.ui.login.LoginFragment
+import org.librarysimplified.ui.login.LoginMainFragment
 import org.librarysimplified.ui.onboarding.OnboardingEvent
 import org.librarysimplified.ui.onboarding.OnboardingFragment
 import org.librarysimplified.ui.splash.SplashEvent
@@ -143,6 +143,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
             this.logger.warn("Deep link did not have a screen parameter.")
             ScreenID.UNSPECIFIED
           }
+
           LOGIN_SCREEN_ID -> ScreenID.LOGIN
           else -> {
             this.logger.warn("Deep link had an unrecognized screen parameter {}.", screenRaw)
@@ -257,17 +258,10 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
         this.handleTutorialEvent(event.event)
 
       is MainActivityListenedEvent.LoginEvent ->
-        this.handleLoginEvent(event.event)
+        this.openMainFragment()
 
       is MainActivityListenedEvent.OnboardingEvent ->
         this.handleOnboardingEvent(event.event)
-    }
-  }
-
-  private fun handleLoginEvent(event: LoginEvent) {
-    return when (event) {
-      LoginEvent.StartLogin ->
-        this.openMainFragment()
     }
   }
 
@@ -345,8 +339,9 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   }
 
   private fun onOnboardingFinished() {
-    this.openMainFragment()
-    //this.openLogin()
+    this.logger.debug("onBoardingFinished - should OPEN LOGIN")
+//    this.openMainFragment()
+    this.openLogin()
   }
 
   private fun openMainBackStack() {
@@ -388,28 +383,24 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
   private fun openLogin() {
     this.logger.debug("openLogin")
-    val loginFragment = LoginFragment()
-    this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-    this.supportFragmentManager.commit {
-      replace(R.id.mainFragmentHolder, loginFragment)
-    }
+    replaceFragment(LoginMainFragment())
   }
 
   private fun openOnboarding() {
     this.logger.debug("openOnboarding")
-    val onboardingFragment = OnboardingFragment()
-    this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-    this.supportFragmentManager.commit {
-      replace(R.id.mainFragmentHolder, onboardingFragment)
-    }
+    replaceFragment(OnboardingFragment())
+
   }
 
   private fun openMainFragment() {
     this.logger.debug("openMainFragment")
-    val mainFragment = MainFragment()
+    replaceFragment(MainFragment(), "MAIN")
+  }
+
+  private fun replaceFragment(fragment: Fragment, tag: String = "") {
     this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     this.supportFragmentManager.commit {
-      replace(R.id.mainFragmentHolder, mainFragment, "MAIN")
+      replace(R.id.mainFragmentHolder, fragment, tag)
     }
   }
 }

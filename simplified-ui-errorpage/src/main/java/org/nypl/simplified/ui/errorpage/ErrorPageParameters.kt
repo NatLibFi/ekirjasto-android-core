@@ -40,7 +40,8 @@ data class ErrorPageParameters(
    * The steps that lead up to the current error.
    */
 
-  val taskSteps: List<TaskStep>
+  val taskSteps: List<TaskStep>,
+  val popPrevious: Boolean = false
 ) : Serializable {
   /**
    * The text of an error report to send to technical support, consisting of the body, attributes,

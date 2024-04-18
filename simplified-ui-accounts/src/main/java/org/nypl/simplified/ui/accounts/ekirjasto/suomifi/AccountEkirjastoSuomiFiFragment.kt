@@ -151,7 +151,8 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
         body = "",
         subject = "[ekirjasto-error-report]",
         attributes = sortedMapOf(),
-        taskSteps = taskSteps
+        taskSteps = taskSteps,
+        popPrevious = true
       )
 
     this.listener.post(AccountEkirjastoSuomiFiEvent.OpenErrorPage(parameters))

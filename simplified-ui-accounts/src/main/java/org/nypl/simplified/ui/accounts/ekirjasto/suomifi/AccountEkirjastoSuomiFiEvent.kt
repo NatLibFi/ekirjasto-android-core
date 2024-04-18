@@ -18,4 +18,6 @@ sealed class AccountEkirjastoSuomiFiEvent {
   data class OpenErrorPage(
     val parameters: ErrorPageParameters
   ) : AccountEkirjastoSuomiFiEvent()
+
+  object Cancel : AccountEkirjastoSuomiFiEvent()
 }
