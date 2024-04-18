@@ -69,8 +69,8 @@
   <string name="accountPasskeyCreate">Register Passkey</string>
     <string name="AccountTitle">Settings</string>
     <string name="app_version_string">E-Kirjasto-version %1$s</string>
-  <string name="account_login_suomifi">Sign in with Suomi.FI</string>
-  <string name="account_login_passkey">Sign in with Passkey</string>
+  <string name="account_login_suomifi">Sign in with suomi.fi</string>
+  <string name="account_login_passkey">Sign in with a passkey</string>
   <string name="account_register_passkey">Register Passkey</string>
   <string name="account_eula">User Agreement</string>
   <string name="account_licenses">Software Licenses</string>
