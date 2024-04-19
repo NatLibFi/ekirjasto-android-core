@@ -80,8 +80,8 @@ if (palaceAssetsDirectory != null) {
  * A task that writes the required assets to a file in order to be used later by ZipCheck.
  */
 
-fun createRequiredAssetsFile(file: File): Task {
-    return task("CheckReleaseRequiredAssetsCreate") {
+fun createRequiredAssetsFile(file: File, flavorName: String): Task {
+    return task("CheckReleaseRequiredAssetsCreate_${flavorName}") {
         doLast {
             file.writer().use {
                 palaceAssetsRequired.store(it, "")
@@ -134,6 +134,9 @@ val requiredSigningTask = task("CheckReleaseSigningInformation") {
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId = "fi.kansalliskirjasto.ekirjasto"
         versionCode = calculateVersionCode()
@@ -155,6 +158,35 @@ android {
                     srcDir(palaceAssetsDirectory)
                 }
             }
+        }
+    }
+
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("dev") {
+            val circURL = "https://lib-dev.e-kirjasto.fi"
+            buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
+            val libProvider = "6a1b4290-aff6-4cb3-a37d-b8161c0c824c"
+            buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
+        }
+        create("beta") {
+            val circURL = "https://lib-beta.e-kirjasto.fi"
+            buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
+            val libProvider = "ef42c35c-96a1-4a20-a7c8-bdfe35f66777"
+            buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
+        }
+        create("production") {
+            val circURL = "https://lib.e-kirjasto.fi"
+            buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
+            val libProvider = "8b7292e9-ed77-480e-a695-423f715be0f2"
+            buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
+        }
+        create("ellibs") {
+            val circURL = "https://circulation-beta.ellibs.com"
+            buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
+            val libProvider = "2fcb96c3-b639-4b12-ab50-4172a0410a07"
+            buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
     }
 
@@ -227,7 +259,7 @@ android {
                 val outputFile = it.outputFile
                 val assetFile = File("${project.buildDir}/required-assets.conf")
                 val fileTask =
-                    createRequiredAssetsFile(assetFile)
+                    createRequiredAssetsFile(assetFile, this.flavorName)
                 val checkTask =
                     createRequiredAssetsTask(checkFile = outputFile, assetList = assetFile)
 

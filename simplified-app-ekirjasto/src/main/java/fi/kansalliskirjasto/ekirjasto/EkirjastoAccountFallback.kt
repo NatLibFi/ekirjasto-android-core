@@ -26,10 +26,10 @@ class EkirjastoAccountFallback : AccountProviderFallbackType {
     )*/
 
   companion object {
-    const val circulationAPIURL = "https://circulation-beta.ellibs.com"
+    const val circulationAPIURL = BuildConfig.CIRCULATION_API_URL
 
     // This must be same as the id of the library on circulation backend.
-    private val libraryProviderId = "2fcb96c3-b639-4b12-ab50-4172a0410a07"
+    private val libraryProviderId = BuildConfig.LIBRARY_PROVIDER_ID
   }
   // This will be replaced by the remote account provider with same id.
   override fun get(): AccountProviderType {
