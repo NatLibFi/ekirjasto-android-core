@@ -1,5 +1,8 @@
 {
    "data" : {
+      "AccountTitle" : {
+         "string" : "Settings"
+      },
       "accessibility_settings" : {
          "string" : "Open the settings menu"
       },
@@ -28,10 +31,10 @@
          "string" : "Open Settings"
       },
       "accountCardCreatorDialogOpenSettingsMessage" : {
-         "string" : "The Palace App requires a one-time location check to create a virtual library card. Your location is currently not shared. To enable location access for the Palace App, please adjust your location settings."
+         "string" : "E-kirjasto requires a one-time location check to create a virtual library card. Your location is currently not shared. To enable location access for E-kirjasto, please adjust your location settings."
       },
       "accountCardCreatorDialogPermissionsMessage" : {
-         "string" : "To create your virtual library card, the Palace App will use your location one time to verify your library service area. Click \"OK\" to proceed."
+         "string" : "To create your virtual library card, E-kirjasto will use your location one time to verify your library service area. Click \"OK\" to proceed."
       },
       "accountCardCreatorLabel" : {
          "string" : "Don't have a library card?"
@@ -43,7 +46,7 @@
          "string" : "Create Card"
       },
       "accountCardCreatorSignUpMessage" : {
-         "string" : "The Palace App will use your location one time to verify your library service area."
+         "string" : "E-kirjasto will use your location one time to verify your library service area."
       },
       "accountCreateCard" : {
          "string" : "Create Card"
@@ -65,6 +68,24 @@
       },
       "accountEULAStatement" : {
          "string" : "By signing in, you agree to the End User License Agreement."
+      },
+      "accountEkirjastoLoggedInLabel" : {
+         "string" : "Logged in the E-kirjasto."
+      },
+      "accountEkirjastoLoggingInLabel" : {
+         "string" : "Logging in with %1$s"
+      },
+      "accountEkirjastoPassKeyLabel" : {
+         "string" : "Passkey login"
+      },
+      "accountEkirjastoSuomiFiLabel" : {
+         "string" : "Suomi.fi login"
+      },
+      "accountEkirjastoSuomiFiNoAccessToken" : {
+         "string" : "Failed to retrieve an access token from the URI: %1$s"
+      },
+      "accountEmail" : {
+         "string" : "E-mail address"
       },
       "accountForgotPassword" : {
          "string" : "Forgot your password?"
@@ -95,6 +116,9 @@
       },
       "accountMore" : {
          "string" : "More options"
+      },
+      "accountPasskeyCreate" : {
+         "string" : "Register Passkey"
       },
       "accountPassword" : {
          "string" : "Password"
@@ -159,6 +183,30 @@
       "accountWantChildCard" : {
          "string" : "Want a card for your child?"
       },
+      "account_about_app" : {
+         "string" : "About App"
+      },
+      "account_eula" : {
+         "string" : "User Agreement"
+      },
+      "account_leave_feedback" : {
+         "string" : "Leave feedback"
+      },
+      "account_licenses" : {
+         "string" : "Software Licenses"
+      },
+      "account_login_passkey" : {
+         "string" : "Sign in with Passkey"
+      },
+      "account_login_suomifi" : {
+         "string" : "Sign in with Suomi.FI"
+      },
+      "account_register_passkey" : {
+         "string" : "Register Passkey"
+      },
+      "account_sync_bookmarks_statement" : {
+         "string" : "Save your reading position and bookmarks to all your other devices"
+      },
       "accounts" : {
          "string" : "Libraries"
       },
@@ -188,6 +236,9 @@
       },
       "app_name" : {
          "string" : "E-kirjasto"
+      },
+      "app_version_string" : {
+         "string" : "E-Kirjasto-version %1$s"
       },
       "audio_book_player" : {
          "string" : "Audiobook Player"
@@ -580,7 +631,7 @@
          "string" : "Step 1 - Find your library"
       },
       "contentDescriptionStep2" : {
-         "string" : "Step 2 - Can't find your library? Go to the Palace Bookshelf for more than 10000 free titles that you can enjoy now"
+         "string" : "Step 2 - Can't find your library? Go to the E-kirjasto Bookshelf for more than 10000 free titles that you can enjoy now"
       },
       "contentDescriptionStep3" : {
          "string" : "Step 3 - Read. Listen. Enjoy!"
@@ -1078,7 +1129,10 @@
          "string" : "Settings"
       },
       "settingsAbout" : {
-         "string" : "About Palace"
+         "string" : "About E-kirjasto"
+      },
+      "settingsAccessibilityStatement" : {
+         "string" : "Accessibility Statement"
       },
       "settingsAccounts" : {
          "string" : "Libraries"
@@ -1211,6 +1265,9 @@
       },
       "settingsFaq" : {
          "string" : "FAQ"
+      },
+      "settingsFeedback" : {
+         "string" : "Feedback"
       },
       "settingsInfo" : {
          "string" : "App info"

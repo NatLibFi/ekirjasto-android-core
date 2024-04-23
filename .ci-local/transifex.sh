@@ -22,6 +22,10 @@ fatal() {
   exit "${2:-1}"
 }
 
+warn() {
+  echo "$(basename "$0"): WARNING: $1" 1>&2
+}
+
 info() {
   echo "$(basename "$0"): INFO: $1" 1>&2
 }
@@ -54,12 +58,17 @@ sha256sum -c .ci-local/transifex.sha256 \
 # Apply Transifex to the project's string resources.
 #
 
-if [ -z "${TRANSIFEX_SECRET}" ]; then
-  info "TRANSIFEX_SECRET is not defined, will skip Transifex upload"
-else
-  STRING_FILES=$(find . -name 'strings*.xml' -type f) \
-    || fatal "Could not list string files" 68
+STRING_FILES=$(find . -name '*strings*.xml' -type f | sort) \
+  || fatal "Could not list string files" 68
 
+info "Files to upload strings from:"
+echo "$STRING_FILES"
+echo
+
+if [ -z "${TRANSIFEX_SECRET}" ]; then
+  warn "TRANSIFEX_SECRET is not defined, will skip Transifex upload"
+  echo
+else
   TRANSIFEX_PUSH_ARGS="--verbose"
   TRANSIFEX_PUSH_ARGS="${TRANSIFEX_PUSH_ARGS} --token=${TRANSIFEX_TOKEN}"
   TRANSIFEX_PUSH_ARGS="${TRANSIFEX_PUSH_ARGS} --secret=${TRANSIFEX_SECRET}"
