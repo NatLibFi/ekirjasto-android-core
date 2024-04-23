@@ -669,7 +669,7 @@ internal class MainFragmentListenerDelegate(
   }
 
   private fun goUpwards() {
-    logger.error("goUpwards(), stack size: {}", navigator.backStackSize())
+    logger.debug("goUpwards(), stack size: {}", navigator.backStackSize())
     val isRoot = (0 == navigator.backStackSize())
     if (!isRoot) {
       navigator.popBackStack()
