@@ -1,7 +1,6 @@
 package org.librarysimplified.main
 
 import android.content.res.Resources
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.common.util.concurrent.FluentFuture
 import hu.akarnokd.rxjava2.subjects.UnicastWorkSubject

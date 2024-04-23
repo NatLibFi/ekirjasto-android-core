@@ -1,6 +1,6 @@
 package org.librarysimplified.ui.catalog
 
-import android.app.Application
+import android.content.res.Resources
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.librarysimplified.services.api.ServiceDirectoryType
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory
  */
 
 class CatalogFeedViewModelFactory(
-  private val application: Application,
+  private val resources: Resources,
   private val services: ServiceDirectoryType,
   private val feedArguments: CatalogFeedArguments,
   private val borrowViewModel: CatalogBorrowViewModel,
@@ -48,7 +48,7 @@ class CatalogFeedViewModelFactory(
           services.requireService(AnalyticsType::class.java)
 
         CatalogFeedViewModel(
-          this.application.resources,
+          this.resources,
           profilesController,
           feedLoader,
           booksController,

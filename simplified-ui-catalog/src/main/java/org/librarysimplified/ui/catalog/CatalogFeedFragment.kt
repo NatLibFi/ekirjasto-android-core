@@ -107,7 +107,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
   private val viewModel: CatalogFeedViewModel by viewModels(
     factoryProducer = {
       CatalogFeedViewModelFactory(
-        application = this.requireActivity().application,
+        resources = this.requireActivity().resources,
         services = Services.serviceDirectory(),
         borrowViewModel = borrowViewModel,
         feedArguments = this.parameters,
