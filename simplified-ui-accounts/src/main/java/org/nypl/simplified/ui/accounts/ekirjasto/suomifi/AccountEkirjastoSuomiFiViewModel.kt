@@ -126,7 +126,7 @@ class AccountEkirjastoSuomiFiViewModel(
         if (it.startsWith(this.description.tunnistus_finish.toString())) {
           view?.visibility = View.GONE
           view?.evaluateJavascript(
-            "(function() {return document.querySelector('pre').innerText; })();"
+            "(function () { return document.body.textContent; })();"
           ) { json -> parseAuthToken(json.trim()
             .removePrefix("\"")
             .removeSuffix("\"")
@@ -138,23 +138,30 @@ class AccountEkirjastoSuomiFiViewModel(
     }
 
     private fun parseAuthToken(
-      json: String
+      content: String
     ) {
 
       logger.debug("Parsing authentication data from result")
+      if (content.isBlank() || content == "null") {
+        logger.debug("Empty response, user exited without signing in")
+        this.eventSubject.onNext(
+          AccountEkirjastoSuomiFiInternalEvent.Cancel()
+        )
+        return
+      }
 
       val mapper = ObjectMapper()
-      val jsonNode = mapper.readTree(json)
+      val jsonNode = mapper.readTree(content)
 
-      val ekirjastoToken = jsonNode["token"].asText();
-      val exp = jsonNode.get("exp").asLong()
+      val ekirjastoToken = jsonNode["token"]?.asText()
+      val exp = jsonNode.get("exp")?.asLong()
 
       val cookies = WebViewUtilities.dumpCookiesAsAccountCookies(
         CookieManager.getInstance(),
         this.webViewDataDir
       )
 
-      if (ekirjastoToken == null) {
+      if (ekirjastoToken == null || exp == null) {
         val message = this.resources.getString(R.string.accountEkirjastoSuomiFiNoAccessToken)
         this.logger.error("{}", message)
         this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.Failed(message))
@@ -187,7 +194,7 @@ class AccountEkirjastoSuomiFiViewModel(
       } catch (e:Exception){
         this.logger.error(e.message, e)
         this.eventSubject.onNext(AccountEkirjastoSuomiFiInternalEvent.Failed(
-          e.message?:"Error when finalizing suomi.fi login"
+          e.message ?: "Error when finalizing Suomi.fi login"
         ))
       }
 
