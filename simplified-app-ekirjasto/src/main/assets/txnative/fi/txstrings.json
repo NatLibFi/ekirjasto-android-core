@@ -1,8 +1,5 @@
 {
    "data" : {
-      "AccountTitle" : {
-         "string" : "Asetukset"
-      },
       "accessibility_settings" : {
          "string" : "Avaa asetusvalikko"
       },
@@ -69,24 +66,6 @@
       "accountEULAStatement" : {
          "string" : "Kirjautumalla sisään hyväksyt loppukäyttäjän lisenssisopimuksen."
       },
-      "accountEkirjastoLoggedInLabel" : {
-         "string" : "Kirjauduttu sisään E-kirjastoon."
-      },
-      "accountEkirjastoLoggingInLabel" : {
-         "string" : "Kirjaudutaan sisään käyttämällä seuraavaa: %1$s"
-      },
-      "accountEkirjastoPassKeyLabel" : {
-         "string" : "Sisäänkirjautuminen pääsyavaimella"
-      },
-      "accountEkirjastoSuomiFiLabel" : {
-         "string" : "Suomi.fi-sisäänkirjautuminen"
-      },
-      "accountEkirjastoSuomiFiNoAccessToken" : {
-         "string" : "Käyttötunnuksen hakeminen URIsta epäonnistui: %1$s"
-      },
-      "accountEmail" : {
-         "string" : "Sähköpostiosoite"
-      },
       "accountForgotPassword" : {
          "string" : "Unohditko salasanasi?"
       },
@@ -116,9 +95,6 @@
       },
       "accountMore" : {
          "string" : "Lisää vaihtoehtoja"
-      },
-      "accountPasskeyCreate" : {
-         "string" : "Rekisteröi pääsyavain"
       },
       "accountPassword" : {
          "string" : "Salasana"
@@ -183,30 +159,6 @@
       "accountWantChildCard" : {
          "string" : "Haluatko kortin lapsellesi?"
       },
-      "account_about_app" : {
-         "string" : "Tietoja sovelluksesta"
-      },
-      "account_eula" : {
-         "string" : "Käyttäjäsopimus"
-      },
-      "account_leave_feedback" : {
-         "string" : "Anna palautetta"
-      },
-      "account_licenses" : {
-         "string" : "Ohjelmistolisenssit"
-      },
-      "account_login_passkey" : {
-         "string" : "Kirjaudu sisään pääsyavaimella"
-      },
-      "account_login_suomifi" : {
-         "string" : "Kirjaudu sisään suomi.fi-tunnistuksella"
-      },
-      "account_register_passkey" : {
-         "string" : "Rekisteröi pääsyavain"
-      },
-      "account_sync_bookmarks_statement" : {
-         "string" : "Tallenna lukukohtasi ja kirjanmerkkisi kaikkiin muihin laitteisiisi"
-      },
       "accounts" : {
          "string" : "Kirjastot"
       },
@@ -236,9 +188,6 @@
       },
       "app_name" : {
          "string" : "Vanilla-profiilit"
-      },
-      "app_version_string" : {
-         "string" : "E-kirjaston versio %1$s"
       },
       "audio_book_player" : {
          "string" : "Äänikirjasoitin"
@@ -1131,9 +1080,6 @@
       "settingsAbout" : {
          "string" : "Tietoja Palacesta"
       },
-      "settingsAccessibilityStatement" : {
-         "string" : "Saavutettavuusseloste"
-      },
       "settingsAccounts" : {
          "string" : "Kirjastot"
       },
@@ -1265,9 +1211,6 @@
       },
       "settingsFaq" : {
          "string" : "Usein kysytyt kysymykset"
-      },
-      "settingsFeedback" : {
-         "string" : "Palaute"
       },
       "settingsInfo" : {
          "string" : "Sovelluksen tiedot"

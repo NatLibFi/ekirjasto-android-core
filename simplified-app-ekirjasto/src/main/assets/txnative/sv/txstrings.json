@@ -1,8 +1,5 @@
 {
    "data" : {
-      "AccountTitle" : {
-         "string" : "Inställningar"
-      },
       "accessibility_settings" : {
          "string" : "Öppna inställningsmenyn"
       },
@@ -69,24 +66,6 @@
       "accountEULAStatement" : {
          "string" : "Genom att logga in godkänner du slutanvändaravtalet."
       },
-      "accountEkirjastoLoggedInLabel" : {
-         "string" : "Inloggad i E-biblioteket."
-      },
-      "accountEkirjastoLoggingInLabel" : {
-         "string" : "Loggar in med %1$s"
-      },
-      "accountEkirjastoPassKeyLabel" : {
-         "string" : "Inloggning med nyckel"
-      },
-      "accountEkirjastoSuomiFiLabel" : {
-         "string" : "Suomi.fi-inloggning"
-      },
-      "accountEkirjastoSuomiFiNoAccessToken" : {
-         "string" : "Det gick inte att hämta åtkomsttoken från URI: %1$s"
-      },
-      "accountEmail" : {
-         "string" : "E-postadress"
-      },
       "accountForgotPassword" : {
          "string" : "Glömt ditt lösenord?"
       },
@@ -116,9 +95,6 @@
       },
       "accountMore" : {
          "string" : "Fler alternativ"
-      },
-      "accountPasskeyCreate" : {
-         "string" : "Registrera nyckel"
       },
       "accountPassword" : {
          "string" : "Lösenord"
@@ -183,30 +159,6 @@
       "accountWantChildCard" : {
          "string" : "Behöver du ett kort för ditt barn?"
       },
-      "account_about_app" : {
-         "string" : "Om appen"
-      },
-      "account_eula" : {
-         "string" : "Användaravtal"
-      },
-      "account_leave_feedback" : {
-         "string" : "Ge respons"
-      },
-      "account_licenses" : {
-         "string" : "Mjukvarulicenser"
-      },
-      "account_login_passkey" : {
-         "string" : "Logga in med nyckel"
-      },
-      "account_login_suomifi" : {
-         "string" : "Logga in med Suomi.fi"
-      },
-      "account_register_passkey" : {
-         "string" : "Registrera nyckel"
-      },
-      "account_sync_bookmarks_statement" : {
-         "string" : "Spara ditt läsläge och bomärken på alla dina enheter"
-      },
       "accounts" : {
          "string" : "Bibliotek"
       },
@@ -236,9 +188,6 @@
       },
       "app_name" : {
          "string" : "Standardprofiler"
-      },
-      "app_version_string" : {
-         "string" : "E-biblioteket version %1$s"
       },
       "audio_book_player" : {
          "string" : "Ljudboksspelare"
@@ -1131,9 +1080,6 @@
       "settingsAbout" : {
          "string" : "Om Palace"
       },
-      "settingsAccessibilityStatement" : {
-         "string" : "Tillgänglighetsutlåtande"
-      },
       "settingsAccounts" : {
          "string" : "Bibliotek"
       },
@@ -1265,9 +1211,6 @@
       },
       "settingsFaq" : {
          "string" : "Frågor och svar"
-      },
-      "settingsFeedback" : {
-         "string" : "Respons"
       },
       "settingsInfo" : {
          "string" : "Information om appen"
