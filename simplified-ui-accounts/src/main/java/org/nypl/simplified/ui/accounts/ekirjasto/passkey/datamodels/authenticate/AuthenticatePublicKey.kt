@@ -5,6 +5,6 @@ data class AuthenticatePublicKey(
   val challenge: String,
   val timeout: Long,
   val userVerification: String,
-  val allowCredentials: List<AllowCredentialType>
+  val allowCredentials: List<AllowCredentialType>?
 )
 

@@ -9,10 +9,14 @@ import androidx.credentials.exceptions.CreateCredentialProviderConfigurationExce
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import one.irradia.mime.api.MIMEType
 import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
 import org.librarysimplified.http.api.LSHTTPClientType
@@ -63,6 +67,9 @@ class AccountEkirjastoPasskeyViewModel (
     services.requireService(BuildConfigurationServiceType::class.java)
   private val steps: TaskRecorderType = TaskRecorder.create()
   private var registering: Boolean = false
+
+  val isRegistering : Boolean
+  get() = this.registering
 
 
 
@@ -140,52 +147,60 @@ class AccountEkirjastoPasskeyViewModel (
 
   }
 
-  suspend fun passkeyLogin(): TaskResult<PasskeyAuth> {
-
+  fun passkeyLogin() {
     this.registering = false
-    lateinit var startResponse : AuthenticatePublicKey
-    lateinit var challengeResponse : AuthenticateResult
-
-    try {
-      steps.beginNewStep("Passkey Login Start")
-      this.logger.debug("Passkey Login Start")
-      startResponse = requestPasskeyLoginStart()
-      this.logger.debug("Passkey Login Start responded")
-      steps.currentStepSucceeded("Login start request OK")
-    } catch (e: Exception){
-      handleFailure(e)
-      return steps.finishFailure()
-    }
-
-    try {
-      this.logger.debug("Passkey Login Challenge")
-      steps.beginNewStep("Authenticator Challenge")
-      challengeResponse = requestPasskeyLoginChallenge(startResponse)
-      this.logger.debug("Passkey Login Challenge responded")
-      steps.currentStepSucceeded("Authentication completed")
-    } catch (e: Exception) {
-      handleFailure(e)
-      return steps.finishFailure()
-    }
-
-    when (challengeResponse) {
-
-      is AuthenticateResult.Success -> {
-        return try {
-          this.logger.debug("Passkey Login Complete")
-          steps.beginNewStep("Complete Login")
-          val auth = requestPasskeyLoginComplete(challengeResponse)
-          steps.currentStepSucceeded("Complete Login succeeded")
-          steps.finishSuccess(auth)
-        } catch (e: Exception) {
-          handleFailure(e)
-          steps.finishFailure()
-        }
+    this.viewModelScope.launch(Dispatchers.IO) {
+      lateinit var startResponse : AuthenticatePublicKey
+      lateinit var challengeResponse : AuthenticateResult
+      try {
+        steps.beginNewStep("Passkey Login Start")
+        logger.debug("Passkey Login Start")
+        startResponse = requestPasskeyLoginStart()
+        logger.debug("Passkey Login Start responded")
+        steps.currentStepSucceeded("Login start request OK")
+      } catch (e: Exception) {
+        handleFailure(e)
+        passkeyResult.postValue(steps.finishFailure())
+        return@launch
       }
-      is AuthenticateResult.Failure -> {
-        logger.warn("Authenticator result Failed")
-        steps.currentStepFailed(challengeResponse.message, "AuthenticatorError", challengeResponse.error)
-        return steps.finishFailure()
+
+      try {
+        logger.debug("Passkey Login Challenge")
+        steps.beginNewStep("Authenticator Challenge")
+        challengeResponse = requestPasskeyLoginChallenge(startResponse)
+        logger.debug("Passkey Login Challenge responded")
+        steps.currentStepSucceeded("Authentication completed")
+      } catch (e: Exception) {
+        handleFailure(e)
+        passkeyResult.postValue(steps.finishFailure())
+        return@launch
+      }
+
+      when (challengeResponse) {
+
+        is AuthenticateResult.Success -> {
+          try {
+            logger.debug("Passkey Login Complete")
+            steps.beginNewStep("Complete Login")
+            val auth = requestPasskeyLoginComplete(challengeResponse)
+            steps.currentStepSucceeded("Complete Login succeeded")
+            passkeyResult.postValue(steps.finishSuccess(auth))
+          } catch (e: Exception) {
+            handleFailure(e)
+            passkeyResult.postValue(steps.finishFailure())
+            return@launch
+          }
+        }
+
+        is AuthenticateResult.Failure -> {
+          logger.warn("Authenticator result Failed")
+          steps.currentStepFailed(
+            challengeResponse.message,
+            "AuthenticatorError",
+            challengeResponse.error
+          )
+          passkeyResult.postValue(steps.finishFailure())
+        }
       }
     }
   }
@@ -206,6 +221,8 @@ class AccountEkirjastoPasskeyViewModel (
         throw Exception("Passkey Login Start Failed",status.exception)
       }
     }
+
+    logger.warn("passkey login start response: ${response.toPrettyString()}")
 
     return objectMapper.readValue(response["publicKey"].toString())
   }
@@ -251,56 +268,53 @@ class AccountEkirjastoPasskeyViewModel (
     return PasskeyAuth(token,exp)
   }
 
-  suspend fun passkeyRegister() : TaskResult<PasskeyAuth> {
+  val passkeyResult = MutableLiveData<TaskResult<PasskeyAuth>>()
+
+  fun passkeyRegister() {
     this.registering = true
-    val uri = description.passkey_register_start
-    val body = mapToJson(mapOf("username" to ""))
-    lateinit var registerStartResponse: JsonNode
-    lateinit var challengeResponse: RegisterResult
-    lateinit var authResponse: PasskeyAuth
-    try {
-      logger.debug("Register Start")
-      steps.beginNewStep("Passkey Register Start")
-      registerStartResponse = requestPasskeyRegisterStart(uri, body)
-      logger.debug("Register Start Complete")
-      steps.currentStepSucceeded("Passkey Register Start Success")
-    } catch (e: Exception) {
-      handleFailure(e)
-      return steps.finishFailure()
-    }
+    viewModelScope.launch(Dispatchers.IO) {
+      val uri = description.passkey_register_start
+      val body = mapToJson(mapOf("username" to ""))
+      lateinit var registerStartResponse: JsonNode
+      lateinit var challengeResponse: RegisterResult
+      lateinit var authResponse: PasskeyAuth
+      try {
+        logger.debug("Register Start")
+        steps.beginNewStep("Passkey Register Start")
+        registerStartResponse = requestPasskeyRegisterStart(uri, body)
+        logger.debug("Register Start Complete")
+        steps.currentStepSucceeded("Passkey Register Start Success")
+      } catch (e: Exception) {
+        handleFailure(e)
+        passkeyResult.postValue(steps.finishFailure())
+        return@launch
+      }
 
-    try {
-      logger.debug("Register Challenge")
-      steps.beginNewStep("Passkey Register Challenge Start")
-      challengeResponse = startPasskeyRegisterChallenge(registerStartResponse)
-      logger.debug("Register Challenge Complete")
-      steps.currentStepSucceeded("Passkey Register Challenge completed")
-    } catch (e: Exception) {
-      handleFailure(e)
-      return steps.finishFailure()
-    }
+      try {
+        logger.debug("Register Challenge")
+        steps.beginNewStep("Passkey Register Challenge Start")
+        challengeResponse = startPasskeyRegisterChallenge(registerStartResponse)
+        logger.debug("Register Challenge Complete")
+        steps.currentStepSucceeded("Passkey Register Challenge completed")
+      } catch (e: Exception) {
+        handleFailure(e)
+        passkeyResult.postValue(steps.finishFailure())
+        return@launch
+      }
 
-    try {
-      logger.debug("Register Finish")
-      steps.beginNewStep("Passkey Register Finish start")
-      authResponse = passkeyRegisterFinish(challengeResponse)
-      logger.debug("Register Finish Complete")
-      steps.currentStepSucceeded("Passkey Register Finished successfully")
-    } catch (e: Exception){
-      handleFailure(e)
-      return steps.finishFailure()
+      try {
+        logger.debug("Register Finish")
+        steps.beginNewStep("Passkey Register Finish start")
+        authResponse = passkeyRegisterFinish(challengeResponse)
+        logger.debug("Register Finish Complete")
+        steps.currentStepSucceeded("Passkey Register Finished successfully")
+      } catch (e: Exception) {
+        handleFailure(e)
+        passkeyResult.postValue(steps.finishFailure())
+        return@launch
+      }
+      passkeyResult.postValue(steps.finishSuccess(authResponse))
     }
-//    try {
-//      this.profiles.profileAccountLogin(ProfileAccountLoginRequest.EkirjastoPasskeyComplete(
-//        accountId = this.account,
-//        description = this.description
-//      ))
-//    } catch (e: Exception){
-//      handleFailure(e)
-//      return steps.finishFailure()
-//    }
-
-    return steps.finishSuccess(authResponse)
 
   }
 
