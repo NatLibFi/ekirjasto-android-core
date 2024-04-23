@@ -101,6 +101,8 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
     return when (event) {
       is AccountEkirjastoSuomiFiInternalEvent.WebViewClientReady ->
         this.onWebViewClientReady()
+      is AccountEkirjastoSuomiFiInternalEvent.Cancel ->
+        this.onSuomiFiEventCancel()
       is AccountEkirjastoSuomiFiInternalEvent.Failed ->
         this.onSuomiFiEventFailed(event)
       is AccountEkirjastoSuomiFiInternalEvent.AccessTokenStartReceive ->
@@ -121,6 +123,11 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
 
   private fun onSuomiFiEventAccessTokenObtained() {
     this.listener.post(AccountEkirjastoSuomiFiEvent.AccessTokenObtained)
+  }
+
+  private fun onSuomiFiEventCancel() {
+    logger.debug("User canceled login, pop from the back stack")
+    this.parentFragmentManager.popBackStack()
   }
 
   private fun onSuomiFiEventFailed(event: AccountEkirjastoSuomiFiInternalEvent.Failed) {

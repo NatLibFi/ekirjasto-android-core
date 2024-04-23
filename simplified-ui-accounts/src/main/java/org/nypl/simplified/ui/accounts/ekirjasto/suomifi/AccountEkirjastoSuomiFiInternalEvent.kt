@@ -15,6 +15,13 @@ sealed class AccountEkirjastoSuomiFiInternalEvent {
 
   class WebViewClientReady() : AccountEkirjastoSuomiFiInternalEvent()
 
+
+  /**
+   * User cancelled the process.
+   */
+
+  class Cancel() : AccountEkirjastoSuomiFiInternalEvent()
+
   /**
    * The process failed.
    */
