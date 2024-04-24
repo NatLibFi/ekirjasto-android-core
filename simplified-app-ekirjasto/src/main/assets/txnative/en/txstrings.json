@@ -70,10 +70,10 @@
          "string" : "By signing in, you agree to the End User License Agreement."
       },
       "accountEkirjastoLoggedInLabel" : {
-         "string" : "Logged in the E-kirjasto."
+         "string" : "Signed into E-kirjasto."
       },
       "accountEkirjastoLoggingInLabel" : {
-         "string" : "Logging in with %1$s"
+         "string" : "Signing in with %1$s"
       },
       "accountEkirjastoPassKeyLabel" : {
          "string" : "Passkey login"
@@ -118,7 +118,7 @@
          "string" : "More options"
       },
       "accountPasskeyCreate" : {
-         "string" : "Register Passkey"
+         "string" : "Register a passkey"
       },
       "accountPassword" : {
          "string" : "Password"
@@ -238,7 +238,7 @@
          "string" : "E-kirjasto"
       },
       "app_version_string" : {
-         "string" : "E-kirjasto-version %1$s"
+         "string" : "E-kirjasto version %1$s"
       },
       "audio_book_player" : {
          "string" : "Audiobook Player"
