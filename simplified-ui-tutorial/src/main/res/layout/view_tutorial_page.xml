@@ -5,5 +5,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:contentDescription="@string/contentDescriptionTutorialPage"
-    android:scaleType="centerInside"
+    android:scaleType="fitCenter"
     tools:src="@drawable/background_image_tutorial1" />
