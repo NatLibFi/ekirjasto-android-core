@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+    <string name="magazinesHeader">Magazines</string>
+    <string name="magazinesSignInRequiredTitle">Signing in required</string>
+    <string name="magazinesSignInRequiredSubtitle">Visit the settings to sign in</string>
+</resources>

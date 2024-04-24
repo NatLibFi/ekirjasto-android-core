@@ -378,6 +378,18 @@ sealed class AccountProviderAuthenticationDescription : Serializable {
     val api: URI,
 
     /**
+     * API endpoint to fetch E-kirjasto token.
+     */
+
+    val ekirjasto_token: URI,
+
+    /**
+     * Magazine service URI.
+     */
+
+    val magazine_service: URI,
+
+    /**
      * URI's for different login flows.
      */
 

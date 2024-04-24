@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.squareup.picasso.Picasso
+import fi.kansalliskirjasto.ekirjasto.magazines.MagazinesHttp
 import io.reactivex.subjects.PublishSubject
 import org.joda.time.LocalDateTime
 import org.librarysimplified.documents.DocumentConfigurationServiceType
@@ -837,6 +838,17 @@ internal object MainServices {
           contentResolver = contentResolver,
           http = lsHTTP,
           opdsFeedParser = opdsFeedParser
+        )
+      }
+    )
+
+    addService(
+      message = strings.bootingGeneral("magazines HTTP"),
+      interfaceType = MagazinesHttp::class.java,
+      serviceConstructor = {
+        MagazinesHttp(
+          http = lsHTTP,
+          exec = NamedThreadPools.namedThreadPool(1, "magazines-http", 19)
         )
       }
     )

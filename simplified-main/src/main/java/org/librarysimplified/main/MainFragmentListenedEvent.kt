@@ -38,6 +38,10 @@ sealed class MainFragmentListenedEvent {
     val event: org.nypl.simplified.ui.accounts.AccountPickerEvent
   ) : MainFragmentListenedEvent()
 
+  data class MagazinesEvent(
+    val event: fi.kansalliskirjasto.ekirjasto.magazines.MagazinesEvent
+  ) : MainFragmentListenedEvent()
+
   data class ErrorPageEvent(
     val event: org.nypl.simplified.ui.errorpage.ErrorPageEvent
   ) : MainFragmentListenedEvent()

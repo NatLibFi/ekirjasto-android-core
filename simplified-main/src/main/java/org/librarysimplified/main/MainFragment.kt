@@ -106,6 +106,7 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
         org.librarysimplified.ui.tabs.R.id.tabCatalog   -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabCatalog)
         org.librarysimplified.ui.tabs.R.id.tabBooks     -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabBooks)
         org.librarysimplified.ui.tabs.R.id.tabHolds     -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabHolds)
+        org.librarysimplified.ui.tabs.R.id.tabMagazines -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabMagazines)
         org.librarysimplified.ui.tabs.R.id.tabSettings  -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabSettings)
       }
     }

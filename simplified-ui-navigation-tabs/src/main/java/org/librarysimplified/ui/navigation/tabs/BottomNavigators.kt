@@ -11,7 +11,11 @@ import org.joda.time.DateTime
 import org.librarysimplified.ui.catalog.CatalogFeedArguments
 import org.librarysimplified.ui.catalog.CatalogFeedFragment
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership
+import fi.kansalliskirjasto.ekirjasto.magazines.MagazinesArguments
+import fi.kansalliskirjasto.ekirjasto.magazines.MagazinesFragment
 import org.librarysimplified.ui.tabs.R
+import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryType
@@ -77,6 +81,11 @@ object BottomNavigators {
               profilesController = profilesController,
               settingsConfiguration = settingsConfiguration,
               defaultProvider = accountProviders.defaultProvider
+            )
+          },
+          R.id.tabMagazines to {
+            createMagazinesFragment(
+              id = R.id.tabMagazines,
             )
           },
           R.id.tabSettings to {
@@ -167,6 +176,17 @@ object BottomNavigators {
       hideToolbar = false,
       barcode = null
     ))
+  }
+
+  private fun createMagazinesFragment(
+    id: Int,
+  ): Fragment {
+    logger.debug("[{}]: creating magazines fragment", id)
+    return MagazinesFragment.create(
+      MagazinesArguments.MagazinesArgumentsData(
+        token = null,
+      )
+    )
   }
 
   private fun createHoldsFragment(

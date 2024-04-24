@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import org.librarysimplified.ui.catalog.CatalogBookDetailEvent
 import org.librarysimplified.ui.catalog.CatalogFeedEvent
 import org.librarysimplified.ui.catalog.saml20.CatalogSAML20Event
+import fi.kansalliskirjasto.ekirjasto.magazines.MagazinesEvent
 import org.nypl.simplified.listeners.api.ListenerRepository
 import org.nypl.simplified.listeners.api.ListenerRepositoryFactory
 import org.nypl.simplified.ui.accounts.AccountDetailEvent
@@ -32,6 +33,7 @@ class MainFragmentDefaultViewModelFactory(fallbackFactory: ViewModelProvider.Fac
     repository.registerListener(AccountListRegistryEvent::class, MainFragmentListenedEvent::AccountListRegistryEvent)
     repository.registerListener(AccountListEvent::class, MainFragmentListenedEvent::AccountListEvent)
     repository.registerListener(AccountPickerEvent::class, MainFragmentListenedEvent::AccountPickerEvent)
+    repository.registerListener(MagazinesEvent::class, MainFragmentListenedEvent::MagazinesEvent)
     repository.registerListener(ErrorPageEvent::class, MainFragmentListenedEvent::ErrorPageEvent)
     repository.registerListener(SettingsMainEvent::class, MainFragmentListenedEvent::SettingsMainEvent)
     repository.registerListener(SettingsDebugEvent::class, MainFragmentListenedEvent::SettingsDebugEvent)

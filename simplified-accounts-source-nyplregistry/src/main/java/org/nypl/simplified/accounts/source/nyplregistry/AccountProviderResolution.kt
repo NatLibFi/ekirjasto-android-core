@@ -300,6 +300,10 @@ class AccountProviderResolution(
       authObject.links.find { link -> link.relation == "authenticate" }?.hrefURI
     links["api"] =
       authObject.links.find { link -> link.relation == "api" }?.hrefURI
+    links["ekirjasto_token"] =
+      authObject.links.find { link -> link.relation == "ekirjasto_token" }?.hrefURI
+    links["magazine_service"] =
+      authObject.links.find { link -> link.relation == "magazine_service" }?.hrefURI
     links["tunnistus_start"] =
       authObject.links.find { link -> link.relation == "tunnistus_start" }?.hrefURI
     links["tunnistus_finish"] =
@@ -329,6 +333,8 @@ class AccountProviderResolution(
       authenticate = links["authenticate"]!!,
       description = authObject.description,
       api = links["api"]!!,
+      ekirjasto_token = links["ekirjasto_token"]!!,
+      magazine_service = links["magazine_service"]!!,
       tunnistus_start = links["tunnistus_start"]!!,
       tunnistus_finish = links["tunnistus_finish"]!!,
       passkey_login_start = links["passkey_login_start"]!!,

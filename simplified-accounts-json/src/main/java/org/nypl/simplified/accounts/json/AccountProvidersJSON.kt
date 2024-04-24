@@ -202,6 +202,8 @@ object AccountProvidersJSON {
         this.putConditionally(authObject, "authenticationURI", authentication.authenticate.toString())
         this.putConditionally(authObject, "description", authentication.description)
         this.putConditionally(authObject, "api", authentication.api.toString())
+        this.putConditionally(authObject, "ekirjasto_token", authentication.ekirjasto_token.toString())
+        this.putConditionally(authObject, "magazine_service", authentication.magazine_service.toString())
         this.putConditionally(authObject, "passkey_login_start", authentication.passkey_login_start.toString())
         this.putConditionally(authObject, "passkey_login_finish", authentication.passkey_login_finish.toString())
         this.putConditionally(authObject, "passkey_register_start", authentication.passkey_register_start.toString())
@@ -530,6 +532,8 @@ object AccountProvidersJSON {
           authenticate = JSONParserUtilities.getURI(container, "authenticationURI"),
           description = JSONParserUtilities.getString(container,"description"),
           api = JSONParserUtilities.getURI(container, "api"),
+          ekirjasto_token = JSONParserUtilities.getURI(container, "ekirjasto_token"),
+          magazine_service = JSONParserUtilities.getURI(container, "magazine_service"),
           passkey_login_start = JSONParserUtilities.getURI(container, "passkey_login_start"),
           passkey_login_finish = JSONParserUtilities.getURI(container, "passkey_login_finish"),
           passkey_register_start = JSONParserUtilities.getURI(container, "passkey_register_start"),
