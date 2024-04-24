@@ -30,8 +30,8 @@ fun overrideProperty(name: String) : String {
     return value
 }
 
-//apply(plugin = "com.google.gms.google-services")
-//apply(plugin = "com.google.firebase.crashlytics")
+apply(plugin = "com.google.gms.google-services")
+apply(plugin = "com.google.firebase.crashlytics")
 
 /*
  * The asset files that are required to be present in order to build the app.
@@ -163,29 +163,32 @@ android {
 
     flavorDimensions += "environment"
 
+    // Product flavors: environments from least stable to most stable
     productFlavors {
+        create("ellibs") {
+            // Set as default flavor, otherwise alphabetically first will be the default
+            isDefault = true
+            val circURL = "https://circulation-beta.ellibs.com"
+            buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
+            val libProvider = "2fcb96c3-b639-4b12-ab50-4172a0410a07"
+            buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
+        }
         create("dev") {
             val circURL = "https://lib-dev.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
-            val libProvider = "6a1b4290-aff6-4cb3-a37d-b8161c0c824c"
+            val libProvider = "28bed937-a16b-4d69-a9c8-4b2656333423"
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("beta") {
             val circURL = "https://lib-beta.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
-            val libProvider = "ef42c35c-96a1-4a20-a7c8-bdfe35f66777"
+            val libProvider = "37015541-b542-4157-a687-3ca5ad47fdbe"
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("production") {
             val circURL = "https://lib.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
             val libProvider = "8b7292e9-ed77-480e-a695-423f715be0f2"
-            buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
-        }
-        create("ellibs") {
-            val circURL = "https://circulation-beta.ellibs.com"
-            buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
-            val libProvider = "2fcb96c3-b639-4b12-ab50-4172a0410a07"
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
     }
@@ -210,11 +213,17 @@ android {
      */
 
     signingConfigs {
+        getByName("debug") {
+            storeFile = file("../debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
         create("release") {
-            keyAlias = palaceKeyAlias
-            keyPassword = palaceKeyPassword
             storeFile = palaceKeyStore
             storePassword = palaceStorePassword
+            keyAlias = palaceKeyAlias
+            keyPassword = palaceKeyPassword
         }
     }
 
@@ -674,7 +683,7 @@ dependencies {
     implementation(libs.truevfs.kernel.impl)
     implementation(libs.truevfs.kernel.spec)
 
-    var libLcpRepositoryLayout = overrideProperty("ekirjasto.liblcp.repositorylayout")
+    val libLcpRepositoryLayout = overrideProperty("ekirjasto.liblcp.repositorylayout")
     if (libLcpRepositoryLayout.contains("test")) {
         println("Using test liblcp AAR")
         implementation("readium:liblcp:1.0.0@aar")

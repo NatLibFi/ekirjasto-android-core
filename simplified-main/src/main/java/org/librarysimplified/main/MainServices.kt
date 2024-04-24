@@ -525,7 +525,7 @@ internal object MainServices {
       if (service != null) {
         services.addService(interfaceType, service)
       } else {
-        logger.warn("Adding Serivce Failed! {}", interfaceType.name)
+        logger.warn("Adding Service Failed! {}", interfaceType.name)
       }
       return service
     }

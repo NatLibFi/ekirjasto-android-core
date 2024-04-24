@@ -91,7 +91,7 @@ class MainApplication : Application() {
    */
 
   private fun configureStrictMode() {
-    if (BuildConfig.DEBUG) {
+    if (BuildConfig.DEBUG && BuildConfig.ENABLE_STRICT_MODE) {
       StrictMode.setThreadPolicy(
         ThreadPolicy.Builder()
           .detectDiskReads()
