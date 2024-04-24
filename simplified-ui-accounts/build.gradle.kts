@@ -1,3 +1,4 @@
+apply(plugin = "com.google.gms.google-services")
 dependencies {
     implementation(project(":simplified-accounts-api"))
     implementation(project(":simplified-accounts-database-api"))
@@ -34,8 +35,8 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.playauth)
+    implementation(libs.androidx.credentials)
     implementation(libs.androidx.customview.poolingcontainer)
     implementation(libs.androidx.drawerlayout)
     implementation(libs.androidx.emoji2)
@@ -64,6 +65,7 @@ dependencies {
     implementation(libs.google.material)
     implementation(libs.palace.http.api)
     implementation(libs.play.services.base)
+    implementation(libs.play.services.basement)
     implementation(libs.play.services.location)
     implementation(libs.play.services.tasks)
     implementation(libs.io7m.junreachable)
