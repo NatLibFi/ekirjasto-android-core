@@ -50,6 +50,7 @@ class Authenticator(
 
   suspend fun register(parameters: RegisterParameters): RegisterResult {
 
+
     lateinit var responseJson: JsonNode
     val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(
       requestJson = objectMapper.writeValueAsString(parameters)

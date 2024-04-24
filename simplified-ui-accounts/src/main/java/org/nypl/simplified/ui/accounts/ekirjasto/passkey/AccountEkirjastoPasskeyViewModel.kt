@@ -282,6 +282,7 @@ class AccountEkirjastoPasskeyViewModel (
         logger.debug("Register Start")
         steps.beginNewStep("Passkey Register Start")
         registerStartResponse = requestPasskeyRegisterStart(uri, body)
+        logger.warn(registerStartResponse.toPrettyString())
         logger.debug("Register Start Complete")
         steps.currentStepSucceeded("Passkey Register Start Success")
       } catch (e: Exception) {
@@ -333,7 +334,10 @@ class AccountEkirjastoPasskeyViewModel (
   private suspend fun startPasskeyRegisterChallenge(jsonBody: JsonNode): RegisterResult {
     logger.debug("Start Passkey Register Challenge")
     val publicKeyJsonNode = jsonBody.get("publicKey")
-    val params: RegisterParameters = objectMapper.readValue(publicKeyJsonNode.toString())
+
+//    val params: RegisterParameters = objectMapper.readValue(publicKeyJsonNode.toString())
+    // try custom configuration instead of server's provided parameters
+    val params = RegisterParameters.from(jsonBody)
     return authenticator.register(params)
   }
 

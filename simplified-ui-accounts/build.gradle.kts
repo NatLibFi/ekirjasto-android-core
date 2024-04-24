@@ -76,20 +76,15 @@ dependencies {
     implementation(libs.palace.theme)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.picasso)
-    implementation(libs.play.services.base)
-    implementation(libs.play.services.location)
-    implementation(libs.play.services.tasks)
     implementation(libs.rxandroid2)
     implementation(libs.rxjava2)
     implementation(libs.rxjava2.extensions)
     implementation(libs.slf4j)
 
-    // Required for Android 13 and below.
-    implementation("androidx.credentials:credentials:1.2.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
     // 1.2.1. has fix for when oem is not enabling CredentialManager
-//    implementation("androidx.credentials:credentials:1.2.1")
-//    implementation("androidx.credentials:credentials-play-services-auth:1.2.1")
-//    implementation("androidx.credentials:credentials:1.3.0-alpha01")
-//    implementation("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
+    implementation("androidx.credentials:credentials:1.2.2")
+    //    implementation("androidx.credentials:credentials:1.3.0-alpha03")
+    // Required for Android 13 and below.
+    implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
+//    implementation("androidx.credentials:credentials-play-services-auth:1.3.0-alpha03")
 }
