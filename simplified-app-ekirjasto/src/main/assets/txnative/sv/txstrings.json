@@ -799,7 +799,7 @@
          "string" : ""
       },
       "login_suomifi" : {
-         "string" : ""
+         "string" : "Logga in med Suomi.fi"
       },
       "logoutClearingBookDatabase" : {
          "string" : "Rensar bokdatabasen..."
@@ -1450,7 +1450,7 @@
          "string" : "Inställningar"
       },
       "skip_login" : {
-         "string" : ""
+         "string" : "Fortsätt utan att logga in"
       },
       "tabBooks" : {
          "string" : "Mina böcker"
