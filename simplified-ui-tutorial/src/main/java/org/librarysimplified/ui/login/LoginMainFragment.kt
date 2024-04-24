@@ -83,6 +83,7 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
     actionBar.title = ""
   }
   private fun openLoginUi() {
+    this.logger.debug("open Login UI")
     configureToolbar()
     childFragmentManager.commit {
       replace(R.id.login_main_container, LoginUiFragment())
@@ -116,7 +117,10 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
       is LoginListenedEvent.ErrorPageEvent -> {
         this.logger.warn("Received Error Page Event: ${event.event}")
         when (val errorPageEvent = event.event){
-          is ErrorPageEvent.GoUpwards -> this.childFragmentManager.popBackStack()
+          is ErrorPageEvent.GoUpwards -> {
+            this.configureToolbar()
+            this.childFragmentManager.popBackStack()
+          }
         }
       }
     }

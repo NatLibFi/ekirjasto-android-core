@@ -16,7 +16,7 @@ data class PublicKeyCredentialRequestOptions(
         timeout = authParams.timeout?:10000,
         rpId = authParams.relyingPartyId,
         userVerification = authParams.userVerification?:"",
-        allowCredentials = authParams.allowCredentials,
+        allowCredentials = authParams.allowCredentials?:listOf(),
         hints = emptyList(),
         extensions = emptyMap(),
         )
