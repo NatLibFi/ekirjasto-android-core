@@ -856,7 +856,7 @@
          "string" : "Päivitetään kirjan %1$s OPDS-merkintää…"
       },
       "magazinesHeader" : {
-         "string" : ""
+         "string" : "Lehdet"
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : ""
@@ -1462,7 +1462,7 @@
          "string" : "Varaukset"
       },
       "tabMagazines" : {
-         "string" : ""
+         "string" : "Lehdet"
       },
       "tabProfile" : {
          "string" : "Profiili"
