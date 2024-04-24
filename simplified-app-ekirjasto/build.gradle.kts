@@ -494,6 +494,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.runtime)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.playauth)
     implementation(libs.androidx.cursoradapter)
     implementation(libs.androidx.customview)
     implementation(libs.androidx.customview.poolingcontainer)
@@ -708,6 +710,4 @@ dependencies {
         println("Using production liblcp AAR")
         implementation("readium:liblcp:2.1.0@aar")
     }
-    implementation("androidx.credentials:credentials:1.2.2")
-    implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
 }

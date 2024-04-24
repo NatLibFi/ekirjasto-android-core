@@ -34,6 +34,8 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.playauth)
     implementation(libs.androidx.customview.poolingcontainer)
     implementation(libs.androidx.drawerlayout)
     implementation(libs.androidx.emoji2)
@@ -80,11 +82,4 @@ dependencies {
     implementation(libs.rxjava2)
     implementation(libs.rxjava2.extensions)
     implementation(libs.slf4j)
-
-    // 1.2.1. has fix for when oem is not enabling CredentialManager
-    implementation("androidx.credentials:credentials:1.2.2")
-    //    implementation("androidx.credentials:credentials:1.3.0-alpha03")
-    // Required for Android 13 and below.
-    implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
-//    implementation("androidx.credentials:credentials-play-services-auth:1.3.0-alpha03")
 }
