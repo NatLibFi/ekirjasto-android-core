@@ -647,7 +647,7 @@ class AccountDetailFragment : Fragment(R.layout.account) {
         AccountDetailEvent.OpenEkirjastoSuomiFiLogin(this.parameters.accountID, authenticationDescription, loginMethod)
       )
     } else {
-      this.logger.warn("Invalid login method for suomi.fi login")
+      this.logger.warn("Invalid login method for Suomi.fi login")
     }
 //    else if (loginMethod == ViewsForEkirjasto.LoginMethod.Passkey) {
 //      this.viewModel.tryLogin(

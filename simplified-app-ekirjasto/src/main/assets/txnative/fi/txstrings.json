@@ -1,5 +1,8 @@
 {
    "data" : {
+      "AccountTitle" : {
+         "string" : "Asetukset"
+      },
       "accessibility_settings" : {
          "string" : "Avaa asetusvalikko"
       },
@@ -66,6 +69,24 @@
       "accountEULAStatement" : {
          "string" : "Kirjautumalla sisään hyväksyt loppukäyttäjän lisenssisopimuksen."
       },
+      "accountEkirjastoLoggedInLabel" : {
+         "string" : "Kirjauduttu sisään E-kirjastoon."
+      },
+      "accountEkirjastoLoggingInLabel" : {
+         "string" : "Kirjaudutaan sisään käyttämällä seuraavaa: %1$s"
+      },
+      "accountEkirjastoPassKeyLabel" : {
+         "string" : "Sisäänkirjautuminen pääsyavaimella"
+      },
+      "accountEkirjastoSuomiFiLabel" : {
+         "string" : "Suomi.fi-sisäänkirjautuminen"
+      },
+      "accountEkirjastoSuomiFiNoAccessToken" : {
+         "string" : "Käyttötunnuksen hakeminen URIsta epäonnistui: %1$s"
+      },
+      "accountEmail" : {
+         "string" : "Sähköpostiosoite"
+      },
       "accountForgotPassword" : {
          "string" : "Unohditko salasanasi?"
       },
@@ -95,6 +116,9 @@
       },
       "accountMore" : {
          "string" : "Lisää vaihtoehtoja"
+      },
+      "accountPasskeyCreate" : {
+         "string" : "Rekisteröi pääsyavain"
       },
       "accountPassword" : {
          "string" : "Salasana"
@@ -159,6 +183,30 @@
       "accountWantChildCard" : {
          "string" : "Haluatko kortin lapsellesi?"
       },
+      "account_about_app" : {
+         "string" : "Tietoja sovelluksesta"
+      },
+      "account_eula" : {
+         "string" : "Käyttäjäsopimus"
+      },
+      "account_leave_feedback" : {
+         "string" : "Anna palautetta"
+      },
+      "account_licenses" : {
+         "string" : "Ohjelmistolisenssit"
+      },
+      "account_login_passkey" : {
+         "string" : "Kirjaudu sisään pääsyavaimella"
+      },
+      "account_login_suomifi" : {
+         "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
+      },
+      "account_register_passkey" : {
+         "string" : "Rekisteröi pääsyavain"
+      },
+      "account_sync_bookmarks_statement" : {
+         "string" : "Tallenna lukukohtasi ja kirjanmerkkisi kaikkiin muihin laitteisiisi"
+      },
       "accounts" : {
          "string" : "Kirjastot"
       },
@@ -188,6 +236,9 @@
       },
       "app_name" : {
          "string" : "Vanilla-profiilit"
+      },
+      "app_version_string" : {
+         "string" : "E-kirjaston versio %1$s"
       },
       "audio_book_player" : {
          "string" : "Äänikirjasoitin"
@@ -311,6 +362,12 @@
       },
       "bookReturned" : {
          "string" : "Kirja %1$s on palautettu onnistuneesti"
+      },
+      "bookmarkEnd" : {
+         "string" : ""
+      },
+      "bookmarkProgressPercent" : {
+         "string" : ""
       },
       "bootAdobeDRMFailed" : {
          "string" : "Jokin meni pieleen Adobe DRM -järjestelmässä. Jotkin kirjat eivät ole saatavilla tässä sovelluksen versiossa. Kokeile päivittää sovelluksen uusimpaan versioon."
@@ -606,6 +663,9 @@
       "dialog_manual_passphrase_title" : {
          "string" : "Anna LCP-salasana"
       },
+      "emptyBookmarksMessage" : {
+         "string" : ""
+      },
       "errorDetailsTitle" : {
          "string" : "Virheen tiedot"
       },
@@ -735,6 +795,12 @@
       "loginUserName" : {
          "string" : "Käyttäjänimi"
       },
+      "login_passkey" : {
+         "string" : ""
+      },
+      "login_suomifi" : {
+         "string" : ""
+      },
       "logoutClearingBookDatabase" : {
          "string" : "Tyhjennetään kirjatietokantaa..."
       },
@@ -789,6 +855,15 @@
       "logoutUpdatingOpdsEntry" : {
          "string" : "Päivitetään kirjan %1$s OPDS-merkintää…"
       },
+      "magazinesHeader" : {
+         "string" : ""
+      },
+      "magazinesSignInRequiredSubtitle" : {
+         "string" : ""
+      },
+      "magazinesSignInRequiredTitle" : {
+         "string" : ""
+      },
       "migrationFailure" : {
          "string" : "Tietojesi siirtämisessä oli yksi tai useampi ongelma…"
       },
@@ -827,6 +902,9 @@
       },
       "ok" : {
          "string" : "OK"
+      },
+      "placeholder" : {
+         "string" : ""
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Luodaan tilintarjoajan kuvausta..."
@@ -876,8 +954,47 @@
       "profileAccountSearchingFeedForAuthenticationDocument" : {
          "string" : "Haetaan todennusdokumentin syötettä…"
       },
+      "progress_page" : {
+         "string" : ""
+      },
+      "progress_percent" : {
+         "string" : ""
+      },
+      "publisherDefaults" : {
+         "string" : ""
+      },
       "reachedLoanLimit" : {
          "string" : "Olet saavuttanut lainarajasi"
+      },
+      "readerAccessAddBookmark" : {
+         "string" : ""
+      },
+      "readerAccessDeleteBookmark" : {
+         "string" : ""
+      },
+      "readerAccessSearch" : {
+         "string" : ""
+      },
+      "readerAccessSettings" : {
+         "string" : ""
+      },
+      "readerAccessTOC" : {
+         "string" : ""
+      },
+      "readerAddBookmark" : {
+         "string" : ""
+      },
+      "readerSearch" : {
+         "string" : ""
+      },
+      "readerSearchNoResults" : {
+         "string" : ""
+      },
+      "readerSettings" : {
+         "string" : ""
+      },
+      "readerTableOfContents" : {
+         "string" : ""
       },
       "reader_bookmark_added" : {
          "string" : "Kirjanmerkki lisättiin"
@@ -1077,8 +1194,62 @@
       "settings" : {
          "string" : "Asetukset"
       },
+      "settingsABC" : {
+         "string" : ""
+      },
+      "settingsABCLarger" : {
+         "string" : ""
+      },
+      "settingsABCReset" : {
+         "string" : ""
+      },
+      "settingsABCSmaller" : {
+         "string" : ""
+      },
+      "settingsAa" : {
+         "string" : ""
+      },
       "settingsAbout" : {
          "string" : "Tietoja Palacesta"
+      },
+      "settingsAccessibilityBack" : {
+         "string" : ""
+      },
+      "settingsAccessibilityBrightnessSlider" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetBlackTextOnSepia" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetBlackTextOnWhite" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetDyslexic" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetPublisher" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSans" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSerif" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSizeLarger" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSizeReset" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSizeSmaller" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetWhiteTextOnBlack" : {
+         "string" : ""
+      },
+      "settingsAccessibilityStatement" : {
+         "string" : "Saavutettavuusseloste"
       },
       "settingsAccounts" : {
          "string" : "Kirjastot"
@@ -1212,6 +1383,9 @@
       "settingsFaq" : {
          "string" : "Usein kysytyt kysymykset"
       },
+      "settingsFeedback" : {
+         "string" : "Palaute"
+      },
       "settingsInfo" : {
          "string" : "Sovelluksen tiedot"
       },
@@ -1245,6 +1419,15 @@
       "settingsPrivacy" : {
          "string" : "Tietosuojakäytäntö"
       },
+      "settingsPub" : {
+         "string" : ""
+      },
+      "settingsPublisherText" : {
+         "string" : ""
+      },
+      "settingsPublisherTitle" : {
+         "string" : ""
+      },
       "settingsReportIssue" : {
          "string" : "Ilmoita ongelmasta…"
       },
@@ -1266,6 +1449,9 @@
       "settings_title" : {
          "string" : "Asetukset"
       },
+      "skip_login" : {
+         "string" : ""
+      },
       "tabBooks" : {
          "string" : "Omat kirjat"
       },
@@ -1274,6 +1460,9 @@
       },
       "tabHolds" : {
          "string" : "Varaukset"
+      },
+      "tabMagazines" : {
+         "string" : ""
       },
       "tabProfile" : {
          "string" : "Profiili"
@@ -1286,6 +1475,33 @@
       },
       "table_of_contents_title" : {
          "string" : "Sisällysluettelo"
+      },
+      "tocAccessBookmarkDelete" : {
+         "string" : ""
+      },
+      "tocAccessChapter" : {
+         "string" : ""
+      },
+      "tocBookmarkCancel" : {
+         "string" : ""
+      },
+      "tocBookmarkDelete" : {
+         "string" : ""
+      },
+      "tocBookmarkDeleteErrorMessage" : {
+         "string" : ""
+      },
+      "tocBookmarkDeleteMessage" : {
+         "string" : ""
+      },
+      "tocBookmarks" : {
+         "string" : ""
+      },
+      "tocError" : {
+         "string" : ""
+      },
+      "tocTitle" : {
+         "string" : ""
       },
       "unexpectedException" : {
          "string" : "Tapahtui odottamaton poikkeus."
