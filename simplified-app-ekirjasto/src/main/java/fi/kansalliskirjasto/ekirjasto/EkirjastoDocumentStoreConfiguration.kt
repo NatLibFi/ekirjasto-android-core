@@ -31,7 +31,10 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
     null
 
   override val eula: DocumentConfiguration? =
-    null
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-kayttoehdot")
+    )
 
   override val licenses: DocumentConfiguration? =
     null

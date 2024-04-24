@@ -66,7 +66,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var eulaStatement: TextView
   private lateinit var syncBookmarks: ConstraintLayout
   private lateinit var buttonFeedback: Button
-  private lateinit var buttonAboutApp: Button
   private lateinit var buttonPrivacyPolicy: Button
   private lateinit var buttonUserAgreement: Button
   private lateinit var buttonLicenses: Button
@@ -107,7 +106,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.syncBookmarks = view.findViewById(R.id.accountSyncBookmarks)
     this.bookmarkStatement = view.findViewById(R.id.accountSyncBookmarksStatement)
     this.buttonFeedback = view.findViewById(R.id.buttonFeedback)
-    this.buttonAboutApp = view.findViewById(R.id.buttonAboutApp)
     this.buttonPrivacyPolicy = view.findViewById(R.id.buttonPrivacyPolicy)
     this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
     this.buttonLicenses = view.findViewById(R.id.buttonLicenses)
@@ -215,7 +213,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       is AccountLoginState.AccountLogoutFailed -> OnConfigureAccountLogoutFailed(loginState)
     }
 
-    configureDocViewButton(buttonAboutApp, this.viewModel.documents.about)
     configureDocViewButton(buttonFeedback, this.viewModel.documents.feedback)
     configureDocViewButton(buttonPrivacyPolicy, this.viewModel.documents.privacyPolicy)
     configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
