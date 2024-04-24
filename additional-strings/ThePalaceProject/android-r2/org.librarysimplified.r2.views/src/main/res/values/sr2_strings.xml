@@ -11,7 +11,7 @@
   <string name="readerAccessSearch">Open the searching input</string>
   <string name="readerAccessSettings">Open the settings dialog</string>
   <string name="readerAccessTOC">Open the table of contents and bookmarks screen</string>
-  <string name="readerAddBookmark">Add A Bookmark</string>
+  <string name="readerAddBookmark">Add a bookmark</string>
   <string name="readerSearch">Search</string>
   <string name="readerSearchNoResults">There are no results</string>
   <string name="readerSettings">Settings</string>
