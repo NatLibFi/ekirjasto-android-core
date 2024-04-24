@@ -227,7 +227,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginSuomiFi.isEnabled = true
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
-    buttonLoginPasskey.visibility = VISIBLE
+    //TODO enable once passkeys fixed
+//    buttonLoginPasskey.visibility = VISIBLE
+    buttonLoginPasskey.visibility = GONE
     buttonRegisterPasskey.visibility = GONE
     this.syncBookmarks.visibility = GONE
     this.bookmarkStatement.visibility = GONE
@@ -239,7 +241,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey.isEnabled = false
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
-    buttonLoginPasskey.visibility = VISIBLE
+    //TODO enable once passkeys fixed
+//    buttonLoginPasskey.visibility = VISIBLE
+    buttonLoginPasskey.visibility = GONE
     buttonRegisterPasskey.visibility = GONE
   }
 
@@ -248,7 +252,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey.isEnabled = false
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
-    buttonLoginPasskey.visibility = VISIBLE
+    //TODO enable once passkeys fixed
+//    buttonLoginPasskey.visibility = VISIBLE
+    buttonLoginPasskey.visibility = GONE
     buttonRegisterPasskey.visibility = GONE
   }
 
@@ -257,7 +263,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey.isEnabled = true
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
-    buttonLoginPasskey.visibility = VISIBLE
+    //TODO enable once passkeys fixed
+//    buttonLoginPasskey.visibility = VISIBLE
+    buttonLoginPasskey.visibility = GONE
     buttonRegisterPasskey.visibility = GONE
     this.syncBookmarks.visibility = GONE
 
@@ -267,7 +275,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     buttonLogout.visibility = VISIBLE
     buttonLoginSuomiFi.visibility = GONE
     buttonLoginPasskey.visibility = GONE
-    buttonRegisterPasskey.visibility = VISIBLE
+    //TODO enable once passkeys fixed
+    buttonRegisterPasskey.visibility = GONE
+//    buttonRegisterPasskey.visibility = VISIBLE
     this.syncBookmarks.visibility = VISIBLE
     this.bookmarkStatement.visibility = VISIBLE
     this.bookmarkSyncProgress.visibility = INVISIBLE
@@ -285,7 +295,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     buttonLogout.visibility = VISIBLE
     buttonLoginSuomiFi.visibility = GONE
     buttonLoginPasskey.visibility = GONE
-    buttonRegisterPasskey.visibility = VISIBLE
+    //TODO enable once passkeys fixed
+    buttonRegisterPasskey.visibility = GONE
+//    buttonRegisterPasskey.visibility = VISIBLE
   }
 
   private fun onTryRegisterPasskey() {
