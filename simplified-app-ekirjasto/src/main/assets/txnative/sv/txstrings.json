@@ -856,7 +856,7 @@
          "string" : "Uppdaterar OPDS-posten för boken %1$s…"
       },
       "magazinesHeader" : {
-         "string" : ""
+         "string" : "Tidningar"
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : ""
@@ -1462,7 +1462,7 @@
          "string" : "Reservationer"
       },
       "tabMagazines" : {
-         "string" : ""
+         "string" : "Tidningar"
       },
       "tabProfile" : {
          "string" : "Profil"
