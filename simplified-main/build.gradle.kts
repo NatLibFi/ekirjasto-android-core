@@ -40,6 +40,8 @@ android {
         buildConfigField("String", "SIMPLIFIED_VERSION", "\"${rootProject.ext["VERSION_NAME"]}\"")
         val languages = overrideProperty("ekirjasto.languages")
         buildConfigField("String", "LANGUAGES", "\"$languages\"")
+        val enableStrictMode = overrideProperty("ekirjasto.enableStrictMode")
+        buildConfigField("Boolean", "ENABLE_STRICT_MODE", enableStrictMode)
     }
 }
 

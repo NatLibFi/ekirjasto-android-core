@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "706915474057",
+    "project_id": "e-kirjasto",
+    "storage_bucket": "e-kirjasto.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706915474057:android:79171180ec50de14378458",
+        "android_client_info": {
+          "package_name": "fi.kansalliskirjasto.ekirjasto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-PBJZBSONbOiB4KkPWOmvGaJeeC2_djY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+
