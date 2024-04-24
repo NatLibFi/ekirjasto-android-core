@@ -1,5 +1,8 @@
 {
    "data" : {
+      "AccountTitle" : {
+         "string" : "Inställningar"
+      },
       "accessibility_settings" : {
          "string" : "Öppna inställningsmenyn"
       },
@@ -66,6 +69,24 @@
       "accountEULAStatement" : {
          "string" : "Genom att logga in godkänner du slutanvändaravtalet."
       },
+      "accountEkirjastoLoggedInLabel" : {
+         "string" : "Inloggad i E-biblioteket."
+      },
+      "accountEkirjastoLoggingInLabel" : {
+         "string" : "Loggar in med %1$s"
+      },
+      "accountEkirjastoPassKeyLabel" : {
+         "string" : "Inloggning med nyckel"
+      },
+      "accountEkirjastoSuomiFiLabel" : {
+         "string" : "Suomi.fi-inloggning"
+      },
+      "accountEkirjastoSuomiFiNoAccessToken" : {
+         "string" : "Det gick inte att hämta åtkomsttoken från URI: %1$s"
+      },
+      "accountEmail" : {
+         "string" : "E-postadress"
+      },
       "accountForgotPassword" : {
          "string" : "Glömt ditt lösenord?"
       },
@@ -95,6 +116,9 @@
       },
       "accountMore" : {
          "string" : "Fler alternativ"
+      },
+      "accountPasskeyCreate" : {
+         "string" : "Registrera nyckel"
       },
       "accountPassword" : {
          "string" : "Lösenord"
@@ -159,6 +183,30 @@
       "accountWantChildCard" : {
          "string" : "Behöver du ett kort för ditt barn?"
       },
+      "account_about_app" : {
+         "string" : "Om appen"
+      },
+      "account_eula" : {
+         "string" : "Användaravtal"
+      },
+      "account_leave_feedback" : {
+         "string" : "Ge respons"
+      },
+      "account_licenses" : {
+         "string" : "Mjukvarulicenser"
+      },
+      "account_login_passkey" : {
+         "string" : "Logga in med nyckel"
+      },
+      "account_login_suomifi" : {
+         "string" : "Logga in med Suomi.fi"
+      },
+      "account_register_passkey" : {
+         "string" : "Registrera nyckel"
+      },
+      "account_sync_bookmarks_statement" : {
+         "string" : "Spara ditt läsläge och bomärken på alla dina enheter"
+      },
       "accounts" : {
          "string" : "Bibliotek"
       },
@@ -188,6 +236,9 @@
       },
       "app_name" : {
          "string" : "Standardprofiler"
+      },
+      "app_version_string" : {
+         "string" : "E-biblioteket version %1$s"
       },
       "audio_book_player" : {
          "string" : "Ljudboksspelare"
@@ -311,6 +362,12 @@
       },
       "bookReturned" : {
          "string" : "Boken '%1$s' har returnerats"
+      },
+      "bookmarkEnd" : {
+         "string" : ""
+      },
+      "bookmarkProgressPercent" : {
+         "string" : ""
       },
       "bootAdobeDRMFailed" : {
          "string" : "Något gick fel med Adobe DRM-systemet: Vissa böcker kommer att vara otillgängliga i denna version av appen. Försök uppdatera till den senaste versionen av appen."
@@ -606,6 +663,9 @@
       "dialog_manual_passphrase_title" : {
          "string" : "Ange LCP-lösenfras"
       },
+      "emptyBookmarksMessage" : {
+         "string" : ""
+      },
       "errorDetailsTitle" : {
          "string" : "Felinformation"
       },
@@ -735,6 +795,12 @@
       "loginUserName" : {
          "string" : "Användarnamn"
       },
+      "login_passkey" : {
+         "string" : ""
+      },
+      "login_suomifi" : {
+         "string" : ""
+      },
       "logoutClearingBookDatabase" : {
          "string" : "Rensar bokdatabasen..."
       },
@@ -789,6 +855,15 @@
       "logoutUpdatingOpdsEntry" : {
          "string" : "Uppdaterar OPDS-posten för boken %1$s…"
       },
+      "magazinesHeader" : {
+         "string" : ""
+      },
+      "magazinesSignInRequiredSubtitle" : {
+         "string" : ""
+      },
+      "magazinesSignInRequiredTitle" : {
+         "string" : ""
+      },
       "migrationFailure" : {
          "string" : "Det uppstod ett eller flera problem med att migrera dina data..."
       },
@@ -827,6 +902,9 @@
       },
       "ok" : {
          "string" : "Ok"
+      },
+      "placeholder" : {
+         "string" : ""
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Skapar en beskrivning för kontoleverantör..."
@@ -876,8 +954,47 @@
       "profileAccountSearchingFeedForAuthenticationDocument" : {
          "string" : "Söker efter autentiseringsdokument i flödet..."
       },
+      "progress_page" : {
+         "string" : ""
+      },
+      "progress_percent" : {
+         "string" : ""
+      },
+      "publisherDefaults" : {
+         "string" : ""
+      },
       "reachedLoanLimit" : {
          "string" : "Du har nått din lånegräns"
+      },
+      "readerAccessAddBookmark" : {
+         "string" : ""
+      },
+      "readerAccessDeleteBookmark" : {
+         "string" : ""
+      },
+      "readerAccessSearch" : {
+         "string" : ""
+      },
+      "readerAccessSettings" : {
+         "string" : ""
+      },
+      "readerAccessTOC" : {
+         "string" : ""
+      },
+      "readerAddBookmark" : {
+         "string" : ""
+      },
+      "readerSearch" : {
+         "string" : ""
+      },
+      "readerSearchNoResults" : {
+         "string" : ""
+      },
+      "readerSettings" : {
+         "string" : ""
+      },
+      "readerTableOfContents" : {
+         "string" : ""
       },
       "reader_bookmark_added" : {
          "string" : "Bokmärke lades till"
@@ -1077,8 +1194,62 @@
       "settings" : {
          "string" : "Inställningar"
       },
+      "settingsABC" : {
+         "string" : ""
+      },
+      "settingsABCLarger" : {
+         "string" : ""
+      },
+      "settingsABCReset" : {
+         "string" : ""
+      },
+      "settingsABCSmaller" : {
+         "string" : ""
+      },
+      "settingsAa" : {
+         "string" : ""
+      },
       "settingsAbout" : {
          "string" : "Om Palace"
+      },
+      "settingsAccessibilityBack" : {
+         "string" : ""
+      },
+      "settingsAccessibilityBrightnessSlider" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetBlackTextOnSepia" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetBlackTextOnWhite" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetDyslexic" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetPublisher" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSans" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSerif" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSizeLarger" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSizeReset" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetSizeSmaller" : {
+         "string" : ""
+      },
+      "settingsAccessibilitySetWhiteTextOnBlack" : {
+         "string" : ""
+      },
+      "settingsAccessibilityStatement" : {
+         "string" : "Tillgänglighetsutlåtande"
       },
       "settingsAccounts" : {
          "string" : "Bibliotek"
@@ -1212,6 +1383,9 @@
       "settingsFaq" : {
          "string" : "Frågor och svar"
       },
+      "settingsFeedback" : {
+         "string" : "Respons"
+      },
       "settingsInfo" : {
          "string" : "Information om appen"
       },
@@ -1245,6 +1419,15 @@
       "settingsPrivacy" : {
          "string" : "Integritetspolicy"
       },
+      "settingsPub" : {
+         "string" : ""
+      },
+      "settingsPublisherText" : {
+         "string" : ""
+      },
+      "settingsPublisherTitle" : {
+         "string" : ""
+      },
       "settingsReportIssue" : {
          "string" : "Rapportera ett problem..."
       },
@@ -1266,6 +1449,9 @@
       "settings_title" : {
          "string" : "Inställningar"
       },
+      "skip_login" : {
+         "string" : ""
+      },
       "tabBooks" : {
          "string" : "Mina böcker"
       },
@@ -1274,6 +1460,9 @@
       },
       "tabHolds" : {
          "string" : "Reservationer"
+      },
+      "tabMagazines" : {
+         "string" : ""
       },
       "tabProfile" : {
          "string" : "Profil"
@@ -1286,6 +1475,33 @@
       },
       "table_of_contents_title" : {
          "string" : "Innehållsförteckning"
+      },
+      "tocAccessBookmarkDelete" : {
+         "string" : ""
+      },
+      "tocAccessChapter" : {
+         "string" : ""
+      },
+      "tocBookmarkCancel" : {
+         "string" : ""
+      },
+      "tocBookmarkDelete" : {
+         "string" : ""
+      },
+      "tocBookmarkDeleteErrorMessage" : {
+         "string" : ""
+      },
+      "tocBookmarkDeleteMessage" : {
+         "string" : ""
+      },
+      "tocBookmarks" : {
+         "string" : ""
+      },
+      "tocError" : {
+         "string" : ""
+      },
+      "tocTitle" : {
+         "string" : ""
       },
       "unexpectedException" : {
          "string" : "Det inträffade ett oväntat undantag."

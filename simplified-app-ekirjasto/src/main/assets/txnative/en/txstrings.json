@@ -1,5 +1,8 @@
 {
    "data" : {
+      "AccountTitle" : {
+         "string" : "Settings"
+      },
       "accessibility_settings" : {
          "string" : "Open the settings menu"
       },
@@ -28,10 +31,10 @@
          "string" : "Open Settings"
       },
       "accountCardCreatorDialogOpenSettingsMessage" : {
-         "string" : "The Palace App requires a one-time location check to create a virtual library card. Your location is currently not shared. To enable location access for the Palace App, please adjust your location settings."
+         "string" : "E-kirjasto requires a one-time location check to create a virtual library card. Your location is currently not shared. To enable location access for E-kirjasto, please adjust your location settings."
       },
       "accountCardCreatorDialogPermissionsMessage" : {
-         "string" : "To create your virtual library card, the Palace App will use your location one time to verify your library service area. Click \"OK\" to proceed."
+         "string" : "To create your virtual library card, E-kirjasto will use your location one time to verify your library service area. Click \"OK\" to proceed."
       },
       "accountCardCreatorLabel" : {
          "string" : "Don't have a library card?"
@@ -43,7 +46,7 @@
          "string" : "Create Card"
       },
       "accountCardCreatorSignUpMessage" : {
-         "string" : "The Palace App will use your location one time to verify your library service area."
+         "string" : "E-kirjasto will use your location one time to verify your library service area."
       },
       "accountCreateCard" : {
          "string" : "Create Card"
@@ -65,6 +68,24 @@
       },
       "accountEULAStatement" : {
          "string" : "By signing in, you agree to the End User License Agreement."
+      },
+      "accountEkirjastoLoggedInLabel" : {
+         "string" : "Signed into E-kirjasto."
+      },
+      "accountEkirjastoLoggingInLabel" : {
+         "string" : "Signing in with %1$s"
+      },
+      "accountEkirjastoPassKeyLabel" : {
+         "string" : "Passkey login"
+      },
+      "accountEkirjastoSuomiFiLabel" : {
+         "string" : "Suomi.fi login"
+      },
+      "accountEkirjastoSuomiFiNoAccessToken" : {
+         "string" : "Failed to retrieve an access token from the URI: %1$s"
+      },
+      "accountEmail" : {
+         "string" : "E-mail address"
       },
       "accountForgotPassword" : {
          "string" : "Forgot your password?"
@@ -95,6 +116,9 @@
       },
       "accountMore" : {
          "string" : "More options"
+      },
+      "accountPasskeyCreate" : {
+         "string" : "Register a passkey"
       },
       "accountPassword" : {
          "string" : "Password"
@@ -159,6 +183,30 @@
       "accountWantChildCard" : {
          "string" : "Want a card for your child?"
       },
+      "account_about_app" : {
+         "string" : "About App"
+      },
+      "account_eula" : {
+         "string" : "User Agreement"
+      },
+      "account_leave_feedback" : {
+         "string" : "Leave feedback"
+      },
+      "account_licenses" : {
+         "string" : "Software Licenses"
+      },
+      "account_login_passkey" : {
+         "string" : "Sign in with a passkey"
+      },
+      "account_login_suomifi" : {
+         "string" : "Sign in with Suomi.fi"
+      },
+      "account_register_passkey" : {
+         "string" : "Register a passkey"
+      },
+      "account_sync_bookmarks_statement" : {
+         "string" : "Save your reading position and bookmarks to all your other devices"
+      },
       "accounts" : {
          "string" : "Libraries"
       },
@@ -188,6 +236,9 @@
       },
       "app_name" : {
          "string" : "E-kirjasto"
+      },
+      "app_version_string" : {
+         "string" : "E-kirjasto version %1$s"
       },
       "audio_book_player" : {
          "string" : "Audiobook Player"
@@ -311,6 +362,12 @@
       },
       "bookReturned" : {
          "string" : "The book '%1$s' has been successfully returned"
+      },
+      "bookmarkEnd" : {
+         "string" : "At the end of the chapter."
+      },
+      "bookmarkProgressPercent" : {
+         "string" : "%1$d%% through chapter."
       },
       "bootAdobeDRMFailed" : {
          "string" : "Something went wrong with the Adobe DRM system: Some books will be unavailable in this version of the application. Please try updating to the latest version of the application."
@@ -580,7 +637,7 @@
          "string" : "Step 1 - Find your library"
       },
       "contentDescriptionStep2" : {
-         "string" : "Step 2 - Can't find your library? Go to the Palace Bookshelf for more than 10000 free titles that you can enjoy now"
+         "string" : "Step 2 - Can't find your library? Go to the E-kirjasto Bookshelf for more than 10000 free titles that you can enjoy now"
       },
       "contentDescriptionStep3" : {
          "string" : "Step 3 - Read. Listen. Enjoy!"
@@ -606,6 +663,9 @@
       "dialog_manual_passphrase_title" : {
          "string" : "Enter LCP Passphrase"
       },
+      "emptyBookmarksMessage" : {
+         "string" : "There are no bookmarks for this book"
+      },
       "errorDetailsTitle" : {
          "string" : "Error Details"
       },
@@ -619,10 +679,10 @@
          "string" : "Here is the error log created by your issue:"
       },
       "eula_agree" : {
-         "string" : "concordare"
+         "string" : "Agree"
       },
       "eula_disagree" : {
-         "string" : "dissentire"
+         "string" : "Disagree"
       },
       "feedByAuthor" : {
          "string" : "Author"
@@ -735,6 +795,12 @@
       "loginUserName" : {
          "string" : "User Name"
       },
+      "login_passkey" : {
+         "string" : "Sign in with a passkey"
+      },
+      "login_suomifi" : {
+         "string" : "Sign in with Suomi.fi"
+      },
       "logoutClearingBookDatabase" : {
          "string" : "Clearing the book database…"
       },
@@ -789,6 +855,15 @@
       "logoutUpdatingOpdsEntry" : {
          "string" : "Updating OPDS entry for book %1$s…"
       },
+      "magazinesHeader" : {
+         "string" : "Magazines"
+      },
+      "magazinesSignInRequiredSubtitle" : {
+         "string" : "Visit the settings to sign in"
+      },
+      "magazinesSignInRequiredTitle" : {
+         "string" : "Signing in required"
+      },
       "migrationFailure" : {
          "string" : "There were one or more problems migrating your data…"
       },
@@ -827,6 +902,9 @@
       },
       "ok" : {
          "string" : "OK"
+      },
+      "placeholder" : {
+         "string" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu leo laoreet, mattis augue ac, placerat nibh. Sed odio nunc, tempor sed justo eu, condimentum eleifend lectus. Sed at leo iaculis, euismod neque nec, rhoncus diam. Pellentesque molestie hendrerit massa ac cursus. Proin sed feugiat mi. Morbi sollicitudin, nulla vitae eleifend laoreet, ligula dolor pretium nunc, ac feugiat nibh sapien vitae augue. Pellentesque ut sollicitudin magna. Ut ac purus pellentesque, venenatis turpis id, auctor augue. Aliquam bibendum lectus id urna placerat auctor. Nullam faucibus molestie neque. Etiam in ligula eget tellus dictum ullamcorper volutpat vel erat. Mauris ut nulla urna."
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Creating an account provider description…"
@@ -876,8 +954,47 @@
       "profileAccountSearchingFeedForAuthenticationDocument" : {
          "string" : "Searching feed for authentication document…"
       },
+      "progress_page" : {
+         "string" : "Page %1$d of %2$d"
+      },
+      "progress_percent" : {
+         "string" : "%1$d%%"
+      },
+      "publisherDefaults" : {
+         "string" : "Publisher defaults"
+      },
       "reachedLoanLimit" : {
          "string" : "You have reached your loan limit"
+      },
+      "readerAccessAddBookmark" : {
+         "string" : "Create a bookmark for the current page"
+      },
+      "readerAccessDeleteBookmark" : {
+         "string" : "Delete the bookmark for the current page"
+      },
+      "readerAccessSearch" : {
+         "string" : "Open the searching input"
+      },
+      "readerAccessSettings" : {
+         "string" : "Open the settings dialog"
+      },
+      "readerAccessTOC" : {
+         "string" : "Open the table of contents and bookmarks screen"
+      },
+      "readerAddBookmark" : {
+         "string" : "Add A Bookmark"
+      },
+      "readerSearch" : {
+         "string" : "Search"
+      },
+      "readerSearchNoResults" : {
+         "string" : "There are no results"
+      },
+      "readerSettings" : {
+         "string" : "Settings"
+      },
+      "readerTableOfContents" : {
+         "string" : "Table of contents &amp; bookmarks"
       },
       "reader_bookmark_added" : {
          "string" : "Bookmark added"
@@ -1077,8 +1194,62 @@
       "settings" : {
          "string" : "Settings"
       },
+      "settingsABC" : {
+         "string" : "ABC"
+      },
+      "settingsABCLarger" : {
+         "string" : "ABC ↑"
+      },
+      "settingsABCReset" : {
+         "string" : "ABC ↺"
+      },
+      "settingsABCSmaller" : {
+         "string" : "ABC ↓"
+      },
+      "settingsAa" : {
+         "string" : "A a"
+      },
       "settingsAbout" : {
-         "string" : "About Palace"
+         "string" : "About E-kirjasto"
+      },
+      "settingsAccessibilityBack" : {
+         "string" : "Back"
+      },
+      "settingsAccessibilityBrightnessSlider" : {
+         "string" : "Brightness adjustment slider"
+      },
+      "settingsAccessibilitySetBlackTextOnSepia" : {
+         "string" : "Set color scheme to black text on a beige background."
+      },
+      "settingsAccessibilitySetBlackTextOnWhite" : {
+         "string" : "Set color scheme to black text on a white background."
+      },
+      "settingsAccessibilitySetDyslexic" : {
+         "string" : "Set book font to Open Dyslexic."
+      },
+      "settingsAccessibilitySetPublisher" : {
+         "string" : "Show the publisher-specified fonts and layout choices."
+      },
+      "settingsAccessibilitySetSans" : {
+         "string" : "Set book font to sans-serif."
+      },
+      "settingsAccessibilitySetSerif" : {
+         "string" : "Set book font to serif."
+      },
+      "settingsAccessibilitySetSizeLarger" : {
+         "string" : "Increase text size."
+      },
+      "settingsAccessibilitySetSizeReset" : {
+         "string" : "Reset the text size."
+      },
+      "settingsAccessibilitySetSizeSmaller" : {
+         "string" : "Decrease text size."
+      },
+      "settingsAccessibilitySetWhiteTextOnBlack" : {
+         "string" : "Set color scheme to white text on a black background."
+      },
+      "settingsAccessibilityStatement" : {
+         "string" : "Accessibility Statement"
       },
       "settingsAccounts" : {
          "string" : "Libraries"
@@ -1212,6 +1383,9 @@
       "settingsFaq" : {
          "string" : "FAQ"
       },
+      "settingsFeedback" : {
+         "string" : "Feedback"
+      },
       "settingsInfo" : {
          "string" : "App info"
       },
@@ -1245,6 +1419,15 @@
       "settingsPrivacy" : {
          "string" : "Privacy Policy"
       },
+      "settingsPub" : {
+         "string" : "Pub"
+      },
+      "settingsPublisherText" : {
+         "string" : "Show the publisher-specified fonts and layout choices in this ebook."
+      },
+      "settingsPublisherTitle" : {
+         "string" : "Publisher's default"
+      },
       "settingsReportIssue" : {
          "string" : "Report an issue…"
       },
@@ -1266,6 +1449,9 @@
       "settings_title" : {
          "string" : "Settings"
       },
+      "skip_login" : {
+         "string" : "Continue without signing in"
+      },
       "tabBooks" : {
          "string" : "My Books"
       },
@@ -1274,6 +1460,9 @@
       },
       "tabHolds" : {
          "string" : "Reservations"
+      },
+      "tabMagazines" : {
+         "string" : "Magazines"
       },
       "tabProfile" : {
          "string" : "Profile"
@@ -1286,6 +1475,33 @@
       },
       "table_of_contents_title" : {
          "string" : "Table of Contents"
+      },
+      "tocAccessBookmarkDelete" : {
+         "string" : "Delete a bookmark"
+      },
+      "tocAccessChapter" : {
+         "string" : "Open chapter %1$d: %2$s"
+      },
+      "tocBookmarkCancel" : {
+         "string" : "Cancel"
+      },
+      "tocBookmarkDelete" : {
+         "string" : "Delete"
+      },
+      "tocBookmarkDeleteErrorMessage" : {
+         "string" : "There was an error deleting the bookmark"
+      },
+      "tocBookmarkDeleteMessage" : {
+         "string" : "Are you sure you want to delete this bookmark?"
+      },
+      "tocBookmarks" : {
+         "string" : "Bookmarks"
+      },
+      "tocError" : {
+         "string" : "No entries available."
+      },
+      "tocTitle" : {
+         "string" : "Table of contents"
       },
       "unexpectedException" : {
          "string" : "An unexpected exception occurred."
