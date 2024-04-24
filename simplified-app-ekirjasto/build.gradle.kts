@@ -371,6 +371,7 @@ dependencies {
     implementation(project(":simplified-ui-errorpage"))
     implementation(project(":simplified-ui-images"))
     implementation(project(":simplified-ui-listeners-api"))
+    implementation(project(":simplified-ekirjasto-magazines"))
     implementation(project(":simplified-ui-navigation-tabs"))
     //implementation(project(":simplified-ui-neutrality"))
     implementation(project(":simplified-ui-onboarding"))

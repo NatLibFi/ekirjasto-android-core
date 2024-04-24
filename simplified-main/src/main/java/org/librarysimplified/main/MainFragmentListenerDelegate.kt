@@ -14,6 +14,7 @@ import org.librarysimplified.ui.catalog.CatalogFeedArguments
 import org.librarysimplified.ui.catalog.CatalogFeedEvent
 import org.librarysimplified.ui.catalog.CatalogFeedFragment
 import org.librarysimplified.ui.catalog.saml20.CatalogSAML20Event
+import fi.kansalliskirjasto.ekirjasto.magazines.MagazinesEvent
 import org.librarysimplified.ui.navigation.tabs.TabbedNavigator
 import org.librarysimplified.viewer.preview.BookPreviewActivity
 import org.nypl.simplified.accounts.api.AccountID
@@ -166,6 +167,9 @@ internal class MainFragmentListenerDelegate(
 
       is MainFragmentListenedEvent.AccountPickerEvent ->
         this.handleAccountPickerEvent(event.event, state)
+
+      is MainFragmentListenedEvent.MagazinesEvent ->
+        this.handleMagazinesEvent(event.event, state)
 
       is MainFragmentListenedEvent.ErrorPageEvent ->
         this.handleErrorPageEvent(event.event, state)
@@ -455,6 +459,20 @@ internal class MainFragmentListenerDelegate(
         this.openAccountRegistry(tab = org.librarysimplified.ui.tabs.R.id.tabCatalog)
         state
       }
+    }
+  }
+
+  private fun handleMagazinesEvent(
+    event: MagazinesEvent,
+    state: MainFragmentState
+  ): MainFragmentState {
+    logger.debug("handleMagazinesEvent({})", event)
+    return when (event) {
+      MagazinesEvent.GoUpwards -> {
+        this.goUpwards()
+        state
+      }
+      else -> state
     }
   }
 

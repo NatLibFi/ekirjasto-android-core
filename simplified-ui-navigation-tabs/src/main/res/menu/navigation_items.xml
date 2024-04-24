@@ -18,6 +18,11 @@
     android:title="@string/tabHolds" />
 
   <item
+    android:id="@+id/tabMagazines"
+    android:icon="@drawable/tab_magazines"
+    android:title="@string/tabMagazines" />
+
+  <item
     android:id="@+id/tabSettings"
     android:icon="@drawable/tab_settings"
     android:title="@string/tabSettings" />

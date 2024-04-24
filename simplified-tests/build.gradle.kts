@@ -60,6 +60,7 @@ val dependencyObjects = listOf(
     project(":simplified-crashlytics-api"),
     project(":simplified-deeplinks-controller-api"),
     project(":simplified-documents"),
+    project(":simplified-ekirjasto-magazines"),
     project(":simplified-feeds-api"),
     project(":simplified-files"),
     project(":simplified-futures"),

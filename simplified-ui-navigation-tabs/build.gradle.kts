@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":simplified-ui-catalog"))
     implementation(project(":simplified-ui-errorpage"))
     implementation(project(":simplified-ui-listeners-api"))
+    implementation(project(":simplified-ekirjasto-magazines"))
     implementation(project(":simplified-ui-settings"))
     implementation(project(":simplified-viewer-api"))
     implementation(project(":simplified-viewer-spi"))
