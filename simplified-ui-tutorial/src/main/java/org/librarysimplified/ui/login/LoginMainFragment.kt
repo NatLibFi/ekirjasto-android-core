@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.tutorial.R
 import org.nypl.simplified.accounts.api.AccountID
@@ -223,22 +224,36 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
 
   private fun openEkirjastoLogin(method: EkirjastoLoginMethod) {
 
-    val account = pickDefaultAccount(profilesController, accountProviders.defaultProvider)
-    val authentication = account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
+    try {
+      val account = pickDefaultAccount(profilesController, accountProviders.defaultProvider)
+      val authentication =
+        account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
+      when (method) {
+        is EkirjastoLoginMethod.SuomiFi -> openSuomiFiLogin(
+          profilesController,
+          account.id,
+          authentication
+        )
 
-    when (method) {
-      is EkirjastoLoginMethod.SuomiFi -> openSuomiFiLogin(
-        profilesController,
-        account.id,
-        authentication
-      )
-
-      is EkirjastoLoginMethod.Passkey -> openPasskeyLogin(
-        profilesController,
-        account.id,
-        authentication
-      )
+        is EkirjastoLoginMethod.Passkey -> openPasskeyLogin(
+          profilesController,
+          account.id,
+          authentication
+        )
+      }
+    } catch (e: ClassCastException) {
+      this.logger.error("Failed to obtain EKirjasto authentication description",e)
+      showErrorAlert(requireContext().getString(R.string.error_login_account_not_found))
+    } catch (e: Exception) {
+      this.logger.error("Ekirjasto Login Unknown error",e)
     }
+
+  }
+
+  private fun showErrorAlert(message: String) {
+    MaterialAlertDialogBuilder(requireContext())
+      .setMessage(message)
+      .show()
   }
 
   private fun openSuomiFiLogin(
