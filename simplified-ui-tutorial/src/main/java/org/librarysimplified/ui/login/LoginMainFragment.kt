@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.tutorial.R
 import org.nypl.simplified.accounts.api.AccountID
+import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderType
 import org.nypl.simplified.accounts.database.api.AccountType
@@ -44,6 +45,12 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
   private val defaultViewModelFactory: ViewModelProvider.Factory by lazy {
     LoginMainFragmentViewModelFactory(super.defaultViewModelProviderFactory)
   }
+  val services =
+    Services.serviceDirectory()
+  val profilesController =
+    services.requireService(ProfilesControllerType::class.java)
+  val accountProviders =
+    services.requireService(AccountProviderRegistryType::class.java)
   override val defaultViewModelProviderFactory: ViewModelProvider.Factory
     get() = this.defaultViewModelFactory
 
@@ -67,8 +74,16 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
   override fun onStart() {
     super.onStart()
     this.listenerRepository.registerHandler(this::handleEvent)
+    if (checkIsLoggedIn()){
+      this.listener.post(MainLoginEvent.LoginSuccess)
+    } else {
+      openLoginUi()
+    }
+  }
 
-    openLoginUi()
+  private fun checkIsLoggedIn(): Boolean {
+    val account = pickDefaultAccount(profilesController, accountProviders.defaultProvider)
+    return account.loginState is AccountLoginState.AccountLoggedIn
   }
 
   override fun onStop() {
@@ -171,12 +186,6 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
   }
 
   private fun openEkirjastoLogin(method: EkirjastoLoginMethod) {
-    val services =
-      Services.serviceDirectory()
-    val profilesController =
-      services.requireService(ProfilesControllerType::class.java)
-    val accountProviders =
-      services.requireService(AccountProviderRegistryType::class.java)
 
     this.logger.warn("Current Accounts: "+profilesController.profileCurrent().accounts().count())
     this.logger.warn("Current Providers: "+accountProviders.resolvedProviders.count())
