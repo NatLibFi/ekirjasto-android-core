@@ -88,6 +88,7 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
   private lateinit var browsingLayout: ViewGroup
   private lateinit var browsingWebView: WebView
   private var readerDialog: Dialog? = null
+  private var readerWebView: WebView? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     logger.debug("onCreate (recreating: {})", savedInstanceState != null)
@@ -112,6 +113,8 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
 
   override fun onDestroyView() {
     logger.debug("onDestroyView")
+    readerWebView?.destroy()
+    readerWebView = null
     super.onDestroyView()
   }
 
@@ -151,14 +154,15 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
     logger.debug("Saved latest reader URL: {}", latestUrl.toString())
 
     // Set up WebView for reading the magazine
-    val readerWebView = WebView(requireContext())
-    readerWebView.getSettings().javaScriptEnabled = true
-    readerWebView.getSettings().userAgentString = http.userAgent()
+    readerWebView?.destroy()
+    readerWebView = WebView(requireContext())
+    readerWebView!!.getSettings().javaScriptEnabled = true
+    readerWebView!!.getSettings().userAgentString = http.userAgent()
     // TODO: Move color to ekirjasto-theme or to the module's colors.xml
-    readerWebView.setBackgroundColor(Color.parseColor("#1a1d21"))
+    readerWebView!!.setBackgroundColor(Color.parseColor("#1a1d21"))
     val webViewClientReader = WebViewClientReader(this)
-    readerWebView.setWebViewClient(webViewClientReader)
-    readerWebView.loadUrl(url.toString())
+    readerWebView!!.setWebViewClient(webViewClientReader)
+    readerWebView!!.loadUrl(url.toString())
 
     // Create a fullscreen (excluding system top and bottom bars) dialog to hold the reader
     readerDialog = Dialog(requireContext(), R.style.Theme_EkirjastoReaderWebView)
@@ -175,7 +179,7 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
       RelativeLayout.LayoutParams.MATCH_PARENT,
       ViewGroup.LayoutParams.MATCH_PARENT
     )
-    readerDialog!!.addContentView(readerWebView, paramsWebView)
+    readerDialog!!.addContentView(readerWebView!!, paramsWebView)
     readerDialog!!.setOnDismissListener { onReaderClosed() }
     readerDialog!!.show()
     requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
@@ -191,10 +195,12 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
   }
 
   /**
-   * Called when the magazine reader is closed.
+   * Called when the magazine reader is closed (dialog is dismissed/closed).
    */
   private fun onReaderClosed() {
     logger.debug("onReaderClosed()")
+    readerWebView?.destroy()
+    readerWebView = null
     readerDialog = null
     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
   }
