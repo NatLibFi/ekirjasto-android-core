@@ -158,6 +158,13 @@
                 android:text="@string/account_leave_feedback" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/accessibilityStatement"
+                style="@style/Palace.Button.Outlined.Settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/account_accessibility_statement" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonPrivacyPolicy"
                 style="@style/Palace.Button.Outlined.Settings"
                 android:layout_width="match_parent"

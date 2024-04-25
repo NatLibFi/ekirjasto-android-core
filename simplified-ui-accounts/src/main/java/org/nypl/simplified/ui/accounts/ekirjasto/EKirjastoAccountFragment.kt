@@ -68,6 +68,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonFeedback: Button
   private lateinit var buttonPrivacyPolicy: Button
   private lateinit var buttonUserAgreement: Button
+  private lateinit var buttonAccessibilityStatement: Button
   private lateinit var buttonLicenses: Button
   private lateinit var versionText: TextView
 
@@ -102,7 +103,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey = view.findViewById(R.id.buttonLoginPasskey)
     this.buttonRegisterPasskey = view.findViewById(R.id.buttonRegisterPasskey)
     this.eulaStatement = view.findViewById(R.id.eulaStatement)
-
+    this.buttonAccessibilityStatement = view.findViewById(R.id.accessibilityStatement)
     this.syncBookmarks = view.findViewById(R.id.accountSyncBookmarks)
     this.bookmarkStatement = view.findViewById(R.id.accountSyncBookmarksStatement)
     this.buttonFeedback = view.findViewById(R.id.buttonFeedback)
@@ -214,6 +215,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     }
 
     configureDocViewButton(buttonFeedback, this.viewModel.documents.feedback)
+    configureDocViewButton(buttonAccessibilityStatement, this.viewModel.documents.accessibilityStatement)
     configureDocViewButton(buttonPrivacyPolicy, this.viewModel.documents.privacyPolicy)
     configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
     configureDocViewButton(buttonLicenses, this.viewModel.documents.licenses)
