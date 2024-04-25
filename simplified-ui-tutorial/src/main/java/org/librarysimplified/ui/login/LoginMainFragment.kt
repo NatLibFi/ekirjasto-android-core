@@ -18,6 +18,7 @@ import org.nypl.simplified.accounts.api.AccountProviderType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryType
 import org.nypl.simplified.android.ktx.supportActionBar
+import org.nypl.simplified.android.ktx.tryPopBackStack
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.ListenerRepository
 import org.nypl.simplified.listeners.api.fragmentListeners
@@ -67,7 +68,16 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
     val activity = requireActivity() as AppCompatActivity
     activity.onBackPressedDispatcher.addCallback(this, true){
       logger.debug("Handle Back Pressed from Callback")
-      childFragmentManager.popBackStack()
+      if (childFragmentManager.tryPopBackStack()){
+        return@addCallback
+      }
+
+      try {
+        isEnabled = false
+        activity.onBackPressed()
+      } finally {
+        isEnabled = true
+      }
     }
 
   }
