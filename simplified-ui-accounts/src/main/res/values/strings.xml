@@ -75,6 +75,7 @@
   <string name="account_eula">User Agreement</string>
   <string name="account_licenses">Software Licenses</string>
   <string name="account_leave_feedback">Leave feedback</string>
+  <string name="account_accessibility_statement">Accessibility Statement</string>
   <string name="account_about_app">About App</string>
   <string name="account_sync_bookmarks_statement">Save your reading position and bookmarks to all your other devices</string>
 </resources>
