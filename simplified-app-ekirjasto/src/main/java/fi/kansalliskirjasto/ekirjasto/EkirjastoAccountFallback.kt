@@ -41,7 +41,7 @@ class EkirjastoAccountFallback : AccountProviderFallbackType {
       cardCreatorURI = null,
       catalogURI = URI.create("$circulationAPIURL/healthcheck.html"),
       description = null,
-      displayName = "Default Account Provider",
+      displayName = "E-Kirjasto Fallback Account",
       eula = null,
       id = URI.create("defaultProvider:$libraryProviderId"),
       idNumeric = -1,

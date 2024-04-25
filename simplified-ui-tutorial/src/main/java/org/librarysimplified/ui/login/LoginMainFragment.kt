@@ -92,7 +92,10 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
   }
 
   private fun checkIsLoggedIn(): Boolean {
+    this.logger.warn("Current Accounts: "+profilesController.profileCurrent().accounts().count())
+    this.logger.warn("Current Providers: "+accountProviders.resolvedProviders.count())
     val account = pickDefaultAccount(profilesController, accountProviders.defaultProvider)
+
     return account.loginState is AccountLoginState.AccountLoggedIn
   }
 
@@ -161,11 +164,36 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
 
   }
 
+  private fun checkAccountProviders() {
+    this.logger.debug("Checking all account providers")
+    for (provider in accountProviders.resolvedProviders){
+      this.logger.debug("- Found AccountProvider: ${provider.value.displayName}")
+    }
+    this.logger.debug("Checking all profiles")
+    for (profile in profilesController.profiles()){
+      val props: MutableList<String> = mutableListOf()
+      if (profile.value.displayName.isEmpty()){
+        props.add("No profile name")
+      } else {
+        props.add("Name=${profile.value.displayName}")
+      }
+      if (profile.value.isAnonymous){
+        props.add("Anonymous Profile")
+      }
+      if (profile.value.isCurrent){
+        props.add("Current Profile")
+      }
+      props.add("Account=${profile.value.mostRecentAccount().provider.displayName}")
+
+      this.logger.debug("- Found Profile: ${props.joinToString(separator = ", ")}")
+    }
+  }
+
   private fun pickDefaultAccount(
     profilesController: ProfilesControllerType,
     defaultProvider: AccountProviderType
   ): AccountType {
-
+    checkAccountProviders()
     val profile = profilesController.profileCurrent()
     val mostRecentId = profile.preferences().mostRecentAccount
     if (mostRecentId != null) {
@@ -195,8 +223,6 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
 
   private fun openEkirjastoLogin(method: EkirjastoLoginMethod) {
 
-    this.logger.warn("Current Accounts: "+profilesController.profileCurrent().accounts().count())
-    this.logger.warn("Current Providers: "+accountProviders.resolvedProviders.count())
     val account = pickDefaultAccount(profilesController, accountProviders.defaultProvider)
     val authentication = account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
 
