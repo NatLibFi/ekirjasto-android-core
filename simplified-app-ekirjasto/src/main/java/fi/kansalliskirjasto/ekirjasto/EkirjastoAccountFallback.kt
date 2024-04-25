@@ -1,5 +1,6 @@
 package fi.kansalliskirjasto.ekirjasto
 
+import fi.kansalliskirjasto.ekirjasto.testing.TestingOverrides
 import org.joda.time.DateTime
 import org.nypl.simplified.accounts.api.AccountProvider
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
@@ -26,11 +27,28 @@ class EkirjastoAccountFallback : AccountProviderFallbackType {
     )*/
 
   companion object {
-    const val circulationAPIURL = BuildConfig.CIRCULATION_API_URL
+    val circulationAPIURL: String
+      get() {
+        return when (TestingOverrides.testLoginActive) {
+          true -> TestingOverrides.TEST_LOGIN_CIRCULATION_API_URL
+          false -> mCirculationAPIURL
+        }
+      }
+
+    val libraryProviderId: String
+      get() {
+        return when (TestingOverrides.testLoginActive) {
+          true -> TestingOverrides.TEST_LOGIN_LIBRARY_PROVIDER_ID
+          false -> mLibraryProviderId
+        }
+      }
+
+    private var mCirculationAPIURL = BuildConfig.CIRCULATION_API_URL
 
     // This must be same as the id of the library on circulation backend.
-    private val libraryProviderId = BuildConfig.LIBRARY_PROVIDER_ID
+    private var mLibraryProviderId = BuildConfig.LIBRARY_PROVIDER_ID
   }
+
   // This will be replaced by the remote account provider with same id.
   override fun get(): AccountProviderType {
     return AccountProvider(

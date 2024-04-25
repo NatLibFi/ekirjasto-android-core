@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import fi.kansalliskirjasto.ekirjasto.magazines.MagazinesEvent
 import io.reactivex.disposables.CompositeDisposable
 import org.librarysimplified.ui.catalog.CatalogBookDetailEvent
 import org.librarysimplified.ui.catalog.CatalogBookDetailFragment
@@ -14,7 +15,6 @@ import org.librarysimplified.ui.catalog.CatalogFeedArguments
 import org.librarysimplified.ui.catalog.CatalogFeedEvent
 import org.librarysimplified.ui.catalog.CatalogFeedFragment
 import org.librarysimplified.ui.catalog.saml20.CatalogSAML20Event
-import fi.kansalliskirjasto.ekirjasto.magazines.MagazinesEvent
 import org.librarysimplified.ui.navigation.tabs.TabbedNavigator
 import org.librarysimplified.viewer.preview.BookPreviewActivity
 import org.nypl.simplified.accounts.api.AccountID

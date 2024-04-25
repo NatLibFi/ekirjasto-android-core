@@ -1,3 +1,7 @@
 # Replace "test" here with the liblcp AAR secret
 ekirjasto.liblcp.repositorylayout=/[organisation]/[module]/android/aar/test/[revision].[ext]
 
+# If you want to enable "test login" set values similar to these
+ekirjasto.testLogin.enabled=true
+ekirjasto.testLogin.username=TestUser
+ekirjasto.testLogin.pinCode=1234567890

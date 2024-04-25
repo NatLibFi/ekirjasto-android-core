@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.transifex.txnative.TxNative
+import fi.kansalliskirjasto.ekirjasto.testing.ui.TestLoginFragment
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.login.LoginMainFragment
 import org.librarysimplified.ui.onboarding.OnboardingEvent
@@ -64,8 +65,8 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     super.onCreate(savedInstanceState)
     this.logger.debug("onCreate (super completed)")
 
-    //interceptDeepLink()
-    val toolbar = this.findViewById(R.id.mainToolbar) as Toolbar
+    interceptDeepLink()
+    val toolbar: Toolbar = this.findViewById(R.id.mainToolbar)
     this.setSupportActionBar(toolbar)
     this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     this.supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -84,7 +85,38 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     askForNotificationsPermission()
   }
 
+  /**
+   * Intercept deep links.
+   */
   private fun interceptDeepLink() {
+    logger.debug("interceptDeepLink()")
+    val action: String? = intent?.action
+    logger.debug("action: $action")
+    val data: Uri? = intent?.data
+    logger.debug("data: {}", data)
+
+    if (data is Uri) {
+      if (data.host == "test-login") {
+        interceptDeepLinkTestLogin(data)
+      }
+      else {
+        interceptDeepLinkBarcode()
+      }
+    }
+  }
+
+  /**
+   * Intercept test login deep links.
+   */
+  private fun interceptDeepLinkTestLogin(data: Uri) {
+    logger.debug("interceptDeepLinkTestLogin()")
+    openTestLogin(
+      prefilledUsername = data.getQueryParameter("username") ?: ""
+    )
+  }
+
+  // "Original" interceptDeepLink()
+  private fun interceptDeepLinkBarcode() {
     val pendingLink =
       FirebaseDynamicLinks.getInstance()
         .getDynamicLink(intent)
@@ -120,7 +152,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
         services.requireService(DeepLinksControllerType::class.java)
 
       val accountURI =
-        URI("urn:uuid" + libraryID)
+        URI("urn:uuid$libraryID")
 
       val accountResult =
         profiles.profileAccountCreate(accountURI)
@@ -240,7 +272,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override fun onStart() {
     super.onStart()
     this.listenerRepo.registerHandler(this::handleEvent)
-    //interceptDeepLink()
+    interceptDeepLink()
   }
 
   override fun onStop() {
@@ -275,8 +307,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   private fun onSplashFinished() {
     this.logger.debug("onSplashFinished")
 
-    val appCache =
-      AppCache(this)
+    //val appCache = AppCache(this)
 
 //    if (appCache.isTutorialSeen()) {
 //      this.onTutorialFinished()
@@ -350,6 +381,16 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     this.supportFragmentManager.beginTransaction()
       .replace(R.id.mainFragmentHolder, mainFragment, "MAIN")
+      .addToBackStack(null)
+      .commit()
+  }
+
+  private fun openTestLogin(prefilledUsername: String = "") {
+    this.logger.error("openTestLogin($prefilledUsername)")
+    val testLoginFragment = TestLoginFragment(prefilledUsername = prefilledUsername)
+    this.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    this.supportFragmentManager.beginTransaction()
+      .replace(R.id.mainFragmentHolder, testLoginFragment, "TEST_LOGIN")
       .addToBackStack(null)
       .commit()
   }
