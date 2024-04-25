@@ -102,8 +102,6 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
     configureToolbar()
     childFragmentManager.commit {
       replace(R.id.login_main_container, LoginUiFragment())
-      setReorderingAllowed(true)
-      addToBackStack("loginUi")
     }
   }
 
