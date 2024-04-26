@@ -21,11 +21,12 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tutorial_tab_layout"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="48dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="24dp"
         app:tabBackground="@drawable/selector_tab"
-        app:tabIndicatorHeight="0dp"
-        app:tabMaxWidth="16dp" />
+        app:tabMinWidth="48dp"
+        app:tabPadding="16dp"
+        app:tabIndicatorHeight="0dp" />
 
 </FrameLayout>
