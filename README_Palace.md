@@ -1,20 +1,19 @@
-E-kirjasto Android core
-=======================
+The Palace Project Android Client
+===
 
-The National Library of Finland's fork of the Palace Project Android client,
-which is itself the Lyrasis fork of the NYPL's [Library Simplified](http://www.librarysimplified.org/) Android client.
+[![Build Status](https://img.shields.io/github/actions/workflow/status/ThePalaceProject/android-core/android-main.yml?branch=main)](https://github.com/ThePalaceProject/android-core/actions/workflows/android-main.yml)
 
-![simplified](./src/site/resources/simplified.jpg?raw=true)
+Lyrasis fork of the NYPL's [Library Simplified](http://www.librarysimplified.org/) Android client.
 
-_Image by [Predrag Kezic](https://pixabay.com/users/PredragKezic-582203/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=581229) from [Pixabay](https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=581229)_
+![Palace](./src/site/resources/palace.jpg?raw=true)
 
-## What Is This?
+### What Is This?
 
-The contents of this repository provide the E-kirjasto Android client application.
+The contents of this repository provide the The Palace Project's Android client application, Palace.
 
 |Application|Module|Description|
 |-----------|------|-----------|
-|E-kirjasto|[simplified-app-ekirjasto](simplified-app-ekirjasto)|The DRM-enabled application|
+|Palace|[simplified-app-palace](simplified-app-palace)|The DRM-enabled application|
 
 ## Contents
 
@@ -71,27 +70,51 @@ Any of the following JDKs should work:
 The `JAVA_HOME` environment variable must be set correctly. You can check what it is set to in
 most shells with `echo $JAVA_HOME`. If that command does not show anything, adding the following
 line to `$HOME/.profile` and then executing `source $HOME/.profile` or opening a new shell
-should suffice:  
-```
+should suffice:
+
+~~~w
 # Replace NNN with your particular version of 17.
 export JAVA_HOME=/path/to/jdk-17+NNN
-```
+~~~
 
 You can verify that everything is set up correctly by inspecting the results of both
-`java -version` and `javac -version`:  
-```
+`java -version` and `javac -version`:
+
+~~~
 $ java -version
 openjdk version "17.0.8" 2023-07-18
 OpenJDK Runtime Environment (build 17.0.8+7)
 OpenJDK 64-Bit Server VM (build 17.0.8+7, mixed mode)
-```
+~~~
+
+#### S3 Credentials
+
+Our application can use packages that are only available from our
+S3 bucket. If you wish to use these packages, you need to obtain
+S3 credentials and then tell Gradle to use them.
+
+S3 credentials can be obtained by emailing `Jonathan.Green@lyrasis.org`
+or by asking in the `#palace-project-tech` channel of
+[lyrasis.slack.com](https://lyrasis.slack.com).
+
+Once you have your credentials, the following lines must be added to 
+`$HOME/.gradle/gradle.properties`:
+
+~~~
+# Replace ACCESS_KEY and SECRET_ACCESS_KEY appropriately.
+# Do NOT use quotes around either value.
+org.thepalaceproject.aws.access_key_id=ACCESS_KEY
+org.thepalaceproject.aws.secret_access_key=SECRET_ACCESS_KEY
+org.thepalaceproject.s3.depend=true
+~~~
 
 #### APK signing
 
 If you wish to generate a signed APK for publishing the application, you will need to copy
 a keystore to `release.jks` and set the following values correctly in
-`$HOME/.gradle/gradle.properties`:  
-```
+`$HOME/.gradle/gradle.properties`:
+
+~~~
 # Replace KEYALIAS, KEYPASSWORD, and STOREPASSWORD appropriately.
 # Do NOT use quotes around values.
 org.thepalaceproject.keyAlias=KEYALIAS
@@ -99,22 +122,18 @@ org.thepalaceproject.keyPassword=KEYPASSWORD
 org.thepalaceproject.storePassword=STOREPASSWORD
 ~~~
 
-Note that APK files are only signed with the release keystore if the code is
-built in _release_ mode (debug builds are signed with `debug.keystore` that's
-included in the repository). In other words, you need to use either of these
-commands to produce signed release APK files:  
-```
+Note that APK files are only signed if the code is built in _release_ mode. In other words, you
+need to use either of these commands to produce signed APK files:
+
+~~~
 $ ./gradlew clean assembleRelease test
 $ ./gradlew clean assemble test
-```
+~~~
 
 #### Enabling DRM
 
-**NOTE:**  
-This section may be invalid in E-kirjasto, this is from the Palace readme.
-
 The application contains optional support for various DRM systems, and these
-must be enabled explicitly in order to build [E-kirjasto](simplified-app-ekirjasto).
+must be enabled explicitly in order to build [Palace](simplified-app-palace).
 
 Firstly, make sure you have your [S3](#s3-credentials) credentials
 correctly configured. Then, add the following property to your
@@ -146,9 +165,6 @@ org.thepalaceproject.app.assets.palace=/path/to/palace/assets
 
 #### Adobe DRM Support
 
-**NOTE:**  
-This section may be invalid in E-kirjasto, this is from the Palace readme.
-
 The project currently makes calls to the Palace [Adobe DRM
 API](https://github.com/ThePalaceProject/android-drm-core). The API
 is structured in a manner that means that enabling actual support
@@ -159,9 +175,6 @@ want to produce a DRM-enabled build!
 
 #### Findaway Audiobook DRM support
 
-**NOTE:**  
-This section may be invalid in E-kirjasto, this is from the Palace readme.
-
 The project currently uses the Palace [AudioBook API](https://github.com/ThePalaceProject/android-audiobook)
 to provide support for playing audio books. The API is structured such
 that adding support for new types of audiobooks and playback engines
@@ -170,9 +183,6 @@ module to play Findaway audio books. Please get in touch with us if you have
 a Findaway license and want to produce a Findaway-enabled build.
 
 #### LCP DRM Support
-
-**NOTE:**  
-This section is partially invalid in E-kirjasto, we use liblcp, but it's configured differently.
 
 The project uses Readium's liblcp module to provide support for LCP
 content protection. This module must be available on the classpath
@@ -267,51 +277,6 @@ numbers, etc) is defined in the `gradle.properties` file in each module. The [gr
 file in the root of the project defines default values that are overridden as necessary by each
 module.
 
-#### Localization
-
-The app uses [Transifex](https://github.com/transifex/transifex-java) for localizations.
-Transifex overrides Android's default localization system (by overriding `getString()` etc.),
-and loads localized strings from `txstrings.json` files in the app's assets folder.
-These files are generated by the Transifex CLI tool and *should not be modified manually*.
-
-The Transifex token is needed at runtime for release builds, but local translations
-will work without it (the token will be replaced by an empty string).
-The token should be placed in `simplified-app-ekirjasto/src/main/assets/secrets.conf`
-with the following line:  
-`transifex.token=...`
-
-##### Transifex command line tool
-
-**TODO:** Automate this in GitHub Actions and add mention about said automation.
-
-To manually upload strings for translation or to download translated strings,
-the `.ci-local/transifex.sh` wrapper script should be used.
-
-Uploading strings for translation requires both the Transifex token and secret,
-while downloading already translated strings only requires the token:
-- The Transifex token is read from the `secrets.conf` file mentioned above.
-    - Alternatively, the `TRANSIFEX_TOKEN` environment variable can be used.
-- The `TRANSIFEX_SECRET` environment variable is used to specify the secret.
-    - If the secret is not given, uploading strings for translation will be skipped.
-
-To do only the download, run one of:  
-```
-# Read the token automatically from secrets.conf:
-./.ci-local/transifex.sh
-
-# Or manually specify the token:
-TRANSIFEX_TOKEN="..." ./.ci-local/transifex.sh
-```
-
-To do both upload and download, run one of:  
-```
-# Read the token automatically from secrets.conf:
-TRANSIFEX_SECRET="..." ./.ci-local/transifex.sh
-
-# Or manually specify both the token and the secret:
-TRANSIFEX_TOKEN="..." TRANSIFEX_SECRET="..." ./.ci-local/transifex.sh
-```
-
 #### Test suite
 
 We aggregate all unit tests in the [simplified-tests](simplified-tests) module. Tests should
@@ -325,7 +290,6 @@ coupled as possible. New features should typically be implemented as new modules
 
 | Module                                                                                        |Description|
 |-----------------------------------------------------------------------------------------------|-----------|
-| [fi.kansalliskirjasto.ekirjasto.magazines](simplified-ekirjasto-magazines)                    |Digital magazines|
 | [org.librarysimplified.accessibility](simplified-accessibility)                               |Accessibility APIs and functionality|
 | [org.librarysimplified.accounts.api](simplified-accounts-api)                                 |Accounts API|
 | [org.librarysimplified.accounts.database](simplified-accounts-database)                       |Accounts database implementation|
@@ -429,20 +393,24 @@ coupled as possible. New features should typically be implemented as new modules
 
 _The above table is generated with [ReadMe.java](src/misc/ReadMe.java)._
 
+### Binaries
+
+Binaries for every commit are built and published in the [android-binaries](https://github.com/ThePalaceProject/android-binaries)
+repository. Note that these binaries are _not_ to be considered production ready and may have
+undergone little or no testing. Use at your own risk!
+
 ### Ktlint
 
 The codebase uses [ktlint](https://ktlint.github.io/) to enforce a consistent
 code style. It's possible to ensure that any changes you've made to the code
 continue to pass `ktlint` checks by running the `ktlintFormat` task to reformat
-source code:  
+source code:
+
 ```
 $ ./gradlew ktlintFormat
 ```
 
 ## Release Process
-
-**NOTE:**  
-The below document needs to updated for E-kirjasto.
 
 Please see [RELEASING.md](RELEASING.md) for documentation on our release
 process.
@@ -450,8 +418,7 @@ process.
 ## License
 
 ~~~
-Copyright 2015 The New York Public Library, Astor, Lenox, and Tilden Foundations,
-and The National Library of Finland
+Copyright 2015 The New York Public Library, Astor, Lenox, and Tilden Foundations
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
