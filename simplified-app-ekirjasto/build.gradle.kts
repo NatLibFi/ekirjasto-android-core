@@ -139,6 +139,7 @@ android {
     }
     defaultConfig {
         applicationId = "fi.kansalliskirjasto.ekirjasto"
+        versionName = "1.0.0"
         versionCode = calculateVersionCode()
         val languages = overrideProperty("ekirjasto.languages")
         println("Configured languages: $languages")
@@ -372,6 +373,8 @@ dependencies {
     implementation(project(":simplified-ui-images"))
     implementation(project(":simplified-ui-listeners-api"))
     implementation(project(":simplified-ekirjasto-magazines"))
+    implementation(project(":simplified-ekirjasto-testing"))
+    implementation(project(":simplified-ekirjasto-testing-ui"))
     implementation(project(":simplified-ui-navigation-tabs"))
     //implementation(project(":simplified-ui-neutrality"))
     implementation(project(":simplified-ui-onboarding"))
@@ -584,6 +587,7 @@ dependencies {
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
     implementation(libs.jackson.kotlin)
+    implementation(libs.jakewharton.processphoenix)
     implementation(libs.javax.inject)
     implementation(libs.joda.time)
     implementation(libs.jsoup)

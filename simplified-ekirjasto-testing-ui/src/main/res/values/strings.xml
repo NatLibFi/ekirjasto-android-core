@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+    <string name="testingLogoDescription">E-kirjasto</string>
+    <string name="testingHeader">E-kirjasto test login</string>
+    <string name="testingUsernameInputTitle">Username:</string>
+    <string name="testingUsernameInputHint">Username</string>
+    <string name="testingPinInputTitle">PIN code:</string>
+    <string name="testingPinInputHint">PIN code</string>
+    <string name="testingLoginButton">Login</string>
+    <string name="testingClearAppDataButton">Clear app data and exit</string>
+    <string name="testingLoginIncorrect">Incorrect login credentials!</string>
+</resources>

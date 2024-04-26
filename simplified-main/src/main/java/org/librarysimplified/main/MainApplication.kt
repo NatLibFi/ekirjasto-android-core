@@ -6,6 +6,8 @@ import android.os.Process
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
+import androidx.core.content.pm.PackageInfoCompat
+import fi.kansalliskirjasto.ekirjasto.testing.TestingOverrides
 import io.reactivex.Observable
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.simplified.boot.api.BootEvent
@@ -39,7 +41,16 @@ class MainApplication : Application() {
   override fun onCreate() {
     super.onCreate()
 
+    val testingPrefs = getSharedPreferences("EkirjastoTesting", MODE_PRIVATE)
+    val testLoginActive = testingPrefs.getBoolean("testLoginActive", false)
+    TestingOverrides.testLoginActive = testLoginActive
+
     MainLogging.configure(cacheDir)
+
+    if (testLoginActive) {
+      logger.warn("Test login is active")
+    }
+
     this.configureHttpCache()
     this.configureStrictMode()
     this.logStartup()
@@ -58,7 +69,7 @@ class MainApplication : Application() {
   private fun versionCode(): String {
     return try {
       val info = this.packageManager.getPackageInfo(this.packageName, 0)
-      info.versionCode.toString()
+      PackageInfoCompat.getLongVersionCode(info).toString()
     } catch (e: Exception) {
       this.logger.error("version info unavailable: ", e)
       "UNKNOWN"

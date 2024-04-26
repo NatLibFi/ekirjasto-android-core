@@ -35,7 +35,7 @@ class EkirjastoBuildConfigurationService : BuildConfigurationServiceType {
   override val supportErrorReportSubject: String
     get() = "[ekirjasto-error]"
   override val oauthCallbackScheme: BuildConfigOAuthScheme
-    get() = BuildConfigOAuthScheme("simplified-vanilla-oauth")
+    get() = BuildConfigOAuthScheme("ekirjasto")
   override val allowExternalReaderLinks: Boolean
     get() = false
   override val showChangeAccountsUi: Boolean
