@@ -16,4 +16,5 @@
   <string name="selectionButton">Find Your Library</string>
   <string name="selectionAlternateTitle">Browse the SimplyE Collection</string>
   <string name="selectionAlternateButton">Add a Library Later</string>
+  <string name="e_kirjasto_logo">E-Kirjasto logo</string>
 </resources>

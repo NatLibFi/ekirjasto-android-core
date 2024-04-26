@@ -10,5 +10,6 @@
     <string name="login_suomifi">Sign in with Suomi.fi</string>
   <string name="login_passkey">Sign in with a passkey</string>
   <string name="skip_login">Continue without signing in</string>
+  <string name="e_kirjasto_logo">E-kirjasto logo</string>
 
 </resources>
