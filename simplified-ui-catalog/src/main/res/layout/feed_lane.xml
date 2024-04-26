@@ -10,9 +10,9 @@
   <LinearLayout
       android:id="@+id/feedLaneTitleContainer"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="48dp"
       android:layout_marginLeft="16dp"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="8dp"
       android:gravity="center_vertical"
@@ -25,6 +25,7 @@
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
         android:ellipsize="end"
+        android:gravity="center_vertical"
         android:maxLines="1"
         android:text="@string/catalogPlaceholder"
         android:textSize="18sp"
@@ -37,6 +38,7 @@
         android:layout_marginEnd="0dp"
         android:layout_weight="0"
         android:text="@string/catalogMore"
+        android:gravity="center_vertical"
         android:textSize="14sp" />
 
   </LinearLayout>
