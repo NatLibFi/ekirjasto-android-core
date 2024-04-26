@@ -35,6 +35,6 @@
       android:maxLines="2"
       android:textSize="18sp"
       android:textStyle="bold"
-      tools:text="@string/accountPlaceholder" />
+      tools:text="Placeholder" />
   </LinearLayout>
 </LinearLayout>

@@ -30,7 +30,7 @@
       android:layout_height="0dp"
       android:gravity="center"
       android:lines="2"
-      android:text="@string/accountPlaceholder"
+      android:text="Placeholder"
       android:textSize="14sp"
       android:textStyle="bold"
       app:layout_constraintBottom_toBottomOf="parent"

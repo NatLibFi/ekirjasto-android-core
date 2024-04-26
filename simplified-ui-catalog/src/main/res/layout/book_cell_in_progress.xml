@@ -14,7 +14,7 @@
         android:layout_margin="16dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="@string/catalogPlaceholder"
+        android:text="Placeholder"
         android:textColor="@color/PalaceTextInvertedColor"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
