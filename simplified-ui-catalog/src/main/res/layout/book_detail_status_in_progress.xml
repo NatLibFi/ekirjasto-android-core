@@ -22,7 +22,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:text="@string/catalogPlaceholder" />
+    tools:text="Placeholder" />
 
     <ProgressBar
         android:id="@+id/inProgressBar"

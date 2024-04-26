@@ -19,5 +19,5 @@
       android:maxLines="2"
       android:textAlignment="center"
       android:textColor="@color/EkirjastoBlack"
-      tools:text="@string/catalogPlaceholder" />
+      tools:text="Placeholder" />
 </FrameLayout>

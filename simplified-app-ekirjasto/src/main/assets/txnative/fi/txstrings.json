@@ -132,9 +132,6 @@
       "accountPickerTitle" : {
          "string" : "Etsi kirjastosi"
       },
-      "accountPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
-      },
       "accountPrivacyPolicy" : {
          "string" : "Tietosuojakäytäntö"
       },
@@ -593,9 +590,6 @@
       },
       "catalogOperationFailed" : {
          "string" : "Toimintoa ei voitu suorittaa loppuun."
-      },
-      "catalogPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
       },
       "catalogRead" : {
          "string" : "Lue"
@@ -1412,9 +1406,6 @@
       },
       "settingsPasswordShow" : {
          "string" : "Näytä salasana"
-      },
-      "settingsPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
       },
       "settingsPrivacy" : {
          "string" : "Tietosuojakäytäntö"

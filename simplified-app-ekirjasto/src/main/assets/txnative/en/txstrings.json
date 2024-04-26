@@ -132,9 +132,6 @@
       "accountPickerTitle" : {
          "string" : "Find Your Library"
       },
-      "accountPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
-      },
       "accountPrivacyPolicy" : {
          "string" : "Privacy Policy"
       },
@@ -594,9 +591,6 @@
       "catalogOperationFailed" : {
          "string" : "The operation could not be completed."
       },
-      "catalogPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
-      },
       "catalogRead" : {
          "string" : "Read"
       },
@@ -902,9 +896,6 @@
       },
       "ok" : {
          "string" : "OK"
-      },
-      "placeholder" : {
-         "string" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu leo laoreet, mattis augue ac, placerat nibh. Sed odio nunc, tempor sed justo eu, condimentum eleifend lectus. Sed at leo iaculis, euismod neque nec, rhoncus diam. Pellentesque molestie hendrerit massa ac cursus. Proin sed feugiat mi. Morbi sollicitudin, nulla vitae eleifend laoreet, ligula dolor pretium nunc, ac feugiat nibh sapien vitae augue. Pellentesque ut sollicitudin magna. Ut ac purus pellentesque, venenatis turpis id, auctor augue. Aliquam bibendum lectus id urna placerat auctor. Nullam faucibus molestie neque. Etiam in ligula eget tellus dictum ullamcorper volutpat vel erat. Mauris ut nulla urna."
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Creating an account provider description…"
@@ -1412,9 +1403,6 @@
       },
       "settingsPasswordShow" : {
          "string" : "Show password"
-      },
-      "settingsPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
       },
       "settingsPrivacy" : {
          "string" : "Privacy Policy"
