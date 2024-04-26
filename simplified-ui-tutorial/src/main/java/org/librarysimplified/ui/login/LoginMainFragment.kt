@@ -57,10 +57,14 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
     get() = this.defaultViewModelFactory
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    logger.debug("onViewCreated(), recreating: {}", (savedInstanceState != null))
     super.onViewCreated(view, savedInstanceState)
 
     mainContainer = view.findViewById(R.id.login_main_container)
 
+    if (!checkIsLoggedIn()) {
+      openLoginUi()
+    }
   }
 
   override fun onAttach(context: Context) {
@@ -84,11 +88,10 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
   }
   override fun onStart() {
     super.onStart()
+
     this.listenerRepository.registerHandler(this::handleEvent)
-    if (checkIsLoggedIn()){
+    if (checkIsLoggedIn()) {
       this.listener.post(MainLoginEvent.LoginSuccess)
-    } else {
-      openLoginUi()
     }
   }
 

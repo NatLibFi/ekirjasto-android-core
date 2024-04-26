@@ -1,5 +1,6 @@
 package org.nypl.simplified.ui.accounts.ekirjasto.suomifi
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.View.INVISIBLE
@@ -65,11 +66,17 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
   private lateinit var progress: ProgressBar
   private lateinit var webView: WebView
 
+  @SuppressLint("SetJavaScriptEnabled")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    logger.debug("onViewCreated(), recreating: {}", (savedInstanceState != null))
     super.onViewCreated(view, savedInstanceState)
     this.progress = view.findViewById(R.id.suomifiprogressBar)
     this.webView = view.findViewById(R.id.suomifiWebView)
     WebViewUtilities.setForcedDark(this.webView.settings, resources.configuration)
+
+    if (this.viewModel.isWebViewClientReady) {
+      this.loadLoginPage()
+    }
   }
 
   override fun onStart() {
@@ -86,13 +93,10 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
     this.webView.webChromeClient = AccountEkirjastoSuomiFiChromeClient(this.progress)
     this.webView.webViewClient = this.viewModel.webViewClient
     this.webView.settings.javaScriptEnabled = true
-
-    if (this.viewModel.isWebViewClientReady) {
-      this.loadLoginPage()
-    }
   }
 
   private fun loadLoginPage() {
+    logger.debug("loadLoginPage()")
     val urlSuffix = "&state=app"
     this.webView.loadUrl("${this.parameters.authenticationDescription.tunnistus_start}${urlSuffix}")
   }
