@@ -30,6 +30,12 @@ fun overrideProperty(name: String) : String {
     return value
 }
 
+
+fun getVersionName(): String {
+    return overrideProperty("ekirjasto.versionName")
+}
+
+
 apply(plugin = "com.google.gms.google-services")
 apply(plugin = "com.google.firebase.crashlytics")
 
@@ -139,7 +145,7 @@ android {
     }
     defaultConfig {
         applicationId = "fi.kansalliskirjasto.ekirjasto"
-        versionName = "1.0.0"
+        versionName = getVersionName()
         versionCode = calculateVersionCode()
         val languages = overrideProperty("ekirjasto.languages")
         println("Configured languages: $languages")
