@@ -81,13 +81,16 @@ class TutorialFragment : Fragment(R.layout.fragment_tutorial) {
       tab.contentDescription = getString(
         when (position) {
           0 -> {
-            R.string.contentDescriptionStep1
+            R.string.contentDescriptionPage1
           }
           1 -> {
-            R.string.contentDescriptionStep2
+            R.string.contentDescriptionPage2
+          }
+          2 -> {
+            R.string.contentDescriptionPage3
           }
           else -> {
-            R.string.contentDescriptionStep3
+            R.string.contentDescriptionPage4
           }
         }
       )
