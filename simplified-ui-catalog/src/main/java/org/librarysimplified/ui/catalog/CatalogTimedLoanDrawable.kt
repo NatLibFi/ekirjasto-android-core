@@ -28,7 +28,7 @@ class CatalogTimedLoanDrawable(
   }
 
   override fun draw(canvas: Canvas) {
-    val color = this.context.getColor(org.thepalaceproject.theme.core.R.color.PalaceTextColor)
+    val color = this.context.getColor(org.thepalaceproject.theme.core.R.color.EkirjastoBlack)
     this.paint.color = color
     this.paint.textSize = 16.0f
 
