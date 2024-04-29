@@ -307,15 +307,15 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   private fun onSplashFinished() {
     this.logger.debug("onSplashFinished")
 
-    //val appCache = AppCache(this)
+    val appCache = AppCache(this)
 
-//    if (appCache.isTutorialSeen()) {
-//      this.onTutorialFinished()
-//    } else {
-//      this.openTutorial()
-//      appCache.setTutorialSeen(true)
-//    }
-    this.openTutorial()
+    if (appCache.isTutorialSeen()) {
+      this.onTutorialFinished()
+    }
+    else {
+      this.openTutorial()
+      appCache.setTutorialSeen(true)
+    }
   }
 
   private fun handleTutorialEvent(event: TutorialEvent) {
