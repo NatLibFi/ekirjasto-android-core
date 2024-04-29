@@ -2,7 +2,7 @@ package org.librarysimplified.ui.login
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import org.librarysimplified.ui.tutorial.R
@@ -20,7 +20,7 @@ class LoginUiFragment : Fragment(R.layout.login_fragment) {
     val loginSkipButton = view.findViewById<Button>(R.id.ekirjasto_loginSkip)
 
     //TODO: Enable passkey buttons when fixed
-    loginPasskeyButton.visibility = GONE
+    loginPasskeyButton.visibility = VISIBLE
 
     loginSuomiFiButton!!.setOnClickListener { loginSuomiFi() }
     loginPasskeyButton!!.setOnClickListener { loginPasskey() }
