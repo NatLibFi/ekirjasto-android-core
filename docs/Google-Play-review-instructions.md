@@ -9,8 +9,8 @@ only through a deep link.
 
 Please follow these instructions to review the app:
 1. make sure the app is closed (not running in the background)
-2. then click this link on the test device:
-   - [ekirjasto://test-login]
+2. then open this deep link on the test device:
+   - ekirjasto://test-login
 3. this opens a test login page (accessible only with the above deep link)
 4. input the test login credentials given in Google Play Console
 5. after pressing "Login" on the test login page, the app will reload and show
