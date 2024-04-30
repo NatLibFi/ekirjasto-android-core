@@ -4,24 +4,25 @@ import org.librarysimplified.documents.DocumentConfiguration
 import org.librarysimplified.documents.DocumentConfigurationServiceType
 import java.net.URI
 
+@Suppress("RedundantNullableReturnType")
 class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
 
   override val privacyPolicy: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
-      remoteURI = URI.create("https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-tietosuoja-ja-rekisteriseloste")
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/__LANGUAGE__/e-kirjasto/e-kirjaston-tietosuoja-ja-rekisteriseloste")
     )
 
   override val feedback: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
-      remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute")
+      remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute/?lang=__LANGUAGE__")
     )
 
   override val accessibilityStatement: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
-      remoteURI = URI.create("https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-saavutettavuusseloste")
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/__LANGUAGE__/e-kirjasto/e-kirjaston-saavutettavuusseloste")
     )
 
   override val about: DocumentConfiguration? =
@@ -33,7 +34,7 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
   override val eula: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
-      remoteURI = URI.create("https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-kayttoehdot")
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/__LANGUAGE__/e-kirjasto/e-kirjaston-kayttoehdot")
     )
 
   override val licenses: DocumentConfiguration? =
