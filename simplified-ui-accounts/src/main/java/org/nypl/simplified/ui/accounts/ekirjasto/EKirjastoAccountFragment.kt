@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import io.reactivex.disposables.CompositeDisposable
 import org.librarysimplified.documents.DocumentType
 import org.librarysimplified.services.api.Services
@@ -33,6 +34,8 @@ import org.nypl.simplified.ui.accounts.AccountFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceToolbar
+import java.net.URI
+import java.net.URL
 
 class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private val logger =
@@ -178,7 +181,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
         this.listener.post(
           AccountDetailEvent.OpenDocViewer(
             title = title.toString(),
-            url = document.readableURL
+            url = LanguageUtil.insertLanguageInURL(document.readableURL)
           )
         )
       }

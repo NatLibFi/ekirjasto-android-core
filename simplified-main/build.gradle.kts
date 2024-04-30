@@ -80,6 +80,7 @@ dependencies {
     implementation(project(":simplified-ekirjasto-magazines"))
     implementation(project(":simplified-ekirjasto-testing"))
     implementation(project(":simplified-ekirjasto-testing-ui"))
+    implementation(project(":simplified-ekirjasto-util"))
     implementation(project(":simplified-feeds-api"))
     implementation(project(":simplified-files"))
     implementation(project(":simplified-lcp"))

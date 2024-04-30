@@ -21,6 +21,17 @@ fun overrideProperty(name: String) : String {
     return value
 }
 
+/**
+ * Overrides property from gradle.properties with same prop in local.properties if present,
+ * or otherwise gives a default value
+ */
+fun overridePropertyDefault(name: String, default: String) : String {
+    val value = localProp.getOrElse(name){
+        providers.gradleProperty(name).orNull
+    }?.toString() ?: default
+    return value
+}
+
 
 android {
     buildFeatures {
@@ -34,39 +45,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":simplified-accounts-api"))
-    implementation(project(":simplified-accounts-database-api"))
-    implementation(project(":simplified-accounts-registry-api"))
-    implementation(project(":simplified-adobe-extensions"))
-    implementation(project(":simplified-analytics-api"))
-    implementation(project(":simplified-android-ktx"))
-    implementation(project(":simplified-books-api"))
-    implementation(project(":simplified-books-borrowing"))
-    implementation(project(":simplified-books-controller-api"))
-    implementation(project(":simplified-books-covers"))
-    implementation(project(":simplified-books-database-api"))
-    implementation(project(":simplified-books-formats"))
-    implementation(project(":simplified-books-formats-api"))
-    implementation(project(":simplified-books-registry-api"))
-    implementation(project(":simplified-buildconfig-api"))
-    implementation(project(":simplified-ekirjasto-util"))
-    implementation(project(":simplified-feeds-api"))
-    implementation(project(":simplified-futures"))
-    implementation(project(":simplified-mdc"))
-    implementation(project(":simplified-opds-core"))
-    implementation(project(":simplified-presentableerror-api"))
-    implementation(project(":simplified-profiles-api"))
-    implementation(project(":simplified-profiles-controller-api"))
-    implementation(project(":simplified-reader-api"))
-    implementation(project(":simplified-services-api"))
-    implementation(project(":simplified-taskrecorder-api"))
-    implementation(project(":simplified-ui-accounts"))
-    implementation(project(":simplified-ui-errorpage"))
-    implementation(project(":simplified-ui-images"))
-    implementation(project(":simplified-ui-listeners-api"))
-    implementation(project(":simplified-ui-screen"))
-    implementation(project(":simplified-ui-thread-api"))
-    implementation(project(":simplified-webview"))
+    //implementation(project(":simplified-webview"))
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.annotation)
@@ -85,6 +64,11 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.customview)
     implementation(libs.androidx.customview.poolingcontainer)
+    implementation(libs.androidx.datastore.android)
+    implementation(libs.androidx.datastore.core.android)
+    implementation(libs.androidx.datastore.core.okio)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences.core)
     implementation(libs.androidx.drawerlayout)
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.fragment.ktx)
@@ -113,6 +97,7 @@ dependencies {
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
     implementation(libs.jackson.kotlin)
+    implementation(libs.jakewharton.processphoenix)
     implementation(libs.jcip.annotations)
     implementation(libs.joda.time)
     implementation(libs.kotlin.reflect)

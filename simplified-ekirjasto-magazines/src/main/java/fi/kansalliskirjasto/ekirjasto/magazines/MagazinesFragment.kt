@@ -3,7 +3,6 @@ package fi.kansalliskirjasto.ekirjasto.magazines
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.pm.ActivityInfo
-import android.content.res.Resources
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -19,8 +18,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import fi.ekirjasto.magazines.BuildConfig
 import fi.ekirjasto.magazines.R
+import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.services.api.Services
 import org.nypl.simplified.android.ktx.supportActionBar
@@ -205,25 +204,10 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
   }
 
-  /**
-   * Get the language that digital magazines should use.
-   */
-  private fun getLanguageForMagazines(): String {
-    // Get the list of languages supported by the app
-    val appLanguages = BuildConfig.LANGUAGES.split(",")
-    // Get the list of languages that the user has set for their device
-    // LocaleList cannot give you an actual *list*, so convert to a string and split into a list
-    val userLanguages = Resources.getSystem().configuration.locales.toLanguageTags().split(",")
-      // Get only the language from the language tag (e.g. "en" from "en-US")
-      .map { it.split("-")[0] }
-    // Get the first user language that is one of the app's supported languages, or default to "en"
-    return userLanguages.firstOrNull{ appLanguages.contains(it) } ?: "en"
-  }
-
   private fun getBrowsingUrlBase(): String? {
     val magazineServiceUrl = viewModel.getMagazineServiceUrl() ?: return null
     // Get the language to use and load the magazine collection browser
-    val language = getLanguageForMagazines()
+    val language = LanguageUtil.getUserLanguage()
     return "$magazineServiceUrl/$language"
   }
 

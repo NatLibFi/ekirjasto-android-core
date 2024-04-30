@@ -326,6 +326,9 @@ coupled as possible. New features should typically be implemented as new modules
 | Module                                                                                        |Description|
 |-----------------------------------------------------------------------------------------------|-----------|
 | [fi.kansalliskirjasto.ekirjasto.magazines](simplified-ekirjasto-magazines)                    |Digital magazines|
+| [fi.kansalliskirjasto.ekirjasto.testing](simplified-ekirjasto-testing)                        |App testing functionality|
+| [fi.kansalliskirjasto.ekirjasto.testing.ui](simplified-ekirjasto-testing-ui)                  |App testing UI components|
+| [fi.kansalliskirjasto.ekirjasto.util](simplified-ekirjasto-util)                              |General utilities|
 | [org.librarysimplified.accessibility](simplified-accessibility)                               |Accessibility APIs and functionality|
 | [org.librarysimplified.accounts.api](simplified-accounts-api)                                 |Accounts API|
 | [org.librarysimplified.accounts.database](simplified-accounts-database)                       |Accounts database implementation|

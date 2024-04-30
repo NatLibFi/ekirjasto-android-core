@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":simplified-bookmarks-api"))
     implementation(project(":simplified-buildconfig-api"))
     implementation(project(":simplified-documents"))
+    implementation(project(":simplified-ekirjasto-util"))
     implementation(project(":simplified-links"))
     implementation(project(":simplified-metrics-api"))
     implementation(project(":simplified-oauth"))
