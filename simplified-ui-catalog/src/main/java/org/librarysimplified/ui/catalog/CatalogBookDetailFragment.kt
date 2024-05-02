@@ -724,7 +724,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     bookPreviewStatus: BookPreviewStatus
   ) {
     this.buttons.removeAllViews()
-
+    
     val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
 
     when (bookStatus) {
@@ -739,8 +739,6 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
             )
           )
           this.buttons.addView(this.buttonCreator.createButtonSpace())
-        } else {
-          this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
         }
 
         if (bookStatus.isRevocable) {
@@ -757,23 +755,15 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
           )
         }
 
-        this.buttons.addView(
-          if (createPreviewButton) {
-            this.buttonCreator.createButtonSpace()
-          } else {
+        //If there is no preview button, create a dummy
+        if (!createPreviewButton) {
+          this.buttons.addView(
             this.buttonCreator.createButtonSizedSpace()
-          }
-        )
+          )
+        }
       }
 
       is BookStatus.Held.HeldReady -> {
-        // if there will be at least one more button
-        if (createPreviewButton || bookStatus.isRevocable) {
-          this.buttons.addView(this.buttonCreator.createButtonSpace())
-        } else {
-          this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
-        }
-
         this.buttons.addView(
           this.buttonCreator.createGetButton(
             onClick = {
@@ -805,8 +795,6 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
               }
             )
           )
-
-          this.buttons.addView(this.buttonCreator.createButtonSpace())
         } else if (!createPreviewButton) {
           // if the book is not revocable and there's no preview button, we need to add a dummy
           // button on the right
