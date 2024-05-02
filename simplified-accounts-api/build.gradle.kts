@@ -1,4 +1,3 @@
-apply(plugin = "com.google.gms.google-services")
 dependencies {
     implementation(project(":simplified-announcements"))
     implementation(project(":simplified-links"))
