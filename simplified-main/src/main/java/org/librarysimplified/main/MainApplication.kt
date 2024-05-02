@@ -8,6 +8,8 @@ import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
 import androidx.core.content.pm.PackageInfoCompat
 import fi.kansalliskirjasto.ekirjasto.testing.TestingOverrides
+import fi.kansalliskirjasto.ekirjasto.util.AppInfoUtil
+import fi.kansalliskirjasto.ekirjasto.util.DataUtil
 import io.reactivex.Observable
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.simplified.boot.api.BootEvent
@@ -41,13 +43,19 @@ class MainApplication : Application() {
   override fun onCreate() {
     super.onCreate()
 
-    val testingPrefs = getSharedPreferences("EkirjastoTesting", MODE_PRIVATE)
-    val testLoginActive = testingPrefs.getBoolean("testLoginActive", false)
-    TestingOverrides.testLoginActive = testLoginActive
-
     MainLogging.configure(cacheDir)
 
-    if (testLoginActive) {
+    AppInfoUtil.init(this)
+    TestingOverrides.init(this)
+
+    if (AppInfoUtil.hasBuildFlavorChanged) {
+      logger.error("Build flavor has changed, clearing app data and restarting")
+      DataUtil.deleteEverythingExceptSharedPrefs(this)
+      DataUtil.restartApp(this)
+      return
+    }
+
+    if (TestingOverrides.testLoginActive) {
       logger.warn("Test login is active")
     }
 

@@ -64,6 +64,7 @@ dependencies {
     implementation(project(":simplified-books-registry-api"))
     implementation(project(":simplified-buildconfig-api"))
     implementation(project(":simplified-ekirjasto-testing"))
+    implementation(project(":simplified-ekirjasto-util"))
     implementation(project(":simplified-feeds-api"))
     implementation(project(":simplified-futures"))
     implementation(project(":simplified-mdc"))

@@ -6,12 +6,12 @@ import java.net.URI
 import java.net.URL
 
 /**
- * Override values for testing the app.
+ * Language and localization related utilities.
  */
 sealed class LanguageUtil {
   companion object {
     /**
-     * Get the language that digital magazines should use.
+     * Get the user's language.
      */
     fun getUserLanguage(): String {
       // Get the list of languages supported by the app
