@@ -1,4 +1,4 @@
-apply(plugin = "com.google.gms.google-services")
+//apply(plugin = "com.google.gms.google-services")
 dependencies {
     implementation(project(":simplified-accounts-api"))
     implementation(project(":simplified-accounts-database-api"))

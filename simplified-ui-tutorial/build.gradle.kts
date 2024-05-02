@@ -29,8 +29,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.runtime)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.playauth)
     implementation(libs.androidx.cursoradapter)
     implementation(libs.androidx.customview)
     implementation(libs.androidx.customview.poolingcontainer)
