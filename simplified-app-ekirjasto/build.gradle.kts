@@ -254,6 +254,15 @@ android {
                 abiFilters.add("armeabi-v7a")
             }
             this.signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                // Includes the default ProGuard rules files that are packaged with
+                // the Android Gradle plugin. To learn more, go to the section about
+                // R8 configuration files.
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+
+                // Includes a local, custom Proguard rules file
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -710,4 +719,11 @@ dependencies {
         println("Using production liblcp AAR")
         implementation("readium:liblcp:2.1.0@aar")
     }
+
+    /** For missing libraries **/
+//    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+//    implementation("com.google.android.gms:play-services-auth:21.1.1")
+//    implementation("com.google.android.gms:play-services-fido:21.0.0")
+//    api("com.google.gms:google-services:4.4.1")
+//    api("com.google.dagger:hilt-android-gradle-plugin:2.40.1")
 }

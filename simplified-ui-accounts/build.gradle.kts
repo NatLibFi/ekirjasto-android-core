@@ -1,4 +1,4 @@
-//apply(plugin = "com.google.gms.google-services")
+apply(plugin = "com.google.gms.google-services")
 dependencies {
     implementation(project(":simplified-accounts-api"))
     implementation(project(":simplified-accounts-database-api"))
@@ -84,4 +84,8 @@ dependencies {
     implementation(libs.rxjava2)
     implementation(libs.rxjava2.extensions)
     implementation(libs.slf4j)
+
+    /** For missing libraries **/
+//    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+//    implementation("com.google.android.gms:play-services-auth:21.1.1")
 }
