@@ -720,10 +720,8 @@ dependencies {
         implementation("readium:liblcp:2.1.0@aar")
     }
 
-    /** For missing libraries **/
-//    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
-//    implementation("com.google.android.gms:play-services-auth:21.1.1")
-//    implementation("com.google.android.gms:play-services-fido:21.0.0")
-//    api("com.google.gms:google-services:4.4.1")
-//    api("com.google.dagger:hilt-android-gradle-plugin:2.40.1")
+    /** For missing passkey libraries **/
+    implementation(libs.android.googleid)
+    implementation(libs.play.services.auth)
+    implementation(libs.play.services.fido)
 }
