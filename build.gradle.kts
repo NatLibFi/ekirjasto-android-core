@@ -17,67 +17,42 @@ if (gradleVersionRequired != gradleVersionReceived) {
 plugins {
     signing
 
-    id("org.jetbrains.kotlin.jvm")
-        .version("1.9.0")
-        .apply(false)
+    alias(libs.plugins.android.application).apply(false)
+    alias(libs.plugins.android.library).apply(false)
 
-    id("org.jetbrains.kotlin.android")
-        .version("1.9.0")
-        .apply(false)
+    alias(libs.plugins.kotlin.android).apply(false)
+    alias(libs.plugins.kotlin.jvm).apply(false)
 
     /*
      * The AndroidX plugin for navigation (including view binding generation).
      *
      * https://developer.android.com/jetpack/androidx/releases/navigation
      */
-
-    id("androidx.navigation.safeargs.kotlin")
-        .version("2.7.1")
-        .apply(false)
-
-    id("com.android.library")
-        .version("8.2.1")
-        .apply(false)
-
-    id("com.android.application")
-        .version("8.2.1")
-        .apply(false)
+    alias(libs.plugins.androidx.navigation.safeargs.kotlin).apply(false)
 
     /*
      * Android Junit5 plugin. Required to run JUnit 5 tests on Android projects.
      *
      * https://github.com/mannodermaus/android-junit5
      */
-
-    id("de.mannodermaus.android-junit5")
-        .version("1.9.3.0")
-        .apply(false)
+    alias(libs.plugins.mannodermaus.android.junit5).apply(false)
 
     /*
      * Download plugin. Used to fetch artifacts such as Scando during the build.
      *
      * https://plugins.gradle.org/plugin/de.undercouch.download
      */
-
-    id("de.undercouch.download")
-        .version("5.4.0")
-        .apply(false)
+    alias(libs.plugins.undercouch.download).apply(false)
 
     /*
      * https://developers.google.com/android/guides/google-services-plugin
      */
-
-    id("com.google.gms.google-services")
-        .version("4.4.1")
-        .apply(false)
+    alias(libs.plugins.google.gms.google.services).apply(false)
 
     /*
      * https://firebase.google.com/docs/crashlytics/get-started?platform=android
      */
-
-    id("com.google.firebase.crashlytics")
-        .version("2.9.9")
-        .apply(false)
+    alias(libs.plugins.google.firebase.crashlytics).apply(false)
 
     id("maven-publish")
 }
