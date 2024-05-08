@@ -74,7 +74,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
   private val viewModel: org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyViewModel by viewModels(
     factoryProducer = {
       org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyViewModelFactory(
-        application = this.requireActivity().application,
+        application = this.requireActivity(),
         account = this.parameters.accountID,
         description = this.parameters.authenticationDescription,
         ekirjastoToken = this.parameters.loginMethod.circulationToken

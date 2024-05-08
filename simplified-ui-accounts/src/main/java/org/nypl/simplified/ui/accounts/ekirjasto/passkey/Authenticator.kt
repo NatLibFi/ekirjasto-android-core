@@ -1,6 +1,6 @@
 package org.nypl.simplified.ui.accounts.ekirjasto.passkey
 
-import android.app.Application
+import android.app.Activity
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory
  * Wrapper for android credential manager
  */
 class Authenticator(
-  val application: Application,
+  val application: Activity,
   val credentialManager: CredentialManager
 ) {
   val objectMapper = jacksonObjectMapper()

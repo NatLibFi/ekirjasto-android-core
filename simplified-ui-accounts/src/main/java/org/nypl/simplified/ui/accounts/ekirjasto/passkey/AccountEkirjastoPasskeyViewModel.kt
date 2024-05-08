@@ -1,6 +1,6 @@
 package org.nypl.simplified.ui.accounts.ekirjasto.passkey
 
-import android.app.Application
+import android.app.Activity
 import androidx.credentials.CredentialManager
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialCustomException
@@ -48,7 +48,7 @@ import java.net.URI
 import java.nio.charset.Charset
 
 class AccountEkirjastoPasskeyViewModel (
-  application: Application,
+  private val application: Activity,
   private val account: AccountID,
   private val description: AccountProviderAuthenticationDescription.Ekirjasto,
   // Used for register passkey
