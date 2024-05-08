@@ -1,6 +1,7 @@
 package org.librarysimplified.main
 
 import android.content.Context
+import androidx.core.content.pm.PackageInfoCompat
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.database.api.AccountType
@@ -50,7 +51,7 @@ internal object MainMigrations {
           .packageManager
           .getPackageInfo(context.packageName, 0)
 
-      "${packageInfo.packageName} ${packageInfo.versionName} (${packageInfo.versionCode})"
+      "${packageInfo.packageName} ${packageInfo.versionName} (${PackageInfoCompat.getLongVersionCode(packageInfo)})"
     } catch (e: Exception) {
       this.logger.error("could not get package info: ", e)
       "unknown"

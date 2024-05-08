@@ -192,6 +192,9 @@
       "account_eula" : {
          "string" : "Käyttäjäsopimus"
       },
+      "account_faq" : {
+         "string" : "Usein kysytyt kysymykset"
+      },
       "account_leave_feedback" : {
          "string" : "Anna palautetta"
       },
@@ -831,6 +834,15 @@
       "catalogMetaFormat" : {
          "string" : "Muoto"
       },
+      "catalogMetaId" : {
+         "string" : "ISBN"
+      },
+      "catalogMetaIllustrators" : {
+         "string" : "Kuvittajat"
+      },
+      "catalogMetaLanguage" : {
+         "string" : "Kieli"
+      },
       "catalogMetaNarrators" : {
          "string" : "Lukijat"
       },
@@ -839,6 +851,9 @@
       },
       "catalogMetaPublisher" : {
          "string" : "Kustantaja"
+      },
+      "catalogMetaTranslators" : {
+         "string" : "Kääntäjät"
       },
       "catalogMetaUpdatedDate" : {
          "string" : "Päivitetty"
@@ -927,11 +942,23 @@
       "errorDetailsTitle" : {
          "string" : "Virheen tiedot"
       },
+      "errorLoginFailed" : {
+         "string" : "Sisäänkirjautuminen epäonnistui"
+      },
+      "errorPasskeyLoginFailed" : {
+         "string" : "Sisäänkirjautuminen pääsyavaimella epäonnistui"
+      },
+      "errorPasskeyRegisterFailed" : {
+         "string" : "Virhe pääsyavaimen rekisteröinnissä"
+      },
       "errorSendReport" : {
          "string" : "Lähetä tukeen"
       },
       "errorStepsTitle" : {
          "string" : "Vaiheet"
+      },
+      "errorSuomiFiLoginFailed" : {
+         "string" : "Sisäänkirjautuminen Suomi.fi:llä epäonnistui"
       },
       "errorTitle" : {
          "string" : "Tässä on ongelmastasi luotu virheloki:"
@@ -1136,6 +1163,9 @@
       },
       "migrationSuccess" : {
          "string" : "Tietosi siirrettiin onnistuneesti!"
+      },
+      "natlibfi_logo" : {
+         "string" : "Kansalliskirjaston logo"
       },
       "next" : {
          "string" : "Seuraava"

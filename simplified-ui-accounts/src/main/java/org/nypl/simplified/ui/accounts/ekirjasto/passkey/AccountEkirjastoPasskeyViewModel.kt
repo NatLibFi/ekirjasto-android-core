@@ -132,7 +132,7 @@ class AccountEkirjastoPasskeyViewModel (
       }
       else -> {
         logger.error("Unexpected exception type ${e::class.java.name}: ${e.message}")
-        steps.currentStepFailed("${e.javaClass.name}", "")
+        steps.currentStepFailed(e.javaClass.name, "")
       }
     }
 

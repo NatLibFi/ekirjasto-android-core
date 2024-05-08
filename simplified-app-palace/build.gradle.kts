@@ -206,7 +206,7 @@ android {
 
             this.outputs.forEach {
                 val outputFile = it.outputFile
-                val assetFile = File("${project.buildDir}/required-assets.conf")
+                val assetFile = File("${project.projectDir}/build/required-assets.conf")
                 val fileTask =
                     createRequiredAssetsFile(assetFile)
                 val checkTask =

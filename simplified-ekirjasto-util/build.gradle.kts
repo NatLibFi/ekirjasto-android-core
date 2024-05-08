@@ -56,10 +56,12 @@ fun getCurrentFlavor(): String {
     val matcher = pattern.matcher(taskRequests)
 
     return if (matcher.find()) {
-        matcher.group(1).lowercase()
+        val flavor = matcher.group(1).lowercase()
+        println("Build flavor: $flavor")
+        flavor
     }
     else {
-        println("WARNING: Could not find flavor (not a build task?)")
+        // Could not find flavor (most likely not a build task, this is normal)
         ""
     }
 }

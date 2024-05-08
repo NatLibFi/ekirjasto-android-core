@@ -1,8 +1,13 @@
-name: Android CI (Pull Requests)
+name: Android CI (pull requests)
+
+#
+# This workflow is run on all PRs (before they're merged).
+#
+#
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ wip-fastlane ]
 
 jobs:
   build:
@@ -17,8 +22,10 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - name: Build PR
-        run: .ekirjasto-ci/ci-build.sh pull-request
+      - name: Debug build
+        run: scripts/build.sh debug
+      - name: Run tests
+        run: scripts/run-tests.sh
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}

@@ -79,6 +79,7 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
     }
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
   override fun onStart() {
     super.onStart()
 

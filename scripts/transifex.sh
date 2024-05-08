@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #
-# Transifex wrapper
+# Transifex wrapper.
 #
-# Version 1.0.0
+# Version 2.0.1
 #
 
 basename "$0"
@@ -12,6 +12,21 @@ trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
 
 # cd into the project root directory (or fail)
 cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
+
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+  echo
+  echo "This script does not accept any parameters (apart from --help)."
+  echo
+  echo "The Transifex token (required) and secret (optional) are read automatically"
+  echo "from local.properties, if they're set there, or they can be set by using the"
+  echo "environment variables TRANSIFEX_TOKEN and TRANSIFEX_SECRET."
+  echo
+  echo "The script always downloads/pulls strings from Transifex, so the token"
+  echo "is required. The Transifex secret is optional, and if not given, then"
+  echo "upload/push will be skipped."
+  echo
+  exit 0
+fi
 
 #------------------------------------------------------------------------
 # Utility methods
@@ -30,15 +45,15 @@ info() {
   echo "$(basename "$0"): INFO: $1" 1>&2
 }
 
+# Path to app assets directory
 assetsPath="simplified-app-ekirjasto/src/main/assets"
 
 if [ -z "${TRANSIFEX_TOKEN}" ]; then
-  info "TRANSIFEX_TOKEN is not defined, trying to look for the token in secrets.conf"
-  secretsConfPath="$assetsPath/secrets.conf"
-  TRANSIFEX_TOKEN="$(grep "transifex.token=" "$secretsConfPath" 2> /dev/null)"
+  info "TRANSIFEX_TOKEN is not defined, trying to look for it in local.properties"
+  TRANSIFEX_TOKEN="$(grep "transifex.token=" local.properties 2> /dev/null)"
   TRANSIFEX_TOKEN="${TRANSIFEX_TOKEN#transifex.token=}"
   if [ -z "${TRANSIFEX_TOKEN}" ]; then
-    fatal "TRANSIFEX_TOKEN is not defined and could not find token in secrets.conf" 65
+    fatal "TRANSIFEX_TOKEN is not defined and could not find it in local.properties" 65
   fi
 fi
 
@@ -51,7 +66,7 @@ info "Downloading transifex.jar"
 wget -c https://github.com/transifex/transifex-java/releases/download/1.3.0/transifex.jar \
   || fatal "Could not download Transifex" 66
 
-sha256sum -c .ci-local/transifex.sha256 \
+sha256sum -c transifex.sha256 \
   || fatal "Could not verify transifex.jar" 67
 
 #------------------------------------------------------------------------
@@ -66,7 +81,14 @@ echo "$STRING_FILES"
 echo
 
 if [ -z "${TRANSIFEX_SECRET}" ]; then
-  warn "TRANSIFEX_SECRET is not defined, will skip Transifex upload"
+  info "TRANSIFEX_SECRET is not defined, trying to look for it in local.properties"
+  TRANSIFEX_SECRET="$(grep "transifex.secret=" local.properties 2> /dev/null)"
+  TRANSIFEX_SECRET="${TRANSIFEX_SECRET#transifex.secret=}"
+fi
+
+if [ -z "${TRANSIFEX_SECRET}" ]; then
+  echo
+  warn "TRANSIFEX_SECRET is not defined and could not find it in local.properties, UPLOAD WILL BE SKIPPED"
   echo
 else
   TRANSIFEX_PUSH_ARGS="--verbose"
@@ -81,10 +103,13 @@ else
 
   java -jar transifex.jar push ${TRANSIFEX_PUSH_ARGS} \
     || fatal "Could not upload Transifex strings" 69
+
+  info "Upload done!"
+  echo
 fi
 
 TRANSIFEX_PULL_ARGS="--token=${TRANSIFEX_TOKEN}"
-TRANSIFEX_PULL_ARGS="${TRANSIFEX_PULL_ARGS} --dir=simplified-app-ekirjasto/src/main/assets"
+TRANSIFEX_PULL_ARGS="${TRANSIFEX_PULL_ARGS} --dir=$assetsPath"
 
 # Get list of languages from gradle.properties
 languages="$(grep "ekirjasto.languages=" gradle.properties)"
@@ -99,6 +124,9 @@ info "Downloading Transifex strings"
 
 java -jar transifex.jar pull ${TRANSIFEX_PULL_ARGS} \
   || fatal "Could not download Transifex strings" 70
+
+info "Download done!"
+echo
 
 #------------------------------------------------------------------------
 # Prettify Transifex JSON files.
