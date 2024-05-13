@@ -605,6 +605,7 @@ dependencies {
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
     implementation(libs.jackson.kotlin)
+    implementation(libs.jackson.annotations)
     implementation(libs.jakewharton.processphoenix)
     implementation(libs.javax.inject)
     implementation(libs.joda.time)

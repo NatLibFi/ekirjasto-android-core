@@ -80,7 +80,7 @@ class AccountEkirjastoPasskeyViewModel (
         // Handle the passkey DOM errors thrown according to the
         // WebAuthn spec.
         logger.error("CreatePublicKeyCredentialDomException")
-        steps.currentStepFailed(e.message?:"Credential Manager Error", e.domError.type, e)
+        steps.currentStepFailed(e.message?:"Credential Manager Error", e.domError.type)
         //handlePasskeyError(e.domError)
       }
       is CreateCredentialCancellationException -> {
@@ -92,14 +92,14 @@ class AccountEkirjastoPasskeyViewModel (
       is CreateCredentialInterruptedException -> {
         // Retry-able error. Consider retrying the call.
         logger.error("CreateCredentialInterruptedException")
-        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "")
       }
       is CreateCredentialProviderConfigurationException -> {
         // Your app is missing the provider configuration dependency.
         // Most likely, you're missing the
         // "credentials-play-services-auth" module.
         logger.error("CreateCredentialProviderConfigurationException")
-        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "")
       }
       is CreateCredentialUnknownException -> {
         //TODO alternate passkey procedures.
@@ -110,7 +110,7 @@ class AccountEkirjastoPasskeyViewModel (
         //theory is it is trying to use a backup method using fido2 api,
         // so implementing fido2 when such message is given may be valid way use passkeys on those devices
         logger.error("CreateCredentialUnknownException")
-        steps.currentStepFailed(e.message?:"Unknown Error", "", e)
+        steps.currentStepFailed(e.message?:"Unknown Error", "")
       }
       is CreateCredentialCustomException -> {
         // You have encountered an error from a 3rd-party SDK. If you
@@ -120,20 +120,19 @@ class AccountEkirjastoPasskeyViewModel (
         // that SDK to match with e.type. Otherwise, drop or log the
         // exception.
         logger.error("CreateCredentialCustomException type={}, message={}",e.type, e.message)
-        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "")
       }
       is GetCredentialUnsupportedException -> {
         logger.error("GetCredentialUnsupportedException", e)
-        steps.currentStepFailed(e.message?:"Credentials not Supported", "", e)
+        steps.currentStepFailed(e.message?:"Credentials not Supported", "")
       }
       is PasskeyFinishException -> {
         logger.error("PasskeyFinishException",e)
-        steps.currentStepFailed("${e.message}: ${e.responseProperties.status}", e.message?:"", e)
+        steps.currentStepFailed("${e.message}: ${e.responseProperties.status}", e.message?:"")
       }
       else -> {
         logger.error("Unexpected exception type ${e::class.java.name}: ${e.message}")
-        logger.error(e.stackTraceToString())
-        steps.currentStepFailed("${e.message}", "", e)
+        steps.currentStepFailed("${e.javaClass.name}", "")
       }
     }
 

@@ -62,7 +62,6 @@ class Authenticator(
     )
     val response: String =
       result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
-    logger.debug("Authenticator Response: {}", response)
     responseJson = this.objectMapper.readValue(response)
 
     return RegisterResult(
