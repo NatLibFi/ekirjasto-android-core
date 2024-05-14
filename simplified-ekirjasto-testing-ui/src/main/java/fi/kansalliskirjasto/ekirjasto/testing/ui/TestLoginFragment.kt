@@ -1,9 +1,7 @@
 package fi.kansalliskirjasto.ekirjasto.testing.ui
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -16,13 +14,12 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.jakewharton.processphoenix.ProcessPhoenix
 import fi.ekirjasto.testing.ui.BuildConfig
 import fi.ekirjasto.testing.ui.R
+import fi.kansalliskirjasto.ekirjasto.util.DataUtil
 import fi.kansalliskirjasto.ekirjasto.testing.TestingOverrides
 import org.nypl.simplified.android.ktx.supportActionBar
 import org.slf4j.LoggerFactory
-import java.io.File
 
 
 /**
@@ -72,7 +69,7 @@ class TestLoginFragment(
 
     if (!testLoginEnabled) {
       logger.error("Test login is disabled")
-      restartApp()
+      DataUtil.restartApp(requireContext())
       return
     }
 
@@ -125,7 +122,7 @@ class TestLoginFragment(
     }
 
     loginButton.setOnClickListener { checkLogin() }
-    clearAppDataButton.setOnClickListener { clearAppDataAndExit() }
+    clearAppDataButton.setOnClickListener { DataUtil.clearAppDataAndExit(requireContext()) }
   }
 
   private fun checkLogin() {
@@ -133,7 +130,7 @@ class TestLoginFragment(
 
     if (!testLoginEnabled) {
       logger.error("Test login is disabled")
-      restartApp()
+      DataUtil.restartApp(requireContext())
       return
     }
 
@@ -159,18 +156,8 @@ class TestLoginFragment(
     loadingLayout.visibility = View.VISIBLE
     loginLayout.visibility = View.GONE
     setTestLoginActive()
-    deleteEverythingExceptSharedPrefs()
-    restartApp()
-  }
-
-  private fun clearAppDataAndExit() {
-    logger.warn("clearAppDataAndExit()")
-    (context?.getSystemService(ACTIVITY_SERVICE) as ActivityManager).clearApplicationUserData()
-  }
-  
-  private fun restartApp() {
-    logger.warn("restartApp()")
-    ProcessPhoenix.triggerRebirth(requireContext())
+    DataUtil.deleteEverythingExceptSharedPrefs(requireContext())
+    DataUtil.restartApp(requireContext())
   }
 
   private fun hideVirtualKeyboard() {
@@ -187,31 +174,5 @@ class TestLoginFragment(
     prefsEditor.putBoolean("testLoginActive", true)
     prefsEditor.commit()
     TestingOverrides.testLoginActive = true
-  }
-  
-  private fun deleteRecursively(fileOrDirectory: File, ignore: String? = null) {
-    if (ignore != null && fileOrDirectory.path.contains(ignore)) {
-      return
-    }
-
-    logger.debug("deleteRecursivelyInner({})", fileOrDirectory)
-
-    if (fileOrDirectory.isDirectory()) {
-      for (child in fileOrDirectory.listFiles() ?: arrayOf()) {
-        deleteRecursively(child, ignore)
-      }
-    }
-
-    fileOrDirectory.delete()
-  }
-
-  private fun deleteEverythingExceptSharedPrefs() {
-    logger.warn("deleteEverythingExceptSharedPrefs()")
-    val basePath = requireActivity().filesDir.parent!! + File.separator
-    deleteRecursively(File(basePath), "shared_prefs")
-    //deleteRecursively(File("${basePath}cache"))
-    //deleteRecursively(File("${basePath}databases"))
-    //deleteRecursively(File("${basePath}files"))
-    //deleteRecursively(File("${basePath}no_backup"))
   }
 }

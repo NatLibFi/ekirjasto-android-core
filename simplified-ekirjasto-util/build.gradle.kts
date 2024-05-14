@@ -1,6 +1,7 @@
 import java.io.FileInputStream
 import java.util.Properties
-
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 val localProp: Properties = Properties().apply{
     try {
@@ -33,12 +34,45 @@ fun overridePropertyDefault(name: String, default: String) : String {
 }
 
 
+/**
+ * Get the current build flavor.
+ */
+fun getCurrentFlavor(): String {
+    val taskRequests = getGradle().startParameter.taskRequests.toString()
+    println("taskRequests: $taskRequests")
+    val pattern =
+        if (taskRequests.contains("assemble")) {
+            // From e.g. `./gradlew assembleRelease` to build an APK
+            Pattern.compile("assemble(\\w+)(Release|Debug)")
+        }
+        else if (taskRequests.contains("bundle")) {
+            // From e.g. `./gradlew bundleRelease` to build an AAB
+            Pattern.compile("bundle(\\w+)(Release|Debug)")
+        }
+        else {
+            Pattern.compile("generate(\\w+)(Release|Debug)")
+        }
+
+    val matcher = pattern.matcher(taskRequests)
+
+    return if (matcher.find()) {
+        matcher.group(1).lowercase()
+    }
+    else {
+        println("WARNING: Could not find flavor")
+        ""
+    }
+}
+
+
 android {
     buildFeatures {
         buildConfig = true
     }
 
     defaultConfig {
+        val buildFlavor = getCurrentFlavor()
+        buildConfigField("String", "FLAVOR", "\"$buildFlavor\"")
         val languages = overrideProperty("ekirjasto.languages")
         buildConfigField("String", "LANGUAGES", "\"$languages\"")
     }
