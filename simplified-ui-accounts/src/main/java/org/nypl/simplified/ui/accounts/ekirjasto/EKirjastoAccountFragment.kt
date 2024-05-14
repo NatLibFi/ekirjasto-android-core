@@ -73,8 +73,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonUserAgreement: Button
   private lateinit var buttonAccessibilityStatement: Button
   private lateinit var buttonLicenses: Button
+  private lateinit var buttonFaq: Button
   private lateinit var versionText: TextView
-
   private lateinit var bookmarkSyncProgress: ProgressBar
   private lateinit var bookmarkSyncCheck: SwitchCompat
   private lateinit var bookmarkStatement: TextView
@@ -113,6 +113,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonPrivacyPolicy = view.findViewById(R.id.buttonPrivacyPolicy)
     this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
     this.buttonLicenses = view.findViewById(R.id.buttonLicenses)
+    this.buttonFaq = view.findViewById(R.id.buttonFaq)
     this.versionText = view.findViewById(R.id.appVersion)
 
 
@@ -222,6 +223,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     configureDocViewButton(buttonPrivacyPolicy, this.viewModel.documents.privacyPolicy)
     configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
     configureDocViewButton(buttonLicenses, this.viewModel.documents.licenses)
+    configureDocViewButton(buttonFaq, this.viewModel.documents.faq)
 
     val versionString = this.requireContext().getString(R.string.app_version_string, this.viewModel.appVersion)
     this.versionText.text = versionString
