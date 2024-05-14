@@ -254,6 +254,15 @@ android {
                 abiFilters.add("armeabi-v7a")
             }
             this.signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                // Includes the default ProGuard rules files that are packaged with
+                // the Android Gradle plugin. To learn more, go to the section about
+                // R8 configuration files.
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+
+                // Includes a local, custom Proguard rules file
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -494,6 +503,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.runtime)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.credentials.playauth)
+    implementation(libs.androidx.credentials)
     implementation(libs.androidx.cursoradapter)
     implementation(libs.androidx.customview)
     implementation(libs.androidx.customview.poolingcontainer)
@@ -594,6 +605,7 @@ dependencies {
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
     implementation(libs.jackson.kotlin)
+    implementation(libs.jackson.annotations)
     implementation(libs.jakewharton.processphoenix)
     implementation(libs.javax.inject)
     implementation(libs.joda.time)
@@ -708,6 +720,9 @@ dependencies {
         println("Using production liblcp AAR")
         implementation("readium:liblcp:2.1.0@aar")
     }
-    implementation("androidx.credentials:credentials:1.2.1")
-    implementation("androidx.credentials:credentials-play-services-auth:1.2.1")
+
+    /** For missing passkey libraries **/
+    implementation(libs.android.googleid)
+    implementation(libs.play.services.auth)
+    implementation(libs.play.services.fido)
 }

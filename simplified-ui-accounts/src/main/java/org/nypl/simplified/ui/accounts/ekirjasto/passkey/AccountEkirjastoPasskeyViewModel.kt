@@ -1,6 +1,6 @@
 package org.nypl.simplified.ui.accounts.ekirjasto.passkey
 
-import android.app.Application
+import android.app.Activity
 import androidx.credentials.CredentialManager
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialCustomException
@@ -48,7 +48,7 @@ import java.net.URI
 import java.nio.charset.Charset
 
 class AccountEkirjastoPasskeyViewModel (
-  application: Application,
+  private val application: Activity,
   private val account: AccountID,
   private val description: AccountProviderAuthenticationDescription.Ekirjasto,
   // Used for register passkey
@@ -80,7 +80,7 @@ class AccountEkirjastoPasskeyViewModel (
         // Handle the passkey DOM errors thrown according to the
         // WebAuthn spec.
         logger.error("CreatePublicKeyCredentialDomException")
-        steps.currentStepFailed(e.message?:"Credential Manager Error", e.domError.type, e)
+        steps.currentStepFailed(e.message?:"Credential Manager Error", e.domError.type)
         //handlePasskeyError(e.domError)
       }
       is CreateCredentialCancellationException -> {
@@ -92,14 +92,14 @@ class AccountEkirjastoPasskeyViewModel (
       is CreateCredentialInterruptedException -> {
         // Retry-able error. Consider retrying the call.
         logger.error("CreateCredentialInterruptedException")
-        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "")
       }
       is CreateCredentialProviderConfigurationException -> {
         // Your app is missing the provider configuration dependency.
         // Most likely, you're missing the
         // "credentials-play-services-auth" module.
         logger.error("CreateCredentialProviderConfigurationException")
-        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "")
       }
       is CreateCredentialUnknownException -> {
         //TODO alternate passkey procedures.
@@ -110,7 +110,7 @@ class AccountEkirjastoPasskeyViewModel (
         //theory is it is trying to use a backup method using fido2 api,
         // so implementing fido2 when such message is given may be valid way use passkeys on those devices
         logger.error("CreateCredentialUnknownException")
-        steps.currentStepFailed(e.message?:"Unknown Error", "", e)
+        steps.currentStepFailed(e.message?:"Unknown Error", "")
       }
       is CreateCredentialCustomException -> {
         // You have encountered an error from a 3rd-party SDK. If you
@@ -120,20 +120,19 @@ class AccountEkirjastoPasskeyViewModel (
         // that SDK to match with e.type. Otherwise, drop or log the
         // exception.
         logger.error("CreateCredentialCustomException type={}, message={}",e.type, e.message)
-        steps.currentStepFailed(e.message?:"Credential Manager Error", "", e)
+        steps.currentStepFailed(e.message?:"Credential Manager Error", "")
       }
       is GetCredentialUnsupportedException -> {
         logger.error("GetCredentialUnsupportedException", e)
-        steps.currentStepFailed(e.message?:"Credentials not Supported", "", e)
+        steps.currentStepFailed(e.message?:"Credentials not Supported", "")
       }
       is PasskeyFinishException -> {
         logger.error("PasskeyFinishException",e)
-        steps.currentStepFailed("${e.message}: ${e.responseProperties.status}", e.message?:"", e)
+        steps.currentStepFailed("${e.message}: ${e.responseProperties.status}", e.message?:"")
       }
       else -> {
         logger.error("Unexpected exception type ${e::class.java.name}: ${e.message}")
-        logger.error(e.stackTraceToString())
-        steps.currentStepFailed("${e.message}", "", e)
+        steps.currentStepFailed("${e.javaClass.name}", "")
       }
     }
 
@@ -247,6 +246,7 @@ class AccountEkirjastoPasskeyViewModel (
     val jsonNode = objectMapper.createObjectNode()
     jsonNode.put("id", data.id)
     jsonNode.replace("data", objectMapper.readTree(dataJson))
+    this.logger.debug("Passkey Login Finish Request: {}", dataJson)
     val requestBody: String = objectMapper.writeValueAsString(jsonNode)
     val response = sendRequest(createPostRequest(description.passkey_login_finish, requestBody))
     val responseBodyNode: JsonNode?
@@ -282,6 +282,7 @@ class AccountEkirjastoPasskeyViewModel (
         logger.debug("Register Start")
         steps.beginNewStep("Passkey Register Start")
         registerStartResponse = requestPasskeyRegisterStart(uri, body)
+        logger.warn(registerStartResponse.toPrettyString())
         logger.debug("Register Start Complete")
         steps.currentStepSucceeded("Passkey Register Start Success")
       } catch (e: Exception) {
@@ -333,7 +334,10 @@ class AccountEkirjastoPasskeyViewModel (
   private suspend fun startPasskeyRegisterChallenge(jsonBody: JsonNode): RegisterResult {
     logger.debug("Start Passkey Register Challenge")
     val publicKeyJsonNode = jsonBody.get("publicKey")
-    val params: RegisterParameters = objectMapper.readValue(publicKeyJsonNode.toString())
+
+//    val params: RegisterParameters = objectMapper.readValue(publicKeyJsonNode.toString())
+    // try custom configuration instead of server's provided parameters
+    val params = RegisterParameters.from(jsonBody)
     return authenticator.register(params)
   }
 
@@ -347,8 +351,11 @@ class AccountEkirjastoPasskeyViewModel (
         type = registerResult.type
       )
     )
+    val json = objectMapper.writeValueAsString(body)
+    val node = objectMapper.readTree(json)
+    this.logger.debug("Passkey Register Finish Request: {}", node.toPrettyString())
     val uri = description.passkey_register_finish
-    val request = createAuthorizedPostRequest(uri, objectMapper.writeValueAsString(body))
+    val request = createAuthorizedPostRequest(uri, json)
     val response = sendRequest(request)
     this.logger.debug("Response status: {}", response.status)
     response.use {

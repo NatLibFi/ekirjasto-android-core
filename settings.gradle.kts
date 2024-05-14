@@ -1,4 +1,4 @@
-import java.io.File
+
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -273,7 +273,7 @@ include(":simplified-analytics-circulation")
 include(":simplified-android-ktx")
 include(":simplified-announcements")
 include(":simplified-app-ekirjasto")
-include(":simplified-app-palace")
+//include(":simplified-app-palace")
 include(":simplified-bookmarks")
 include(":simplified-bookmarks-api")
 include(":simplified-books-api")

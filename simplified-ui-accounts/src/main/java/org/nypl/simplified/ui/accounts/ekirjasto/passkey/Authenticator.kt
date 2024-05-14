@@ -1,6 +1,6 @@
 package org.nypl.simplified.ui.accounts.ekirjasto.passkey
 
-import android.app.Application
+import android.app.Activity
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory
  * Wrapper for android credential manager
  */
 class Authenticator(
-  val application: Application,
+  val application: Activity,
   val credentialManager: CredentialManager
 ) {
   val objectMapper = jacksonObjectMapper()
@@ -50,6 +50,7 @@ class Authenticator(
 
   suspend fun register(parameters: RegisterParameters): RegisterResult {
 
+
     lateinit var responseJson: JsonNode
     val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(
       requestJson = objectMapper.writeValueAsString(parameters)
@@ -61,8 +62,9 @@ class Authenticator(
     )
     val response: String =
       result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
-    logger.debug("Authenticator Response: {}", response)
     responseJson = this.objectMapper.readValue(response)
+
+    this.logger.debug("Passkey Register Authenticator Response: {}", responseJson.toPrettyString())
 
     return RegisterResult(
       id = responseJson["id"].asText(),

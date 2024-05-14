@@ -1,6 +1,6 @@
 package org.nypl.simplified.ui.accounts.ekirjasto.passkey
 
-import android.app.Application
+import android.app.Activity
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,7 +8,7 @@ import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 
 class AccountEkirjastoPasskeyViewModelFactory(
-  private val application: Application,
+  private val application: Activity,
   private val account: AccountID,
   private val description: AccountProviderAuthenticationDescription.Ekirjasto,
   private val ekirjastoToken: String?,
