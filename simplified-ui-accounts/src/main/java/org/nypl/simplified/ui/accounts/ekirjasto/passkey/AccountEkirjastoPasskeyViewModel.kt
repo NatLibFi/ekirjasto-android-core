@@ -246,6 +246,7 @@ class AccountEkirjastoPasskeyViewModel (
     val jsonNode = objectMapper.createObjectNode()
     jsonNode.put("id", data.id)
     jsonNode.replace("data", objectMapper.readTree(dataJson))
+    this.logger.debug("Passkey Login Finish Request: {}", dataJson)
     val requestBody: String = objectMapper.writeValueAsString(jsonNode)
     val response = sendRequest(createPostRequest(description.passkey_login_finish, requestBody))
     val responseBodyNode: JsonNode?
@@ -350,8 +351,11 @@ class AccountEkirjastoPasskeyViewModel (
         type = registerResult.type
       )
     )
+    val json = objectMapper.writeValueAsString(body)
+    val node = objectMapper.readTree(json)
+    this.logger.debug("Passkey Register Finish Request: {}", node.toPrettyString())
     val uri = description.passkey_register_finish
-    val request = createAuthorizedPostRequest(uri, objectMapper.writeValueAsString(body))
+    val request = createAuthorizedPostRequest(uri, json)
     val response = sendRequest(request)
     this.logger.debug("Response status: {}", response.status)
     response.use {

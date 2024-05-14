@@ -64,6 +64,8 @@ class Authenticator(
       result.data.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON", null)
     responseJson = this.objectMapper.readValue(response)
 
+    this.logger.debug("Passkey Register Authenticator Response: {}", responseJson.toPrettyString())
+
     return RegisterResult(
       id = responseJson["id"].asText(),
       rawId = responseJson["rawId"].asText(),
