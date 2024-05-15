@@ -186,6 +186,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/account_licenses" />
 
+            <ImageView
+                android:id="@+id/settingsNatLibFiLogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:alpha="0.8"
+                android:contentDescription="@string/natlibfi_logo"
+                app:srcCompat="@drawable/natlibfi_logo" />
+
+
             <TextView
                 android:id="@+id/appVersion"
                 style="@style/Palace.TextViewStyle.Settings"
