@@ -41,5 +41,8 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
     null
 
   override val faq: DocumentConfiguration? =
-    null
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/__LANGUAGE__/e-kirjasto/e-kirjaston-usein-kysytyt-kysymykset")
+    )
 }
