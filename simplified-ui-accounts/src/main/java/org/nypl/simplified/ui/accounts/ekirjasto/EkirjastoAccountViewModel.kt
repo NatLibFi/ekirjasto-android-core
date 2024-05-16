@@ -199,6 +199,7 @@ class EkirjastoAccountViewModel(
    */
 
   fun enableBookmarkSyncing(enabled: Boolean) {
+    this.logger.debug("EnableBookmarkSyncing: $enabled")
     this.bookmarkService.bookmarkSyncEnable(this.accountId, enabled)
   }
 
