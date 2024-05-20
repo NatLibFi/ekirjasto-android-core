@@ -1,6 +1,6 @@
 package fi.kansalliskirjasto.ekirjasto
 
-import org.librarysimplified.main.BuildConfig
+import org.librarysimplified.main.BuildConfig as MainBuildConfig
 import org.nypl.simplified.buildconfig.api.BuildConfigOAuthScheme
 import org.nypl.simplified.buildconfig.api.BuildConfigurationAccountsRegistryURIs
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
@@ -27,11 +27,11 @@ class EkirjastoBuildConfigurationService : BuildConfigurationServiceType {
   override val showBooksFromAllAccounts: Boolean
     get() = false
   override val vcsCommit: String
-    get() = BuildConfig.SIMPLIFIED_GIT_COMMIT
+    get() = MainBuildConfig.SIMPLIFIED_GIT_COMMIT
   override val simplifiedVersion: String
-    get() = BuildConfig.SIMPLIFIED_VERSION
+    get() = MainBuildConfig.SIMPLIFIED_VERSION
   override val supportErrorReportEmailAddress: String
-    get() = "support@ellibs.com"
+    get() = BuildConfig.SUPPORT_EMAIL
   override val supportErrorReportSubject: String
     get() = "[ekirjasto-error]"
   override val oauthCallbackScheme: BuildConfigOAuthScheme
