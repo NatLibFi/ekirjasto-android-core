@@ -137,8 +137,8 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
   private fun onSuomiFiEventFailed(event: AccountEkirjastoSuomiFiInternalEvent.Failed) {
     val newDialog =
       AlertDialog.Builder(this.requireActivity())
-        .setTitle(R.string.accountCreationFailed)
-        .setMessage(R.string.accountCreationFailedMessage)
+        .setTitle(R.string.errorLoginFailed)
+        .setMessage(R.string.errorSuomiFiLoginFailed)
         .setPositiveButton(R.string.accountsDetails) { dialog, _ ->
           this.showErrorPage(this.makeLoginTaskSteps(event.message))
           dialog.dismiss()
