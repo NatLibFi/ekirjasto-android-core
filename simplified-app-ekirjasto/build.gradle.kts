@@ -151,6 +151,8 @@ android {
         println("Configured languages: $languages")
         resourceConfigurations += languages.split(",")
         setProperty("archivesBaseName", "ekirjasto")
+        val supportEmail = overrideProperty("ekirjasto.supportEmail")
+        buildConfigField("String", "SUPPORT_EMAIL", "\"$supportEmail\"")
     }
 
     /*
