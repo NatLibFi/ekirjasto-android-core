@@ -102,6 +102,44 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
     }
   }
 
+  private void findIllustrators(
+    final Element element,
+    final OPDSAcquisitionFeedEntryBuilderType eb)
+    throws OPDSParseException {
+    final List<Element> e_contributors =
+      OPDSXML.getChildElementsWithName(element, ATOM_URI, "contributor");
+    for (final Element ec : e_contributors) {
+      Objects.requireNonNull(ec);
+      if (ec.hasAttribute("opf:role")) {
+        String role = ec.getAttribute("opf:role");
+        if (role.toLowerCase(Locale.ROOT).equals("ill")) {
+          final String illustratorName =
+            OPDSXML.getFirstChildElementTextWithName(Objects.requireNonNull(ec), ATOM_URI, "name");
+          eb.addIllustrator(illustratorName);
+        }
+      }
+    }
+  }
+
+  private void findTranslators(
+    final Element element,
+    final OPDSAcquisitionFeedEntryBuilderType eb)
+    throws OPDSParseException {
+    final List<Element> e_contributors =
+      OPDSXML.getChildElementsWithName(element, ATOM_URI, "contributor");
+    for (final Element ec : e_contributors) {
+      Objects.requireNonNull(ec);
+      if (ec.hasAttribute("opf:role")) {
+        String role = ec.getAttribute("opf:role");
+        if (role.toLowerCase(Locale.ROOT).equals("trl")) {
+          final String translatorName =
+            OPDSXML.getFirstChildElementTextWithName(Objects.requireNonNull(ec), ATOM_URI, "name");
+          eb.addTranslator(translatorName);
+        }
+      }
+    }
+  }
+
   private OptionType<String> findPublisher(final Element element) {
     return OPDSXML.getFirstChildElementTextWithNameOptional(
       element, DUBLIN_CORE_TERMS_URI, "publisher");
@@ -110,6 +148,11 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
   private String findDistribution(final Element element) {
     return OPDSXML.getFirstChildElementTextWithName(
       element, BIBFRAME_URI, "distribution", "ProviderName");
+  }
+
+  private OptionType<String> findLanguage(final Element element){
+    return OPDSXML.getFirstChildElementTextWithNameOptional(
+      element, DUBLIN_CORE_TERMS_URI, "language");
   }
 
   /**
@@ -200,12 +243,15 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
     parseCategories(element, entry_builder);
     findAcquisitionAuthors(element, entry_builder);
     findNarrators(element, entry_builder);
+    findIllustrators(element,entry_builder);
+    findTranslators(element,entry_builder);
     entry_builder.setDurationOption(findDuration(element));
     entry_builder.setPublisherOption(findPublisher(element));
     entry_builder.setDistribution(findDistribution(element));
     entry_builder.setPublishedOption(OPDSAtom.findPublished(element));
     entry_builder.setSummaryOption(
       OPDSXML.getFirstChildElementTextWithNameOptional(element, ATOM_URI, "summary"));
+    entry_builder.setLanguageOption(findLanguage(element));
 
     return entry_builder.build();
   }

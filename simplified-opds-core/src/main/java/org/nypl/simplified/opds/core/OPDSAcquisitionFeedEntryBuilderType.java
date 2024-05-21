@@ -182,6 +182,31 @@ public interface OPDSAcquisitionFeedEntryBuilderType {
     final String name);
 
   /**
+   * Set the translator.
+   *
+   * @param name The translator's name
+   */
+  OPDSAcquisitionFeedEntryBuilderType addTranslator(
+    final String name);
+
+  /**
+   * Set the illustrator.
+   *
+   * @param name The illustrators's name
+   */
+  OPDSAcquisitionFeedEntryBuilderType addIllustrator(
+    final String name);
+
+  /**
+   * Set the language
+   *
+   * @param language
+   * @return
+   */
+  OPDSAcquisitionFeedEntryBuilderType setLanguageOption(
+    OptionType<String> language);
+
+  /**
    * Set the thumbnail.
    *
    * @param uri The thumbnail
