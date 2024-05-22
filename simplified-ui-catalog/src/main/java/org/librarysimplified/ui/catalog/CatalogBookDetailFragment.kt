@@ -132,6 +132,11 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var title: TextView
   private lateinit var toolbar: PalaceToolbar
 
+  private val dateYearFormatter =
+    DateTimeFormatterBuilder()
+      .appendYear(4, 5)
+      .toFormatter()
+
   private val dateFormatter =
     DateTimeFormatterBuilder()
       .appendYear(4, 5)
@@ -403,11 +408,29 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       this.metadata.addView(row)
     }
 
+    val id = entry.id
+    if(id.isNotEmpty()){
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaId)
+      if(id.startsWith("urn:isbn:")){
+        rowVal.text = id.substring(9)
+      }else{
+        rowVal.text = id
+      }
+
+      this.metadata.addView(row)
+    }
+
     val publishedOpt = entry.published
     if (publishedOpt is Some<DateTime>) {
       val (row, rowKey, rowVal) = this.bookInfoViewOf()
       rowKey.text = this.getString(R.string.catalogMetaPublicationDate)
-      rowVal.text = this.dateFormatter.print(publishedOpt.get())
+      val published = publishedOpt.get()
+      if (published.dayOfMonth().get() == 1 && published.monthOfYear().get() == 1){
+        rowVal.text = this.dateYearFormatter.print(published)
+      }else{
+        rowVal.text = this.dateFormatter.print(published)
+      }
       this.metadata.addView(row)
     }
 
@@ -419,10 +442,18 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       this.metadata.addView(row)
     }
 
-    if (entry.distribution.isNotBlank()) {
+    /*if (entry.distribution.isNotBlank()) {
       val (row, rowKey, rowVal) = this.bookInfoViewOf()
       rowKey.text = this.getString(R.string.catalogMetaDistributor)
       rowVal.text = entry.distribution
+      this.metadata.addView(row)
+    }*/
+
+    val languageOpt = entry.language
+    if (languageOpt is Some<String>) {
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaLanguage)
+      rowVal.text = languageOpt.get()
       this.metadata.addView(row)
     }
 
@@ -435,11 +466,27 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       this.metadata.addView(row)
     }
 
+    val translators = entry.translators.filterNot { it.isBlank() }
+    if (translators.isNotEmpty()) {
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaTranslators)
+      rowVal.text = translators.joinToString(", ")
+      this.metadata.addView(row)
+    }
+
     val narrators = entry.narrators.filterNot { it.isBlank() }
     if (narrators.isNotEmpty()) {
       val (row, rowKey, rowVal) = this.bookInfoViewOf()
       rowKey.text = this.getString(R.string.catalogMetaNarrators)
       rowVal.text = narrators.joinToString(", ")
+      this.metadata.addView(row)
+    }
+
+    val illustrators = entry.illustrators.filterNot { it.isBlank() }
+    if (illustrators.isNotEmpty()) {
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaIllustrators)
+      rowVal.text = illustrators.joinToString(", ")
       this.metadata.addView(row)
     }
 
