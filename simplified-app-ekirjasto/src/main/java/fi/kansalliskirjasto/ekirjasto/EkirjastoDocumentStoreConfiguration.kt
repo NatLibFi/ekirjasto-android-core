@@ -3,6 +3,8 @@ package fi.kansalliskirjasto.ekirjasto
 import org.librarysimplified.documents.DocumentConfiguration
 import org.librarysimplified.documents.DocumentConfigurationServiceType
 import java.net.URI
+import android.os.Build
+import fi.kansalliskirjasto.ekirjasto.BuildConfig;
 
 @Suppress("RedundantNullableReturnType")
 class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
@@ -16,7 +18,7 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
   override val feedback: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
-      remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute/?lang=__LANGUAGE__")
+      remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute/?lang=__LANGUAGE__&device_model=${Build.MANUFACTURER}%20${Build.MODEL}&software_version=${BuildConfig.VERSION_NAME}%20(${BuildConfig.VERSION_CODE})")
     )
 
   override val accessibilityStatement: DocumentConfiguration? =
