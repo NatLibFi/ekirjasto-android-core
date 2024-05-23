@@ -80,4 +80,8 @@
   <string name="account_sync_bookmarks_statement">Save your reading position and bookmarks to all your other devices</string>
   <string name="e_kirjasto_logo">E-Kirjasto logo</string>
   <string name="natlibfi_logo">National Library of Finland logo</string>
+  <string name="errorLoginFailed">Could not sign in</string>
+  <string name="errorPasskeyLoginFailed">Could not sign in with Passkey</string>
+  <string name="errorPasskeyRegisterFailed">Error registering a Passkey</string>
+  <string name="errorSuomiFiLoginFailed">Could not sign in with Suomi.fi</string>
 </resources>
