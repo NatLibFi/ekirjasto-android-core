@@ -132,6 +132,9 @@
       "accountPickerTitle" : {
          "string" : "Find Your Library"
       },
+      "accountPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
+      },
       "accountPrivacyPolicy" : {
          "string" : "Privacy Policy"
       },
@@ -183,8 +186,14 @@
       "account_about_app" : {
          "string" : "About App"
       },
+      "account_accessibility_statement" : {
+         "string" : "Accessibility Statement"
+      },
       "account_eula" : {
          "string" : "User Agreement"
+      },
+      "account_faq" : {
+         "string" : "Frequently Asked Questions"
       },
       "account_leave_feedback" : {
          "string" : "Leave feedback"
@@ -232,7 +241,7 @@
          "string" : "%1$s (%2$d of %3$d)"
       },
       "app_name" : {
-         "string" : "E-kirjasto"
+         "string" : "simplified-viewer-epub-readium2"
       },
       "app_version_string" : {
          "string" : "E-kirjasto version %1$s"
@@ -272,6 +281,258 @@
       },
       "audio_book_player_toc_title" : {
          "string" : "Table Of Contents"
+      },
+      "audiobook_accessibility_backward_15" : {
+         "string" : "Rewind 15 seconds"
+      },
+      "audiobook_accessibility_book_cover" : {
+         "string" : "Book cover"
+      },
+      "audiobook_accessibility_forward_15" : {
+         "string" : "Fast forward 15 seconds"
+      },
+      "audiobook_accessibility_hour" : {
+         "string" : "Hour"
+      },
+      "audiobook_accessibility_hours" : {
+         "string" : "Hours"
+      },
+      "audiobook_accessibility_menu_playback_speed_0p75" : {
+         "string" : "75 percent"
+      },
+      "audiobook_accessibility_menu_playback_speed_1" : {
+         "string" : "100 percent"
+      },
+      "audiobook_accessibility_menu_playback_speed_1p25" : {
+         "string" : "125 percent"
+      },
+      "audiobook_accessibility_menu_playback_speed_1p5" : {
+         "string" : "150 percent"
+      },
+      "audiobook_accessibility_menu_playback_speed_2" : {
+         "string" : "200 percent"
+      },
+      "audiobook_accessibility_menu_playback_speed_icon" : {
+         "string" : "Set your playback speed"
+      },
+      "audiobook_accessibility_menu_sleep_timer_icon" : {
+         "string" : "Set your sleep timer"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_at_end_of_chapter" : {
+         "string" : "Sleep at end of file"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_in_15_minutes" : {
+         "string" : "Sleep in 15 minutes"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_in_30_minutes" : {
+         "string" : "Sleep in 30 minutes"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_in_45_minutes" : {
+         "string" : "Sleep in 45 minutes"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_in_60_minutes" : {
+         "string" : "Sleep in 60 minutes"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_now" : {
+         "string" : "Sleep now"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_off" : {
+         "string" : "Sleep timer off"
+      },
+      "audiobook_accessibility_minute" : {
+         "string" : "Minute"
+      },
+      "audiobook_accessibility_minutes" : {
+         "string" : "Minutes"
+      },
+      "audiobook_accessibility_navigation_back" : {
+         "string" : "Back"
+      },
+      "audiobook_accessibility_pause" : {
+         "string" : "Pause"
+      },
+      "audiobook_accessibility_play" : {
+         "string" : "Play"
+      },
+      "audiobook_accessibility_playback_speed_currently" : {
+         "string" : "Playback speed is currently set to"
+      },
+      "audiobook_accessibility_playback_speed_has_been_set" : {
+         "string" : "Playback speed has been set to"
+      },
+      "audiobook_accessibility_playback_speed_is_selected" : {
+         "string" : "This is the currently selected playback rate"
+      },
+      "audiobook_accessibility_playback_speed_set_to" : {
+         "string" : "Set playback speed to"
+      },
+      "audiobook_accessibility_player_buffering" : {
+         "string" : "Player is buffering"
+      },
+      "audiobook_accessibility_player_time_current" : {
+         "string" : "%1$s played"
+      },
+      "audiobook_accessibility_player_time_remaining" : {
+         "string" : "%1$s remaining"
+      },
+      "audiobook_accessibility_second" : {
+         "string" : "Second"
+      },
+      "audiobook_accessibility_seconds" : {
+         "string" : "Seconds"
+      },
+      "audiobook_accessibility_sleep_timer_currently" : {
+         "string" : "The sleep timer is currently set to"
+      },
+      "audiobook_accessibility_sleep_timer_description_end_of_chapter" : {
+         "string" : "Sleep at end of file"
+      },
+      "audiobook_accessibility_sleep_timer_description_off" : {
+         "string" : "Off"
+      },
+      "audiobook_accessibility_sleep_timer_has_been_set" : {
+         "string" : "Sleep timer has been set to"
+      },
+      "audiobook_accessibility_sleep_timer_is_paused" : {
+         "string" : "The sleep timer is paused because playback is paused."
+      },
+      "audiobook_accessibility_toc_bookmark_date_is" : {
+         "string" : "Date"
+      },
+      "audiobook_accessibility_toc_bookmark_delete" : {
+         "string" : "Delete"
+      },
+      "audiobook_accessibility_toc_bookmark_offset_is" : {
+         "string" : "Offset"
+      },
+      "audiobook_accessibility_toc_chapter_downloading" : {
+         "string" : "File is currently downloading"
+      },
+      "audiobook_accessibility_toc_chapter_duration_is" : {
+         "string" : "Duration"
+      },
+      "audiobook_accessibility_toc_chapter_failed_download" : {
+         "string" : "File has failed to download"
+      },
+      "audiobook_accessibility_toc_chapter_is_current" : {
+         "string" : "Selected"
+      },
+      "audiobook_accessibility_toc_chapter_requires_download" : {
+         "string" : "File must be downloaded before it can be played"
+      },
+      "audiobook_accessibility_toc_download" : {
+         "string" : "Download file %1$d"
+      },
+      "audiobook_accessibility_toc_progress" : {
+         "string" : "Download progress of file %1$d is %2$d percent. Click to stop download."
+      },
+      "audiobook_accessibility_toc_refresh_all" : {
+         "string" : "Download all files"
+      },
+      "audiobook_accessibility_toc_retry" : {
+         "string" : "Retry download of file %1$d"
+      },
+      "audiobook_accessibility_toc_selected" : {
+         "string" : "Selected file %1$d"
+      },
+      "audiobook_accessibility_toc_stop_all" : {
+         "string" : "Stop all file downloads"
+      },
+      "audiobook_accessibility_toc_track_n" : {
+         "string" : "Track %1$d"
+      },
+      "audiobook_part_download_continue" : {
+         "string" : "Continue"
+      },
+      "audiobook_part_download_stop" : {
+         "string" : "Stop"
+      },
+      "audiobook_part_download_stop_confirm" : {
+         "string" : "Stop downloading this book part?"
+      },
+      "audiobook_player_buffering" : {
+         "string" : "Buffering…"
+      },
+      "audiobook_player_error" : {
+         "string" : "An error occurred during playback. Error code: %1$d"
+      },
+      "audiobook_player_initial" : {
+         "string" : "00:00:00"
+      },
+      "audiobook_player_menu_add_bookmark_title" : {
+         "string" : "Add bookmark"
+      },
+      "audiobook_player_menu_playback_rate_title" : {
+         "string" : "Playback rate"
+      },
+      "audiobook_player_menu_sleep_title" : {
+         "string" : "Set your sleep timer"
+      },
+      "audiobook_player_menu_toc_title" : {
+         "string" : "Table of contents"
+      },
+      "audiobook_player_menu_toc_title_bookmarks" : {
+         "string" : "Bookmarks"
+      },
+      "audiobook_player_menu_toc_title_chapters" : {
+         "string" : "Chapters"
+      },
+      "audiobook_player_options_cancel" : {
+         "string" : "Cancel"
+      },
+      "audiobook_player_remaining_time" : {
+         "string" : "%1$d hr %2$d min remaining"
+      },
+      "audiobook_player_remaining_time_minutes_only" : {
+         "string" : "%d min remaining"
+      },
+      "audiobook_player_sleep_15" : {
+         "string" : "15:00"
+      },
+      "audiobook_player_sleep_30" : {
+         "string" : "30:00"
+      },
+      "audiobook_player_sleep_45" : {
+         "string" : "45:00"
+      },
+      "audiobook_player_sleep_60" : {
+         "string" : "60:00"
+      },
+      "audiobook_player_sleep_end_of_chapter" : {
+         "string" : "End of file"
+      },
+      "audiobook_player_sleep_now" : {
+         "string" : "Now"
+      },
+      "audiobook_player_sleep_off" : {
+         "string" : "Off"
+      },
+      "audiobook_player_toc_bookmarks_dialog_message_delete" : {
+         "string" : "Are you sure you want to delete this bookmark?"
+      },
+      "audiobook_player_toc_bookmarks_dialog_title_delete" : {
+         "string" : "Delete"
+      },
+      "audiobook_player_toc_bookmarks_empty" : {
+         "string" : "There are no bookmarks for this book"
+      },
+      "audiobook_player_toc_bookmarks_error_deleting" : {
+         "string" : "There was an error deleting the bookmark"
+      },
+      "audiobook_player_toc_menu_refresh_all" : {
+         "string" : "Refresh all"
+      },
+      "audiobook_player_toc_menu_stop_all" : {
+         "string" : "Stop all downloads"
+      },
+      "audiobook_player_toc_menu_stop_all_confirm" : {
+         "string" : "Stop all downloads?"
+      },
+      "audiobook_player_toc_track_n" : {
+         "string" : "Track %1$d"
+      },
+      "audiobook_player_waiting" : {
+         "string" : "File %1$d must be downloaded to continue playback."
       },
       "bookFailedLoan" : {
          "string" : "The book '%1$s' could not be downloaded"
@@ -573,6 +834,15 @@
       "catalogMetaFormat" : {
          "string" : "Format"
       },
+      "catalogMetaId" : {
+         "string" : "ISBN"
+      },
+      "catalogMetaIllustrators" : {
+         "string" : "Illustrators"
+      },
+      "catalogMetaLanguage" : {
+         "string" : "Language"
+      },
       "catalogMetaNarrators" : {
          "string" : "Narrators"
       },
@@ -582,6 +852,9 @@
       "catalogMetaPublisher" : {
          "string" : "Publisher"
       },
+      "catalogMetaTranslators" : {
+         "string" : "Translators"
+      },
       "catalogMetaUpdatedDate" : {
          "string" : "Updated"
       },
@@ -590,6 +863,9 @@
       },
       "catalogOperationFailed" : {
          "string" : "The operation could not be completed."
+      },
+      "catalogPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
       },
       "catalogRead" : {
          "string" : "Read"
@@ -624,6 +900,18 @@
       "contentDescriptionLogo" : {
          "string" : "Logo"
       },
+      "contentDescriptionPage1" : {
+         "string" : "Welcome to the E-library! This service is provided by your local library."
+      },
+      "contentDescriptionPage2" : {
+         "string" : "You can browse e-books and audiobooks by genre, book or author, or browse recommendation lists made by librarians."
+      },
+      "contentDescriptionPage3" : {
+         "string" : "Browse the selection, borrow and read or listen! If a book is on loan, press reserve to get it when it becomes available."
+      },
+      "contentDescriptionPage4" : {
+         "string" : "Or do you want something to listen to? The collection also includes an untold number of audiobooks! Click borrow to listen to the audiobook."
+      },
       "contentDescriptionSkipButton" : {
          "string" : "Skip button"
       },
@@ -657,11 +945,23 @@
       "dialog_manual_passphrase_title" : {
          "string" : "Enter LCP Passphrase"
       },
+      "e_kirjasto_logo" : {
+         "string" : "E-kirjasto logo"
+      },
       "emptyBookmarksMessage" : {
          "string" : "There are no bookmarks for this book"
       },
       "errorDetailsTitle" : {
          "string" : "Error Details"
+      },
+      "errorLoginFailed" : {
+         "string" : "Could not sign in"
+      },
+      "errorPasskeyLoginFailed" : {
+         "string" : "Could not sign in with Passkey"
+      },
+      "errorPasskeyRegisterFailed" : {
+         "string" : "Error registering a Passkey"
       },
       "errorSendReport" : {
          "string" : "Send To Support"
@@ -669,8 +969,14 @@
       "errorStepsTitle" : {
          "string" : "Steps"
       },
+      "errorSuomiFiLoginFailed" : {
+         "string" : "Could not sign in with Suomi.fi"
+      },
       "errorTitle" : {
          "string" : "Here is the error log created by your issue:"
+      },
+      "error_login_account_not_found" : {
+         "string" : "Error logging in. Please restart app and try again."
       },
       "eula_agree" : {
          "string" : "Agree"
@@ -870,6 +1176,9 @@
       "migrationSuccess" : {
          "string" : "Your data was migrated successfully!"
       },
+      "natlibfi_logo" : {
+         "string" : "National Library of Finland logo"
+      },
       "next" : {
          "string" : "Next"
       },
@@ -896,6 +1205,9 @@
       },
       "ok" : {
          "string" : "OK"
+      },
+      "placeholder" : {
+         "string" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu leo laoreet, mattis augue ac, placerat nibh. Sed odio nunc, tempor sed justo eu, condimentum eleifend lectus. Sed at leo iaculis, euismod neque nec, rhoncus diam. Pellentesque molestie hendrerit massa ac cursus. Proin sed feugiat mi. Morbi sollicitudin, nulla vitae eleifend laoreet, ligula dolor pretium nunc, ac feugiat nibh sapien vitae augue. Pellentesque ut sollicitudin magna. Ut ac purus pellentesque, venenatis turpis id, auctor augue. Aliquam bibendum lectus id urna placerat auctor. Nullam faucibus molestie neque. Etiam in ligula eget tellus dictum ullamcorper volutpat vel erat. Mauris ut nulla urna."
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Creating an account provider description…"
@@ -973,7 +1285,7 @@
          "string" : "Open the table of contents and bookmarks screen"
       },
       "readerAddBookmark" : {
-         "string" : "Add A Bookmark"
+         "string" : "Add a bookmark"
       },
       "readerSearch" : {
          "string" : "Search"
@@ -1404,6 +1716,9 @@
       "settingsPasswordShow" : {
          "string" : "Show password"
       },
+      "settingsPlaceholder" : {
+         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
+      },
       "settingsPrivacy" : {
          "string" : "Privacy Policy"
       },
@@ -1463,6 +1778,33 @@
       },
       "table_of_contents_title" : {
          "string" : "Table of Contents"
+      },
+      "testingClearAppDataButton" : {
+         "string" : "Clear app data and exit"
+      },
+      "testingHeader" : {
+         "string" : "E-kirjasto test login"
+      },
+      "testingLoginButton" : {
+         "string" : "Login"
+      },
+      "testingLoginIncorrect" : {
+         "string" : "Incorrect login credentials!"
+      },
+      "testingLogoDescription" : {
+         "string" : "E-kirjasto"
+      },
+      "testingPinInputHint" : {
+         "string" : "PIN code"
+      },
+      "testingPinInputTitle" : {
+         "string" : "PIN code:"
+      },
+      "testingUsernameInputHint" : {
+         "string" : "Username"
+      },
+      "testingUsernameInputTitle" : {
+         "string" : "Username:"
       },
       "tocAccessBookmarkDelete" : {
          "string" : "Delete a bookmark"

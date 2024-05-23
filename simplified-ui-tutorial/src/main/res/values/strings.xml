@@ -4,7 +4,7 @@
     <!-- Accessibility -->
     <string name="contentDescriptionTutorialPage">Tutorial page</string>
     <string name="contentDescriptionSkipButton">Skip button</string>
-    <string name="contentDescriptionPage1">Welcome to the E-library! This service is provided by your local library.</string>
+    <string name="contentDescriptionPage1">Welcome to E-library! This service is provided by your local library.</string>
     <string name="contentDescriptionPage2">You can browse e-books and audiobooks by genre, book or author, or browse recommendation lists made by librarians.</string>
     <string name="contentDescriptionPage3">Browse the selection, borrow and read or listen! If a book is on loan, press "reserve" to get it when it becomes available.</string>
     <string name="contentDescriptionPage4">Or do you want something to listen to? The collection also includes an untold number of audiobooks! Click "borrow" to listen to the audiobook.</string>
