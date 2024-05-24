@@ -241,7 +241,7 @@
          "string" : "%1$s (%2$d of %3$d)"
       },
       "app_name" : {
-         "string" : "simplified-viewer-epub-readium2"
+         "string" : "E-kirjasto"
       },
       "app_version_string" : {
          "string" : "E-kirjasto version %1$s"
