@@ -1681,7 +1681,7 @@
          "string" : "Integritetspolicy"
       },
       "settingsPub" : {
-         "string" : "Utgivare"
+         "string" : "Utg"
       },
       "settingsPublisherText" : {
          "string" : "Visa de typsnitt och layoutalternativen som utgivaren fastställt i denna e-bok."
