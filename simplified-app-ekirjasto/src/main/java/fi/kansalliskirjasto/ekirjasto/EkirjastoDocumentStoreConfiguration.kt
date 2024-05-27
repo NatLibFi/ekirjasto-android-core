@@ -18,7 +18,7 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
   override val feedback: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
-      remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute/?lang=__LANGUAGE__&device_model=${Build.MANUFACTURER}%20${Build.MODEL}&software_version=${BuildConfig.VERSION_NAME}%20(${BuildConfig.VERSION_CODE})")
+      remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute/?lang=__LANGUAGE__&device_model=${Build.MANUFACTURER}%20${Build.MODEL}&software_version=${BuildConfig.VERSION_NAME}%20(${BuildConfig.VERSION_CODE})".replace(" ", "%20"))
     )
 
   override val accessibilityStatement: DocumentConfiguration? =
