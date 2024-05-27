@@ -183,7 +183,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     button.isEnabled = document != null
     if (document != null) {
       button.setOnClickListener {
-        var title = button.text
+        val title = button.text
+        val url = LanguageUtil.insertLanguageInURL(document.readableURL)
+        logger.debug("OpenDocViewer: {} -> {}", title, url)
         this.listener.post(
           AccountDetailEvent.OpenDocViewer(
             title = title.toString(),

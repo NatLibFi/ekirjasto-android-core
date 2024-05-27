@@ -59,7 +59,7 @@ fun getCurrentFlavor(): String {
         matcher.group(1).lowercase()
     }
     else {
-        println("WARNING: Could not find flavor")
+        println("WARNING: Could not find flavor (not a build task?)")
         ""
     }
 }
