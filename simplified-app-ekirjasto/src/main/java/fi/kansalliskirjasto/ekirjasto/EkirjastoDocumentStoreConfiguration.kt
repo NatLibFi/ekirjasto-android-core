@@ -1,10 +1,11 @@
 package fi.kansalliskirjasto.ekirjasto
 
+import android.os.Build
+import java.net.URI
+import java.net.URLEncoder
 import org.librarysimplified.documents.DocumentConfiguration
 import org.librarysimplified.documents.DocumentConfigurationServiceType
-import java.net.URI
-import android.os.Build
-import fi.kansalliskirjasto.ekirjasto.BuildConfig;
+import org.librarysimplified.main.BuildConfig as MainBuildConfig
 
 @Suppress("RedundantNullableReturnType")
 class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
@@ -18,7 +19,7 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
   override val feedback: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
-      remoteURI = URI.create("https://lib.e-kirjasto.fi/palaute/?lang=__LANGUAGE__&device_model=${Build.MANUFACTURER}%20${Build.MODEL}&software_version=${BuildConfig.VERSION_NAME}%20(${BuildConfig.VERSION_CODE})")
+      remoteURI = URI.create(getFeedbackUrl())
     )
 
   override val accessibilityStatement: DocumentConfiguration? =
@@ -47,4 +48,15 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
       name = null,
       remoteURI = URI.create("https://www.kansalliskirjasto.fi/__LANGUAGE__/e-kirjasto/e-kirjaston-usein-kysytyt-kysymykset")
     )
+
+  private fun getFeedbackUrl(): String {
+    var url = BuildConfig.FEEDBACK_URL_BASE
+    url += "?lang=__LANGUAGE__"
+    url += "&device_manufacturer=${URLEncoder.encode(Build.MANUFACTURER, "UTF-8")}"
+    url += "&device_model=${URLEncoder.encode(Build.MODEL, "UTF-8")}"
+    url += "&version_name=${URLEncoder.encode(BuildConfig.VERSION_NAME, "UTF-8")}"
+    url += "&version_code=${URLEncoder.encode(BuildConfig.VERSION_CODE.toString(), "UTF-8")}"
+    url += "&commit=${URLEncoder.encode(MainBuildConfig.SIMPLIFIED_GIT_COMMIT, "UTF-8")}"
+    return url
+  }
 }

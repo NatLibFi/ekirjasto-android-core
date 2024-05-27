@@ -147,6 +147,8 @@ android {
         applicationId = "fi.kansalliskirjasto.ekirjasto"
         versionName = getVersionName()
         versionCode = calculateVersionCode()
+        val feedbackUrlBase = overrideProperty("ekirjasto.feedbackUrlBase")
+        buildConfigField("String", "FEEDBACK_URL_BASE", "\"$feedbackUrlBase\"")
         val languages = overrideProperty("ekirjasto.languages")
         println("Configured languages: $languages")
         resourceConfigurations += languages.split(",")
