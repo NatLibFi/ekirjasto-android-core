@@ -4,7 +4,6 @@ import org.librarysimplified.documents.DocumentConfiguration
 import org.librarysimplified.documents.DocumentConfigurationServiceType
 import java.net.URI
 import android.os.Build
-import fi.kansalliskirjasto.ekirjasto.BuildConfig;
 
 @Suppress("RedundantNullableReturnType")
 class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
