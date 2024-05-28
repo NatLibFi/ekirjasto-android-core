@@ -1,6 +1,8 @@
 package org.nypl.simplified.ui.accounts.ekirjasto.suomifi
 
-sealed class EkirjastoLoginMethod {
+import java.io.Serializable
+
+sealed class EkirjastoLoginMethod : Serializable {
   class SuomiFi() : EkirjastoLoginMethod()
 
   data class Passkey(
