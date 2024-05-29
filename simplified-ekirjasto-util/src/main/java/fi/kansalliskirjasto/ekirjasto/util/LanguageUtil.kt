@@ -4,6 +4,7 @@ import android.content.res.Resources
 import fi.ekirjasto.util.BuildConfig
 import java.net.URI
 import java.net.URL
+import java.util.Locale
 
 /**
  * Language and localization related utilities.
@@ -21,8 +22,10 @@ sealed class LanguageUtil {
       val userLanguages = Resources.getSystem().configuration.locales.toLanguageTags().split(",")
         // Get only the language from the language tag (e.g. "en" from "en-US")
         .map { it.split("-")[0] }
+      //Get user language from locale, which is set by the locale helper
+      val userLanguage = Locale.getDefault().language
       // Get the first user language that is one of the app's supported languages, or default to "en"
-      return userLanguages.firstOrNull{ appLanguages.contains(it) } ?: "en"
+      return userLanguage//userLanguages.firstOrNull{ appLanguages.contains(it) } ?: "en"
     }
 
     /**

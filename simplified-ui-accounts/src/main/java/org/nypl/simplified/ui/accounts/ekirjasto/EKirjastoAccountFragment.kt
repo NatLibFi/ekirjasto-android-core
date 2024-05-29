@@ -8,12 +8,15 @@ import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import fi.kansalliskirjasto.ekirjasto.util.DataUtil
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
+import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import io.reactivex.disposables.CompositeDisposable
 import org.librarysimplified.documents.DocumentType
 import org.librarysimplified.services.api.Services
@@ -74,6 +77,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonAccessibilityStatement: Button
   private lateinit var buttonLicenses: Button
   private lateinit var buttonFaq: Button
+  private lateinit var buttonEnglish: Button
+  private lateinit var buttonFinnish: Button
+  private lateinit var buttonSwedish: Button
   private lateinit var versionText: TextView
   private lateinit var bookmarkSyncProgress: ProgressBar
   private lateinit var bookmarkSyncCheck: SwitchCompat
@@ -114,6 +120,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
     this.buttonLicenses = view.findViewById(R.id.buttonLicenses)
     this.buttonFaq = view.findViewById(R.id.buttonFaq)
+    this.buttonEnglish = view.findViewById(R.id.buttonEnglish)
+    this.buttonFinnish = view.findViewById(R.id.buttonFinnish)
+    this.buttonSwedish = view.findViewById(R.id.buttonSwedish)
     this.versionText = view.findViewById(R.id.appVersion)
 
 
@@ -148,6 +157,18 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       this.logger.debug("Register Passkey clicked")
       onTryRegisterPasskey()
     }
+    this.buttonEnglish.setOnClickListener {
+      this.logger.debug("English button clicked")
+      popUp("en")
+    }
+    this.buttonFinnish.setOnClickListener {
+      this.logger.debug("Finnish button clicked")
+      popUp("fi")
+    }
+    this.buttonSwedish.setOnClickListener {
+      this.logger.debug("Swedish button clicked")
+      popUp("sv")
+    }
 
 
     /*
@@ -172,6 +193,31 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
      */
 
     this.reconfigureAccountUI()
+  }
+
+  // Call to update the language
+  private fun updateLanguage(language : String) {
+    val cont = LocaleHelper.setLocale(requireContext(), language)
+    val res = cont.resources
+    logger.debug(res.toString())
+  }
+
+  // Show a popup asking if they want to set the language, and inform about restart
+  private fun popUp (lang: String) {
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    builder
+      .setMessage(R.string.restartPopupMessage)
+      .setTitle(R.string.restartPopupTitle)
+      .setPositiveButton(R.string.restartPopupAgree) { dialog, which ->
+        updateLanguage(lang)
+        DataUtil.restartApp(this.requireContext())
+      }
+      .setNegativeButton(R.string.restartPopupCancel) { dialog, which ->
+        //do nothing
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
   }
 
   private fun configureDocViewButton(button: Button, document: DocumentType?){
