@@ -16,31 +16,17 @@ object MainTransifex {
 
   private val logger = LoggerFactory.getLogger(MainTransifex::class.java)
 
-  private fun loadTransifexToken(context: Context): String? {
-    return try {
-      context.assets.open("secrets.conf").use { stream ->
-        val props = Properties()
-        props.load(stream)
-        props.getProperty("transifex.token")
-      }
-    } catch (e: FileNotFoundException) {
-      this.logger.warn("secrets.conf not found, will insert empty Transifex token")
-      null
-    } catch (e: Exception) {
-      this.logger.warn("Could not find Transifex token in secrets.conf, will insert empty token", e)
-      null
-    }
-  }
-
   /**
    * Configure Transifex.
    *
-   * Will insert an empty token for Transifex if a token is not found in assets.
+   * Will warn about an empty token for Transifex, if not set.
    */
-
+  @Suppress("KotlinConstantConditions")
   fun configure(applicationContext: Context) {
     this.logger.debug("MainTransifex.configure()")
-    val token = loadTransifexToken(applicationContext) ?: ""
+    if (BuildConfig.TRANSIFEX_TOKEN == "") {
+      logger.warn("Transifex token not set, Transifex will only use cached localizations")
+    }
 
     val languages = BuildConfig.LANGUAGES.split(",")
     this.logger.debug("Languages: " + languages.joinToString(", "))
@@ -64,7 +50,7 @@ object MainTransifex {
     TxNative.init(
       applicationContext,
       localeState,
-      token,
+      BuildConfig.TRANSIFEX_TOKEN,
       null,
       null,
       stringPolicy

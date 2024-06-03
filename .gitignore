@@ -30,6 +30,10 @@ LCP/*
 simplified-tests-sandbox/src/main/*
 .env
 
+# Built packages
+*.apk
+*.aab
+
 # deprecated
 cardcreator.conf
 overdrive.json

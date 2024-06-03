@@ -1,0 +1,6 @@
+# Ignore the API key used by Fastlane to access the Google Play Console API
+play_store_api_key.json
+
+# Ignore Fastlane reports
+fastlane/report*.xml
+

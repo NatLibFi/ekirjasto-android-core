@@ -1,0 +1,140 @@
+#!/bin/bash
+
+#
+# Transifex wrapper.
+#
+# Version 2.0.1
+#
+
+basename "$0"
+
+trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
+
+# cd into the project root directory (or fail)
+cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
+
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+  echo
+  echo "This script does not accept any parameters (apart from --help)."
+  echo
+  echo "The Transifex token (required) and secret (optional) are read automatically"
+  echo "from local.properties, if they're set there, or they can be set by using the"
+  echo "environment variables TRANSIFEX_TOKEN and TRANSIFEX_SECRET."
+  echo
+  echo "The script always downloads/pulls strings from Transifex, so the token"
+  echo "is required. The Transifex secret is optional, and if not given, then"
+  echo "upload/push will be skipped."
+  echo
+  exit 0
+fi
+
+#------------------------------------------------------------------------
+# Utility methods
+#
+
+fatal() {
+  echo "$(basename "$0"): FATAL: $1" 1>&2
+  exit "${2:-1}"
+}
+
+warn() {
+  echo "$(basename "$0"): WARNING: $1" 1>&2
+}
+
+info() {
+  echo "$(basename "$0"): INFO: $1" 1>&2
+}
+
+# Path to app assets directory
+assetsPath="simplified-app-ekirjasto/src/main/assets"
+
+if [ -z "${TRANSIFEX_TOKEN}" ]; then
+  info "TRANSIFEX_TOKEN is not defined, trying to look for it in local.properties"
+  TRANSIFEX_TOKEN="$(grep "transifex.token=" local.properties 2> /dev/null)"
+  TRANSIFEX_TOKEN="${TRANSIFEX_TOKEN#transifex.token=}"
+  if [ -z "${TRANSIFEX_TOKEN}" ]; then
+    fatal "TRANSIFEX_TOKEN is not defined and could not find it in local.properties" 65
+  fi
+fi
+
+#------------------------------------------------------------------------
+# Download and verify Transifex.
+#
+
+info "Downloading transifex.jar"
+
+wget -c https://github.com/transifex/transifex-java/releases/download/1.3.0/transifex.jar \
+  || fatal "Could not download Transifex" 66
+
+sha256sum -c transifex.sha256 \
+  || fatal "Could not verify transifex.jar" 67
+
+#------------------------------------------------------------------------
+# Apply Transifex to the project's string resources.
+#
+
+STRING_FILES=$(find . -name '*strings*.xml' -type f | sort) \
+  || fatal "Could not list string files" 68
+
+info "Files to upload strings from:"
+echo "$STRING_FILES"
+echo
+
+if [ -z "${TRANSIFEX_SECRET}" ]; then
+  info "TRANSIFEX_SECRET is not defined, trying to look for it in local.properties"
+  TRANSIFEX_SECRET="$(grep "transifex.secret=" local.properties 2> /dev/null)"
+  TRANSIFEX_SECRET="${TRANSIFEX_SECRET#transifex.secret=}"
+fi
+
+if [ -z "${TRANSIFEX_SECRET}" ]; then
+  echo
+  warn "TRANSIFEX_SECRET is not defined and could not find it in local.properties, UPLOAD WILL BE SKIPPED"
+  echo
+else
+  TRANSIFEX_PUSH_ARGS="--verbose"
+  TRANSIFEX_PUSH_ARGS="${TRANSIFEX_PUSH_ARGS} --token=${TRANSIFEX_TOKEN}"
+  TRANSIFEX_PUSH_ARGS="${TRANSIFEX_PUSH_ARGS} --secret=${TRANSIFEX_SECRET}"
+
+  for FILE in ${STRING_FILES}; do
+    TRANSIFEX_PUSH_ARGS="${TRANSIFEX_PUSH_ARGS} --file=${FILE}"
+  done
+
+  info "Uploading Transifex strings"
+
+  java -jar transifex.jar push ${TRANSIFEX_PUSH_ARGS} \
+    || fatal "Could not upload Transifex strings" 69
+
+  info "Upload done!"
+  echo
+fi
+
+TRANSIFEX_PULL_ARGS="--token=${TRANSIFEX_TOKEN}"
+TRANSIFEX_PULL_ARGS="${TRANSIFEX_PULL_ARGS} --dir=$assetsPath"
+
+# Get list of languages from gradle.properties
+languages="$(grep "ekirjasto.languages=" gradle.properties)"
+languages="${languages#ekirjasto.languages=}"
+IFS="," read -r -a languages <<< "$languages"
+info "Languages: ${languages[*]}"
+for language in "${languages[@]}"; do
+  TRANSIFEX_PULL_ARGS="${TRANSIFEX_PULL_ARGS} --locales=$language"
+done
+
+info "Downloading Transifex strings"
+
+java -jar transifex.jar pull ${TRANSIFEX_PULL_ARGS} \
+  || fatal "Could not download Transifex strings" 70
+
+info "Download done!"
+echo
+
+#------------------------------------------------------------------------
+# Prettify Transifex JSON files.
+#
+
+for transifexFile in "$assetsPath/txnative/"*/txstrings.json; do
+  info "Prettifying JSON file: $transifexFile"
+  # jq might be nicer than json_pp, but it's usually available on macOS and Linux
+  { json_pp > "$transifexFile~"; } < "$transifexFile"
+  mv "$transifexFile~" "$transifexFile"
+done

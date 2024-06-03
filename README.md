@@ -16,18 +16,18 @@ The contents of this repository provide the E-kirjasto Android client applicatio
 |-----------|------|-----------|
 |E-kirjasto|[simplified-app-ekirjasto](simplified-app-ekirjasto)|The DRM-enabled application|
 
+The (mostly) original Palace Project app is under `simplified-app-palace`,
+but it's only there for reference, and it's not used in any way for E-kirjasto.
+
 ## Contents
 
 * [Building](#building-the-code)
-  * [The Short Version](#the-short-version)
-  * [The Longer Version](#the-longer-version)
-    * [Android SDK](#android-sdk)
-    * [JDK](#jdk)
-    * [S3 Credentials](#s3-credentials)
-    * [APK Signing](#apk-signing)
-    * [Enabling DRM](#enabling-drm)
-    * [Adobe DRM](#adobe-drm-support)
-    * [Findaway DRM](#findaway-audiobook-drm-support)
+  * [Android SDK](#android-sdk)
+  * [JDK](#jdk)
+  * [APK Signing](#apk-signing)
+  * [Enabling DRM](#enabling-drm)
+  * [LCP DRM Support](#lcp-drm-support)
+  * [Test login](#test-login)
 * [Development](#development)
   * [Branching/Merging](#branchingmerging)
   * [Project Structure](#project-structure--architecture)
@@ -42,7 +42,11 @@ The contents of this repository provide the E-kirjasto Android client applicatio
 
 ## Building The Code
 
-#### Cloning the Repository
+The short version is to clone the repository recursively (including submodules),
+then copy `local.properties.example` to `local.properties`,
+and fill in the correct values.
+
+### Cloning the Repository
 
 Make sure you clone this repository with `git clone --recursive`. 
 If you forgot to use `--recursive`, then execute:
@@ -51,12 +55,12 @@ If you forgot to use `--recursive`, then execute:
 $ git submodule update --init
 ```
 
-#### Android SDK
+### Android SDK
 
 Install the [Android SDK and Android Studio](https://developer.android.com/studio/). We don't
 support the use of any other IDE at the moment.
 
-#### JDK
+### JDK
 
 Install a reasonably modern JDK, at least JDK 17. We don't recommend building
 on anything newer than the current LTS JDK for everyday usage.
@@ -86,18 +90,18 @@ OpenJDK Runtime Environment (build 17.0.8+7)
 OpenJDK 64-Bit Server VM (build 17.0.8+7, mixed mode)
 ```
 
-#### APK signing
+### APK signing
 
 If you wish to generate a signed APK for publishing the application, you will need to copy
 a keystore to `release.jks` and set the following values correctly in
-`$HOME/.gradle/gradle.properties`:  
+`local.properties`:  
 ```
-# Replace KEYALIAS, KEYPASSWORD, and STOREPASSWORD appropriately.
+# Replace STOREPASSWORD, KEYPASSWORD, and KEYALIAS  appropriately.
 # Do NOT use quotes around values.
-org.thepalaceproject.keyAlias=KEYALIAS
-org.thepalaceproject.keyPassword=KEYPASSWORD
-org.thepalaceproject.storePassword=STOREPASSWORD
-~~~
+ekirjasto.storePassword=STOREPASSWORD
+ekirjasto.keyPassword=KEYPASSWORD
+ekirjasto.keyAlias=KEYALIAS
+```
 
 Note that APK files are only signed with the release keystore if the code is
 built in _release_ mode (debug builds are signed with `debug.keystore` that's
@@ -108,77 +112,44 @@ $ ./gradlew clean assembleRelease test
 $ ./gradlew clean assemble test
 ```
 
-#### Enabling DRM
+### Enabling DRM
 
-**NOTE:**  
-This section may be invalid in E-kirjasto, this is from the Palace readme.
+Unlike the Palace Project, E-kirjasto does not use Adobe DRM.
+Instead, E-kirjasto only uses Readium LCP (liblcp) for content DRM.
 
-The application contains optional support for various DRM systems, and these
-must be enabled explicitly in order to build [E-kirjasto](simplified-app-ekirjasto).
+### LCP DRM Support
 
-Firstly, make sure you have your [S3](#s3-credentials) credentials
-correctly configured. Then, add the following property to your
-`$HOME/.gradle/gradle.properties` file:
+The repository uses the test AAR for liblcp by default.
 
+In order to build the app using the production version of liblcp,
+copy the following to local.properties and replace "test" with the correct
+production AAR path:  
 ```
-org.thepalaceproject.adobeDRM.enabled=true
-```
-
-This will instruct the build system that you want to build with DRM enabled.
-If you were to attempt to build the code right now, you would encounter a
-build failure: When DRM is enabled, the build system will check that you have
-provided various configuration files containing secrets that the DRM systems
-require, and will refuse to build the app if you've failed to do this. The
-build system can copy in the correct secrets for you if tell it the location
-of directories containing those secrets. There are two directories to configure:
-A credentials directory, containing secrets needed to build the app, and an
-assets directory, containing secrets needed by the app at runtime (which will be
-installed as assets in the app). For example, assuming that you have
-[Palace's](simplified-app-palace) credentials in '/path/to/palace/credentials',
-and assets in `/path/to/palace/assets`, you can add the following properties to
-your `$HOME/.gradle/gradle.properties` file and the build system will copy in
-the required secrets at build time:
-
-```
-org.thepalaceproject.app.credentials.palace=/path/to/palace/credentials
-org.thepalaceproject.app.assets.palace=/path/to/palace/assets
+ekirjasto.liblcp.repositorylayout=/[organisation]/[module]/android/aar/test/[revision].[ext]
 ```
 
-#### Adobe DRM Support
+### Test login
 
-**NOTE:**  
-This section may be invalid in E-kirjasto, this is from the Palace readme.
+The app only allows logging in with strong authencation using Suomi.fi.
+For development, a test version of the Suomi.fi login is used,
+but reviewers need to be able to login into the production version of the app.
 
-The project currently makes calls to the Palace [Adobe DRM
-API](https://github.com/ThePalaceProject/android-drm-core). The API
-is structured in a manner that means that enabling actual support
-for Adobe DRM simply entails adding a dependency on the Palace Adobe
-DRM _implementation_. This implementation is only available to DRM
-licensees. Please get in touch with us if you have a DRM license and
-want to produce a DRM-enabled build!
+To allow this, the app has a test login accessible using a deep link.
+First, set values like these in `local.properties`:  
+```
+ekirjasto.testLogin.enabled=true
+ekirjasto.testLogin.username=TestUser
+ekirjasto.testLogin.pinCode=1234567890
+```
 
-#### Findaway Audiobook DRM support
+Then, after closing the app (it cannot be open in the background),
+you can access the test login page using this deep link:  
+- ekirjasto://test-login
 
-**NOTE:**  
-This section may be invalid in E-kirjasto, this is from the Palace readme.
-
-The project currently uses the Palace [AudioBook API](https://github.com/ThePalaceProject/android-audiobook)
-to provide support for playing audio books. The API is structured such
-that adding support for new types of audiobooks and playback engines
-only involves adding those modules to the classpath. The Palace app depends on a Findaway
-module to play Findaway audio books. Please get in touch with us if you have
-a Findaway license and want to produce a Findaway-enabled build.
-
-#### LCP DRM Support
-
-**NOTE:**  
-This section is partially invalid in E-kirjasto, we use liblcp, but it's configured differently.
-
-The project uses Readium's liblcp module to provide support for LCP
-content protection. This module must be available on the classpath
-when the `org.thepalaceproject.lcp.enabled` property is true. Otherwise,
-the project will not compile. Please get in touch with us if you have
-an LCP license and want to produce a DRM-enabled build.
+After inputting the test login credentials you defined in `local.properties`,
+the app will switch to the development backend and restart the app.
+This will allow Google Play app reviewers to use the production app,
+without using the production servers or the production Suomi.fi login.
 
 ## Development
 
@@ -259,9 +230,12 @@ can be found on the OSGi web site.
 
 #### Build System
 
-The build is driven by the [build.gradle](build.gradle) file in the root of the project,
-with the `build.gradle` files in each module typically only listing dependencies (the actual
-dependency definitions are defined in the root `build.gradle` file to avoid duplicating version
+**NOTE:**  
+This section is partially outdated. Version numbers are defined in the ekirjasto-android-platform repository.
+
+The build is driven by the [build.gradle.kts](build.gradle.kts) file in the root of the project,
+with the `build.gradle.kts` files in each module typically only listing dependencies (the actual
+dependency definitions are defined in the root `build.gradle.kts` file to avoid duplicating version
 numbers over the whole project). Metadata used to publish builds (such as Maven group IDs, version
 numbers, etc) is defined in the `gradle.properties` file in each module. The [gradle.properties](gradle.properties)
 file in the root of the project defines default values that are overridden as necessary by each
@@ -276,8 +250,7 @@ These files are generated by the Transifex CLI tool and *should not be modified 
 
 The Transifex token is needed at runtime for release builds, but local translations
 will work without it (the token will be replaced by an empty string).
-The token should be placed in `simplified-app-ekirjasto/src/main/assets/secrets.conf`
-with the following line:  
+The token should be placed in `local.properties` with the following line:  
 `transifex.token=...`
 
 ##### Transifex command line tool
@@ -285,31 +258,25 @@ with the following line:
 **TODO:** Automate this in GitHub Actions and add mention about said automation.
 
 To manually upload strings for translation or to download translated strings,
-the `.ci-local/transifex.sh` wrapper script should be used.
+the `scripts/transifex.sh` wrapper script should be used.
 
 Uploading strings for translation requires both the Transifex token and secret,
 while downloading already translated strings only requires the token:
-- The Transifex token is read from the `secrets.conf` file mentioned above.
+- The Transifex token is read from the `local.properties` file mentioned above.
     - Alternatively, the `TRANSIFEX_TOKEN` environment variable can be used.
-- The `TRANSIFEX_SECRET` environment variable is used to specify the secret.
+- The Transifex token is also read from the `local.properties` file.
+    - Set the secret as `transifex.secret=...` in `local.properties`.
+    - Alternatively, the `TRANSIFEX_TOKEN` environment variable can be used.
     - If the secret is not given, uploading strings for translation will be skipped.
 
-To do only the download, run one of:  
+If the token and secret are in place in `local.properties`, just run:  
 ```
-# Read the token automatically from secrets.conf:
-./.ci-local/transifex.sh
-
-# Or manually specify the token:
-TRANSIFEX_TOKEN="..." ./.ci-local/transifex.sh
+./scripts/transifex.sh
 ```
 
-To do both upload and download, run one of:  
+Or optionally use environment variables to specify the token and secret:  
 ```
-# Read the token automatically from secrets.conf:
-TRANSIFEX_SECRET="..." ./.ci-local/transifex.sh
-
-# Or manually specify both the token and the secret:
-TRANSIFEX_TOKEN="..." TRANSIFEX_SECRET="..." ./.ci-local/transifex.sh
+TRANSIFEX_TOKEN="..." TRANSIFEX_SECRET="..." ./scripts/transifex.sh
 ```
 
 #### Test suite
@@ -444,17 +411,13 @@ $ ./gradlew ktlintFormat
 
 ## Release Process
 
-**NOTE:**  
-The below document needs to updated for E-kirjasto.
-
-Please see [RELEASING.md](RELEASING.md) for documentation on our release
-process.
+Please see [RELEASING.md](RELEASING.md) for documentation on our release process.
 
 ## License
 
 ~~~
 Copyright 2015 The New York Public Library, Astor, Lenox, and Tilden Foundations,
-and The National Library of Finland
+and The National Library of Finland (Kansalliskirjasto)
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
