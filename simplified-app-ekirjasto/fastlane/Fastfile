@@ -1,0 +1,93 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+#update_fastlane
+
+default_platform(:android)
+
+#
+# Get the highest version code from a given release track.
+#
+def get_track_max_version_code(track)
+  # This will throw an error if the track doesn't have any releases
+  # (it's a bug in Fastlane that has open PRs, but no released fix yet)
+  version_codes = google_play_track_version_codes(
+    track: track,
+    json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"]
+  )
+  # If there were no releases in the track, return 0
+  return 0 if version_codes.empty?
+  # If there were releases, return the highest version code
+  return version_codes.map(&:to_i).max()
+end
+
+platform :android do
+  desc "Get the highest current version code in Google Play"
+  lane :get_version_code do
+    # Get the highest version code from any of the release tracks
+    version_code_max = [
+      get_track_max_version_code("internal"),
+      #get_track_max_version_code("alpha"),
+      #get_track_max_version_code("beta"),
+      get_track_max_version_code("production")
+    ].max()
+    # Print version code for easy shell capturing
+    puts "\n\nGOOGLE_PLAY_VERSION_CODE=#{version_code_max}\n"
+  end
+
+  desc "Deploy a new release to Google Play internal testing"
+  lane :deploy_internal do
+    #gradle(task: "clean assembleRelease")
+    upload_to_play_store(
+      aab: "build/outputs/bundle/devRelease/ekirjasto-dev-release.aab",
+      json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
+      track: "internal"
+    )
+  end
+
+  #desc "Deploy a new release to Google Play alpha testing"
+  #lane :deploy_alpha do
+  #  #gradle(task: "clean assembleRelease")
+  #  upload_to_play_store(
+  #      aab: "../build/outputs/bundle/productionRelease/ekirjasto-production-release.aab",
+  #    json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
+  #    # Must be manually sent to app review in Google Play Console
+  #    changes_not_sent_for_review: true,
+  #    track: "alpha"
+  #  )
+  #end
+
+  #desc "Deploy a new release to Google Play beta testing"
+  #lane :deploy_beta do
+  #  #gradle(task: "clean assembleRelease")
+  #  upload_to_play_store(
+  #      aab: "build/outputs/bundle/productionRelease/ekirjasto-production-release.aab",
+  #    json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
+  #    # Must be manually sent to app review in Google Play Console
+  #    changes_not_sent_for_review: true,
+  #    track: "beta"
+  #  )
+  #end
+
+  desc "Deploy a new release to Google Play production"
+  lane :deploy_production do
+    #gradle(task: "clean assembleRelease")
+    upload_to_play_store(
+        aab: "build/outputs/bundle/productionRelease/ekirjasto-production-release.aab",
+      json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
+      # Must be manually sent to app review in Google Play Console
+      changes_not_sent_for_review: true,
+      track: "production"
+    )
+  end
+end

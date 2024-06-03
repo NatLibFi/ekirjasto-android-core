@@ -42,6 +42,8 @@ android {
         buildConfigField("String", "LANGUAGES", "\"$languages\"")
         val enableStrictMode = overrideProperty("ekirjasto.enableStrictMode")
         buildConfigField("Boolean", "ENABLE_STRICT_MODE", enableStrictMode)
+        val transifexToken = overrideProperty("transifex.token")
+        buildConfigField("String", "TRANSIFEX_TOKEN", "\"$transifexToken\"")
     }
 }
 

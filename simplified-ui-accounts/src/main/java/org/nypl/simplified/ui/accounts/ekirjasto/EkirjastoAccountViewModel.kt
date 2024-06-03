@@ -2,6 +2,7 @@ package org.nypl.simplified.ui.accounts.ekirjasto
 
 import android.app.Application
 import android.content.pm.PackageManager
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -91,7 +92,7 @@ class EkirjastoAccountViewModel(
       val pkgManager = context.packageManager
       val pkgInfo = pkgManager.getPackageInfo(context.packageName, 0)
       val versionName = pkgInfo.versionName
-      val versionCode = pkgInfo.versionCode
+      val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo).toString()
       "$versionName (${versionCode})"
     } catch (e: PackageManager.NameNotFoundException) {
       "Unknown"
