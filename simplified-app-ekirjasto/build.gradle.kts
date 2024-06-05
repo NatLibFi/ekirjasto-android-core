@@ -2,6 +2,7 @@ import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.util.Base64
 import java.util.Properties
 
 fun calculateVersionCode(): Int {
@@ -165,7 +166,9 @@ android {
         println("Configured languages: $languages")
         resourceConfigurations += languages.split(",")
         setProperty("archivesBaseName", "ekirjasto")
-        val supportEmail = overrideProperty("ekirjasto.supportEmail")
+        val supportEmailBase64 = overrideProperty("ekirjasto.supportEmailBase64")
+        val supportEmail = Base64.getDecoder().decode(supportEmailBase64.toByteArray(Charsets.UTF_8)).toString(Charsets.UTF_8)
+        println("Support email: $supportEmail")
         buildConfigField("String", "SUPPORT_EMAIL", "\"$supportEmail\"")
     }
 
