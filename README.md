@@ -255,7 +255,9 @@ The token should be placed in `local.properties` with the following line:
 
 ##### Transifex command line tool
 
-**TODO:** Automate this in GitHub Actions and add mention about said automation.
+The main CI build workflow automatically uploads new strings to Transifex.
+So, every time a PR is merged to the main branch,
+all new localizations are pushed to Transifex.
 
 To manually upload strings for translation or to download translated strings,
 the `scripts/transifex.sh` wrapper script should be used.

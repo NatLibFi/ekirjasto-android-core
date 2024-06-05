@@ -3,7 +3,7 @@
 #
 # Transifex wrapper.
 #
-# Version 2.0.1
+# Version 2.0.2
 #
 
 basename "$0"
@@ -14,8 +14,17 @@ trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
 cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+  exit 0
+fi
+
+# Show command usage
+show_usage() {
+  echo "Usage: $(basename "$0") [-h|--help]"
   echo
-  echo "This script does not accept any parameters (apart from --help)."
+  echo "-h   --help           Show this help page."
+  echo "     --skip-upload    Skip upload even if the Transifex secret is given."
+  echo
+  echo "This script uploads and downloads Transifex strings."
   echo
   echo "The Transifex token (required) and secret (optional) are read automatically"
   echo "from local.properties, if they're set there, or they can be set by using the"
@@ -25,12 +34,7 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
   echo "is required. The Transifex secret is optional, and if not given, then"
   echo "upload/push will be skipped."
   echo
-  exit 0
-fi
-
-#------------------------------------------------------------------------
-# Utility methods
-#
+}
 
 fatal() {
   echo "$(basename "$0"): FATAL: $1" 1>&2
@@ -44,6 +48,25 @@ warn() {
 info() {
   echo "$(basename "$0"): INFO: $1" 1>&2
 }
+
+skipUpload=0
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      show_usage
+      exit 0
+    ;;
+    --skip-upload)
+      skipUpload=1
+      shift
+    ;;
+    # Error on unrecognized parameters
+    *)
+      show_usage
+      fatal "Unrecognized parameter: $1" 65
+    ;;
+  esac
+done
 
 # Path to app assets directory
 assetsPath="simplified-app-ekirjasto/src/main/assets"
@@ -80,13 +103,15 @@ info "Files to upload strings from:"
 echo "$STRING_FILES"
 echo
 
-if [ -z "${TRANSIFEX_SECRET}" ]; then
+if [ $skipUpload -eq 0 ] && [ -z "${TRANSIFEX_SECRET}" ]; then
   info "TRANSIFEX_SECRET is not defined, trying to look for it in local.properties"
   TRANSIFEX_SECRET="$(grep "transifex.secret=" local.properties 2> /dev/null)"
   TRANSIFEX_SECRET="${TRANSIFEX_SECRET#transifex.secret=}"
 fi
 
-if [ -z "${TRANSIFEX_SECRET}" ]; then
+if [ $skipUpload -eq 1 ]; then
+  info "Skipping Transifex upload because of flag..."
+elif [ -z "${TRANSIFEX_SECRET}" ]; then
   echo
   warn "TRANSIFEX_SECRET is not defined and could not find it in local.properties, UPLOAD WILL BE SKIPPED"
   echo

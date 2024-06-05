@@ -28,7 +28,8 @@ jobs:
         run: scripts/build.sh debug
       - name: Release build
         run: scripts/build.sh release
-      # TODO: Add release branch checks (version increment, changelogs, etc.)
+      - name: Run release checks
+        run: scripts/release-checks.sh
       - name: Upload build to Google Play internal track
         run: scripts/upload.sh internal
       - name: Run tests

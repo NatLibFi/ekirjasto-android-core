@@ -192,6 +192,9 @@
       "account_eula" : {
          "string" : "Användaravtal"
       },
+      "account_faq" : {
+         "string" : ""
+      },
       "account_leave_feedback" : {
          "string" : "Ge respons"
       },
@@ -233,6 +236,9 @@
       },
       "ageVerification" : {
          "string" : "Ålderskontroll"
+      },
+      "android_app_name" : {
+         "string" : "E-biblioteket"
       },
       "announcementTitle" : {
          "string" : "%1$s (%2$d av %3$d)"
@@ -831,6 +837,15 @@
       "catalogMetaFormat" : {
          "string" : "Format"
       },
+      "catalogMetaId" : {
+         "string" : ""
+      },
+      "catalogMetaIllustrators" : {
+         "string" : ""
+      },
+      "catalogMetaLanguage" : {
+         "string" : ""
+      },
       "catalogMetaNarrators" : {
          "string" : "Uppläsare"
       },
@@ -839,6 +854,9 @@
       },
       "catalogMetaPublisher" : {
          "string" : "Utgivare"
+      },
+      "catalogMetaTranslators" : {
+         "string" : ""
       },
       "catalogMetaUpdatedDate" : {
          "string" : "Uppdaterad"
@@ -885,6 +903,18 @@
       "contentDescriptionLogo" : {
          "string" : "Logotyp"
       },
+      "contentDescriptionPage1" : {
+         "string" : ""
+      },
+      "contentDescriptionPage2" : {
+         "string" : ""
+      },
+      "contentDescriptionPage3" : {
+         "string" : ""
+      },
+      "contentDescriptionPage4" : {
+         "string" : ""
+      },
       "contentDescriptionSkipButton" : {
          "string" : "Hoppa över-knapp"
       },
@@ -927,11 +957,23 @@
       "errorDetailsTitle" : {
          "string" : "Felinformation"
       },
+      "errorLoginFailed" : {
+         "string" : ""
+      },
+      "errorPasskeyLoginFailed" : {
+         "string" : ""
+      },
+      "errorPasskeyRegisterFailed" : {
+         "string" : ""
+      },
       "errorSendReport" : {
          "string" : "Sänd till supportavdelningen"
       },
       "errorStepsTitle" : {
          "string" : "Steg"
+      },
+      "errorSuomiFiLoginFailed" : {
+         "string" : ""
       },
       "errorTitle" : {
          "string" : "Här är felloggen som skapats över ditt problem:"
@@ -1136,6 +1178,9 @@
       },
       "migrationSuccess" : {
          "string" : "Dina data har migrerats!"
+      },
+      "natlibfi_logo" : {
+         "string" : ""
       },
       "next" : {
          "string" : "Nästa"

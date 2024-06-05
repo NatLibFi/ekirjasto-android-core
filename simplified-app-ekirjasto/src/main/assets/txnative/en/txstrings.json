@@ -205,7 +205,7 @@
          "string" : "Sign in with a passkey"
       },
       "account_login_suomifi" : {
-         "string" : "Sign in with Suomi.fi"
+         "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
       },
       "account_register_passkey" : {
          "string" : "Register a passkey"
@@ -237,11 +237,14 @@
       "ageVerification" : {
          "string" : "Age Verification"
       },
+      "android_app_name" : {
+         "string" : "E-library"
+      },
       "announcementTitle" : {
          "string" : "%1$s (%2$d of %3$d)"
       },
       "app_name" : {
-         "string" : "E-kirjasto"
+         "string" : "simplified-viewer-epub-readium2"
       },
       "app_version_string" : {
          "string" : "E-kirjasto version %1$s"
@@ -901,7 +904,7 @@
          "string" : "Logo"
       },
       "contentDescriptionPage1" : {
-         "string" : "Welcome to the E-library! This service is provided by your local library."
+         "string" : "Welcome to E-library! This service is provided by your local library."
       },
       "contentDescriptionPage2" : {
          "string" : "You can browse e-books and audiobooks by genre, book or author, or browse recommendation lists made by librarians."
@@ -1099,7 +1102,7 @@
          "string" : "Sign in with a passkey"
       },
       "login_suomifi" : {
-         "string" : "Sign in with Suomi.fi"
+         "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
       },
       "logoutClearingBookDatabase" : {
          "string" : "Clearing the book database…"

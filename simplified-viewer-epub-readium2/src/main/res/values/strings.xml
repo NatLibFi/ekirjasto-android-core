@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <resources>
-  <string name="app_name">E-kirjasto</string>
+  <string name="android_app_name">E-library</string>
   <string name="bookOpenFailedTitle">Book loading failed</string>
   <string name="bookOpenFailedMessage">There was an error opening the book: (%1$s): %2$s.</string>
 

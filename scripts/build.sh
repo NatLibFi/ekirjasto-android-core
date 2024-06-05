@@ -3,7 +3,7 @@
 #
 # Build E-kirjasto.
 #
-# Version 1.0.0
+# Version 1.0.1
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -15,14 +15,27 @@ cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 show_usage() {
   echo "Usage: $(basename "$0") [-h|--help] [BUILD_TYPE]"
   echo
-  echo "This script builds the E-kirjasto app. This is mostly used for"
-  echo "CI builds, but can be used locally as well."
-  echo
   echo "-h   --help     Show this help page."
   echo "BUILD_TYPE      Build type to use. Available build types:"
   echo "                - debug (default): debug build"
   echo "                - release: release build (requires signing keys)"
   echo
+  echo "This script builds the E-kirjasto app. This is mostly used for"
+  echo "CI builds, but can be used locally as well."
+  echo
+}
+
+fatal() {
+  echo "$(basename "$0"): FATAL: $1" 1>&2
+  exit "${2:-1}"
+}
+
+warn() {
+  echo "$(basename "$0"): WARNING: $1" 1>&2
+}
+
+info() {
+  echo "$(basename "$0"): INFO: $1" 1>&2
 }
 
 buildType="debug"
@@ -39,26 +52,11 @@ while [[ $# -gt 0 ]]; do
     ;;
     # Error on unrecognized parameters
     *)
-      >&2 echo "ERROR: Unrecognized parameter: $1"
       show_usage
-      exit 65
+      fatal "Unrecognized parameter: $1" 65
     ;;
   esac
 done
-
-
-fatal() {
-  echo "$(basename "$0"): FATAL: $1" 1>&2
-  exit "${2:-1}"
-}
-
-warn() {
-  echo "$(basename "$0"): WARNING: $1" 1>&2
-}
-
-info() {
-  echo "$(basename "$0"): INFO: $1" 1>&2
-}
 
 
 basename "$0"

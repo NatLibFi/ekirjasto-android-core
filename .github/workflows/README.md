@@ -27,6 +27,14 @@ The secrets in use for the Android CI workflows are:
 | LOCAL_PROPERTIES              | EKIRJASTO_LOCAL_PROPERTIES_BASE64       | base64 | local.properties file encoded as base64 |
 | RELEASE_JKS                   | EKIRJASTO_RELEASE_JKS_BASE64            | base64 | release.jks file encoded as base64      |
 
+In addition to the above secrets, there are some additional values where the
+name starts with `MASK_`. These secrets are not used at all in the build, and
+their purpose just to mask the values from GitHub Actions logs (there are other
+ways to achieve log masking, but this is the easiest method).
+
+For example, some of the values in the `local.properties` file should be masked
+in logs, but the entire file is stored as one secret, so the individual values
+would not be automatically masked without the `MASK_*` secrets.
 
 
 ## Workflows

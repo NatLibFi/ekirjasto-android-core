@@ -237,6 +237,9 @@
       "ageVerification" : {
          "string" : "Iän vahvistus"
       },
+      "android_app_name" : {
+         "string" : "E-kirjasto"
+      },
       "announcementTitle" : {
          "string" : "%1$s (%2$d/%3$d)"
       },
@@ -900,6 +903,18 @@
       "contentDescriptionLogo" : {
          "string" : "Logo"
       },
+      "contentDescriptionPage1" : {
+         "string" : ""
+      },
+      "contentDescriptionPage2" : {
+         "string" : ""
+      },
+      "contentDescriptionPage3" : {
+         "string" : ""
+      },
+      "contentDescriptionPage4" : {
+         "string" : ""
+      },
       "contentDescriptionSkipButton" : {
          "string" : "Ohita-painike"
       },
@@ -1144,7 +1159,7 @@
          "string" : "Päivitetään kirjan %1$s OPDS-merkintää…"
       },
       "magazinesHeader" : {
-         "string" : "Aikakauslehdet"
+         "string" : "Lehdet"
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : "Kirjaudu sisään siirtymällä asetuksiin"
