@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<resources>
+
+  <string name="audiobook_player_remaining_time">%1$d hr %2$d min remaining</string>
+  <string name="audiobook_player_remaining_time_minutes_only">%d min remaining</string>
+
+  <string name="audiobook_part_download_stop_confirm">Stop downloading this book part?</string>
+  <string name="audiobook_part_download_stop">Stop</string>
+  <string name="audiobook_part_download_continue">Continue</string>
+
+  <string name="audiobook_player_menu_playback_rate_title">Playback rate</string>
+  <string name="audiobook_player_menu_sleep_title">Set your sleep timer</string>
+  <string name="audiobook_player_menu_add_bookmark_title">Add bookmark</string>
+  <string name="audiobook_player_menu_toc_title">Table of contents</string>
+  <string name="audiobook_player_menu_toc_title_bookmarks">Bookmarks</string>
+  <string name="audiobook_player_menu_toc_title_chapters">Chapters</string>
+
+  <string name="audiobook_player_sleep_end_of_chapter">End of file</string>
+  <string name="audiobook_player_sleep_60">60:00</string>
+  <string name="audiobook_player_sleep_45">45:00</string>
+  <string name="audiobook_player_initial">00:00:00</string>
+  <string name="audiobook_player_sleep_30">30:00</string>
+  <string name="audiobook_player_sleep_15">15:00</string>
+  <string name="audiobook_player_sleep_now">Now</string>
+  <string name="audiobook_player_sleep_off">Off</string>
+
+  <string name="audiobook_player_options_cancel">Cancel</string>
+
+  <string name="audiobook_player_buffering">Buffering…</string>
+  <string name="audiobook_player_waiting">File %1$d must be downloaded to continue playback.</string>
+  <string name="audiobook_player_error">An error occurred during playback. Error code: %1$d</string>
+
+  <string name="audiobook_player_toc_track_n">Track %1$d</string>
+  <string name="audiobook_player_toc_menu_refresh_all">Refresh all</string>
+  <string name="audiobook_player_toc_menu_stop_all">Stop all downloads</string>
+  <string name="audiobook_player_toc_menu_stop_all_confirm">Stop all downloads?</string>
+
+  <string name="audiobook_player_toc_bookmarks_empty">There are no bookmarks for this book</string>
+  <string name="audiobook_player_toc_bookmarks_dialog_title_delete">Delete</string>
+  <string name="audiobook_player_toc_bookmarks_dialog_message_delete">Are you sure you want to delete this bookmark?</string>
+  <string name="audiobook_player_toc_bookmarks_error_deleting">There was an error deleting the bookmark</string>
+
+
+  <!--
+    Accessibility strings.
+  -->
+
+  <string name="audiobook_accessibility_hours">Hours</string>
+  <string name="audiobook_accessibility_minutes">Minutes</string>
+  <string name="audiobook_accessibility_seconds">Seconds</string>
+  <string name="audiobook_accessibility_hour">Hour</string>
+  <string name="audiobook_accessibility_minute">Minute</string>
+  <string name="audiobook_accessibility_second">Second</string>
+
+  <string name="audiobook_accessibility_navigation_back">Back</string>
+
+  <string name="audiobook_accessibility_player_buffering">Player is buffering</string>
+
+  <string name="audiobook_accessibility_player_time_current">%1$s played</string>
+  <string name="audiobook_accessibility_player_time_remaining">%1$s remaining</string>
+
+  <string name="audiobook_accessibility_menu_sleep_timer_icon">Set your sleep timer</string>
+  <string name="audiobook_accessibility_menu_sleep_timer_item_at_end_of_chapter">Sleep at end of file</string>
+  <string name="audiobook_accessibility_menu_sleep_timer_item_in_60_minutes">Sleep in 60 minutes</string>
+  <string name="audiobook_accessibility_menu_sleep_timer_item_in_45_minutes">Sleep in 45 minutes</string>
+  <string name="audiobook_accessibility_menu_sleep_timer_item_in_30_minutes">Sleep in 30 minutes</string>
+  <string name="audiobook_accessibility_menu_sleep_timer_item_in_15_minutes">Sleep in 15 minutes</string>
+  <string name="audiobook_accessibility_menu_sleep_timer_item_off">Sleep timer off</string>
+  <string name="audiobook_accessibility_menu_sleep_timer_item_now">Sleep now</string>
+
+  <string name="audiobook_accessibility_sleep_timer_description_end_of_chapter">Sleep at end of file</string>
+  <string name="audiobook_accessibility_sleep_timer_description_off">Off</string>
+
+  <string name="audiobook_accessibility_sleep_timer_currently">The sleep timer is currently set to</string>
+  <string name="audiobook_accessibility_sleep_timer_has_been_set">Sleep timer has been set to</string>
+  <string name="audiobook_accessibility_sleep_timer_is_paused">The sleep timer is paused because playback is paused.</string>
+
+  <string name="audiobook_accessibility_menu_playback_speed_icon">Set your playback speed</string>
+  <string name="audiobook_accessibility_menu_playback_speed_0p75">75 percent</string>
+  <string name="audiobook_accessibility_menu_playback_speed_1">100 percent</string>
+  <string name="audiobook_accessibility_menu_playback_speed_1p25">125 percent</string>
+  <string name="audiobook_accessibility_menu_playback_speed_1p5">150 percent</string>
+  <string name="audiobook_accessibility_menu_playback_speed_2">200 percent</string>
+
+  <string name="audiobook_accessibility_playback_speed_currently">Playback speed is currently set to</string>
+  <string name="audiobook_accessibility_playback_speed_set_to">Set playback speed to</string>
+  <string name="audiobook_accessibility_playback_speed_has_been_set">Playback speed has been set to</string>
+  <string name="audiobook_accessibility_playback_speed_is_selected">This is the currently selected playback rate</string>
+
+  <string name="audiobook_accessibility_forward_15">Fast forward 15 seconds</string>
+  <string name="audiobook_accessibility_backward_15">Rewind 15 seconds</string>
+  <string name="audiobook_accessibility_play">Play</string>
+  <string name="audiobook_accessibility_pause">Pause</string>
+  <string name="audiobook_accessibility_book_cover">Book cover</string>
+
+  <string name="audiobook_accessibility_toc_track_n">Track %1$d</string>
+  <string name="audiobook_accessibility_toc_chapter_is_current">Selected</string>
+  <string name="audiobook_accessibility_toc_chapter_requires_download">File must be downloaded before it can be played</string>
+  <string name="audiobook_accessibility_toc_chapter_failed_download">File has failed to download</string>
+  <string name="audiobook_accessibility_toc_chapter_downloading">File is currently downloading</string>
+  <string name="audiobook_accessibility_toc_chapter_duration_is">Duration</string>
+
+  <string name="audiobook_accessibility_toc_bookmark_date_is">Date</string>
+  <string name="audiobook_accessibility_toc_bookmark_delete">Delete</string>
+  <string name="audiobook_accessibility_toc_bookmark_offset_is">Offset</string>
+
+  <string name="audiobook_accessibility_toc_refresh_all">Download all files</string>
+  <string name="audiobook_accessibility_toc_stop_all">Stop all file downloads</string>
+  <string name="audiobook_accessibility_toc_download">Download file %1$d</string>
+  <string name="audiobook_accessibility_toc_retry">Retry download of file %1$d</string>
+  <string name="audiobook_accessibility_toc_progress">Download progress of file %1$d is %2$d percent. Click to stop download.</string>
+  <string name="audiobook_accessibility_toc_selected">Selected file %1$d</string>
+
+</resources>

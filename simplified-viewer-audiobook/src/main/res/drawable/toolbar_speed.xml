@@ -1,0 +1,30 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:fillColor="@color/PalacePrimaryForegroundColor"
+        android:pathData="M32.0146,0.1323A31.8823,31.8823 0,0 0,0.1323 32.0146A31.8823,31.8823 0,0 0,32.0146 63.8969A31.8823,31.8823 0,0 0,63.8969 32.0146A31.8823,31.8823 0,0 0,32.0146 0.1323zM32.0146,5.6885A26.326,26.326 0,0 1,58.3406 32.0146A26.326,26.326 0,0 1,32.0146 58.3406A26.326,26.326 0,0 1,5.6885 32.0146A26.326,26.326 0,0 1,32.0146 5.6885z"
+        android:strokeWidth="1.092319" />
+    <path
+        android:fillColor="@color/PalacePrimaryForegroundColor"
+        android:pathData="M31.6546,8.5134L31.9041,8.5134A0.9336,0.9336 0,0 1,32.8377 9.447L32.8377,18.0829A0.9336,0.9336 0,0 1,31.9041 19.0165L31.6546,19.0165A0.9336,0.9336 0,0 1,30.721 18.0829L30.721,9.447A0.9336,0.9336 0,0 1,31.6546 8.5134z"
+        android:strokeWidth="0.631837" />
+    <path
+        android:fillColor="@color/PalacePrimaryForegroundColor"
+        android:pathData="M43.2265,11.6103L43.4426,11.735A0.9336,0.9336 75,0 1,43.7843 13.0104L39.4664,20.4892A0.9336,0.9336 75,0 1,38.191 20.831L37.975,20.7062A0.9336,0.9336 75,0 1,37.6333 19.4309L41.9512,11.952A0.9336,0.9336 75,0 1,43.2265 11.6103z"
+        android:strokeWidth="0.631837" />
+    <path
+        android:fillColor="@color/PalacePrimaryForegroundColor"
+        android:pathData="M20.0846,11.6174L20.3006,11.4927A0.9336,0.9336 105,0 1,21.576 11.8344L25.8939,19.3133A0.9336,0.9336 105,0 1,25.5522 20.5886L25.3362,20.7134A0.9336,0.9336 105,0 1,24.0608 20.3716L19.7429,12.8928A0.9336,0.9336 105,0 1,20.0846 11.6174z"
+        android:strokeWidth="0.631837" />
+    <path
+        android:fillColor="@color/PalacePrimaryForegroundColor"
+        android:pathData="M11.6167,20.0906L11.7414,19.8745A0.9336,0.9336 75,0 1,13.0167 19.5328L20.4956,23.8508A0.9336,0.9336 75,0 1,20.8373 25.1261L20.7126,25.3421A0.9336,0.9336 75,0 1,19.4373 25.6838L11.9584,21.3659A0.9336,0.9336 75,0 1,11.6167 20.0906z"
+        android:strokeWidth="0.631837" />
+    <path
+        android:fillColor="@color/PalacePrimaryForegroundColor"
+        android:pathData="M51.6997,20.0782L51.8244,20.2943A0.9336,0.9336 105,0 1,51.4827 21.5696L44.0038,25.8875A0.9336,0.9336 105,0 1,42.7285 25.5458L42.6037,25.3298A0.9336,0.9336 105,0 1,42.9455 24.0544L50.4244,19.7365A0.9336,0.9336 105,0 1,51.6997 20.0782z"
+        android:strokeWidth="0.631837" />
+</vector>

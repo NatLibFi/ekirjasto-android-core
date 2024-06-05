@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.graphics.Color
+import androidx.core.content.pm.PackageInfoCompat
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.squareup.picasso.Picasso
 import fi.kansalliskirjasto.ekirjasto.magazines.MagazinesHttp
@@ -372,7 +373,7 @@ internal object MainServices {
     http: LSHTTPClientType,
     opdsFeedParser: OPDSFeedParserType,
     bookFormatSupport: BookFormatSupportType,
-    bookRegistry: BookRegistryType,
+    //bookRegistry: BookRegistryType,
     bundledContent: BundledContentResolverType,
     contentResolver: ContentResolverType
   ): FeedLoaderType {
@@ -470,7 +471,7 @@ internal object MainServices {
           null,
           packageInfo.packageName,
           BuildConfig.SIMPLIFIED_VERSION,
-          packageInfo.versionCode
+          PackageInfoCompat.getLongVersionCode(packageInfo).toString()
         )
 
       analytics.publishEvent(event)
@@ -792,7 +793,7 @@ internal object MainServices {
         }
       )
 
-    val profilesDatabase =
+    //val profilesDatabase =
       addService(
         message = strings.bootingGeneral("profiles database"),
         interfaceType = ProfilesDatabaseType::class.java,
@@ -833,7 +834,7 @@ internal object MainServices {
       serviceConstructor = {
         this.createFeedLoader(
           bookFormatSupport = bookFormatService,
-          bookRegistry = bookRegistry,
+          //bookRegistry = bookRegistry,
           bundledContent = bundledContent,
           contentResolver = contentResolver,
           http = lsHTTP,

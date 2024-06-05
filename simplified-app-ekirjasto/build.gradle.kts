@@ -31,6 +31,18 @@ fun overrideProperty(name: String) : String {
 }
 
 
+/**
+ * Overrides property from gradle.properties with same prop in local.properties if present,
+ * or otherwise gives a default value
+ */
+fun overridePropertyDefault(name: String, default: String) : String {
+    val value = localProp.getOrElse(name){
+        providers.gradleProperty(name).orNull
+    }?.toString() ?: default
+    return value
+}
+
+
 fun getVersionName(): String {
     return overrideProperty("ekirjasto.versionName")
 }
@@ -118,24 +130,24 @@ fun createRequiredAssetsTask(
  * The signing information that is required to exist for release builds.
  */
 
-val palaceKeyStore =
+val releaseKeystore =
     File("$rootDir/release.jks")
-val palaceKeyAlias =
-    project.findProperty("org.thepalaceproject.keyAlias") as String?
-val palaceKeyPassword =
-    project.findProperty("org.thepalaceproject.keyPassword") as String?
-val palaceStorePassword =
-    project.findProperty("org.thepalaceproject.storePassword") as String?
+val releaseKeyAlias =
+    overridePropertyDefault("ekirjasto.keyAlias", "")
+val releaseKeyPassword =
+    overridePropertyDefault("ekirjasto.keyPassword", "")
+val releaseStorePassword =
+    overridePropertyDefault("ekirjasto.storePassword", "")
 
 val requiredSigningTask = task("CheckReleaseSigningInformation") {
-    if (palaceKeyAlias == null) {
-        throw GradleException("org.thepalaceproject.keyAlias is not specified.")
+    if (releaseKeyAlias == "") {
+        throw GradleException("ekirjasto.keyAlias is not specified.")
     }
-    if (palaceKeyPassword == null) {
-        throw GradleException("org.thepalaceproject.keyPassword is not specified.")
+    if (releaseKeyPassword == "") {
+        throw GradleException("ekirjasto.keyPassword is not specified.")
     }
-    if (palaceStorePassword == null) {
-        throw GradleException("org.thepalaceproject.storePassword is not specified.")
+    if (releaseStorePassword == "") {
+        throw GradleException("ekirjasto.storePassword is not specified.")
     }
 }
 
@@ -231,10 +243,10 @@ android {
             keyPassword = "android"
         }
         create("release") {
-            storeFile = palaceKeyStore
-            storePassword = palaceStorePassword
-            keyAlias = palaceKeyAlias
-            keyPassword = palaceKeyPassword
+            storeFile = releaseKeystore
+            storePassword = releaseStorePassword
+            keyAlias = releaseKeyAlias
+            keyPassword = releaseKeyPassword
         }
     }
 
@@ -286,7 +298,7 @@ android {
 
             this.outputs.forEach {
                 val outputFile = it.outputFile
-                val assetFile = File("${project.buildDir}/required-assets.conf")
+                val assetFile = File("${project.projectDir}/build/required-assets.conf")
                 val fileTask =
                     createRequiredAssetsFile(assetFile, this.flavorName)
                 val checkTask =

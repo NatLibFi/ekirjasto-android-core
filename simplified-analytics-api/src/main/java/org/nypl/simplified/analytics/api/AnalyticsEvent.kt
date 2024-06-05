@@ -49,7 +49,7 @@ sealed class AnalyticsEvent {
      * The application version code.
      */
 
-    val packageVersionCode: Int
+    val packageVersionCode: String
   ) : AnalyticsEvent()
 
   /**

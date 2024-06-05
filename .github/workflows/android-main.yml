@@ -1,12 +1,12 @@
-name: Android CI (Authenticated)
+name: Android CI (main)
 
 on:
   push:
-    branches: [ main, release/* ]
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest-large
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,21 +17,27 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - name: Build
+      - name: Reveal secrets
         env:
-          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          MAVEN_CENTRAL_STAGING_PROFILE_ID: ${{ secrets.MAVEN_CENTRAL_STAGING_PROFILE_ID }}
-          MAVEN_CENTRAL_SIGNING_KEY_ID: ${{ secrets.MAVEN_CENTRAL_SIGNING_KEY_ID }}
-          CI_GITHUB_ACCESS_TOKEN: ${{ secrets.CI_GITHUB_ACCESS_TOKEN }}
-          CI_AWS_ACCESS_ID: ${{ secrets.CI_AWS_ACCESS_ID }}
-          CI_AWS_SECRET_KEY: ${{ secrets.CI_AWS_SECRET_KEY }}
-          TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
-          TRANSIFEX_SECRET: ${{ secrets.TRANSIFEX_SECRET }}
-        run: .ekirjasto-ci/ci-build.sh normal
+          EKIRJASTO_LOCAL_PROPERTIES_BASE64: ${{ secrets.LOCAL_PROPERTIES }}
+          EKIRJASTO_RELEASE_JKS_BASE64: ${{ secrets.RELEASE_JKS }}
+        run: scripts/reveal-secrets.sh
+      - name: Upload and download Transifex localizations
+        run: scripts/transifex.sh
+      - name: Debug build
+        run: scripts/build.sh debug
+      - name: Release build
+        run: scripts/build.sh release
+      - name: Upload build to Google Play internal track
+        env:
+          EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
+        run: scripts/upload.sh internal
+      - name: Run tests
+        if: always()
+        run: scripts/run-tests.sh
       - name: Upload test report
         uses: actions/upload-artifact@v4
-        if: ${{ always() }}
+        if: always()
         with:
           name: junit-test-report
           path: ./simplified-tests/build/reports/tests/testDebugUnitTest/
