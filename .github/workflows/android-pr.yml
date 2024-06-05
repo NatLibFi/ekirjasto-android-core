@@ -1,4 +1,4 @@
-name: Android CI (PR)
+name: android-pr
 
 #
 # This workflow is run on all PRs (before they're merged).
@@ -8,6 +8,13 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  COMMIT_SHA: ${{ github.sha }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  TARGET_BRANCH_NAME: ${{ github.base_ref || github.ref_name }}
+  # Join all secrets, so that they're "used", and will be masked in logs
+  MASKED_SECRETS: ${{ join(secrets, '\n') }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,6 +23,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Checkout submodules
         run: git submodule update --init --recursive
+      - name: Show CI info
+        run: scripts/show-ci-info.sh
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -31,6 +40,7 @@ jobs:
       - name: Release build
         run: scripts/build.sh release
       - name: Run tests
+        if: ${{ always() }}
         run: scripts/run-tests.sh
       - name: Upload test report
         uses: actions/upload-artifact@v4

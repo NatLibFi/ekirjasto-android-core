@@ -49,7 +49,7 @@ platform :android do
   lane :deploy_internal do
     #gradle(task: "clean assembleRelease")
     upload_to_play_store(
-      aab: "build/outputs/bundle/devRelease/ekirjasto-dev-release.aab",
+      aab: "build/outputs/bundle/productionRelease/ekirjasto-production-release.aab",
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       track: "internal"
     )

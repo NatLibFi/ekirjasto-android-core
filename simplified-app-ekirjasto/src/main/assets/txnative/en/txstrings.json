@@ -132,9 +132,6 @@
       "accountPickerTitle" : {
          "string" : "Find Your Library"
       },
-      "accountPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
-      },
       "accountPrivacyPolicy" : {
          "string" : "Privacy Policy"
       },
@@ -204,7 +201,7 @@
       "account_login_passkey" : {
          "string" : "Sign in with a passkey"
       },
-      "account_login_suomifi" : {
+      "account_login_with_suomifi" : {
          "string" : "Sign in with Suomi.fi"
       },
       "account_register_passkey" : {
@@ -237,11 +234,11 @@
       "ageVerification" : {
          "string" : "Age Verification"
       },
+      "android_app_name" : {
+         "string" : "E-library"
+      },
       "announcementTitle" : {
          "string" : "%1$s (%2$d of %3$d)"
-      },
-      "app_name" : {
-         "string" : "E-kirjasto"
       },
       "app_version_string" : {
          "string" : "E-kirjasto version %1$s"
@@ -864,9 +861,6 @@
       "catalogOperationFailed" : {
          "string" : "The operation could not be completed."
       },
-      "catalogPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
-      },
       "catalogRead" : {
          "string" : "Read"
       },
@@ -901,7 +895,7 @@
          "string" : "Logo"
       },
       "contentDescriptionPage1" : {
-         "string" : "Welcome to the E-library! This service is provided by your local library."
+         "string" : "Welcome to E-library! This service is provided by your local library."
       },
       "contentDescriptionPage2" : {
          "string" : "You can browse e-books and audiobooks by genre, book or author, or browse recommendation lists made by librarians."
@@ -914,15 +908,6 @@
       },
       "contentDescriptionSkipButton" : {
          "string" : "Skip button"
-      },
-      "contentDescriptionStep1" : {
-         "string" : "Step 1 - Find your library"
-      },
-      "contentDescriptionStep2" : {
-         "string" : "Step 2 - Can't find your library? Go to the E-kirjasto Bookshelf for more than 10000 free titles that you can enjoy now"
-      },
-      "contentDescriptionStep3" : {
-         "string" : "Step 3 - Read. Listen. Enjoy!"
       },
       "contentDescriptionTutorialPage" : {
          "string" : "Tutorial page"
@@ -1098,7 +1083,7 @@
       "login_passkey" : {
          "string" : "Sign in with a passkey"
       },
-      "login_suomifi" : {
+      "login_with_suomifi" : {
          "string" : "Sign in with Suomi.fi"
       },
       "logoutClearingBookDatabase" : {
@@ -1205,9 +1190,6 @@
       },
       "ok" : {
          "string" : "OK"
-      },
-      "placeholder" : {
-         "string" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu leo laoreet, mattis augue ac, placerat nibh. Sed odio nunc, tempor sed justo eu, condimentum eleifend lectus. Sed at leo iaculis, euismod neque nec, rhoncus diam. Pellentesque molestie hendrerit massa ac cursus. Proin sed feugiat mi. Morbi sollicitudin, nulla vitae eleifend laoreet, ligula dolor pretium nunc, ac feugiat nibh sapien vitae augue. Pellentesque ut sollicitudin magna. Ut ac purus pellentesque, venenatis turpis id, auctor augue. Aliquam bibendum lectus id urna placerat auctor. Nullam faucibus molestie neque. Etiam in ligula eget tellus dictum ullamcorper volutpat vel erat. Mauris ut nulla urna."
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Creating an account provider description…"
@@ -1715,9 +1697,6 @@
       },
       "settingsPasswordShow" : {
          "string" : "Show password"
-      },
-      "settingsPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
       },
       "settingsPrivacy" : {
          "string" : "Privacy Policy"

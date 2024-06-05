@@ -47,7 +47,7 @@
                 style="@style/Palace.Button.Outlined.Settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/account_login_suomifi" />
+                android:text="@string/account_login_with_suomifi" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonLoginPasskey"

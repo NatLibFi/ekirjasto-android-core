@@ -153,10 +153,21 @@ without using the production servers or the production Suomi.fi login.
 
 ## Development
 
-### Branching/Merging
+### Branching
 
-All new features should be created on feature branches and merged to `main` once
-completed.
+`main` is the main development branch, and is only updated through pull requests.
+
+Release branch names follow the convention: `release/<version>` (e.g. `release/1.2.3`).
+
+### Continuous integration (CI)
+
+The repository uses continuous integration to aid development and to automate releases.
+
+See [.github/workflows/README.md] for more information about the CI workflows.
+
+## Releasing
+
+Please see [RELEASING.md](RELEASING.md) for documentation on E-kirjasto's release process.
 
 ### Project Structure / Architecture
 
@@ -255,7 +266,9 @@ The token should be placed in `local.properties` with the following line:
 
 ##### Transifex command line tool
 
-**TODO:** Automate this in GitHub Actions and add mention about said automation.
+The main CI build workflow automatically uploads new strings to Transifex.
+So, every time a PR is merged to the main branch,
+all new localizations are pushed to Transifex.
 
 To manually upload strings for translation or to download translated strings,
 the `scripts/transifex.sh` wrapper script should be used.
@@ -408,10 +421,6 @@ source code:
 ```
 $ ./gradlew ktlintFormat
 ```
-
-## Release Process
-
-Please see [RELEASING.md](RELEASING.md) for documentation on our release process.
 
 ## License
 
