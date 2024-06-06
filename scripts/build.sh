@@ -3,7 +3,7 @@
 #
 # Build E-kirjasto.
 #
-# Version 1.0.2
+# Version 1.1.0
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -19,6 +19,7 @@ show_usage() {
   echo "BUILD_TYPE      Build type to use. Available build types:"
   echo "                - debug (default): debug build"
   echo "                - release: release build (requires signing keys)"
+  echo "                - all: both debug and release builds"
   echo
   echo "This script builds the E-kirjasto app (all flavors)."
   echo "This is mostly used for CI builds, but can be used locally as well."
@@ -46,7 +47,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
     ;;
     # Build type
-    debug|release)
+    debug|release|all)
         buildType="$1"
         shift
     ;;
@@ -85,6 +86,15 @@ case $buildType in
       -Dorg.gradle.internal.publish.checksums.insecure=true \
       assemble verifySemanticVersioning \
       || fatal "Release build failed" $?
+  ;;
+  all)
+    ./gradlew \
+      -Dorg.gradle.jvmargs="${jvmArguments}" \
+      -Dorg.gradle.daemon=false \
+      -Dorg.gradle.parallel=false \
+      -Dorg.gradle.internal.publish.checksums.insecure=true \
+      assembleDebug assemble verifySemanticVersioning \
+      || fatal "Debug and release build failed" $?
   ;;
   *)
     fatal "Unrecognized build type: $buildType"
