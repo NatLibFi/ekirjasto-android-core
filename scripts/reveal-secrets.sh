@@ -3,7 +3,7 @@
 #
 # Reveal E-kirjasto secrets.
 #
-# Version 1.0.1
+# Version 1.1.0
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -82,6 +82,8 @@ reveal_file() {
 
 
 basename "$0"
+
+info "Fake secret, should be masked in logs: 'fake-secret-should-be-masked'"
 
 reveal_file local.properties EKIRJASTO_LOCAL_PROPERTIES_BASE64
 reveal_file release.jks EKIRJASTO_RELEASE_JKS_BASE64
