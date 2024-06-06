@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Checkout submodules
         run: git submodule update --init --recursive
-      - name: Show Git info
+      - name: Show build info
         run: scripts/show-ci-info.sh
       - name: Set up JDK 17
         uses: actions/setup-java@v4

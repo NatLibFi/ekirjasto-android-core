@@ -3,7 +3,7 @@
 #
 # Build E-kirjasto.
 #
-# Version 1.0.1
+# Version 1.0.2
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -20,8 +20,8 @@ show_usage() {
   echo "                - debug (default): debug build"
   echo "                - release: release build (requires signing keys)"
   echo
-  echo "This script builds the E-kirjasto app. This is mostly used for"
-  echo "CI builds, but can be used locally as well."
+  echo "This script builds the E-kirjasto app (all flavors)."
+  echo "This is mostly used for CI builds, but can be used locally as well."
   echo
 }
 

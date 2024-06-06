@@ -10,10 +10,15 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-# Uncomment the line if you want fastlane to automatically update itself
-#update_fastlane
-
-default_platform(:android)
+#
+# Get the AAB path based on the build flavor.
+#
+def get_aab_path_for_flavor(flavor)
+  unless is_flavor_valid(flavor)
+    UI.user_error!("ERROR: Invalid flavor: #{flavor}")
+  end
+  return "build/outputs/bundle/#{flavor}Release/ekirjasto-#{flavor}-release.aab"
+end
 
 #
 # Get the highest version code from a given release track.
@@ -32,15 +37,48 @@ def get_track_max_version_code(track)
 end
 
 #
-# Get the AAB path based on the build flavor.
+# Get version name from gradle.properties.
 #
-def get_aab_path_for_flavor(flavor)
-  return "build/outputs/bundle/#{flavor}Release/ekirjasto-#{flavor}-release.aab"
+def get_version_name()
+  File.open("../../gradle.properties", "r") do |file|
+    file.grep(/^ekirjasto\.versionName=/) do |version_line|
+      return version_line.split("=")[1].strip!
+    end
+  end
 end
+
+#
+# Get version name for Google Play.
+#
+def get_version_name_for_google_play(flavor)
+  commit_hash = last_git_commit[:abbreviated_commit_hash]
+  version_name = get_version_name()
+  return "#{version_name} flavor:#{flavor} commit:#{commit_hash}"
+end
+
+#
+# Check if a flavor is valid.
+#
+def is_flavor_valid(flavor)
+  return ["ellibs", "dev", "beta", "production"].include?(flavor)
+end
+
+#
+# Get flavor from options.
+#
+def options_flavor(options)
+  return (options[:flavor] ? options[:flavor] : "production")
+end
+
+
+# Uncomment the line if you want fastlane to automatically update itself
+#update_fastlane
+
+default_platform(:android)
 
 platform :android do
   desc "Get the highest current version code in Google Play"
-  lane :get_version_code do
+  lane :get_google_play_version_code do
     # Get the highest version code from any of the release tracks
     version_code_max = [
       get_track_max_version_code("internal"),
@@ -54,11 +92,14 @@ platform :android do
 
   desc "Deploy a new release to Google Play internal testing"
   lane :deploy_internal do |options|
-    flavor = (options[:flavor] ? options[:flavor] : "production")
+    flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
+    version_name_for_google_play = get_version_name_for_google_play(flavor)
+    puts "Version name for Google Play: #{version_name_for_google_play}"
 
     upload_to_play_store(
       aab: get_aab_path_for_flavor(flavor),
+      version_name: version_name_for_google_play,
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       track: "internal"
     )
@@ -66,13 +107,16 @@ platform :android do
 
   desc "Deploy a new release to Google Play alpha testing"
   lane :deploy_alpha do |options|
-    flavor = (options[:flavor] ? options[:flavor] : "production")
+    flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
+    version_name_for_google_play = get_version_name_for_google_play(flavor)
+    puts "Version name for Google Play: #{version_name_for_google_play}"
 
     UI.user_error!("ERROR: Alpha track is manually disabled")
 
     #upload_to_play_store(
     #  aab: "../build/outputs/bundle/productionRelease/ekirjasto-production-release.aab",
+    #  version_name: version_name_for_google_play,
     #  json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
     #  # Must be manually sent to app review in Google Play Console
     #  changes_not_sent_for_review: true,
@@ -82,11 +126,14 @@ platform :android do
 
   desc "Deploy a new release to Google Play beta testing"
   lane :deploy_beta do |options|
-    flavor = (options[:flavor] ? options[:flavor] : "production")
+    flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
+    version_name_for_google_play = get_version_name_for_google_play(flavor)
+    puts "Version name for Google Play: #{version_name_for_google_play}"
 
     upload_to_play_store(
       aab: get_aab_path_for_flavor(flavor),
+      version_name: version_name_for_google_play,
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       # Must be manually sent to app review in Google Play Console
       changes_not_sent_for_review: true,
@@ -96,8 +143,11 @@ platform :android do
 
   desc "Deploy a new release to Google Play production"
   lane :deploy_production do |options|
-    flavor = (options[:flavor] ? options[:flavor] : "production")
+    flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
+    version_name_for_google_play = get_version_name_for_google_play(flavor)
+    puts "Version name for Google Play: #{version_name_for_google_play}"
+
     if flavor != "production"
       UI.user_error!("ERROR: Only the production flavor can be uploaded to the production track")
       return
@@ -105,6 +155,7 @@ platform :android do
 
     upload_to_play_store(
       aab: get_aab_path_for_flavor(flavor),
+      version_name: version_name_for_google_play,
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       # Must be manually sent to app review in Google Play Console
       changes_not_sent_for_review: true,

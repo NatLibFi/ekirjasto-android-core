@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Checkout submodules
         run: git submodule update --init --recursive
-      - name: Show CI info
+      - name: Show build info
         run: scripts/show-ci-info.sh
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -48,3 +48,7 @@ jobs:
         with:
           name: junit-test-report
           path: ./simplified-tests/build/reports/tests/testDebugUnitTest/
+      - name: Upload dev build to Google Play internal track
+        env:
+          EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
+        run: scripts/fastlane.sh deploy_internal flavor:dev

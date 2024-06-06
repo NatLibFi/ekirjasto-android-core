@@ -15,10 +15,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
-### android get_version_code
+### android get_google_play_version_code
 
 ```sh
-[bundle exec] fastlane android get_version_code
+[bundle exec] fastlane android get_google_play_version_code
 ```
 
 Get the highest current version code in Google Play
