@@ -3,7 +3,7 @@
 #
 # Transifex wrapper.
 #
-# Version 2.1.0
+# Version 2.1.1
 #
 
 basename "$0"
@@ -91,11 +91,11 @@ if [ $skipUpload -eq 1 ] && [ -n "$appendTags" ]; then
 fi
 
 if [ $skipUpload -eq 1 ] && [ $dryRun -eq 1 ]; then
-  fatal "Cannot use --skip-upload and --dry-run together (dry-runs are only for uploads, not downloads)" 66
+  fatal "Cannot use --skip-upload and --dry-run together (dry-runs are only for uploads, not downloads)" 67
 fi
 
 if [ $skipUpload -eq 1 ] && [ $purge -eq 1 ]; then
-  fatal "Cannot use --skip-upload and --purge together (purge is only effective when uploading)" 66
+  fatal "Cannot use --skip-upload and --purge together (purge is only effective when uploading)" 68
 fi
 
 # Path to app assets directory
@@ -106,7 +106,7 @@ if [ -z "${TRANSIFEX_TOKEN}" ]; then
   TRANSIFEX_TOKEN="$(grep "transifex.token=" local.properties 2> /dev/null)"
   TRANSIFEX_TOKEN="${TRANSIFEX_TOKEN#transifex.token=}"
   if [ -z "${TRANSIFEX_TOKEN}" ]; then
-    fatal "TRANSIFEX_TOKEN is not defined and could not find it in local.properties" 67
+    fatal "TRANSIFEX_TOKEN is not defined and could not find it in local.properties" 69
   fi
 fi
 
@@ -117,17 +117,17 @@ fi
 info "Downloading transifex.jar"
 
 wget -c https://github.com/transifex/transifex-java/releases/download/1.3.0/transifex.jar \
-  || fatal "Could not download Transifex" 68
+  || fatal "Could not download Transifex" 70
 
 sha256sum -c transifex.sha256 \
-  || fatal "Could not verify transifex.jar" 69
+  || fatal "Could not verify transifex.jar" 71
 
 #------------------------------------------------------------------------
 # Apply Transifex to the project's string resources.
 #
 
 STRING_FILES=$(find . -name '*strings*.xml' -type f | sort) \
-  || fatal "Could not list string files" 70
+  || fatal "Could not list string files" 72
 
 info "Files to upload strings from:"
 echo "$STRING_FILES"
@@ -170,7 +170,7 @@ else
   info "Uploading Transifex strings"
 
   java -jar transifex.jar push ${TRANSIFEX_PUSH_ARGS} \
-    || fatal "Could not upload Transifex strings" 71
+    || fatal "Could not upload Transifex strings" 73
 
   info "Upload done!"
   echo
@@ -191,7 +191,7 @@ done
 info "Downloading Transifex strings"
 
 java -jar transifex.jar pull ${TRANSIFEX_PULL_ARGS} \
-  || fatal "Could not download Transifex strings" 72
+  || fatal "Could not download Transifex strings" 74
 
 info "Download done!"
 echo
