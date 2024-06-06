@@ -139,7 +139,7 @@ First, set values like these in `local.properties`:
 ```
 ekirjasto.testLogin.enabled=true
 ekirjasto.testLogin.username=TestUser
-ekirjasto.testLogin.pinCode=1234567890
+ekirjasto.testLogin.pin.base64=MTIzNDU2Nzg5MA==
 ```
 
 Then, after closing the app (it cannot be open in the background),

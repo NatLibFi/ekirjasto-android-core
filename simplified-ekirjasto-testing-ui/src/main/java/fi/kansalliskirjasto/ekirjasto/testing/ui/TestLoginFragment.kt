@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import fi.ekirjasto.testing.ui.BuildConfig
 import fi.ekirjasto.testing.ui.R
 import fi.kansalliskirjasto.ekirjasto.util.DataUtil
+import fi.kansalliskirjasto.ekirjasto.util.SecretsUtil
 import fi.kansalliskirjasto.ekirjasto.testing.TestingOverrides
 import org.nypl.simplified.android.ktx.supportActionBar
 import org.slf4j.LoggerFactory
@@ -138,7 +139,7 @@ class TestLoginFragment(
     val inputPin = pinInput.text.toString()
 
     val correctUserName = BuildConfig.TEST_LOGIN_USERNAME
-    val correctPin = BuildConfig.TEST_LOGIN_PIN_CODE
+    val correctPin = SecretsUtil.getTestLoginPin()
     if ((correctUserName.lowercase() == inputUsername.lowercase())
         && (correctPin.lowercase() == inputPin.lowercase())) {
       logger.info("Correct login")
