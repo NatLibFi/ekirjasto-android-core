@@ -37,8 +37,6 @@ import org.nypl.simplified.ui.accounts.AccountFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceToolbar
-import java.net.URI
-import java.net.URL
 
 class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private val logger =
@@ -195,31 +193,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.reconfigureAccountUI()
   }
 
-  // Call to update the language
-  private fun updateLanguage(language : String) {
-    val cont = LocaleHelper.setLocale(requireContext(), language)
-    val res = cont.resources
-    logger.debug(res.toString())
-  }
-
-  // Show a popup asking if they want to set the language, and inform about restart
-  private fun popUp (lang: String) {
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
-    builder
-      .setMessage(R.string.restartPopupMessage)
-      .setTitle(R.string.restartPopupTitle)
-      .setPositiveButton(R.string.restartPopupAgree) { dialog, which ->
-        updateLanguage(lang)
-        DataUtil.restartApp(this.requireContext())
-      }
-      .setNegativeButton(R.string.restartPopupCancel) { dialog, which ->
-        //do nothing
-      }
-
-    val dialog: AlertDialog = builder.create()
-    dialog.show()
-  }
-
   private fun configureDocViewButton(button: Button, document: DocumentType?){
     button.isEnabled = document != null
     if (document != null) {
@@ -228,7 +201,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
         this.listener.post(
           AccountDetailEvent.OpenDocViewer(
             title = title.toString(),
-            url = LanguageUtil.insertLanguageInURL(document.readableURL)
+            url = LanguageUtil.insertLanguageInURL(document.readableURL, this.requireContext())
           )
         )
       }
@@ -436,4 +409,26 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.subscriptions.clear()
   }
 
+  // Show a popup asking if user wants to set chosen language, and inform about restart
+  private fun popUp (language: String) {
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    builder
+      .setMessage(R.string.restartPopupMessage)
+      .setTitle(R.string.restartPopupTitle)
+      .setPositiveButton(R.string.restartPopupAgree) { dialog, which ->
+        updateLanguageAndRestart(language)
+      }
+      .setNegativeButton(R.string.restartPopupCancel) { dialog, which ->
+        //do nothing
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+  }
+
+  // Call to update the language and restart
+  private fun updateLanguageAndRestart(language : String) {
+    LocaleHelper.setLocale(this.requireContext(), language)
+    DataUtil.restartApp(this.requireContext())
+  }
 }
