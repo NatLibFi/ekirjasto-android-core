@@ -77,12 +77,14 @@ android {
         buildConfigField("String", "FLAVOR", "\"$buildFlavor\"")
         val languages = overrideProperty("ekirjasto.languages")
         buildConfigField("String", "LANGUAGES", "\"$languages\"")
+        val testLoginPinBase64 = overridePropertyDefault("ekirjasto.testLogin.pin.base64", "")
+        buildConfigField("String", "TEST_LOGIN_PIN_BASE64", "\"$testLoginPinBase64\"")
+        val transifexTokenBase64 = overrideProperty("transifex.token.base64")
+        buildConfigField("String", "TRANSIFEX_TOKEN_BASE64", "\"$transifexTokenBase64\"")
     }
 }
 
 dependencies {
-    //implementation(project(":simplified-webview"))
-
     implementation(libs.androidx.activity)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.appcompat)

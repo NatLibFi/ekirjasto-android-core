@@ -4,16 +4,17 @@ import android.content.Context
 import com.transifex.txnative.LocaleState
 import com.transifex.txnative.TxNative
 import com.transifex.txnative.missingpolicy.WrappedStringPolicy
-import org.slf4j.LoggerFactory
+import fi.kansalliskirjasto.ekirjasto.util.SecretsUtil
 import java.io.FileNotFoundException
 import java.util.Properties
+import org.slf4j.LoggerFactory
+
 
 /**
  * Functions to enable Transifex string translation.
  */
 
 object MainTransifex {
-
   private val logger = LoggerFactory.getLogger(MainTransifex::class.java)
 
   /**
@@ -24,7 +25,8 @@ object MainTransifex {
   @Suppress("KotlinConstantConditions")
   fun configure(applicationContext: Context) {
     this.logger.debug("MainTransifex.configure()")
-    if (BuildConfig.TRANSIFEX_TOKEN == "") {
+    val transifexToken = SecretsUtil.getTransifexToken()
+    if (transifexToken.isBlank()) {
       logger.warn("Transifex token not set, Transifex will only use cached localizations")
     }
 
@@ -50,7 +52,7 @@ object MainTransifex {
     TxNative.init(
       applicationContext,
       localeState,
-      BuildConfig.TRANSIFEX_TOKEN,
+      transifexToken,
       null,
       null,
       stringPolicy

@@ -42,8 +42,6 @@ android {
         buildConfigField("Boolean", "TEST_LOGIN_ENABLED", testLoginEnabled)
         val testLoginUsername = overridePropertyDefault("ekirjasto.testLogin.username", "")
         buildConfigField("String", "TEST_LOGIN_USERNAME", "\"$testLoginUsername\"")
-        val testLoginPinCode = overridePropertyDefault("ekirjasto.testLogin.pinCode", "")
-        buildConfigField("String", "TEST_LOGIN_PIN_CODE", "\"$testLoginPinCode\"")
     }
 }
 
