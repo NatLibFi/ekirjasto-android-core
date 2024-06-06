@@ -31,6 +31,22 @@ Get the highest current version code in Google Play
 
 Deploy a new release to Google Play internal testing
 
+### android deploy_alpha
+
+```sh
+[bundle exec] fastlane android deploy_alpha
+```
+
+Deploy a new release to Google Play alpha testing
+
+### android deploy_beta
+
+```sh
+[bundle exec] fastlane android deploy_beta
+```
+
+Deploy a new release to Google Play beta testing
+
 ### android deploy_production
 
 ```sh
