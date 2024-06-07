@@ -21,6 +21,21 @@ def get_aab_path_for_flavor(flavor)
 end
 
 #
+# Get the highest version code currently in Google Play Console.
+#
+def get_gpc_version_code_max()
+  # Get the highest version code from any of the release tracks
+  version_code_max = [
+    get_track_max_version_code("internal"),
+    get_track_max_version_code("alpha"),
+    get_track_max_version_code("closed-beta"),
+    #get_track_max_version_code("beta"),
+    get_track_max_version_code("production")
+  ].max()
+  return version_code_max
+end
+
+#
 # Get the highest version code from a given release track.
 #
 def get_track_max_version_code(track)
@@ -48,17 +63,22 @@ def get_version_name()
 end
 
 #
-# Get version name for Google Play.
+# Get version name for Google Play Console.
 #
-def get_version_name_for_google_play(flavor)
+def get_version_name_for_gpc_console(flavor)
+  # Shorten "production" to "prod"
+  if flavor == "production" then flavor = "prod" end
   commit_hash = last_git_commit[:abbreviated_commit_hash]
   version_name = get_version_name()
   branch = git_branch
-  if branch.empty?
-    return "#{version_name} flavor:#{flavor} commit:#{commit_hash}"
-  else
-    return "#{version_name} flavor:#{flavor} branch:#{branch} commit:#{commit_hash}"
+  gpc_version_name = "#{version_name} #{flavor} #{branch}"
+  # Google Play Console has a maximum length of 50 characters for the version,
+  # so cut the length if we would go over that limit (but keep the commit hash)
+  max_length_without_hash = 50 - "@#{commit_hash}".length
+  if gpc_version_name.length > max_length_without_hash
+    gpc_version_name = "#{gpc_version_name[0..(max_length_without_hash-2)]}…"
   end
+  return "#{gpc_version_name}@#{commit_hash}"
 end
 
 #
@@ -82,30 +102,24 @@ end
 default_platform(:android)
 
 platform :android do
-  desc "Get the highest current version code in Google Play"
-  lane :get_google_play_version_code do
-    # Get the highest version code from any of the release tracks
-    version_code_max = [
-      get_track_max_version_code("internal"),
-      get_track_max_version_code("alpha"),
-      get_track_max_version_code("closed-beta"),
-      #get_track_max_version_code("beta"),
-      get_track_max_version_code("production")
-    ].max()
+  desc "Print the highest current version code in Google Play Console"
+  lane :print_gpc_version_code do
     # Print version code for easy shell capturing
-    puts "\n\nGOOGLE_PLAY_VERSION_CODE=#{version_code_max}\n"
+    puts "\n\nGOOGLE_PLAY_VERSION_CODE_MAX=#{get_gpc_version_code_max()}\n"
   end
 
   desc "Deploy a new release to Google Play internal testing"
   lane :deploy_internal do |options|
     flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
-    version_name_for_google_play = get_version_name_for_google_play(flavor)
-    puts "Version name for Google Play: #{version_name_for_google_play}"
+    version_name_for_gpc = get_version_name_for_gpc_console(flavor)
+    puts "Version name for Google Play Console: #{version_name_for_gpc}"
+    puts "Version name length: #{version_name_for_gpc.length} (max 50)"
+    puts "Highest version code currently in Google Play Console: #{get_gpc_version_code_max()}"
 
     upload_to_play_store(
       aab: get_aab_path_for_flavor(flavor),
-      version_name: version_name_for_google_play,
+      version_name: version_name_for_gpc,
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       track: "internal"
     )
@@ -115,12 +129,14 @@ platform :android do
   lane :deploy_alpha do |options|
     flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
-    version_name_for_google_play = get_version_name_for_google_play(flavor)
-    puts "Version name for Google Play: #{version_name_for_google_play}"
+    version_name_for_gpc = get_version_name_for_gpc_console(flavor)
+    puts "Version name for Google Play Console: #{version_name_for_gpc}"
+    puts "Version name length: #{version_name_for_gpc.length} (max 50)"
+    puts "Highest version code currently in Google Play Console: #{get_gpc_version_code_max()}"
 
     upload_to_play_store(
       aab: get_aab_path_for_flavor(flavor),
-      version_name: version_name_for_google_play,
+      version_name: version_name_for_gpc,
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       # Must be manually sent to app review in Google Play Console
       changes_not_sent_for_review: true,
@@ -132,12 +148,14 @@ platform :android do
   lane :deploy_closed_beta do |options|
     flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
-    version_name_for_google_play = get_version_name_for_google_play(flavor)
-    puts "Version name for Google Play: #{version_name_for_google_play}"
+    version_name_for_gpc = get_version_name_for_gpc_console(flavor)
+    puts "Version name for Google Play Console: #{version_name_for_gpc}"
+    puts "Version name length: #{version_name_for_gpc.length} (max 50)"
+    puts "Highest version code currently in Google Play Console: #{get_gpc_version_code_max()}"
 
     upload_to_play_store(
       aab: get_aab_path_for_flavor(flavor),
-      version_name: version_name_for_google_play,
+      version_name: version_name_for_gpc,
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       # Must be manually sent to app review in Google Play Console
       changes_not_sent_for_review: true,
@@ -149,14 +167,16 @@ platform :android do
   lane :deploy_open_beta do |options|
     flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
-    version_name_for_google_play = get_version_name_for_google_play(flavor)
-    puts "Version name for Google Play: #{version_name_for_google_play}"
+    version_name_for_gpc = get_version_name_for_gpc_console(flavor)
+    puts "Version name for Google Play Console: #{version_name_for_gpc}"
+    puts "Version name length: #{version_name_for_gpc.length} (max 50)"
+    puts "Highest version code currently in Google Play Console: #{get_gpc_version_code_max()}"
 
     UI.user_error!("ERROR: The closed open track is manually disabled")
 
     #upload_to_play_store(
     #  aab: get_aab_path_for_flavor(flavor),
-    #  version_name: version_name_for_google_play,
+    #  version_name: version_name_for_gpc,
     #  json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
     #  # Must be manually sent to app review in Google Play Console
     #  changes_not_sent_for_review: true,
@@ -168,8 +188,10 @@ platform :android do
   lane :deploy_production do |options|
     flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
-    version_name_for_google_play = get_version_name_for_google_play(flavor)
-    puts "Version name for Google Play: #{version_name_for_google_play}"
+    version_name_for_gpc = get_version_name_for_gpc_console(flavor)
+    puts "Version name for Google Play Console: #{version_name_for_gpc}"
+    puts "Version name length: #{version_name_for_gpc.length} (max 50)"
+    puts "Highest version code currently in Google Play Console: #{get_gpc_version_code_max()}"
 
     if flavor != "production"
       UI.user_error!("ERROR: Only the production flavor can be uploaded to the production track")
@@ -178,7 +200,7 @@ platform :android do
 
     upload_to_play_store(
       aab: get_aab_path_for_flavor(flavor),
-      version_name: version_name_for_google_play,
+      version_name: version_name_for_gpc,
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       # Must be manually sent to app review in Google Play Console
       changes_not_sent_for_review: true,
