@@ -9,7 +9,10 @@ fun calculateVersionCode(): Int {
     val now = LocalDateTime.now(ZoneId.of("UTC"))
     val nowSeconds = now.toEpochSecond(ZoneOffset.UTC)
     // Seconds since 2021-03-15 09:20:00 UTC
-    return (nowSeconds - 1615800000).toInt()
+    val versionCodeBeforeModuloCutoff = (nowSeconds - 1615800000).toInt()
+    // Round down to the nearest 10
+    val versionCode = versionCodeBeforeModuloCutoff - versionCodeBeforeModuloCutoff % 10
+    return versionCode
 }
 
 val localProp: Properties = Properties().apply{
@@ -152,6 +155,8 @@ val requiredSigningTask = task("CheckReleaseSigningInformation") {
     }
 }
 
+val versionCodeBase = calculateVersionCode()
+
 android {
     buildFeatures {
         buildConfig = true
@@ -159,7 +164,7 @@ android {
     defaultConfig {
         applicationId = "fi.kansalliskirjasto.ekirjasto"
         versionName = getVersionName()
-        versionCode = calculateVersionCode()
+        versionCode = versionCodeBase
         val feedbackUrlBase = overrideProperty("ekirjasto.feedbackUrlBase")
         buildConfigField("String", "FEEDBACK_URL_BASE", "\"$feedbackUrlBase\"")
         val languages = overrideProperty("ekirjasto.languages")
@@ -192,6 +197,7 @@ android {
     // Product flavors: environments from least stable to most stable
     productFlavors {
         create("ellibs") {
+            versionCode = versionCodeBase + 4
             // Set as default flavor, otherwise alphabetically first will be the default
             isDefault = true
             val circURL = "https://circulation-beta.ellibs.com"
@@ -200,18 +206,21 @@ android {
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("dev") {
+            versionCode = versionCodeBase + 3
             val circURL = "https://lib-dev.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
             val libProvider = "28bed937-a16b-4d69-a9c8-4b2656333423"
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("beta") {
+            versionCode = versionCodeBase + 2
             val circURL = "https://lib-beta.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
             val libProvider = "37015541-b542-4157-a687-3ca5ad47fdbe"
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("production") {
+            versionCode = versionCodeBase + 1
             val circURL = "https://lib.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
             val libProvider = "8b7292e9-ed77-480e-a695-423f715be0f2"
