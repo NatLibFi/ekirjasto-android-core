@@ -39,13 +39,21 @@ Deploy a new release to Google Play internal testing
 
 Deploy a new release to Google Play alpha testing
 
-### android deploy_beta
+### android deploy_closed_beta
 
 ```sh
-[bundle exec] fastlane android deploy_beta
+[bundle exec] fastlane android deploy_closed_beta
 ```
 
-Deploy a new release to Google Play beta testing
+Deploy a new release to Google Play closed beta testing
+
+### android deploy_open_beta
+
+```sh
+[bundle exec] fastlane android deploy_open_beta
+```
+
+Deploy a new release to Google Play open beta testing
 
 ### android deploy_production
 

@@ -51,11 +51,15 @@ jobs:
         with:
           name: junit-test-report
           path: ./simplified-tests/build/reports/tests/testDebugUnitTest/
-      - name: Upload production build to Google Play internal track
+      - name: Upload production build to the Google Play Console closed-beta track
         env:
           EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
-        run: scripts/fastlane.sh deploy_internal flavor:production
-      - name: Upload dev build to Google Play internal track
+        run: scripts/fastlane.sh deploy_closed_beta flavor:production
+      - name: Upload beta build to the Google Play Console alpha track
+        env:
+          EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
+        run: scripts/fastlane.sh deploy_alpha flavor:beta
+      - name: Upload dev build to the Google Play Console internal track
         env:
           EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
         run: scripts/fastlane.sh deploy_internal flavor:dev

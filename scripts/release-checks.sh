@@ -3,7 +3,7 @@
 #
 # Run release checks for E-kirjasto.
 #
-# Version 1.0.0
+# Version 1.1.0
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -21,6 +21,7 @@ show_usage() {
   echo "This script checks if a new E-kirjasto version is ready for release."
   echo "Release checks include:"
   echo "- the version number must be increased from the version in the main branch"
+  echo "- the version name must not contain some suffixes like 'dev'"
   echo "- Transifex cannot have any new strings that have not been committed to Git"
   echo
 }
@@ -109,6 +110,17 @@ else
   fatal "The version in the current commit ($newVersion) must be higher than the version in the main branch ($oldVersion)" 67
 fi
 
+# List of illegal suffixes (substrings, so "test" will also match "testing")
+illegalSuffixes=(
+  "dev"
+  "test"
+)
+for illegalSuffix in "${illegalSuffixes[@]}"; do
+  if [[ "$newVersion" == *"$illegalSuffix"* ]]; then
+    fatal "The version in the current commit ($newVersion) contains an illegal suffix: '$illegalSuffix'" 68
+  fi
+done
+
 
 if [ $skipTransifexDownload -eq 1 ]; then
   info "Skipping Transifex download because of flag..."
@@ -132,6 +144,6 @@ else
     done <<< "$changedTransifexFiles"
   else
     # Locally, exit with an error code
-    fatal "$message" 68
+    fatal "$message" 69
   fi
 fi
