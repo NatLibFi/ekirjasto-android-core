@@ -132,9 +132,6 @@
       "accountPickerTitle" : {
          "string" : "Etsi kirjastosi"
       },
-      "accountPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
-      },
       "accountPrivacyPolicy" : {
          "string" : "Tietosuojakäytäntö"
       },
@@ -204,7 +201,7 @@
       "account_login_passkey" : {
          "string" : "Kirjaudu sisään pääsyavaimella"
       },
-      "account_login_suomifi" : {
+      "account_login_with_suomifi" : {
          "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
       },
       "account_register_passkey" : {
@@ -237,11 +234,11 @@
       "ageVerification" : {
          "string" : "Iän vahvistus"
       },
+      "android_app_name" : {
+         "string" : "E-kirjasto"
+      },
       "announcementTitle" : {
          "string" : "%1$s (%2$d/%3$d)"
-      },
-      "app_name" : {
-         "string" : "Vanilla-profiilit"
       },
       "app_version_string" : {
          "string" : "E-kirjaston versio %1$s"
@@ -864,9 +861,6 @@
       "catalogOperationFailed" : {
          "string" : "Toimintoa ei voitu suorittaa loppuun."
       },
-      "catalogPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
-      },
       "catalogRead" : {
          "string" : "Lue"
       },
@@ -900,17 +894,20 @@
       "contentDescriptionLogo" : {
          "string" : "Logo"
       },
+      "contentDescriptionPage1" : {
+         "string" : ""
+      },
+      "contentDescriptionPage2" : {
+         "string" : ""
+      },
+      "contentDescriptionPage3" : {
+         "string" : ""
+      },
+      "contentDescriptionPage4" : {
+         "string" : ""
+      },
       "contentDescriptionSkipButton" : {
          "string" : "Ohita-painike"
-      },
-      "contentDescriptionStep1" : {
-         "string" : "Vaihe 1 - Etsi kirjastosi"
-      },
-      "contentDescriptionStep2" : {
-         "string" : "Vaihe 2 - Etkö löydä kirjastoasi? Palacen kirjahyllystä löydät yli 10 000 ilmaista kirjaa, joista voit nauttia nyt"
-      },
-      "contentDescriptionStep3" : {
-         "string" : "Vaihe 3 - Lue. Kuuntele. Nauti!"
       },
       "contentDescriptionTutorialPage" : {
          "string" : "Tutoriaalisivu"
@@ -1086,7 +1083,7 @@
       "login_passkey" : {
          "string" : "Kirjaudu sisään pääsyavaimella"
       },
-      "login_suomifi" : {
+      "login_with_suomifi" : {
          "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
       },
       "logoutClearingBookDatabase" : {
@@ -1144,7 +1141,7 @@
          "string" : "Päivitetään kirjan %1$s OPDS-merkintää…"
       },
       "magazinesHeader" : {
-         "string" : "Aikakauslehdet"
+         "string" : "Lehdet"
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : "Kirjaudu sisään siirtymällä asetuksiin"
@@ -1193,9 +1190,6 @@
       },
       "ok" : {
          "string" : "OK"
-      },
-      "placeholder" : {
-         "string" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu leo laoreet, mattis augue ac, placerat nibh. Sed odio nunc, tempor sed justo eu, condimentum eleifend lectus. Sed at leo iaculis, euismod neque nec, rhoncus diam. Pellentesque molestie hendrerit massa ac cursus. Proin sed feugiat mi. Morbi sollicitudin, nulla vitae eleifend laoreet, ligula dolor pretium nunc, ac feugiat nibh sapien vitae augue. Pellentesque ut sollicitudin magna. Ut ac purus pellentesque, venenatis turpis id, auctor augue. Aliquam bibendum lectus id urna placerat auctor. Nullam faucibus molestie neque. Etiam in ligula eget tellus dictum ullamcorper volutpat vel erat. Mauris ut nulla urna."
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Luodaan tilintarjoajan kuvausta..."
@@ -1703,9 +1697,6 @@
       },
       "settingsPasswordShow" : {
          "string" : "Näytä salasana"
-      },
-      "settingsPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
       },
       "settingsPrivacy" : {
          "string" : "Tietosuojakäytäntö"

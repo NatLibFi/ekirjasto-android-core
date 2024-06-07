@@ -1,8 +1,18 @@
-name: Android CI (release)
+name: android-release
+
+#
+# This workflow is run for all commits in release/* branches.
+#
 
 on:
   push:
     branches: [ release/* ]
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  TARGET_BRANCH_NAME: ${{ github.base_ref || github.ref_name }}
+  # Join all secrets, so that they're "used", and will be masked in logs
+  MASKED_SECRETS: ${{ join(secrets, '\n') }}
 
 jobs:
   build:
@@ -12,6 +22,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Checkout submodules
         run: git submodule update --init --recursive
+      - name: Show build info
+        run: scripts/show-ci-info.sh
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -22,21 +34,28 @@ jobs:
           EKIRJASTO_LOCAL_PROPERTIES_BASE64: ${{ secrets.LOCAL_PROPERTIES }}
           EKIRJASTO_RELEASE_JKS_BASE64: ${{ secrets.RELEASE_JKS }}
         run: scripts/reveal-secrets.sh
+      - name: Run release checks
+        run: scripts/release-checks.sh
       - name: Upload and download Transifex localizations
-        run: scripts/transifex.sh
+        run: scripts/transifex.sh --append-tags=release
       - name: Debug build
         run: scripts/build.sh debug
       - name: Release build
         run: scripts/build.sh release
-      # TODO: Add release branch checks (version increment, changelogs, etc.)
-      - name: Upload build to Google Play internal track
-        run: scripts/upload.sh internal
       - name: Run tests
-        if: always()
+        if: ${{ always() }}
         run: scripts/run-tests.sh
       - name: Upload test report
         uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ always() }}
         with:
           name: junit-test-report
           path: ./simplified-tests/build/reports/tests/testDebugUnitTest/
+      - name: Upload dev build to Google Play internal track
+        env:
+          EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
+        run: scripts/fastlane.sh deploy_internal flavor:dev
+      - name: Upload production build to Google Play internal track
+        env:
+          EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
+        run: scripts/fastlane.sh deploy_internal flavor:production

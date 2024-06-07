@@ -132,9 +132,6 @@
       "accountPickerTitle" : {
          "string" : "Hitta ditt bibliotek"
       },
-      "accountPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
-      },
       "accountPrivacyPolicy" : {
          "string" : "Integritetspolicy"
       },
@@ -192,6 +189,9 @@
       "account_eula" : {
          "string" : "Användaravtal"
       },
+      "account_faq" : {
+         "string" : ""
+      },
       "account_leave_feedback" : {
          "string" : "Ge respons"
       },
@@ -201,7 +201,7 @@
       "account_login_passkey" : {
          "string" : "Logga in med nyckel"
       },
-      "account_login_suomifi" : {
+      "account_login_with_suomifi" : {
          "string" : "Logga in med Suomi.fi"
       },
       "account_register_passkey" : {
@@ -234,11 +234,11 @@
       "ageVerification" : {
          "string" : "Ålderskontroll"
       },
+      "android_app_name" : {
+         "string" : "E-biblioteket"
+      },
       "announcementTitle" : {
          "string" : "%1$s (%2$d av %3$d)"
-      },
-      "app_name" : {
-         "string" : "Standardprofiler"
       },
       "app_version_string" : {
          "string" : "E-biblioteket version %1$s"
@@ -831,6 +831,15 @@
       "catalogMetaFormat" : {
          "string" : "Format"
       },
+      "catalogMetaId" : {
+         "string" : ""
+      },
+      "catalogMetaIllustrators" : {
+         "string" : ""
+      },
+      "catalogMetaLanguage" : {
+         "string" : ""
+      },
       "catalogMetaNarrators" : {
          "string" : "Uppläsare"
       },
@@ -840,6 +849,9 @@
       "catalogMetaPublisher" : {
          "string" : "Utgivare"
       },
+      "catalogMetaTranslators" : {
+         "string" : ""
+      },
       "catalogMetaUpdatedDate" : {
          "string" : "Uppdaterad"
       },
@@ -848,9 +860,6 @@
       },
       "catalogOperationFailed" : {
          "string" : "Åtgärden kunde inte slutföras."
-      },
-      "catalogPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
       },
       "catalogRead" : {
          "string" : "Läs"
@@ -885,17 +894,20 @@
       "contentDescriptionLogo" : {
          "string" : "Logotyp"
       },
+      "contentDescriptionPage1" : {
+         "string" : ""
+      },
+      "contentDescriptionPage2" : {
+         "string" : ""
+      },
+      "contentDescriptionPage3" : {
+         "string" : ""
+      },
+      "contentDescriptionPage4" : {
+         "string" : ""
+      },
       "contentDescriptionSkipButton" : {
          "string" : "Hoppa över-knapp"
-      },
-      "contentDescriptionStep1" : {
-         "string" : "Steg 1  - Hitta ditt bibliotek"
-      },
-      "contentDescriptionStep2" : {
-         "string" : "Steg 2 - Hittar du inte ditt bibliotek? Gå till Palace Bookshelf som innehåller över 10 000 gratis titlar som du kan läsa nu"
-      },
-      "contentDescriptionStep3" : {
-         "string" : "Steg 3 - Läs. Lyssna. Njut!"
       },
       "contentDescriptionTutorialPage" : {
          "string" : "Handledningssida"
@@ -927,11 +939,23 @@
       "errorDetailsTitle" : {
          "string" : "Felinformation"
       },
+      "errorLoginFailed" : {
+         "string" : ""
+      },
+      "errorPasskeyLoginFailed" : {
+         "string" : ""
+      },
+      "errorPasskeyRegisterFailed" : {
+         "string" : ""
+      },
       "errorSendReport" : {
          "string" : "Sänd till supportavdelningen"
       },
       "errorStepsTitle" : {
          "string" : "Steg"
+      },
+      "errorSuomiFiLoginFailed" : {
+         "string" : ""
       },
       "errorTitle" : {
          "string" : "Här är felloggen som skapats över ditt problem:"
@@ -1059,7 +1083,7 @@
       "login_passkey" : {
          "string" : "Logga in med nyckel"
       },
-      "login_suomifi" : {
+      "login_with_suomifi" : {
          "string" : "Logga in med Suomi.fi"
       },
       "logoutClearingBookDatabase" : {
@@ -1137,6 +1161,9 @@
       "migrationSuccess" : {
          "string" : "Dina data har migrerats!"
       },
+      "natlibfi_logo" : {
+         "string" : ""
+      },
       "next" : {
          "string" : "Nästa"
       },
@@ -1163,9 +1190,6 @@
       },
       "ok" : {
          "string" : "Ok"
-      },
-      "placeholder" : {
-         "string" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu leo laoreet, mattis augue ac, placerat nibh. Sed odio nunc, tempor sed justo eu, condimentum eleifend lectus. Sed at leo iaculis, euismod neque nec, rhoncus diam. Pellentesque molestie hendrerit massa ac cursus. Proin sed feugiat mi. Morbi sollicitudin, nulla vitae eleifend laoreet, ligula dolor pretium nunc, ac feugiat nibh sapien vitae augue. Pellentesque ut sollicitudin magna. Ut ac purus pellentesque, venenatis turpis id, auctor augue. Aliquam bibendum lectus id urna placerat auctor. Nullam faucibus molestie neque. Etiam in ligula eget tellus dictum ullamcorper volutpat vel erat. Mauris ut nulla urna."
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Skapar en beskrivning för kontoleverantör..."
@@ -1673,9 +1697,6 @@
       },
       "settingsPasswordShow" : {
          "string" : "Visa lösenord"
-      },
-      "settingsPlaceholder" : {
-         "string" : "Lorem ipsum dolor sit amet, probatus volutpat has at, vis adhuc iuvaret omittantur an, sadipscing conclusionemque his ad. Eam ut simul tempor. Primis consetetur appellantur vim eu, eum an iudico dolorum. Ad vis utamur honestatis, sanctus debitis referrentur an eam."
       },
       "settingsPrivacy" : {
          "string" : "Integritetspolicy"

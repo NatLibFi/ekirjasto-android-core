@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/elibrary_arrow_right_icon"
             android:paddingRight="20dp"
-            android:text="@string/login_suomifi" />
+            android:text="@string/login_with_suomifi" />
 
         <Button
             android:id="@+id/ekirjasto_loginPasskey"

@@ -3,7 +3,7 @@
 #
 # Run E-kirjasto tests.
 #
-# Version 1.0.0
+# Version 1.0.2
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -11,11 +11,15 @@ trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
 # cd into the project root directory (or fail)
 cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 
-if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
-  echo "TODO: Write help text"
-  exit 0
-fi
-
+# Show command usage
+show_usage() {
+  echo "Usage: $(basename "$0") [-h|--help]"
+  echo
+  echo "-h   --help           Show this help page."
+  echo
+  echo "This script runs E-kirjasto unit tests."
+  echo
+}
 
 fatal() {
   echo "$(basename "$0"): FATAL: $1" 1>&2
@@ -29,6 +33,20 @@ warn() {
 info() {
   echo "$(basename "$0"): INFO: $1" 1>&2
 }
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      show_usage
+      exit 0
+    ;;
+    # Error on unrecognized parameters
+    *)
+      show_usage
+      fatal "Unrecognized parameter: $1" 65
+    ;;
+  esac
+done
 
 
 basename "$0"

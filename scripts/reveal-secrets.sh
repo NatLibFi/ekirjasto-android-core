@@ -3,7 +3,7 @@
 #
 # Reveal E-kirjasto secrets.
 #
-# Version 1.0.0
+# Version 1.1.0
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -15,12 +15,25 @@ cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 show_usage() {
   echo "Usage: $(basename "$0") [-h|--help] [--overwrite]"
   echo
-  echo "This script reveals E-kirjasto build secrets from base64 encoded"
-  echo "environment variables."
-  echo
   echo "-h   --help           Show this help page."
   echo "     --overwrite      Ovewrite existing secret files."
   echo
+  echo "This script reveals E-kirjasto build secrets from base64 encoded"
+  echo "environment variables."
+  echo
+}
+
+fatal() {
+  echo "$(basename "$0"): FATAL: $1" 1>&2
+  exit "${2:-1}"
+}
+
+warn() {
+  echo "$(basename "$0"): WARNING: $1" 1>&2
+}
+
+info() {
+  echo "$(basename "$0"): INFO: $1" 1>&2
 }
 
 overwrite=0
@@ -35,22 +48,14 @@ while [[ $# -gt 0 ]]; do
         overwrite=1
         shift
     ;;
+    # Error on unrecognized parameters
+    *)
+      show_usage
+      fatal "Unrecognized parameter: $1" 65
+    ;;
   esac
 done
 
-
-fatal() {
-  echo "$(basename "$0"): FATAL: $1" 1>&2
-  exit "${2:-1}"
-}
-
-warn() {
-  echo "$(basename "$0"): WARNING: $1" 1>&2
-}
-
-info() {
-  echo "$(basename "$0"): INFO: $1" 1>&2
-}
 
 base64_to_file() {
   base64Input="$1"
@@ -77,6 +82,8 @@ reveal_file() {
 
 
 basename "$0"
+
+info "Fake secret, should be masked in logs: 'fake-secret-should-be-masked'"
 
 reveal_file local.properties EKIRJASTO_LOCAL_PROPERTIES_BASE64
 reveal_file release.jks EKIRJASTO_RELEASE_JKS_BASE64
