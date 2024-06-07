@@ -12,7 +12,6 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import io.reactivex.disposables.CompositeDisposable
@@ -35,7 +34,6 @@ import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.ui.accounts.AccountDetailEvent
 import org.nypl.simplified.ui.accounts.AccountFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
-import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.NewFragment
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceToolbar
 
