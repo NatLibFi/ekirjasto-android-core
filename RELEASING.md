@@ -2,10 +2,12 @@
 
 Releasing of the E-kirjasto Android app is mostly automated through a CI workflow.
 
+
 ## The short version (TL;DR)
 
 - Create a release branch, for example `release/1.2.3`
-    - Fill in t
+    - Update the version in `gradle.properties` (e.g. `ekirjasto.versionName=1.2.3`)
+    - Fill in the changelogs at `simplified-app-ekirjasto/metadata/<language>/changelogs/default.txt`
 - In GitHub Actions, check that the build and all checks will pass
     - If something fails, the build will not be uploaded to Google Play Console
 - Once the build is uploaded to Google Play Console
@@ -16,6 +18,8 @@ Releasing of the E-kirjasto Android app is mostly automated through a CI workflo
 
 
 ## Version numbers
+
+The version number is defined in `gradle.properties` (e.g. `ekirjasto.versionName=1.2.3`).
 
 The version number should follow the [Semantic Versioning](https://semver.org/) format.
 Basically, the version number is of the form `major.minor.patch`.
@@ -32,6 +36,7 @@ The version number should be incremented as follows:
 - the patch version should increase for bugfixes and other minor changes
 - the version components should not have any leading zeroes
 - the version components can have multiple digits (e.g. 1.0.9 can increase to 1.0.10)
+
 
 ## Version codes
 
@@ -67,19 +72,19 @@ and then promote it to the other tracks.
 To create a new release, create a branch of the form `release/<version>`.
 For example, the release branch name could be `release/1.2.3` or `release/3.20.1-suffix`.
 
-Edit these files for the changelog (will be visible to users in Google Play):
-- `/simplified-app-ekirjasto/metadata/fi-FI/changelogs/default.txt`
-- `/simplified-app-ekirjasto/metadata/en-US/changelogs/default.txt`
-- `/simplified-app-ekirjasto/metadata/sv-SE/changelogs/default.txt`
+Increase the version number in `gradle.properties` (e.g. `ekirjasto.versionName=1.2.3`).
 
-When a release branch is created, the `android-release` workflow will:
-- perform release checks
+Edit these files for the changelog (will be visible to users in Google Play):
+- `simplified-app-ekirjasto/metadata/<language>/changelogs/default.txt`
+
+When a release branch is created, the `android-release` workflow:
+- performs release checks
     - the version number must increase from the main branch (any suffix is ignored here)
     - there must not be any uncommitted Transifex strings
-        - these should be downloaded using `./transifex.sh`
-            - fill in the Transifex secret and token in `local.properties`
-- build both debug and release builds for all flavors
-- upload builds to different tracks in Google Play Console
+        - these should be downloaded using `./scripts/transifex.sh`
+            - see `--help` for setting the Transifex token and secret
+- builds both debug and release builds for all flavors
+- uploads builds to different tracks in Google Play Console
 
 If the release checks and everything else in the CI workflow goes okay,
 the build flavors will be uploaded to the following tracks:
@@ -103,9 +108,11 @@ In order to perform a release build, you need:
 - secret values in `local.properties`
     - make a copy of `local.properties.exmaple` and fill in the correct values
 
+First, update the version number in `gradle.properties`.
+
 Then, build the release version of the production flavor:
 - either by running `./scripts/build.sh release`
-- or in Android Studio
+- or manually in Android Studio
     - select the `simplified-app-ekirjasto` target (near the top-right)
     - go to: `View` > `Tool Windows` > `Build Variants`
     - select the `productionRelease` variant for `simplified-app-ekirjasto`
@@ -121,6 +128,7 @@ Once the AAB is successfully built and signed, it can be uploaded to Google Play
     - set the `EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON` environment variable
         - this should contain the Google Play Console service account JSON file contents (not the filepath)
 - or by manually uploading the AAB into the internal track in Google Play Console
+
 
 ### Publishing an uploaded build
 

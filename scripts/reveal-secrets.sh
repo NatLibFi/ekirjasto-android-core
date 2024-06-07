@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Reveal E-kirjasto secrets.
+# Reveal E-kirjasto Android secrets.
 #
 # Version 1.1.0
 #

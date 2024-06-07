@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #
-# Run E-kirjasto tests.
+# Run E-kirjasto Android tests.
 #
-# Version 1.0.2
+# Version 1.0.3
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT

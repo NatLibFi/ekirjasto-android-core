@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #
-# Transifex wrapper.
+# Transifex Android wrapper.
 #
-# Version 2.1.1
+# Version 2.1.2
 #
 
 basename "$0"

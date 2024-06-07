@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #
-# Run release checks for E-kirjasto.
+# Run release checks for the E-kirjasto Android app.
 #
-# Version 1.1.0
+# Version 1.1.1
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT

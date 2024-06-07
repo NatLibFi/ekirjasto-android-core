@@ -48,7 +48,8 @@ values would not be automatically masked without the `MASK_*` secrets.
 
 This workflow is run for every commit pushed to a PR.
 
-This only runs a debug build and tests, and doesn't upload builds anywhere.
+This builds debug and release builds for all flavors and runs tests,
+but doesn't upload the builds anywhere.
 
 
 ### android-main.yml
@@ -71,15 +72,15 @@ and uploads build flavors to the following Google Play Console tracks:
 
 This workflow is run for commits on release/* branches (e.g. release/1.2.3).
 
-This workflow is mostly the same as the workflow run on commits pushed to main,
-meaning that all builds and tests are run, and flavors are uploaded.
+This workflow is mostly the same as the main CI workflow,
+meaning that all builds and tests are run, and the same uploads are made.
 
-In addition to that, some additional checks are run:
+However, before the uploads some additional checks are run:
 - the version number must be increased from the one currently in main
 - the version number suffix (if any) must not contain words like "dev" or "test"
 - all Transifex strings must be committed into the repository
     - i.e. `scripts/transifex.sh` must not find new strings to download
 
-The main purpose of this workflow is to automate releasing a new version of the app,
+The main purpose of this workflow is to automate releasing a new version,
 but not everything is automated (by design). See [RELEASING.md](/RELEASING.md)
 for what to do after upload and more info about E-kirjasto's releasing process.
