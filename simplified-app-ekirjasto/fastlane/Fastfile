@@ -53,7 +53,12 @@ end
 def get_version_name_for_google_play(flavor)
   commit_hash = last_git_commit[:abbreviated_commit_hash]
   version_name = get_version_name()
-  return "#{version_name} flavor:#{flavor} commit:#{commit_hash}"
+  branch = git_branch
+  if branch.empty?
+    return "#{version_name} flavor:#{flavor} commit:#{commit_hash}"
+  else
+    return "#{version_name} flavor:#{flavor} branch:#{branch} commit:#{commit_hash}"
+  end
 end
 
 #
