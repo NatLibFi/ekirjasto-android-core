@@ -41,6 +41,7 @@ import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFi
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragment
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.NewFragment
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Event
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Fragment
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20FragmentParameters
@@ -399,7 +400,12 @@ internal class MainFragmentListenerDelegate(
         state
       }
 
-      AccountDetailEvent.GoUpwards -> {
+      is AccountDetailEvent.OpenNewView -> {
+        this.openSettingsNewView()
+        state
+      }
+
+      is AccountDetailEvent.GoUpwards -> {
         this.goUpwards()
         state
       }
@@ -649,6 +655,13 @@ internal class MainFragmentListenerDelegate(
   private fun openSettingsAccessibilityStatement(title: String, url: String) {
     this.navigator.addFragment(
       fragment = SettingsDocumentViewerFragment.create(title, url),
+      tab = org.librarysimplified.ui.tabs.R.id.tabSettings
+    )
+  }
+
+  private fun openSettingsNewView() {
+    this.navigator.addFragment(
+      fragment = NewFragment(),
       tab = org.librarysimplified.ui.tabs.R.id.tabSettings
     )
   }

@@ -9,7 +9,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:id="@+id/account_ekirjasto">
 
         <LinearLayout
             android:id="@+id/accountTop"
@@ -150,6 +151,13 @@
             app:layout_constraintHorizontal_bias="0.49"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/accountTop">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonNewView"
+                style="@style/Palace.Button.Outlined.Settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Button" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonFaq"

@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import io.reactivex.disposables.CompositeDisposable
@@ -34,6 +35,7 @@ import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.ui.accounts.AccountDetailEvent
 import org.nypl.simplified.ui.accounts.AccountFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.EkirjastoLoginMethod
+import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.NewFragment
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceToolbar
 
@@ -78,6 +80,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var bookmarkSyncProgress: ProgressBar
   private lateinit var bookmarkSyncCheck: SwitchCompat
   private lateinit var bookmarkStatement: TextView
+  private lateinit var buttonNewView: Button
 
   //inherited elements
   private lateinit var toolbar: PalaceToolbar
@@ -116,6 +119,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonFaq = view.findViewById(R.id.buttonFaq)
     this.versionText = view.findViewById(R.id.appVersion)
     this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
+    this.buttonNewView = view.findViewById(R.id.buttonNewView)
 
 
     this.toolbar =
@@ -198,6 +202,15 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     }
   }
 
+  private fun configureNewViewButton(button: Button) {
+    button.setOnClickListener {
+      logger.debug("New view clicked")
+      this.listener.post(
+        AccountDetailEvent.OpenNewView
+      )
+    }
+  }
+
   private fun configureToolbar() {
     val providerName = this.viewModel.account.provider.displayName
     val actionBar = this.supportActionBar ?: return
@@ -235,6 +248,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
     configureDocViewButton(buttonLicenses, this.viewModel.documents.licenses)
     configureDocViewButton(buttonFaq, this.viewModel.documents.faq)
+
+    configureNewViewButton(buttonNewView)
 
     val versionString = this.requireContext().getString(R.string.app_version_string, this.viewModel.appVersion)
     this.versionText.text = versionString
