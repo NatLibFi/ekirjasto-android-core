@@ -56,8 +56,15 @@ This only runs a debug build and tests, and doesn't upload builds anywhere.
 This workflow is run for every commit pushed to the main branch.
 Direct commits to main are disabled, so essentially this is run for merged PRs.
 
-This builds debug and release builds for all flavors, runs tests, and uploads
-the production release build to Google Play Console's internal testing track.
+This builds debug and release builds for all flavors, runs tests,
+and uploads build flavors to the following Google Play Console tracks:
+
+| Flavor     | Uploaded to track |
+|------------|------------------ |
+| production | closed-beta       |
+| beta       | alpha             |
+| dev        | internal testing  |
+| ellibs     | (not uploaded)    |
 
 
 ### android-release.yml
@@ -65,12 +72,14 @@ the production release build to Google Play Console's internal testing track.
 This workflow is run for commits on release/* branches (e.g. release/1.2.3).
 
 This workflow is mostly the same as the workflow run on commits pushed to main,
-meaning that all builds and tests are run, and the production release build is
-uploaded to Google Play Console's internal track.
+meaning that all builds and tests are run, and flavors are uploaded.
 
 In addition to that, some additional checks are run:
 - the version number must be increased from the one currently in main
+- the version number suffix (if any) must not contain words like "dev" or "test"
 - all Transifex strings must be committed into the repository
     - i.e. `scripts/transifex.sh` must not find new strings to download
 
-See [RELEASING.md](/RELEASING.md) for more info about E-kirjasto's releasing process.
+The main purpose of this workflow is to automate releasing a new version of the app,
+but not everything is automated (by design). See [RELEASING.md](/RELEASING.md)
+for what to do after upload and more info about E-kirjasto's releasing process.

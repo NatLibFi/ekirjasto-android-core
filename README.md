@@ -8,7 +8,8 @@ which is itself the Lyrasis fork of the NYPL's [Library Simplified](http://www.l
 
 _Image by [Predrag Kezic](https://pixabay.com/users/PredragKezic-582203/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=581229) from [Pixabay](https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=581229)_
 
-## What Is This?
+
+## Introduction
 
 The contents of this repository provide the E-kirjasto Android client application.
 
@@ -18,6 +19,7 @@ The contents of this repository provide the E-kirjasto Android client applicatio
 
 The (mostly) original Palace Project app is under `simplified-app-palace`,
 but it's only there for reference, and it's not used in any way for E-kirjasto.
+
 
 ## Contents
 
@@ -40,13 +42,15 @@ but it's only there for reference, and it's not used in any way for E-kirjasto.
 * [Release Process](#release-process)
 * [License](#license)
 
-## Building The Code
+
+## Building the code
 
 The short version is to clone the repository recursively (including submodules),
 then copy `local.properties.example` to `local.properties`,
 and fill in the correct values.
 
-### Cloning the Repository
+
+### Cloning the repository
 
 Make sure you clone this repository with `git clone --recursive`. 
 If you forgot to use `--recursive`, then execute:
@@ -59,6 +63,7 @@ $ git submodule update --init
 
 Install the [Android SDK and Android Studio](https://developer.android.com/studio/). We don't
 support the use of any other IDE at the moment.
+
 
 ### JDK
 
@@ -90,6 +95,7 @@ OpenJDK Runtime Environment (build 17.0.8+7)
 OpenJDK 64-Bit Server VM (build 17.0.8+7, mixed mode)
 ```
 
+
 ### APK signing
 
 If you wish to generate a signed APK for publishing the application, you will need to copy
@@ -112,12 +118,14 @@ $ ./gradlew clean assembleRelease test
 $ ./gradlew clean assemble test
 ```
 
+
 ### Enabling DRM
 
 Unlike the Palace Project, E-kirjasto does not use Adobe DRM.
 Instead, E-kirjasto only uses Readium LCP (liblcp) for content DRM.
 
-### LCP DRM Support
+
+### LCP DRM support
 
 The repository uses the test AAR for liblcp by default.
 
@@ -127,6 +135,7 @@ production AAR path:
 ```
 ekirjasto.liblcp.repositorylayout=/[organisation]/[module]/android/aar/test/[revision].[ext]
 ```
+
 
 ### Test login
 
@@ -151,6 +160,7 @@ the app will switch to the development backend and restart the app.
 This will allow Google Play app reviewers to use the production app,
 without using the production servers or the production Suomi.fi login.
 
+
 ## Development
 
 ### Branching
@@ -159,15 +169,18 @@ without using the production servers or the production Suomi.fi login.
 
 Release branch names follow the convention: `release/<version>` (e.g. `release/1.2.3`).
 
+
 ### Continuous integration (CI)
 
 The repository uses continuous integration to aid development and to automate releases.
 
 See [.github/workflows/README.md] for more information about the CI workflows.
 
-## Releasing
+
+### Releasing
 
 Please see [RELEASING.md](RELEASING.md) for documentation on E-kirjasto's release process.
+
 
 ### Project Structure / Architecture
 
@@ -178,11 +191,13 @@ architecture distributed over the application modules. The _controller_ in the a
 task-based and executes all tasks on a background thread to avoid any possibility of blocking
 the Android UI thread.
 
+
 #### MVVM
 
 Newer application modules, roughly follow an [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) architecture.
 The _View Model_ in the application exposes reactive properties
 and executes all tasks on a background thread. The _View_ observes those properties and updates on the Android UI thread.
+
 
 #### API vs SPI
 
@@ -239,7 +254,8 @@ and so, although the Library Simplified application is not an OSGi application, 
 design and architecture conforms to conventions followed by OSGi applications. Further reading
 can be found on the OSGi web site.
 
-#### Build System
+
+#### Build system
 
 **NOTE:**  
 This section is partially outdated. Version numbers are defined in the ekirjasto-android-platform repository.
@@ -252,6 +268,7 @@ numbers, etc) is defined in the `gradle.properties` file in each module. The [gr
 file in the root of the project defines default values that are overridden as necessary by each
 module.
 
+
 #### Localization
 
 The app uses [Transifex](https://github.com/transifex/transifex-java) for localizations.
@@ -263,6 +280,7 @@ The Transifex token is needed at runtime for release builds, but local translati
 will work without it (the token will be replaced by an empty string).
 The token should be placed in `local.properties` with the following line:  
 `transifex.token=...`
+
 
 ##### Transifex command line tool
 
@@ -292,11 +310,13 @@ Or optionally use environment variables to specify the token and secret:
 TRANSIFEX_TOKEN="..." TRANSIFEX_SECRET="..." ./scripts/transifex.sh
 ```
 
+
 #### Test suite
 
 We aggregate all unit tests in the [simplified-tests](simplified-tests) module. Tests should
 be written using the JUnit 5 library, although at the time of writing we have [one test](simplified-tests/src/test/java/org/nypl/simplified/tests/webview/CookiesContract.kt)
 that still requires JUnit 4 due to the use of [Robolectric](http://robolectric.org/).
+
 
 #### Modules
 
@@ -412,6 +432,7 @@ coupled as possible. New features should typically be implemented as new modules
 
 _The above table is generated with [ReadMe.java](src/misc/ReadMe.java)._
 
+
 ### Ktlint
 
 The codebase uses [ktlint](https://ktlint.github.io/) to enforce a consistent
@@ -421,6 +442,7 @@ source code:
 ```
 $ ./gradlew ktlintFormat
 ```
+
 
 ## License
 

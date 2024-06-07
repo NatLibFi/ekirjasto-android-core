@@ -12,7 +12,7 @@ Releasing of the E-kirjasto Android app is mostly automated through a CI workflo
     - Promote it from the internal track to the production track
     - Send the release for app review
     - Wait for the pre-launch report to complete and check it for any issues
-    - 
+    - After the app passes review, it can be published
 
 
 ## Version numbers
@@ -32,6 +32,30 @@ The version number should be incremented as follows:
 - the patch version should increase for bugfixes and other minor changes
 - the version components should not have any leading zeroes
 - the version components can have multiple digits (e.g. 1.0.9 can increase to 1.0.10)
+
+## Version codes
+
+The version code is an integer, which has to increase for every upload to Google Play Console.
+
+The version code is automatically generated during the E-kirjasto build
+This auto-generated version code is time-based (epoch timestamp since 2021-03-15 09:20:00 UTC),
+but the last digit is zeroed, and then the build flavor sets the last digit to:
+
+| Flavor     | Last digit in version code |
+|------------|----------------------------|
+| production | 1                          |
+| beta       | 2                          |
+| dev        | 3                          |
+| ellibs     | 4                          |
+
+This way, all flavors of the same build can be uploaded to Google Play Console.
+But note that the flavors *must* be uploaded in the above order.
+Otherwise the version code will not increase between uploads,
+and Google Play Console will reject the upload.
+
+If you want to upload the same flavor into multiple Google Play Console tracks,
+you have to upload it to the "lowest" (most closed) track first,
+and then promote it to the other tracks.
 
 
 ## Creating a new release
@@ -55,9 +79,18 @@ When a release branch is created, the `android-release` workflow will:
         - these should be downloaded using `./transifex.sh`
             - fill in the Transifex secret and token in `local.properties`
 - build both debug and release builds for all flavors
-- upload builds to Google Play Console's internal track
+- upload builds to different tracks in Google Play Console
 
-If everything in the release is OK, the new release is uploaded to Google Play Console.
+If the release checks and everything else in the CI workflow goes okay,
+the build flavors will be uploaded to the following tracks:
+
+| Flavor     | Uploaded to track |
+|------------|------------------ |
+| production | closed-beta       |
+| beta       | alpha             |
+| dev        | internal testing  |
+| ellibs     | (not uploaded)    |
+
 
 #### Manual build and upload
 
@@ -92,15 +125,19 @@ Once the AAB is successfully built and signed, it can be uploaded to Google Play
 ### Publishing an uploaded build
 
 After a new build is uploaded to Google Play Console:
-- the pre-launch report should be checked for any issues
+- double-check that you won't accidentally promote a non-production build to production
+- the pre-launch report should be checked for any (major) issues
+    - there will likely be accessibility issues, but some are from embedded websites
 - the app should be sent for review
+- final internal testing should be done with an APK downloaded from Google Play Console
 
-The pre-launch report takes *at least* an hour to complete, so you can
-immediately promote the build from the internal track to the production track
-and send it for app review.
+The pre-launch report takes *at least* an hour to complete, so you should
+immediately promote an intended production release build from the internal track
+to the production track and send it for app review.
 
 App review takes it's own time (sometimes just 15 minutes, sometimes days),
 and the build will *not* be automatically released to production after review
 (since "Managed publishing" *should* be turned on in Google Play Console).
+So, it's safe to send a build for review, this doesn't mean that it must be released.
 
 Assuming review passes, the app can be published to production!

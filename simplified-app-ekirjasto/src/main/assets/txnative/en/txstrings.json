@@ -201,6 +201,9 @@
       "account_login_passkey" : {
          "string" : "Sign in with a passkey"
       },
+      "account_login_suomifi" : {
+         "string" : "Sign in with Suomi.fi"
+      },
       "account_login_with_suomifi" : {
          "string" : "Sign in with Suomi.fi"
       },
@@ -239,6 +242,9 @@
       },
       "announcementTitle" : {
          "string" : "%1$s (%2$d of %3$d)"
+      },
+      "app_name" : {
+         "string" : "E-kirjasto"
       },
       "app_version_string" : {
          "string" : "E-kirjasto version %1$s"
@@ -1082,6 +1088,9 @@
       },
       "login_passkey" : {
          "string" : "Sign in with a passkey"
+      },
+      "login_suomifi" : {
+         "string" : "Sign in with Suomi.fi"
       },
       "login_with_suomifi" : {
          "string" : "Sign in with Suomi.fi"

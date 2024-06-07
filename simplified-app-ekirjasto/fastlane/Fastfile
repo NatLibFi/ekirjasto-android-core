@@ -82,8 +82,9 @@ platform :android do
     # Get the highest version code from any of the release tracks
     version_code_max = [
       get_track_max_version_code("internal"),
-      #get_track_max_version_code("alpha"),
-      get_track_max_version_code("beta"),
+      get_track_max_version_code("alpha"),
+      get_track_max_version_code("closed-beta"),
+      #get_track_max_version_code("beta"),
       get_track_max_version_code("production")
     ].max()
     # Print version code for easy shell capturing
@@ -112,20 +113,18 @@ platform :android do
     version_name_for_google_play = get_version_name_for_google_play(flavor)
     puts "Version name for Google Play: #{version_name_for_google_play}"
 
-    UI.user_error!("ERROR: Alpha track is manually disabled")
-
-    #upload_to_play_store(
-    #  aab: "../build/outputs/bundle/productionRelease/ekirjasto-production-release.aab",
-    #  version_name: version_name_for_google_play,
-    #  json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
-    #  # Must be manually sent to app review in Google Play Console
-    #  changes_not_sent_for_review: true,
-    #  track: "alpha"
-    #)
+    upload_to_play_store(
+      aab: get_aab_path_for_flavor(flavor),
+      version_name: version_name_for_google_play,
+      json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
+      # Must be manually sent to app review in Google Play Console
+      changes_not_sent_for_review: true,
+      track: "alpha"
+    )
   end
 
-  desc "Deploy a new release to Google Play beta testing"
-  lane :deploy_beta do |options|
+  desc "Deploy a new release to Google Play closed beta testing"
+  lane :deploy_closed_beta do |options|
     flavor = options_flavor(options)
     puts "Flavor: #{flavor}"
     version_name_for_google_play = get_version_name_for_google_play(flavor)
@@ -137,8 +136,27 @@ platform :android do
       json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
       # Must be manually sent to app review in Google Play Console
       changes_not_sent_for_review: true,
-      track: "beta"
+      track: "closed-beta"
     )
+  end
+
+  desc "Deploy a new release to Google Play open beta testing"
+  lane :deploy_open_beta do |options|
+    flavor = options_flavor(options)
+    puts "Flavor: #{flavor}"
+    version_name_for_google_play = get_version_name_for_google_play(flavor)
+    puts "Version name for Google Play: #{version_name_for_google_play}"
+
+    UI.user_error!("ERROR: The closed open track is manually disabled")
+
+    #upload_to_play_store(
+    #  aab: get_aab_path_for_flavor(flavor),
+    #  version_name: version_name_for_google_play,
+    #  json_key_data: ENV["EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON"],
+    #  # Must be manually sent to app review in Google Play Console
+    #  changes_not_sent_for_review: true,
+    #  track: "beta"
+    #)
   end
 
   desc "Deploy a new release to Google Play production"
