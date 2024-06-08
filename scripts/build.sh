@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #
-# Build E-kirjasto.
+# Build the E-kirjasto Android app.
 #
-# Version 1.1.0
+# Version 1.1.1
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT

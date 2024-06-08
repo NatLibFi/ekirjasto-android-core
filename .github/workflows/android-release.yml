@@ -24,24 +24,27 @@ jobs:
         run: git submodule update --init --recursive
       - name: Show build info
         run: scripts/show-ci-info.sh
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
+
       - name: Reveal secrets
         env:
           EKIRJASTO_LOCAL_PROPERTIES_BASE64: ${{ secrets.LOCAL_PROPERTIES }}
           EKIRJASTO_RELEASE_JKS_BASE64: ${{ secrets.RELEASE_JKS }}
-        run: scripts/reveal-secrets.sh
-      - name: Run release checks
-        run: scripts/release-checks.sh
+        run: scripts/reveal-secrets.sh --overwrite
+
       - name: Upload and download Transifex localizations
         run: scripts/transifex.sh --append-tags=release
+
       - name: Debug build
         run: scripts/build.sh debug
       - name: Release build
         run: scripts/build.sh release
+
       - name: Run tests
         if: ${{ always() }}
         run: scripts/run-tests.sh
@@ -51,6 +54,10 @@ jobs:
         with:
           name: junit-test-report
           path: ./simplified-tests/build/reports/tests/testDebugUnitTest/
+
+      - name: Run release checks
+        run: scripts/release-checks.sh
+
       - name: Upload production build to the Google Play Console closed-beta track
         env:
           EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}

@@ -3,7 +3,7 @@
 #
 # Show CI info.
 #
-# 1.1.0
+# 1.2.0
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -14,7 +14,6 @@ cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 basename "$0"
 
 echo "----------------------------------------"
-echo "TIMESTAMP=$TIMESTAMP"
 echo "COMMIT_SHA=$COMMIT_SHA"
 echo "BRANCH_NAME=$BRANCH_NAME"
 echo "TARGET_BRANCH_NAME=$TARGET_BRANCH_NAME"
