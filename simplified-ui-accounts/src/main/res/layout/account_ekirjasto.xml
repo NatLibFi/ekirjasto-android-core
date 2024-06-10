@@ -37,28 +37,28 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonLogout"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/accountLogout" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonLoginSuomiFi"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_login_suomifi" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonLoginPasskey"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_login_passkey" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonRegisterPasskey"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_register_passkey" />
@@ -153,6 +153,7 @@
 
             <TextView
                 android:id="@+id/accountLanguageChoiceText"
+                style="@style/Palace.TextViewStyle.Settings.Dark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_application_languages" />
@@ -163,6 +164,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonFinnish"
+                    style="@style/Palace.Button.Outlined.Settings"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -170,6 +172,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonSwedish"
+                    style="@style/Palace.Button.Outlined.Settings"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -177,6 +180,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonEnglish"
+                    style="@style/Palace.Button.Outlined.Settings"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -185,42 +189,42 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonFaq"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_faq" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonFeedback"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_leave_feedback" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/accessibilityStatement"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_accessibility_statement" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonPrivacyPolicy"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/accountPrivacyPolicy" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonUserAgreement"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_eula" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonLicenses"
-                style="@style/Palace.Button.Outlined.Settings"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_licenses" />
