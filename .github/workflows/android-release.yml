@@ -23,6 +23,8 @@ jobs:
       - name: Checkout submodules
         run: git submodule update --init --recursive
       - name: Show build info
+        env:
+          TEST_SECRET: ${{ secrets.MASK_TEST }}
         run: scripts/show-ci-info.sh
 
       - name: Set up JDK 17
