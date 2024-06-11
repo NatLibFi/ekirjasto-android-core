@@ -3,7 +3,7 @@
 #
 # Transifex Android wrapper.
 #
-# Version 2.1.3
+# Version 2.2.0
 #
 
 basename "$0"
@@ -119,7 +119,7 @@ fi
 
 info "Downloading transifex.jar"
 
-wget -c https://github.com/transifex/transifex-java/releases/download/1.3.0/transifex.jar \
+curl -sLo transifex.jar https://github.com/transifex/transifex-java/releases/download/1.3.0/transifex.jar \
   || fatal "Could not download Transifex" 70
 
 sha256sum -c transifex.sha256 \
