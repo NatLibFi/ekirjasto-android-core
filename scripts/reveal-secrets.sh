@@ -3,7 +3,7 @@
 #
 # Reveal E-kirjasto Android secrets.
 #
-# Version 1.1.1
+# Version 1.1.2
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -63,7 +63,7 @@ done
 base64_to_file() {
   base64Input="$1"
   outputFile="$2"
-  echo "Revealing secret file: $outputFile"
+  info "Revealing secret file: $outputFile"
   echo "$base64Input" | base64 --decode > "$outputFile"
 }
 

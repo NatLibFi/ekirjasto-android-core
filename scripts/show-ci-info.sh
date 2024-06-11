@@ -3,7 +3,7 @@
 #
 # Show CI info.
 #
-# 1.3.0
+# 1.3.1
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -19,9 +19,9 @@ echo "BRANCH_NAME=$BRANCH_NAME"
 echo "TARGET_BRANCH_NAME=$TARGET_BRANCH_NAME"
 echo "----------------------------------------"
 echo
-echo "Checking if secrets are available, fake secret: $TEST_SECRET"
+info "Checking if secrets are available, fake secret: $TEST_SECRET"
 if [ -z "$TEST_SECRET" ]; then
     echo "::warning title=Secrets are unavailable::Secrets are not available, this could be a non-member PR (there could be build issues)"
 else
-    echo "Secrets are available!"
+    info "Secrets are available!"
 fi

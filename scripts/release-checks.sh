@@ -3,7 +3,7 @@
 #
 # Run release checks for the E-kirjasto Android app.
 #
-# Version 1.1.2
+# Version 1.1.3
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -100,15 +100,15 @@ fi
 # Get the old version (main branch) and the new version (current commit)
 oldVersion="$(grep '^-' <<< "$versionDiff")"
 oldVersion="${oldVersion#*=}"
-echo "Old version: $oldVersion"
+info "Old version: $oldVersion"
 newVersion="$(grep '^+' <<< "$versionDiff")"
 newVersion="${newVersion#*=}"
-echo "New version: $newVersion"
+info "New version: $newVersion"
 
 oldVersionComparison="$(getVersionComparisonString "$oldVersion")"
 newVersionComparison="$(getVersionComparisonString "$newVersion")"
 if [[ $oldVersionComparison < $newVersionComparison ]]; then
-  echo "The version in the current commit ($newVersion) is newer than the version in the main branch ($oldVersion), all good!"
+  info "The version in the current commit ($newVersion) is newer than the version in the main branch ($oldVersion), all good!"
 else
   fatal "The version in the current commit ($newVersion) must be higher than the version in the main branch ($oldVersion)" 67
 fi
