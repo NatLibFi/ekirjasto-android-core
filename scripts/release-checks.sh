@@ -3,7 +3,7 @@
 #
 # Run release checks for the E-kirjasto Android app.
 #
-# Version 1.1.1
+# Version 1.1.2
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -15,8 +15,11 @@ cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 show_usage() {
   echo "Usage: $(basename "$0") [-h|--help]"
   echo
+  # Wrap after 80 characters --> #######################################################
+  echo "Options:"
   echo "-h   --help                     Show this help page."
   echo "     --skip-transifex-download  Skip downloading new Transifex strings."
+  # Wrap after 80 characters --> #######################################################
   echo
   echo "This script checks if a new E-kirjasto version is ready for release."
   echo "Release checks include:"
