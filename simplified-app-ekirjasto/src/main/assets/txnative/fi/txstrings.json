@@ -183,8 +183,14 @@
       "account_about_app" : {
          "string" : "Tietoja sovelluksesta"
       },
+      "account_accessibility_statement" : {
+         "string" : "Saavutettavuusseloste"
+      },
       "account_eula" : {
          "string" : "Käyttäjäsopimus"
+      },
+      "account_faq" : {
+         "string" : "Usein kysytyt kysymykset"
       },
       "account_leave_feedback" : {
          "string" : "Anna palautetta"
@@ -196,6 +202,9 @@
          "string" : "Kirjaudu sisään pääsyavaimella"
       },
       "account_login_suomifi" : {
+         "string" : ""
+      },
+      "account_login_with_suomifi" : {
          "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
       },
       "account_register_passkey" : {
@@ -228,11 +237,14 @@
       "ageVerification" : {
          "string" : "Iän vahvistus"
       },
+      "android_app_name" : {
+         "string" : "E-kirjasto"
+      },
       "announcementTitle" : {
          "string" : "%1$s (%2$d/%3$d)"
       },
       "app_name" : {
-         "string" : "Vanilla-profiilit"
+         "string" : ""
       },
       "app_version_string" : {
          "string" : "E-kirjaston versio %1$s"
@@ -272,6 +284,258 @@
       },
       "audio_book_player_toc_title" : {
          "string" : "Sisällysluettelo"
+      },
+      "audiobook_accessibility_backward_15" : {
+         "string" : "Kelaa taaksepäin 15 sekuntia"
+      },
+      "audiobook_accessibility_book_cover" : {
+         "string" : "Kirjan kansi"
+      },
+      "audiobook_accessibility_forward_15" : {
+         "string" : "Kelaa eteenpäin 15 sekuntia"
+      },
+      "audiobook_accessibility_hour" : {
+         "string" : "tunti"
+      },
+      "audiobook_accessibility_hours" : {
+         "string" : "tuntia"
+      },
+      "audiobook_accessibility_menu_playback_speed_0p75" : {
+         "string" : "75 prosenttia"
+      },
+      "audiobook_accessibility_menu_playback_speed_1" : {
+         "string" : "100 prosenttia"
+      },
+      "audiobook_accessibility_menu_playback_speed_1p25" : {
+         "string" : "125 prosenttia"
+      },
+      "audiobook_accessibility_menu_playback_speed_1p5" : {
+         "string" : "150 prosenttia"
+      },
+      "audiobook_accessibility_menu_playback_speed_2" : {
+         "string" : "200 prosenttia"
+      },
+      "audiobook_accessibility_menu_playback_speed_icon" : {
+         "string" : "Aseta toistonopeus"
+      },
+      "audiobook_accessibility_menu_sleep_timer_icon" : {
+         "string" : "Aseta uniajastin"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_at_end_of_chapter" : {
+         "string" : "Unitila tiedoston lopussa"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_in_15_minutes" : {
+         "string" : "Unitila 15 minuutin kuluttua"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_in_30_minutes" : {
+         "string" : "Unitila 30 minuutin kuluttua"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_in_45_minutes" : {
+         "string" : "Unitila 45 minuutin kuluttua"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_in_60_minutes" : {
+         "string" : "Unitila 60 minuutin kuluttua"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_now" : {
+         "string" : "Unitila nyt"
+      },
+      "audiobook_accessibility_menu_sleep_timer_item_off" : {
+         "string" : "Uniajastin pois"
+      },
+      "audiobook_accessibility_minute" : {
+         "string" : "minuutti"
+      },
+      "audiobook_accessibility_minutes" : {
+         "string" : "minuuttia"
+      },
+      "audiobook_accessibility_navigation_back" : {
+         "string" : "Takaisin"
+      },
+      "audiobook_accessibility_pause" : {
+         "string" : "Keskeytä"
+      },
+      "audiobook_accessibility_play" : {
+         "string" : "Toista"
+      },
+      "audiobook_accessibility_playback_speed_currently" : {
+         "string" : "Toistonopeudeksi on tällä hetkellä asetettu"
+      },
+      "audiobook_accessibility_playback_speed_has_been_set" : {
+         "string" : "Toistonopeudeksi on asetettu"
+      },
+      "audiobook_accessibility_playback_speed_is_selected" : {
+         "string" : "Tämä on tällä hetkellä valittuna oleva toistonopeus"
+      },
+      "audiobook_accessibility_playback_speed_set_to" : {
+         "string" : "Aseta toistonopeudeksi"
+      },
+      "audiobook_accessibility_player_buffering" : {
+         "string" : "Soitin puskuroi"
+      },
+      "audiobook_accessibility_player_time_current" : {
+         "string" : "%1$s toistettu"
+      },
+      "audiobook_accessibility_player_time_remaining" : {
+         "string" : "%1$s jäljellä"
+      },
+      "audiobook_accessibility_second" : {
+         "string" : "sekunti"
+      },
+      "audiobook_accessibility_seconds" : {
+         "string" : "sekuntia"
+      },
+      "audiobook_accessibility_sleep_timer_currently" : {
+         "string" : "Uniajastimen asetukseksi on tällä hetkellä valittu"
+      },
+      "audiobook_accessibility_sleep_timer_description_end_of_chapter" : {
+         "string" : "Unitila tiedoston lopussa"
+      },
+      "audiobook_accessibility_sleep_timer_description_off" : {
+         "string" : "Pois"
+      },
+      "audiobook_accessibility_sleep_timer_has_been_set" : {
+         "string" : "Uniajastimen asetukseksi on valittu"
+      },
+      "audiobook_accessibility_sleep_timer_is_paused" : {
+         "string" : "Uniajastin on keskeytetty, koska toisto on keskeytetty."
+      },
+      "audiobook_accessibility_toc_bookmark_date_is" : {
+         "string" : "Päivämäärä"
+      },
+      "audiobook_accessibility_toc_bookmark_delete" : {
+         "string" : "Poista"
+      },
+      "audiobook_accessibility_toc_bookmark_offset_is" : {
+         "string" : "Offset"
+      },
+      "audiobook_accessibility_toc_chapter_downloading" : {
+         "string" : "Tiedostoa ladataan parhaillaan"
+      },
+      "audiobook_accessibility_toc_chapter_duration_is" : {
+         "string" : "Kesto"
+      },
+      "audiobook_accessibility_toc_chapter_failed_download" : {
+         "string" : "Tiedoston lataaminen on epäonnistunut"
+      },
+      "audiobook_accessibility_toc_chapter_is_current" : {
+         "string" : "Valittu"
+      },
+      "audiobook_accessibility_toc_chapter_requires_download" : {
+         "string" : "Tiedosto on ladattava ennen kuin se voidaan toistaa"
+      },
+      "audiobook_accessibility_toc_download" : {
+         "string" : "Lataa tiedosto %1$d"
+      },
+      "audiobook_accessibility_toc_progress" : {
+         "string" : "Tiedostoa %1$d on ladattu %2$d prosenttia. Lopeta lataaminen klikkaamalla."
+      },
+      "audiobook_accessibility_toc_refresh_all" : {
+         "string" : "Lataa kaikki tiedostot"
+      },
+      "audiobook_accessibility_toc_retry" : {
+         "string" : "Yritä ladata tiedosto %1$d uudelleen"
+      },
+      "audiobook_accessibility_toc_selected" : {
+         "string" : "Valittu tiedosto %1$d"
+      },
+      "audiobook_accessibility_toc_stop_all" : {
+         "string" : "Lopeta kaikkien tiedostojen lataus"
+      },
+      "audiobook_accessibility_toc_track_n" : {
+         "string" : "Kappale %1$d"
+      },
+      "audiobook_part_download_continue" : {
+         "string" : "Jatka"
+      },
+      "audiobook_part_download_stop" : {
+         "string" : "Lopeta"
+      },
+      "audiobook_part_download_stop_confirm" : {
+         "string" : "Lopetetaanko tämän kirjan osan lataaminen?"
+      },
+      "audiobook_player_buffering" : {
+         "string" : "Puskuroidaan…"
+      },
+      "audiobook_player_error" : {
+         "string" : "Toiston aikana tapahtui virhe. Virhekoodi: %1$d"
+      },
+      "audiobook_player_initial" : {
+         "string" : "00:00:00"
+      },
+      "audiobook_player_menu_add_bookmark_title" : {
+         "string" : "Lisää kirjanmerkki"
+      },
+      "audiobook_player_menu_playback_rate_title" : {
+         "string" : "Toistonopeus"
+      },
+      "audiobook_player_menu_sleep_title" : {
+         "string" : "Aseta uniajastin"
+      },
+      "audiobook_player_menu_toc_title" : {
+         "string" : "Sisällysluettelo"
+      },
+      "audiobook_player_menu_toc_title_bookmarks" : {
+         "string" : "Kirjanmerkit"
+      },
+      "audiobook_player_menu_toc_title_chapters" : {
+         "string" : "Luvut"
+      },
+      "audiobook_player_options_cancel" : {
+         "string" : "Peruuta"
+      },
+      "audiobook_player_remaining_time" : {
+         "string" : "%1$d h %2$d min jäljellä"
+      },
+      "audiobook_player_remaining_time_minutes_only" : {
+         "string" : "%d min jäljellä"
+      },
+      "audiobook_player_sleep_15" : {
+         "string" : "15:00"
+      },
+      "audiobook_player_sleep_30" : {
+         "string" : "30:00"
+      },
+      "audiobook_player_sleep_45" : {
+         "string" : "45:00"
+      },
+      "audiobook_player_sleep_60" : {
+         "string" : "60:00"
+      },
+      "audiobook_player_sleep_end_of_chapter" : {
+         "string" : "Tiedoston loppu"
+      },
+      "audiobook_player_sleep_now" : {
+         "string" : "Nyt"
+      },
+      "audiobook_player_sleep_off" : {
+         "string" : "Pois"
+      },
+      "audiobook_player_toc_bookmarks_dialog_message_delete" : {
+         "string" : "Haluatko varmasti poistaa tämän kirjanmerkin?"
+      },
+      "audiobook_player_toc_bookmarks_dialog_title_delete" : {
+         "string" : "Poista"
+      },
+      "audiobook_player_toc_bookmarks_empty" : {
+         "string" : "Tässä kirjassa ei ole kirjanmerkkejä"
+      },
+      "audiobook_player_toc_bookmarks_error_deleting" : {
+         "string" : "Kirjanmerkin poistamisessa tapahtui virhe"
+      },
+      "audiobook_player_toc_menu_refresh_all" : {
+         "string" : "Päivitä kaikki"
+      },
+      "audiobook_player_toc_menu_stop_all" : {
+         "string" : "Lopeta kaikki lataukset"
+      },
+      "audiobook_player_toc_menu_stop_all_confirm" : {
+         "string" : "Lopetetaanko kaikki lataukset?"
+      },
+      "audiobook_player_toc_track_n" : {
+         "string" : "Kappale %1$d"
+      },
+      "audiobook_player_waiting" : {
+         "string" : "Tiedosto %1$d on ladattava, jotta toistoa voidaan jatkaa."
       },
       "bookFailedLoan" : {
          "string" : "Kirjaa %1$s ei voitu ladata"
@@ -361,10 +625,10 @@
          "string" : "Kirja %1$s on palautettu onnistuneesti"
       },
       "bookmarkEnd" : {
-         "string" : ""
+         "string" : "Luvun lopussa."
       },
       "bookmarkProgressPercent" : {
-         "string" : ""
+         "string" : "%1$d%% luvusta."
       },
       "bootAdobeDRMFailed" : {
          "string" : "Jokin meni pieleen Adobe DRM -järjestelmässä. Jotkin kirjat eivät ole saatavilla tässä sovelluksen versiossa. Kokeile päivittää sovelluksen uusimpaan versioon."
@@ -547,7 +811,7 @@
          "string" : "Ladataan syötettä…"
       },
       "catalogGet" : {
-         "string" : "Hae"
+         "string" : "Lainaa"
       },
       "catalogHoldCannotCancel" : {
          "string" : "Tätä varausta ei voi peruuttaa."
@@ -573,6 +837,15 @@
       "catalogMetaFormat" : {
          "string" : "Muoto"
       },
+      "catalogMetaId" : {
+         "string" : "ISBN"
+      },
+      "catalogMetaIllustrators" : {
+         "string" : "Kuvittajat"
+      },
+      "catalogMetaLanguage" : {
+         "string" : "Kieli"
+      },
       "catalogMetaNarrators" : {
          "string" : "Lukijat"
       },
@@ -581,6 +854,9 @@
       },
       "catalogMetaPublisher" : {
          "string" : "Kustantaja"
+      },
+      "catalogMetaTranslators" : {
+         "string" : "Kääntäjät"
       },
       "catalogMetaUpdatedDate" : {
          "string" : "Päivitetty"
@@ -624,17 +900,20 @@
       "contentDescriptionLogo" : {
          "string" : "Logo"
       },
+      "contentDescriptionPage1" : {
+         "string" : ""
+      },
+      "contentDescriptionPage2" : {
+         "string" : ""
+      },
+      "contentDescriptionPage3" : {
+         "string" : ""
+      },
+      "contentDescriptionPage4" : {
+         "string" : ""
+      },
       "contentDescriptionSkipButton" : {
          "string" : "Ohita-painike"
-      },
-      "contentDescriptionStep1" : {
-         "string" : "Vaihe 1 - Etsi kirjastosi"
-      },
-      "contentDescriptionStep2" : {
-         "string" : "Vaihe 2 - Etkö löydä kirjastoasi? Palacen kirjahyllystä löydät yli 10 000 ilmaista kirjaa, joista voit nauttia nyt"
-      },
-      "contentDescriptionStep3" : {
-         "string" : "Vaihe 3 - Lue. Kuuntele. Nauti!"
       },
       "contentDescriptionTutorialPage" : {
          "string" : "Tutoriaalisivu"
@@ -657,11 +936,23 @@
       "dialog_manual_passphrase_title" : {
          "string" : "Anna LCP-salasana"
       },
+      "e_kirjasto_logo" : {
+         "string" : "E-kirjaston logo"
+      },
       "emptyBookmarksMessage" : {
-         "string" : ""
+         "string" : "Tässä kirjassa ei ole kirjanmerkkejä"
       },
       "errorDetailsTitle" : {
          "string" : "Virheen tiedot"
+      },
+      "errorLoginFailed" : {
+         "string" : "Sisäänkirjautuminen epäonnistui"
+      },
+      "errorPasskeyLoginFailed" : {
+         "string" : "Sisäänkirjautuminen pääsyavaimella epäonnistui"
+      },
+      "errorPasskeyRegisterFailed" : {
+         "string" : "Virhe pääsyavaimen rekisteröinnissä"
       },
       "errorSendReport" : {
          "string" : "Lähetä tukeen"
@@ -669,8 +960,14 @@
       "errorStepsTitle" : {
          "string" : "Vaiheet"
       },
+      "errorSuomiFiLoginFailed" : {
+         "string" : "Sisäänkirjautuminen Suomi.fi:llä epäonnistui"
+      },
       "errorTitle" : {
          "string" : "Tässä on ongelmastasi luotu virheloki:"
+      },
+      "error_login_account_not_found" : {
+         "string" : "Virhe sisäänkirjautumisessa. Käynnistä sovellus uudelleen ja yritä uudelleen."
       },
       "eula_agree" : {
          "string" : "concordare"
@@ -790,9 +1087,12 @@
          "string" : "Käyttäjänimi"
       },
       "login_passkey" : {
-         "string" : ""
+         "string" : "Kirjaudu sisään pääsyavaimella"
       },
       "login_suomifi" : {
+         "string" : ""
+      },
+      "login_with_suomifi" : {
          "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
       },
       "logoutClearingBookDatabase" : {
@@ -853,10 +1153,10 @@
          "string" : "Lehdet"
       },
       "magazinesSignInRequiredSubtitle" : {
-         "string" : ""
+         "string" : "Kirjaudu sisään siirtymällä asetuksiin"
       },
       "magazinesSignInRequiredTitle" : {
-         "string" : ""
+         "string" : "Sisäänkirjautuminen vaaditaan"
       },
       "migrationFailure" : {
          "string" : "Tietojesi siirtämisessä oli yksi tai useampi ongelma…"
@@ -869,6 +1169,9 @@
       },
       "migrationSuccess" : {
          "string" : "Tietosi siirrettiin onnistuneesti!"
+      },
+      "natlibfi_logo" : {
+         "string" : "Kansalliskirjaston logo"
       },
       "next" : {
          "string" : "Seuraava"
@@ -896,9 +1199,6 @@
       },
       "ok" : {
          "string" : "OK"
-      },
-      "placeholder" : {
-         "string" : ""
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Luodaan tilintarjoajan kuvausta..."
@@ -949,46 +1249,46 @@
          "string" : "Haetaan todennusdokumentin syötettä…"
       },
       "progress_page" : {
-         "string" : ""
+         "string" : "Sivu %1$d/%2$d"
       },
       "progress_percent" : {
-         "string" : ""
+         "string" : "%1$d%%"
       },
       "publisherDefaults" : {
-         "string" : ""
+         "string" : "Kustantajan oletusasetukset"
       },
       "reachedLoanLimit" : {
          "string" : "Olet saavuttanut lainarajasi"
       },
       "readerAccessAddBookmark" : {
-         "string" : ""
+         "string" : "Luo kirjanmerkki nykyiselle sivulle"
       },
       "readerAccessDeleteBookmark" : {
-         "string" : ""
+         "string" : "Poista nykyisen sivun kirjanmerkki"
       },
       "readerAccessSearch" : {
-         "string" : ""
+         "string" : "Avaa hakusyöte"
       },
       "readerAccessSettings" : {
-         "string" : ""
+         "string" : "Avaa asetusikkuna"
       },
       "readerAccessTOC" : {
-         "string" : ""
+         "string" : "Avaa sisällysluettelo- ja kirjanmerkkinäyttö"
       },
       "readerAddBookmark" : {
-         "string" : ""
+         "string" : "Lisää kirjanmerkki"
       },
       "readerSearch" : {
-         "string" : ""
+         "string" : "Hae"
       },
       "readerSearchNoResults" : {
-         "string" : ""
+         "string" : "Ei hakutuloksia"
       },
       "readerSettings" : {
-         "string" : ""
+         "string" : "Asetukset"
       },
       "readerTableOfContents" : {
-         "string" : ""
+         "string" : "Sisällysluettelo ja kirjanmerkit"
       },
       "reader_bookmark_added" : {
          "string" : "Kirjanmerkki lisättiin"
@@ -1189,58 +1489,58 @@
          "string" : "Asetukset"
       },
       "settingsABC" : {
-         "string" : ""
+         "string" : "ABC"
       },
       "settingsABCLarger" : {
-         "string" : ""
+         "string" : "ABC ↑"
       },
       "settingsABCReset" : {
-         "string" : ""
+         "string" : "ABC ↺"
       },
       "settingsABCSmaller" : {
-         "string" : ""
+         "string" : "ABC ↓"
       },
       "settingsAa" : {
-         "string" : ""
+         "string" : "A a"
       },
       "settingsAbout" : {
          "string" : "Tietoja Palacesta"
       },
       "settingsAccessibilityBack" : {
-         "string" : ""
+         "string" : "Takaisin"
       },
       "settingsAccessibilityBrightnessSlider" : {
-         "string" : ""
+         "string" : "Kirkkauden säädön liukusäädin"
       },
       "settingsAccessibilitySetBlackTextOnSepia" : {
-         "string" : ""
+         "string" : "Aseta värimalliksi musta teksti beigellä taustalla."
       },
       "settingsAccessibilitySetBlackTextOnWhite" : {
-         "string" : ""
+         "string" : "Aseta värimalliksi musta teksti valkoisella taustalla."
       },
       "settingsAccessibilitySetDyslexic" : {
-         "string" : ""
+         "string" : "Aseta kirjan fontiksi Open Dyslexic."
       },
       "settingsAccessibilitySetPublisher" : {
-         "string" : ""
+         "string" : "Näytä kustantajan määrittämät fontit ja asetteluvaihtoehdot."
       },
       "settingsAccessibilitySetSans" : {
-         "string" : ""
+         "string" : "Aseta kirjan fontiksi sans-serif."
       },
       "settingsAccessibilitySetSerif" : {
-         "string" : ""
+         "string" : "Aseta kirjan fontiksi serif."
       },
       "settingsAccessibilitySetSizeLarger" : {
-         "string" : ""
+         "string" : "Suurenna tekstin kokoa."
       },
       "settingsAccessibilitySetSizeReset" : {
-         "string" : ""
+         "string" : "Palauta tekstin koko."
       },
       "settingsAccessibilitySetSizeSmaller" : {
-         "string" : ""
+         "string" : "Pienennä tekstin kokoa."
       },
       "settingsAccessibilitySetWhiteTextOnBlack" : {
-         "string" : ""
+         "string" : "Aseta värimalliksi valkoinen teksti mustalla taustalla."
       },
       "settingsAccessibilityStatement" : {
          "string" : "Saavutettavuusseloste"
@@ -1411,13 +1711,13 @@
          "string" : "Tietosuojakäytäntö"
       },
       "settingsPub" : {
-         "string" : ""
+         "string" : "Julk"
       },
       "settingsPublisherText" : {
-         "string" : ""
+         "string" : "Näytä kustantajan määrittämät fontit ja asetteluvaihtoehdot tässä e-kirjassa."
       },
       "settingsPublisherTitle" : {
-         "string" : ""
+         "string" : "Kustantajan oletus"
       },
       "settingsReportIssue" : {
          "string" : "Ilmoita ongelmasta…"
@@ -1441,7 +1741,7 @@
          "string" : "Asetukset"
       },
       "skip_login" : {
-         "string" : "Jatka kirjautumatta"
+         "string" : "Jatka kirjautumatta sisään"
       },
       "tabBooks" : {
          "string" : "Omat kirjat"
@@ -1467,32 +1767,59 @@
       "table_of_contents_title" : {
          "string" : "Sisällysluettelo"
       },
+      "testingClearAppDataButton" : {
+         "string" : "Nollaa sovelluksen tiedot ja lopeta"
+      },
+      "testingHeader" : {
+         "string" : "Testikirjautuminen E-kirjastoon"
+      },
+      "testingLoginButton" : {
+         "string" : "Sisäänkirjautuminen"
+      },
+      "testingLoginIncorrect" : {
+         "string" : "Virheelliset kirjautumistiedot!"
+      },
+      "testingLogoDescription" : {
+         "string" : "E-kirjasto"
+      },
+      "testingPinInputHint" : {
+         "string" : "PIN-koodi"
+      },
+      "testingPinInputTitle" : {
+         "string" : "PIN-koodi:"
+      },
+      "testingUsernameInputHint" : {
+         "string" : "Käyttäjänimi"
+      },
+      "testingUsernameInputTitle" : {
+         "string" : "Käyttäjänimi:"
+      },
       "tocAccessBookmarkDelete" : {
-         "string" : ""
+         "string" : "Poista kirjanmerkki"
       },
       "tocAccessChapter" : {
-         "string" : ""
+         "string" : "Avaa luku %1$d: %2$s"
       },
       "tocBookmarkCancel" : {
-         "string" : ""
+         "string" : "Peruuta"
       },
       "tocBookmarkDelete" : {
-         "string" : ""
+         "string" : "Poista"
       },
       "tocBookmarkDeleteErrorMessage" : {
-         "string" : ""
+         "string" : "Kirjanmerkin poistamisessa tapahtui virhe"
       },
       "tocBookmarkDeleteMessage" : {
-         "string" : ""
+         "string" : "Haluatko varmasti poistaa tämän kirjanmerkin?"
       },
       "tocBookmarks" : {
-         "string" : ""
+         "string" : "Kirjanmerkit"
       },
       "tocError" : {
-         "string" : ""
+         "string" : "Merkintöjä ei ole saatavilla."
       },
       "tocTitle" : {
-         "string" : ""
+         "string" : "Sisällysluettelo"
       },
       "unexpectedException" : {
          "string" : "Tapahtui odottamaton poikkeus."

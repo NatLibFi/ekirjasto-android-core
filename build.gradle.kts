@@ -353,13 +353,13 @@ fun createScandoAnalyzeTask(project: Project): Task {
         versionPrevious,
         "--ignoreMissingOld",
         "--newJar",
-        "${project.buildDir}/outputs/aar/$artifactId-debug.aar",
+        "${project.projectDir}/build/outputs/aar/$artifactId-debug.aar",
         "--newJarVersion",
         versionCurrent,
         "--textReport",
-        "${project.buildDir}/scando-report.txt",
+        "${project.projectDir}/build/scando-report.txt",
         "--htmlReport",
-        "${project.buildDir}/scando-report.html",
+        "${project.projectDir}/build/scando-report.html",
     )
 
     return project.task("ScandoAnalyze", Exec::class) {

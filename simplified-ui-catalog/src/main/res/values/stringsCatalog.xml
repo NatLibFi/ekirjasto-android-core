@@ -69,6 +69,10 @@
   <string name="catalogMetaPublisher">Publisher</string>
   <string name="catalogMetaUpdatedDate">Updated</string>
   <string name="catalogMetaDuration">Duration</string>
+  <string name="catalogMetaLanguage">Language</string>
+  <string name="catalogMetaTranslators">Translators</string>
+  <string name="catalogMetaIllustrators">Illustrators</string>
+  <string name="catalogMetaId">ISBN</string>
   <string name="catalogMore">More</string>
   <string name="catalogOperationFailed">The operation could not be completed.</string>
   <string name="catalogRead">Read</string>

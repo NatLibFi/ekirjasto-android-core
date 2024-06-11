@@ -4,43 +4,31 @@ import android.content.Context
 import com.transifex.txnative.LocaleState
 import com.transifex.txnative.TxNative
 import com.transifex.txnative.missingpolicy.WrappedStringPolicy
-import org.slf4j.LoggerFactory
+import fi.kansalliskirjasto.ekirjasto.util.SecretsUtil
 import java.io.FileNotFoundException
 import java.util.Properties
+import org.slf4j.LoggerFactory
+
 
 /**
  * Functions to enable Transifex string translation.
  */
 
 object MainTransifex {
-
   private val logger = LoggerFactory.getLogger(MainTransifex::class.java)
-
-  private fun loadTransifexToken(context: Context): String? {
-    return try {
-      context.assets.open("secrets.conf").use { stream ->
-        val props = Properties()
-        props.load(stream)
-        props.getProperty("transifex.token")
-      }
-    } catch (e: FileNotFoundException) {
-      this.logger.warn("secrets.conf not found, will insert empty Transifex token")
-      null
-    } catch (e: Exception) {
-      this.logger.warn("Could not find Transifex token in secrets.conf, will insert empty token", e)
-      null
-    }
-  }
 
   /**
    * Configure Transifex.
    *
-   * Will insert an empty token for Transifex if a token is not found in assets.
+   * Will warn about an empty token for Transifex, if not set.
    */
-
+  @Suppress("KotlinConstantConditions")
   fun configure(applicationContext: Context) {
     this.logger.debug("MainTransifex.configure()")
-    val token = loadTransifexToken(applicationContext) ?: ""
+    val transifexToken = SecretsUtil.getTransifexToken()
+    if (transifexToken.isBlank()) {
+      logger.warn("Transifex token not set, Transifex will only use cached localizations")
+    }
 
     val languages = BuildConfig.LANGUAGES.split(",")
     this.logger.debug("Languages: " + languages.joinToString(", "))
@@ -64,7 +52,7 @@ object MainTransifex {
     TxNative.init(
       applicationContext,
       localeState,
-      token,
+      transifexToken,
       null,
       null,
       stringPolicy

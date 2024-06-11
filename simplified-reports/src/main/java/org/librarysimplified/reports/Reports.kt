@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.core.content.FileProvider
+import androidx.core.content.pm.PackageInfoCompat
 import org.librarysimplified.reports.Reports.Result.NoFiles
 import org.librarysimplified.reports.Reports.Result.RaisedException
 import org.librarysimplified.reports.Reports.Result.Sent
@@ -159,7 +160,7 @@ object Reports {
       this.append(' ')
       this.append(pkgInfo.versionName)
       this.append(" (")
-      this.append(pkgInfo.versionCode)
+      this.append(PackageInfoCompat.getLongVersionCode(pkgInfo).toString())
       this.append(")")
     }
   }

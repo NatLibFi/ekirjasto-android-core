@@ -29,6 +29,8 @@ import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoggingInWaitin
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoginFailed
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountNotLoggedIn
 import org.nypl.simplified.android.ktx.supportActionBar
+import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult
+import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableStatus
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
@@ -122,6 +124,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonFinnish = view.findViewById(R.id.buttonFinnish)
     this.buttonSwedish = view.findViewById(R.id.buttonSwedish)
     this.versionText = view.findViewById(R.id.appVersion)
+    this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
 
 
     this.toolbar =
@@ -131,6 +134,10 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
     this.viewModel.accountLive.observe(this.viewLifecycleOwner) {
       this.reconfigureAccountUI()
+    }
+
+    this.viewModel.accountSyncingSwitchStatus.observe(this.viewLifecycleOwner){ status ->
+      this.reconfigureBookmarkSyncingSwitch(status)
     }
 
     this.reconfigureAccountUI()
@@ -172,10 +179,10 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     /*
      * Configure the bookmark syncing switch to enable/disable syncing permissions.
      */
-// TODO bookmark sync
-//    this.bookmarkSyncCheck.setOnCheckedChangeListener { _, isChecked ->
-//      this.viewModel.enableBookmarkSyncing(isChecked)
-//    }
+
+    this.bookmarkSyncCheck.setOnCheckedChangeListener { _, isChecked ->
+      this.viewModel.enableBookmarkSyncing(isChecked)
+    }
 
     /*
      * Hide the toolbar and back arrow if there is no page to return to (e.g. coming from a deep link).
@@ -197,11 +204,13 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     button.isEnabled = document != null
     if (document != null) {
       button.setOnClickListener {
-        var title = button.text
+        val title = button.text
+        val url = LanguageUtil.insertLanguageInURL(document.readableURL,this.requireContext())
+        logger.debug("OpenDocViewer: {} -> {}", title, url)
         this.listener.post(
           AccountDetailEvent.OpenDocViewer(
             title = title.toString(),
-            url = LanguageUtil.insertLanguageInURL(document.readableURL, this.requireContext())
+            url = url
           )
         )
       }
@@ -225,6 +234,10 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private fun reconfigureAccountUI() {
 
+    if (!isPasskeySupported()) {
+      this.buttonRegisterPasskey.visibility = GONE
+      this.buttonLoginPasskey.visibility = GONE
+    }
     val loginState = this.viewModel.account.loginState
     this.logger.debug("Configure UI Account Login State: {}",loginState)
     when (loginState){
@@ -253,10 +266,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginSuomiFi.isEnabled = true
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
-    //TODO enable once passkeys fixed
-    buttonLoginPasskey.visibility = VISIBLE
-//    buttonLoginPasskey.visibility = GONE
-    buttonRegisterPasskey.visibility = GONE
+
+    if (isPasskeySupported()) {
+      buttonLoginPasskey.visibility = VISIBLE
+      buttonRegisterPasskey.visibility = GONE
+    }
     this.syncBookmarks.visibility = GONE
     this.bookmarkStatement.visibility = GONE
     this.eulaStatement.visibility = VISIBLE
@@ -267,10 +281,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey.isEnabled = false
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
-    //TODO enable once passkeys fixed
-    buttonLoginPasskey.visibility = VISIBLE
-//    buttonLoginPasskey.visibility = GONE
-    buttonRegisterPasskey.visibility = GONE
+
+    if (isPasskeySupported()) {
+      buttonLoginPasskey.visibility = VISIBLE
+      buttonRegisterPasskey.visibility = GONE
+    }
   }
 
   private fun OnConfigureWaitingForExternalAuth(loginState: AccountLoggingInWaitingForExternalAuthentication) {
@@ -278,10 +293,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey.isEnabled = false
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
-    //TODO enable once passkeys fixed
-    buttonLoginPasskey.visibility = VISIBLE
-//    buttonLoginPasskey.visibility = GONE
-    buttonRegisterPasskey.visibility = GONE
+
+    if (isPasskeySupported()) {
+      buttonLoginPasskey.visibility = VISIBLE
+      buttonRegisterPasskey.visibility = GONE
+    }
   }
 
   private fun OnConfigureAccountLoginFailed(loginState: AccountLoginFailed) {
@@ -289,10 +305,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey.isEnabled = true
     buttonLogout.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
-    //TODO enable once passkeys fixed
-    buttonLoginPasskey.visibility = VISIBLE
-//    buttonLoginPasskey.visibility = GONE
-    buttonRegisterPasskey.visibility = GONE
+
+    if (isPasskeySupported()) {
+      buttonLoginPasskey.visibility = VISIBLE
+      buttonRegisterPasskey.visibility = GONE
+    }
     this.syncBookmarks.visibility = GONE
 
   }
@@ -300,10 +317,10 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private fun OnConfigureAccountLoggedIn(loginState: AccountLoggedIn) {
     buttonLogout.visibility = VISIBLE
     buttonLoginSuomiFi.visibility = GONE
-    buttonLoginPasskey.visibility = GONE
-    //TODO enable once passkeys fixed
-//    buttonRegisterPasskey.visibility = GONE
-    buttonRegisterPasskey.visibility = VISIBLE
+    if (isPasskeySupported()) {
+      buttonLoginPasskey.visibility = GONE
+      buttonRegisterPasskey.visibility = VISIBLE
+    }
     this.syncBookmarks.visibility = VISIBLE
     this.bookmarkStatement.visibility = VISIBLE
     this.bookmarkSyncProgress.visibility = INVISIBLE
@@ -320,10 +337,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private fun OnConfigureAccountLogoutFailed(loginState: AccountLoginState.AccountLogoutFailed) {
     buttonLogout.visibility = VISIBLE
     buttonLoginSuomiFi.visibility = GONE
-    buttonLoginPasskey.visibility = GONE
-    //TODO enable once passkeys fixed
-//    buttonRegisterPasskey.visibility = GONE
-    buttonRegisterPasskey.visibility = VISIBLE
+
+    if (isPasskeySupported()) {
+      buttonLoginPasskey.visibility = GONE
+      buttonRegisterPasskey.visibility = VISIBLE
+    }
   }
 
   private fun onTryRegisterPasskey() {
@@ -431,4 +449,54 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     LocaleHelper.setLocale(this.requireContext(), language)
     DataUtil.restartApp(this.requireContext())
   }
+
+  private fun isPasskeySupported(): Boolean {
+    return android.os.Build.VERSION.SDK_INT >= 28
+  }
+
+  private fun reconfigureBookmarkSyncingSwitch(status: BookmarkSyncEnableStatus) {
+    /*
+     * Remove the checked-change listener, because setting `isChecked` will trigger the listener.
+     */
+
+    this.bookmarkSyncCheck.setOnCheckedChangeListener(null)
+
+    /*
+     * Otherwise, the switch is doing something that interests us...
+     */
+
+    val account = this.viewModel.account
+    return when (status) {
+      is BookmarkSyncEnableStatus.Changing -> {
+        this.bookmarkSyncProgress.visibility = View.VISIBLE
+        this.bookmarkSyncCheck.isEnabled = false
+      }
+
+      is BookmarkSyncEnableStatus.Idle -> {
+        this.bookmarkSyncProgress.visibility = View.INVISIBLE
+        this.logger.debug("Bookmark Syncing Status: $status")
+        when (status.status) {
+
+          BookmarkSyncEnableResult.SYNC_ENABLE_NOT_SUPPORTED -> {
+            this.bookmarkSyncCheck.isChecked = false
+            this.bookmarkSyncCheck.isEnabled = false
+          }
+
+          BookmarkSyncEnableResult.SYNC_ENABLED,
+          BookmarkSyncEnableResult.SYNC_DISABLED -> {
+            val isPermitted = account.preferences.bookmarkSyncingPermitted
+            val isSupported = account.loginState.credentials?.annotationsURI != null
+
+            this.bookmarkSyncCheck.isChecked = isPermitted
+            this.bookmarkSyncCheck.isEnabled = isSupported
+
+            this.bookmarkSyncCheck.setOnCheckedChangeListener { _, isChecked ->
+              this.viewModel.enableBookmarkSyncing(isChecked)
+            }
+          }
+        }
+      }
+    }
+  }
+
 }

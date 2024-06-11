@@ -47,7 +47,7 @@
                 style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/account_login_suomifi" />
+                android:text="@string/account_login_with_suomifi" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonLoginPasskey"
@@ -121,7 +121,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:enabled="false"
+                    android:enabled="true"
                     android:label="@id/accountSyncBookmarksLabel"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

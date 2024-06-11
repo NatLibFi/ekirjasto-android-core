@@ -38,9 +38,12 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
   private final OptionType<URI> related;
   private final OptionType<DateTime> published;
   private final OptionType<String> publisher;
+  private final OptionType<String> language;
   private final String distribution;
   private final String summary;
   private final List<String> narrators;
+  private final List<String> illustrators;
+  private final List<String> translators;
   private final OptionType<URI> thumbnail;
   private final OptionType<URI> timeTrackingUri;
   private final String title;
@@ -75,6 +78,9 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     final OptionType<URI> in_analytics,
     final OptionType<DRMLicensor> in_licensor,
     final OptionType<Double> in_duration,
+    final OptionType<String> in_language,
+    final List<String> in_illustrators,
+    final List<String> in_translators,
     final ArrayList<ParseError> in_errors) {
     this.authors = NullCheck.notNull(Collections.unmodifiableList(in_authors));
     this.acquisitions = NullCheck.notNull(Collections.unmodifiableList(in_acquisitions));
@@ -100,6 +106,9 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     this.analytics = NullCheck.notNull(in_analytics);
     this.licensor = NullCheck.notNull(in_licensor);
     this.duration = NullCheck.notNull(in_duration);
+    this.language = NullCheck.notNull(in_language);
+    this.illustrators = NullCheck.notNull(in_illustrators);
+    this.translators = NullCheck.notNull(in_translators);
     this.errors = NullCheck.notNull(in_errors);
   }
 
@@ -257,6 +266,27 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
 
   public List<String> getNarrators() {
     return this.narrators;
+  }
+
+  /**
+   * @return The list of illustrators
+   */
+  public List<String> getIllustrators(){
+    return this.illustrators;
+  }
+
+  /**
+   * @return The list of translators
+   */
+  public List<String> getTranslators(){
+    return this.translators;
+  }
+
+  /**
+   * @return The language
+   */
+  public OptionType<String> getLanguage(){
+    return this.language;
   }
 
   /**
@@ -524,9 +554,12 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     private OptionType<URI> related;
     private OptionType<DateTime> published;
     private OptionType<String> publisher;
+    private OptionType<String> language;
     private String distribution;
     private String summary;
     private List<String> narrators;
+    private List<String> translators;
+    private List<String> illustrators;
     private OptionType<String> copyright;
     private OptionType<URI> thumbnail;
     private OptionType<URI> timeTrackingUri;
@@ -564,6 +597,9 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
       this.groups = new HashSet<Pair<String, URI>>(8);
       this.licensor = Option.none();
       this.duration = Option.none();
+      this.translators = new ArrayList<>();
+      this.illustrators = new ArrayList<>();
+      this.language = Option.none();
     }
 
     @Override
@@ -630,6 +666,9 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
         this.analytics,
         this.licensor,
         this.duration,
+        this.language,
+        this.illustrators,
+        this.translators,
         this.errors);
     }
 
@@ -729,6 +768,24 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     @Override
     public OPDSAcquisitionFeedEntryBuilderType addNarrator(String name) {
       this.narrators.add(NullCheck.notNull(name));
+      return this;
+    }
+
+    @Override
+    public OPDSAcquisitionFeedEntryBuilderType addTranslator(String name) {
+      this.translators.add(name);
+      return this;
+    }
+
+    @Override
+    public OPDSAcquisitionFeedEntryBuilderType addIllustrator(String name) {
+      this.illustrators.add(name);
+      return this;
+    }
+
+    @Override
+    public OPDSAcquisitionFeedEntryBuilderType setLanguageOption(OptionType<String> language) {
+      this.language = language;
       return this;
     }
 

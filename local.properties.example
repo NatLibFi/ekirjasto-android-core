@@ -1,7 +1,19 @@
-# Replace "test" here with the liblcp AAR secret
+# Add the upload keystore and key passwords here (required for production builds)
+ekirjasto.storePassword=
+ekirjasto.keyPassword=
+ekirjasto.keyalias=key0
+
+# Change "test" below with the liblcp AAR secret path
 ekirjasto.liblcp.repositorylayout=/[organisation]/[module]/android/aar/test/[revision].[ext]
 
-# If you want to enable "test login" set values similar to these
+# Set test login username and PIN code (base64 encoded) for Google Play review
 ekirjasto.testLogin.enabled=true
-ekirjasto.testLogin.username=TestUser
-ekirjasto.testLogin.pinCode=1234567890
+ekirjasto.testLogin.username=
+ekirjasto.testLogin.pin.base64=
+
+# Add the base64 encoded Transifex token here
+transifex.token.base64=
+# Optionally, add the Transifex token here (only used by transifex.sh)
+transifex.token=
+# Optionally, add the Transifex secret here (only used by transifex.sh)
+transifex.secret=

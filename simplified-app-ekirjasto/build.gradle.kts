@@ -2,13 +2,17 @@ import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.util.Base64
 import java.util.Properties
 
 fun calculateVersionCode(): Int {
     val now = LocalDateTime.now(ZoneId.of("UTC"))
     val nowSeconds = now.toEpochSecond(ZoneOffset.UTC)
     // Seconds since 2021-03-15 09:20:00 UTC
-    return (nowSeconds - 1615800000).toInt()
+    val versionCodeBeforeModuloCutoff = (nowSeconds - 1615800000).toInt()
+    // Round down to the nearest 10
+    val versionCode = versionCodeBeforeModuloCutoff - versionCodeBeforeModuloCutoff % 10
+    return versionCode
 }
 
 val localProp: Properties = Properties().apply{
@@ -27,6 +31,18 @@ fun overrideProperty(name: String) : String {
     val value = localProp.getOrElse(name){
         providers.gradleProperty(name).orNull
     }?.toString() ?: throw Exception("Property not found: $name")
+    return value
+}
+
+
+/**
+ * Overrides property from gradle.properties with same prop in local.properties if present,
+ * or otherwise gives a default value
+ */
+fun overridePropertyDefault(name: String, default: String) : String {
+    val value = localProp.getOrElse(name){
+        providers.gradleProperty(name).orNull
+    }?.toString() ?: default
     return value
 }
 
@@ -118,26 +134,28 @@ fun createRequiredAssetsTask(
  * The signing information that is required to exist for release builds.
  */
 
-val palaceKeyStore =
+val releaseKeystore =
     File("$rootDir/release.jks")
-val palaceKeyAlias =
-    project.findProperty("org.thepalaceproject.keyAlias") as String?
-val palaceKeyPassword =
-    project.findProperty("org.thepalaceproject.keyPassword") as String?
-val palaceStorePassword =
-    project.findProperty("org.thepalaceproject.storePassword") as String?
+val releaseKeyAlias =
+    overridePropertyDefault("ekirjasto.keyAlias", "")
+val releaseKeyPassword =
+    overridePropertyDefault("ekirjasto.keyPassword", "")
+val releaseStorePassword =
+    overridePropertyDefault("ekirjasto.storePassword", "")
 
 val requiredSigningTask = task("CheckReleaseSigningInformation") {
-    if (palaceKeyAlias == null) {
-        throw GradleException("org.thepalaceproject.keyAlias is not specified.")
+    if (releaseKeyAlias == "") {
+        throw GradleException("ekirjasto.keyAlias is not specified.")
     }
-    if (palaceKeyPassword == null) {
-        throw GradleException("org.thepalaceproject.keyPassword is not specified.")
+    if (releaseKeyPassword == "") {
+        throw GradleException("ekirjasto.keyPassword is not specified.")
     }
-    if (palaceStorePassword == null) {
-        throw GradleException("org.thepalaceproject.storePassword is not specified.")
+    if (releaseStorePassword == "") {
+        throw GradleException("ekirjasto.storePassword is not specified.")
     }
 }
+
+val versionCodeBase = calculateVersionCode()
 
 android {
     buildFeatures {
@@ -146,11 +164,17 @@ android {
     defaultConfig {
         applicationId = "fi.kansalliskirjasto.ekirjasto"
         versionName = getVersionName()
-        versionCode = calculateVersionCode()
+        versionCode = versionCodeBase
+        val feedbackUrlBase = overrideProperty("ekirjasto.feedbackUrlBase")
+        buildConfigField("String", "FEEDBACK_URL_BASE", "\"$feedbackUrlBase\"")
         val languages = overrideProperty("ekirjasto.languages")
         println("Configured languages: $languages")
         resourceConfigurations += languages.split(",")
         setProperty("archivesBaseName", "ekirjasto")
+        val supportEmailBase64 = overrideProperty("ekirjasto.supportEmailBase64")
+        val supportEmail = Base64.getDecoder().decode(supportEmailBase64.toByteArray(Charsets.UTF_8)).toString(Charsets.UTF_8)
+        println("Support email: $supportEmail")
+        buildConfigField("String", "SUPPORT_EMAIL", "\"$supportEmail\"")
     }
 
     /*
@@ -173,6 +197,7 @@ android {
     // Product flavors: environments from least stable to most stable
     productFlavors {
         create("ellibs") {
+            versionCode = versionCodeBase + 4
             // Set as default flavor, otherwise alphabetically first will be the default
             isDefault = true
             val circURL = "https://circulation-beta.ellibs.com"
@@ -181,18 +206,21 @@ android {
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("dev") {
+            versionCode = versionCodeBase + 3
             val circURL = "https://lib-dev.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
             val libProvider = "28bed937-a16b-4d69-a9c8-4b2656333423"
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("beta") {
+            versionCode = versionCodeBase + 2
             val circURL = "https://lib-beta.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
             val libProvider = "37015541-b542-4157-a687-3ca5ad47fdbe"
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("production") {
+            versionCode = versionCodeBase + 1
             val circURL = "https://lib.e-kirjasto.fi"
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
             val libProvider = "8b7292e9-ed77-480e-a695-423f715be0f2"
@@ -227,10 +255,10 @@ android {
             keyPassword = "android"
         }
         create("release") {
-            storeFile = palaceKeyStore
-            storePassword = palaceStorePassword
-            keyAlias = palaceKeyAlias
-            keyPassword = palaceKeyPassword
+            storeFile = releaseKeystore
+            storePassword = releaseStorePassword
+            keyAlias = releaseKeyAlias
+            keyPassword = releaseKeyPassword
         }
     }
 
@@ -282,7 +310,7 @@ android {
 
             this.outputs.forEach {
                 val outputFile = it.outputFile
-                val assetFile = File("${project.buildDir}/required-assets.conf")
+                val assetFile = File("${project.projectDir}/build/required-assets.conf")
                 val fileTask =
                     createRequiredAssetsFile(assetFile, this.flavorName)
                 val checkTask =

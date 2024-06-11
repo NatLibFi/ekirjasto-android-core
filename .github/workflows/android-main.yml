@@ -1,37 +1,70 @@
-name: Android CI (Authenticated)
+name: android-main
+
+#
+# This workflow is run on all commits pushed to main (i.e. merged PRs).
+#
 
 on:
   push:
-    branches: [ main, release/* ]
+    branches: [ main ]
+
+env:
+  COMMIT_SHA: ${{ github.sha }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  TARGET_BRANCH_NAME: ${{ github.base_ref || github.ref_name }}
+  # Join all secrets, so that they're "used", and will be masked in logs
+  MASKED_SECRETS: ${{ join(secrets, '\n') }}
 
 jobs:
   build:
-    runs-on: ubuntu-latest-large
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Checkout submodules
         run: git submodule update --init --recursive
+      - name: Show build info
+        run: scripts/show-ci-info.sh
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
-      - name: Build
+
+      - name: Reveal secrets
         env:
-          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          MAVEN_CENTRAL_STAGING_PROFILE_ID: ${{ secrets.MAVEN_CENTRAL_STAGING_PROFILE_ID }}
-          MAVEN_CENTRAL_SIGNING_KEY_ID: ${{ secrets.MAVEN_CENTRAL_SIGNING_KEY_ID }}
-          CI_GITHUB_ACCESS_TOKEN: ${{ secrets.CI_GITHUB_ACCESS_TOKEN }}
-          CI_AWS_ACCESS_ID: ${{ secrets.CI_AWS_ACCESS_ID }}
-          CI_AWS_SECRET_KEY: ${{ secrets.CI_AWS_SECRET_KEY }}
-          TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
-          TRANSIFEX_SECRET: ${{ secrets.TRANSIFEX_SECRET }}
-        run: .ekirjasto-ci/ci-build.sh normal
+          EKIRJASTO_LOCAL_PROPERTIES_BASE64: ${{ secrets.LOCAL_PROPERTIES }}
+          EKIRJASTO_RELEASE_JKS_BASE64: ${{ secrets.RELEASE_JKS }}
+        run: scripts/reveal-secrets.sh --overwrite
+
+      - name: Upload and download Transifex localizations
+        run: scripts/transifex.sh --append-tags=main
+
+      - name: Debug build
+        run: scripts/build.sh debug
+      - name: Release build
+        run: scripts/build.sh release
+
+      - name: Run tests
+        if: ${{ always() }}
+        run: scripts/run-tests.sh
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: junit-test-report
           path: ./simplified-tests/build/reports/tests/testDebugUnitTest/
+
+      - name: Upload production build to the Google Play Console closed-beta track
+        env:
+          EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
+        run: scripts/fastlane.sh deploy_closed_beta flavor:production
+      - name: Upload beta build to the Google Play Console alpha track
+        env:
+          EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
+        run: scripts/fastlane.sh deploy_alpha flavor:beta
+      - name: Upload dev build to the Google Play Console internal track
+        env:
+          EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
+        run: scripts/fastlane.sh deploy_internal flavor:dev

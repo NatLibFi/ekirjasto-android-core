@@ -2,6 +2,7 @@ package org.nypl.simplified.ui.settings
 
 import android.app.Application
 import android.content.pm.PackageManager
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.AndroidViewModel
 import org.librarysimplified.documents.DocumentStoreType
 import org.librarysimplified.services.api.ServiceDirectoryType
@@ -48,7 +49,7 @@ class SettingsMainViewModel(application: Application) : AndroidViewModel(applica
       val pkgManager = context.packageManager
       val pkgInfo = pkgManager.getPackageInfo(context.packageName, 0)
       val versionName = BuildConfig.SIMPLIFIED_VERSION
-      "$versionName (Build ${pkgInfo.versionCode})"
+      "$versionName (Build ${PackageInfoCompat.getLongVersionCode(pkgInfo)})"
     } catch (e: PackageManager.NameNotFoundException) {
       "Unknown"
     }

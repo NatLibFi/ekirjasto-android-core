@@ -111,10 +111,11 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
   }
 
   private fun postPasskeyFailed(result: TaskResult.Failure<PasskeyAuth>) {
+    val msg = if(this.viewModel.isRegistering) {R.string.errorPasskeyRegisterFailed} else {R.string.errorPasskeyLoginFailed}
     val newDialog =
       AlertDialog.Builder(this.requireActivity())
-        .setTitle(R.string.accountCreationFailed)
-        .setMessage(R.string.accountCreationFailedMessage)
+        .setTitle(R.string.errorLoginFailed)
+        .setMessage(msg)
         .setPositiveButton(R.string.accountsDetails) { dialog, _ ->
           this.showErrorPage(result.steps)
           dialog.dismiss()
