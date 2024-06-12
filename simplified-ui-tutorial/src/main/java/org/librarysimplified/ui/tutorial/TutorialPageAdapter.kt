@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
-class TutorialPageAdapter : RecyclerView.Adapter<TutorialPageAdapter.TutorialPageViewHolder>() {
+class TutorialPageAdapter(descriptions :Array<String>) : RecyclerView.Adapter<TutorialPageAdapter.TutorialPageViewHolder>() {
 
   private val images = arrayOf(
     R.drawable.intro_1,
@@ -14,6 +14,8 @@ class TutorialPageAdapter : RecyclerView.Adapter<TutorialPageAdapter.TutorialPag
     R.drawable.intro_3,
     R.drawable.intro_4
   )
+
+  private val imDescriptions = descriptions
 
   override fun getItemCount(): Int {
     return this.images.size
@@ -28,12 +30,13 @@ class TutorialPageAdapter : RecyclerView.Adapter<TutorialPageAdapter.TutorialPag
   }
 
   override fun onBindViewHolder(holder: TutorialPageViewHolder, position: Int) {
-    holder.bind(images[position])
+    holder.bind(images[position], imDescriptions[position])
   }
 
   inner class TutorialPageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    fun bind(imageResource: Int) {
+    fun bind(imageResource: Int, description: String) {
       (itemView as ImageView).setImageResource(imageResource)
+      (itemView as ImageView).contentDescription = description
     }
   }
 }

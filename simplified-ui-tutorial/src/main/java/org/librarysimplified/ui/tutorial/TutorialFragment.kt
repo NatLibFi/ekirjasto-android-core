@@ -73,31 +73,23 @@ class TutorialFragment : Fragment(R.layout.fragment_tutorial) {
   }
 
   private fun setupUI() {
-    tutorialViewPager.adapter = TutorialPageAdapter()
+    val descriptions = arrayOf(
+      getString(R.string.contentDescription1),
+      getString(R.string.contentDescription2),
+      getString(R.string.contentDescription3),
+      getString(R.string.contentDescription4))
+
+    tutorialViewPager.adapter = TutorialPageAdapter(descriptions)
 
     tutorialViewPager.registerOnPageChangeCallback(pageChangeCallback)
 
     TabLayoutMediator(tutorialTabLayout, tutorialViewPager) { tab, position ->
-      tab.contentDescription = getString(
-        when (position) {
-          0 -> {
-            R.string.contentDescriptionPage1
-          }
-          1 -> {
-            R.string.contentDescriptionPage2
-          }
-          2 -> {
-            R.string.contentDescriptionPage3
-          }
-          else -> {
-            R.string.contentDescriptionPage4
-          }
-        }
-      )
+      tab.contentDescription = getString(R.string.contentTabDescription)
     }.attach()
 
     adjustTabLayoutTabMargins()
 
+    this.skipButton.contentDescription = getString(R.string.close_tutorial)
     this.skipButton.setOnClickListener {
       closeTutorial()
     }
