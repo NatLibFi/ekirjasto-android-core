@@ -24,6 +24,7 @@
         android:layout_height="48dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/EkirjastoWhite"
         app:tabBackground="@drawable/selector_tab"
         app:tabMinWidth="48dp"
         app:tabIndicatorHeight="0dp" />
