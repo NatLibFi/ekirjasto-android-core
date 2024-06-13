@@ -202,7 +202,7 @@
          "string" : "Kirjaudu sisään pääsyavaimella"
       },
       "account_login_suomifi" : {
-         "string" : ""
+         "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
       },
       "account_login_with_suomifi" : {
          "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
@@ -1018,10 +1018,10 @@
          "string" : "Varaukset"
       },
       "feedWithGroupsEmptyHolds" : {
-         "string" : "Kun varaat kirjan luettelosta, se näkyy täällä. Katso täältä aika ajoin, onko kirjasi ladattavissa."
+         "string" : "Sinulla ei ole voimassa olevia varauksia."
       },
       "feedWithGroupsEmptyLoaned" : {
-         "string" : "Siirry luetteloon ja lisää kirjoja Omat kirjat -kohtaan."
+         "string" : "Sinulla ei ole voimassa olevia lainoja."
       },
       "loginAuthRequired" : {
          "string" : "Todennus vaaditaan. Jatketaan..."
@@ -1090,7 +1090,7 @@
          "string" : "Kirjaudu sisään pääsyavaimella"
       },
       "login_suomifi" : {
-         "string" : ""
+         "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
       },
       "login_with_suomifi" : {
          "string" : "Kirjaudu sisään Suomi.fi-tunnistuksella"
@@ -1744,7 +1744,7 @@
          "string" : "Jatka kirjautumatta sisään"
       },
       "tabBooks" : {
-         "string" : "Omat kirjat"
+         "string" : "Omat lainat"
       },
       "tabCatalog" : {
          "string" : "Selaa kirjoja"

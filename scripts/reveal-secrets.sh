@@ -3,7 +3,7 @@
 #
 # Reveal E-kirjasto Android secrets.
 #
-# Version 1.1.0
+# Version 1.1.2
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -15,8 +15,11 @@ cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 show_usage() {
   echo "Usage: $(basename "$0") [-h|--help] [--overwrite]"
   echo
+  # Wrap after 80 characters --> #######################################################
+  echo "Options:"
   echo "-h   --help           Show this help page."
   echo "     --overwrite      Ovewrite existing secret files."
+  # Wrap after 80 characters --> #######################################################
   echo
   echo "This script reveals E-kirjasto build secrets from base64 encoded"
   echo "environment variables."
@@ -60,7 +63,7 @@ done
 base64_to_file() {
   base64Input="$1"
   outputFile="$2"
-  echo "Revealing secret file: $outputFile"
+  info "Revealing secret file: $outputFile"
   echo "$base64Input" | base64 --decode > "$outputFile"
 }
 
