@@ -1,6 +1,8 @@
 E-kirjasto Android core
 =======================
 
+[![android-main](https://github.com/NatLibFi/ekirjasto-android-core/actions/workflows/android-main.yml/badge.svg)](https://github.com/NatLibFi/ekirjasto-android-core/actions/workflows/android-main.yml)
+
 The National Library of Finland's fork of the Palace Project Android client,
 which is itself the Lyrasis fork of the NYPL's [Library Simplified](http://www.librarysimplified.org/) Android client.
 
