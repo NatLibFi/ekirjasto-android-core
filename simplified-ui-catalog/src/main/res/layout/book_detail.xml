@@ -51,7 +51,6 @@
                 android:layout_marginEnd="16dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:focusable="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/bookDetailCover"
                 app:layout_constraintTop_toTopOf="parent"
@@ -64,7 +63,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:focusable="false"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textSize="14sp"
@@ -73,17 +71,34 @@
                 app:layout_constraintTop_toBottomOf="@id/bookDetailTitle"
                 tools:text="Mary Shelley" />
 
+            <TextView
+                android:id="@+id/bookDetailType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/bookDetailCover"
+                app:layout_constraintTop_toBottomOf="@id/bookDetailAuthors"
+                tools:text="eBook - The New York Public Library" />
+
             <LinearLayout
                 android:id="@+id/bookDetailButtons"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/catalogBookDetailButtonsHeight"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:gravity="start|bottom"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/bookDetailCover"
-                app:layout_constraintTop_toBottomOf="@id/bookDetailAuthors">
+                app:layout_constraintTop_toBottomOf="@id/bookDetailType">
 
                 <!-- These views are removed at runtime and are just present for the sake of the UI editor preview -->
 

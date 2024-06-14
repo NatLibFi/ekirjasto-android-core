@@ -130,6 +130,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var statusInProgressText: TextView
   private lateinit var summary: TextView
   private lateinit var title: TextView
+  private lateinit var type: TextView
   private lateinit var toolbar: PalaceToolbar
 
   private val dateYearFormatter =
@@ -190,6 +191,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       view.findViewById(R.id.bookDetailCoverImage)
     this.title =
       view.findViewById(R.id.bookDetailTitle)
+    this.type =
+      view.findViewById(R.id.bookDetailType)
     this.authors =
       view.findViewById(R.id.bookDetailAuthors)
     this.seeMore =
@@ -319,8 +322,21 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     this.title.text = opds.title
     this.authors.text = opds.authorsCommaSeparated
 
-    this.cover.contentDescription =
-      CatalogBookAccessibilityStrings.coverDescription(this.resources, feedEntry)
+
+    this.type.text = when (feedEntry.probableFormat) {
+      BookFormats.BookFormatDefinition.BOOK_FORMAT_EPUB ->
+        getString(R.string.catalogBookFormatEPUB)
+
+      BookFormats.BookFormatDefinition.BOOK_FORMAT_AUDIO ->
+        getString(R.string.catalogBookFormatAudioBook)
+
+      BookFormats.BookFormatDefinition.BOOK_FORMAT_PDF ->
+        getString(R.string.catalogBookFormatPDF)
+
+      else -> {
+        ""
+      }
+    }
 
     /*
      * Render the HTML present in the summary and insert it into the text view.
@@ -714,7 +730,6 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
           }
         )
       )
-      this.buttons.addView(this.buttonCreator.createButtonSpace())
     } else {
       this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
     }

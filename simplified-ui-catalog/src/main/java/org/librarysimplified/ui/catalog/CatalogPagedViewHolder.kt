@@ -125,8 +125,6 @@ class CatalogPagedViewHolder(
 
     this.setVisibilityIfNecessary(this.idleCover, View.INVISIBLE)
     this.idleCover.setImageDrawable(null)
-    this.idleCover.contentDescription =
-      CatalogBookAccessibilityStrings.coverDescription(this.context.resources, item)
 
     this.setVisibilityIfNecessary(this.idleProgress, View.VISIBLE)
     this.idleTitle.text = item.feedEntry.title
@@ -158,8 +156,6 @@ class CatalogPagedViewHolder(
 
     val onClick: (View) -> Unit = { this.listener.openBookDetail(item) }
     this.idle.setOnClickListener(onClick)
-    this.idleTitle.setOnClickListener(onClick)
-    this.idleCover.setOnClickListener(onClick)
   }
 
   private fun onBookChanged(bookWithStatus: BookWithStatus) {
