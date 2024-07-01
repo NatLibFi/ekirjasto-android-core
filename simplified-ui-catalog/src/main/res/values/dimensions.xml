@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <resources>
-  <dimen name="catalogLaneCoverMaximumWidth">120dp</dimen>
+  <dimen name="catalogLaneCoverMaximumWidth">140dp</dimen>
   <dimen name="catalogBookDetailCoverMaximumWidth">128dp</dimen>
 
   <dimen name="catalogBookDetailStatusHeight">64dp</dimen>
