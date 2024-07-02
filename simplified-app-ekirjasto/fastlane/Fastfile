@@ -57,7 +57,9 @@ end
 def get_version_name()
   File.open("../../gradle.properties", "r") do |file|
     file.grep(/^ekirjasto\.versionName=/) do |version_line|
-      return version_line.split("=")[1].strip!
+      version = version_line.split("=")[1]
+      version.strip!
+      return version
     end
   end
 end

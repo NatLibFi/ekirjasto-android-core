@@ -24,6 +24,8 @@ jobs:
       - name: Checkout submodules
         run: git submodule update --init --recursive
       - name: Show build info
+        env:
+          TEST_SECRET: ${{ secrets.MASK_TEST }}
         run: scripts/show-ci-info.sh
 
       - name: Set up JDK 17
@@ -47,11 +49,11 @@ jobs:
         run: scripts/build.sh release
 
       - name: Run tests
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         run: scripts/run-tests.sh
       - name: Upload test report
         uses: actions/upload-artifact@v4
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         with:
           name: junit-test-report
           path: ./simplified-tests/build/reports/tests/testDebugUnitTest/

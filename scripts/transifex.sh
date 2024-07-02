@@ -3,7 +3,7 @@
 #
 # Transifex Android wrapper.
 #
-# Version 2.1.2
+# Version 2.2.0
 #
 
 basename "$0"
@@ -17,11 +17,14 @@ cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 show_usage() {
   echo "Usage: $(basename "$0") [-h|--help]"
   echo
+  # Wrap after 80 characters --> #######################################################
+  echo "Options:"
   echo "-h   --help           Show this help page."
   echo "     --append-tags    Append the listed tags to all strings (comma-separated)."
   echo "     --dry-run        Perform a dry-run of an upload."
   echo "     --purge          Purge any deleted source strings."
   echo "     --skip-upload    Skip upload even if the Transifex secret is given."
+  # Wrap after 80 characters --> #######################################################
   echo
   echo "This script uploads and downloads Transifex strings."
   echo
@@ -116,7 +119,7 @@ fi
 
 info "Downloading transifex.jar"
 
-wget -c https://github.com/transifex/transifex-java/releases/download/1.3.0/transifex.jar \
+curl -sLo transifex.jar https://github.com/transifex/transifex-java/releases/download/1.3.0/transifex.jar \
   || fatal "Could not download Transifex" 70
 
 sha256sum -c transifex.sha256 \

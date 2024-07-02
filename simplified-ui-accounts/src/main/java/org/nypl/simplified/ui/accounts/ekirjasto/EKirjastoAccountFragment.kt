@@ -8,7 +8,6 @@ import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -16,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
-import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import io.reactivex.disposables.CompositeDisposable
 import org.librarysimplified.documents.DocumentType
 import org.librarysimplified.services.api.Services
@@ -77,7 +75,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonAccessibilityStatement: Button
   private lateinit var buttonLicenses: Button
   private lateinit var buttonFaq: Button
-  private lateinit var buttonLanguage: Button
   private lateinit var versionText: TextView
   private lateinit var bookmarkSyncProgress: ProgressBar
   private lateinit var bookmarkSyncCheck: SwitchCompat
@@ -118,7 +115,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
     this.buttonLicenses = view.findViewById(R.id.buttonLicenses)
     this.buttonFaq = view.findViewById(R.id.buttonFaq)
-    this.buttonLanguage = view.findViewById(R.id.buttonLanguage)
     this.versionText = view.findViewById(R.id.appVersion)
     this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
 
@@ -158,32 +154,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       this.logger.debug("Register Passkey clicked")
       onTryRegisterPasskey()
     }
-    this.buttonLanguage.setOnClickListener {
-      this.logger.debug("Language button clicked")
-      // Build the dialog
-      val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
-      val languages : Array<String> = arrayOf(getString(R.string.buttonTextFinnish),getString(R.string.buttonTextSwedish),getString(R.string.buttonTextEnglish))
-      val current = LanguageUtil.getUserLanguage(this.requireContext())
-      logger.debug("Current language {}", current)
-      var curr = -1
-      when (current) {
-        "fi" -> curr = 0
-        "sv" -> curr = 1
-        "en" -> curr = 2
-      }
-      alertBuilder.setTitle(R.string.account_application_language)
-      alertBuilder.setSingleChoiceItems(languages, curr) { dialog, checked ->
-        if (checked != curr) {
-          when (checked) {
-            0 -> popUp("fi")
-            1 -> popUp("sv")
-            2-> popUp("en")
-          }
-        }
-        dialog.dismiss()
-      }
-      alertBuilder.create().show()
-    }
+
 
     /*
      * Configure the bookmark syncing switch to enable/disable syncing permissions.
@@ -214,12 +185,12 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     if (document != null) {
       button.setOnClickListener {
         val title = button.text
-        val url = LanguageUtil.insertLanguageInURL(document.readableURL,this.requireContext())
+        val url = LanguageUtil.insertLanguageInURL(document.readableURL)
         logger.debug("OpenDocViewer: {} -> {}", title, url)
         this.listener.post(
           AccountDetailEvent.OpenDocViewer(
             title = title.toString(),
-            url = url
+            url = LanguageUtil.insertLanguageInURL(document.readableURL)
           )
         )
       }
