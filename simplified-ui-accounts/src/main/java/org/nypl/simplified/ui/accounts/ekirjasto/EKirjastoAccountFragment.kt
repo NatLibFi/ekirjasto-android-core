@@ -15,7 +15,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import fi.kansalliskirjasto.ekirjasto.util.DataUtil
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import io.reactivex.disposables.CompositeDisposable
@@ -445,7 +444,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       .setMessage(R.string.restartPopupMessage)
       .setTitle(R.string.restartPopupTitle)
       .setPositiveButton(R.string.restartPopupAgree) { dialog, which ->
-        updateLanguageAndRestart(language)
+        updateLanguage(language)
       }
       .setNegativeButton(R.string.restartPopupCancel) { dialog, which ->
         //do nothing
@@ -455,10 +454,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     dialog.show()
   }
 
-  // Call to update the language and restart
-  private fun updateLanguageAndRestart(language : String) {
+  // Call to update the language
+  private fun updateLanguage(language : String) {
     LocaleHelper.setLocale(this.requireContext(), language)
-    DataUtil.restartApp(this.requireContext())
   }
 
   private fun isPasskeySupported(): Boolean {

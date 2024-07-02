@@ -81,9 +81,9 @@
   <string name="e_kirjasto_logo">E-Kirjasto logo</string>
   <string name="natlibfi_logo">National Library of Finland logo</string>
   <string name="account_application_language">Application language</string>
-  <string name="restartPopupMessage">The application needs to restart to apply changes. Restart now?</string>
-  <string name="restartPopupTitle">Change app language and restart?</string>
-  <string name="restartPopupAgree">Restart</string>
+  <string name="restartPopupMessage">The language is applied the next time the application starts.</string>
+  <string name="restartPopupTitle">Confirm changing application language?</string>
+  <string name="restartPopupAgree">Confirm</string>
   <string name="restartPopupCancel">Cancel</string>
   <string name="buttonLanguage">Language options</string>
   <string name="buttonTextFinnish">Finnish</string>
