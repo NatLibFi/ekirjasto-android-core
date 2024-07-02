@@ -2,6 +2,7 @@ package org.librarysimplified.main
 
 import android.Manifest
 import android.app.ActionBar
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -18,6 +19,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.transifex.txnative.TxNative
 import fi.kansalliskirjasto.ekirjasto.testing.ui.TestLoginFragment
+import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.login.LoginMainFragment
 import org.librarysimplified.ui.onboarding.OnboardingEvent
@@ -58,6 +60,10 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
   private val defaultViewModelFactory: ViewModelProvider.Factory by lazy {
     MainActivityDefaultViewModelFactory(super.defaultViewModelProviderFactory)
+  }
+
+  override fun attachBaseContext(newBase: Context?) {
+    super.attachBaseContext(LocaleHelper.onAttach(newBase))
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

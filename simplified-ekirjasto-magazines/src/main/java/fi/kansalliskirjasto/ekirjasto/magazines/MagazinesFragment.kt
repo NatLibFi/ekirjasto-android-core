@@ -207,7 +207,7 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
   private fun getBrowsingUrlBase(): String? {
     val magazineServiceUrl = viewModel.getMagazineServiceUrl() ?: return null
     // Get the language to use and load the magazine collection browser
-    val language = LanguageUtil.getUserLanguage()
+    val language = LanguageUtil.getUserLanguage(this.requireContext())
     return "$magazineServiceUrl/$language"
   }
 
