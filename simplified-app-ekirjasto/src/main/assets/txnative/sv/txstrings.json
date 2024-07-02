@@ -202,7 +202,7 @@
          "string" : "Logga in med nyckel"
       },
       "account_login_suomifi" : {
-         "string" : ""
+         "string" : "Logga in med Suomi.fi"
       },
       "account_login_with_suomifi" : {
          "string" : "Logga in med Suomi.fi"
@@ -1090,7 +1090,7 @@
          "string" : "Logga in med nyckel"
       },
       "login_suomifi" : {
-         "string" : ""
+         "string" : "Logga in med Suomi.fi"
       },
       "login_with_suomifi" : {
          "string" : "Logga in med Suomi.fi"

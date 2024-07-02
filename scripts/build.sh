@@ -3,7 +3,7 @@
 #
 # Build the E-kirjasto Android app.
 #
-# Version 1.1.1
+# Version 1.1.2
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -15,6 +15,8 @@ cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 show_usage() {
   echo "Usage: $(basename "$0") [-h|--help] [BUILD_TYPE]"
   echo
+  # Wrap after 80 characters --> #######################################################
+  echo "Options:"
   echo "-h   --help     Show this help page."
   echo "BUILD_TYPE      Build type to use. Available build types:"
   echo "                - debug (default): debug build"
@@ -23,6 +25,7 @@ show_usage() {
   echo
   echo "This script builds the E-kirjasto app (all flavors)."
   echo "This is mostly used for CI builds, but can be used locally as well."
+  # Wrap after 80 characters --> #######################################################
   echo
 }
 

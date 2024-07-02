@@ -3,7 +3,7 @@
 #
 # Run E-kirjasto Android tests.
 #
-# Version 1.0.3
+# Version 1.0.4
 #
 
 trap 'trap - INT; exit $((128 + $(kill -l INT)))' INT
@@ -15,7 +15,10 @@ cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." || exit 64
 show_usage() {
   echo "Usage: $(basename "$0") [-h|--help]"
   echo
+  # Wrap after 80 characters --> #######################################################
+  echo "Options:"
   echo "-h   --help           Show this help page."
+  # Wrap after 80 characters --> #######################################################
   echo
   echo "This script runs E-kirjasto unit tests."
   echo
