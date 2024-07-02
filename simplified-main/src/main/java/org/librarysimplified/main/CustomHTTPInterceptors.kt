@@ -2,6 +2,7 @@ package org.librarysimplified.main
 
 import android.content.Context
 import android.content.res.Resources
+import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.librarysimplified.http.vanilla.extensions.LSHTTPInterceptorFactoryType
@@ -16,12 +17,13 @@ class CustomHTTPInterceptors {
     override val version: String = "1.0.0"
 
     override fun createInterceptor(context: Context): Interceptor {
-      return AcceptLanguage()
+      return AcceptLanguage(context)
     }
   }
 
-  class AcceptLanguage : Interceptor {
+  class AcceptLanguage(cont: Context) : Interceptor {
     private val logger = LoggerFactory.getLogger(AcceptLanguage::class.java)
+    private val context = cont
 
     override fun intercept(chain: Interceptor.Chain): Response {
       val acceptLanguageHeader = getAcceptLanguageHeader()
@@ -33,18 +35,12 @@ class CustomHTTPInterceptors {
     }
 
     private fun getAcceptLanguageHeader(): String {
-      // LocaleList cannot give you an actual *list*, so convert to a string and split into a list
-      val languageTags = Resources.getSystem().configuration.locales.toLanguageTags().split(",")
+      //Get current language from LocaleHelper
+      val languageTag = LocaleHelper.getLanguage(context)
       // According to RFC2616, quality must be in the range 0-1 and have at most 3 decimal digits,
-      // so let's start at 1.000 and go down by 0.001 after every language tag
-      var quality = 1.000
-      val acceptLanguageHeader = languageTags.fold(""){ accumulator, langTag ->
-        // Java (or Kotlin here) is always so *succinct*
-        val langTagWithQ = "$langTag;q=" + String.format(Locale.ENGLISH, "%.3f", quality)
-        quality = max(0.001, quality - 0.001)
-        if (accumulator.isEmpty()) langTagWithQ else "$accumulator, $langTagWithQ"
-      }
-
+      // so let's start at 1.000
+      val quality = 1.000
+      val acceptLanguageHeader ="$languageTag;q=" + String.format(Locale.getDefault(), "%.3f", quality)
       return acceptLanguageHeader
     }
   }

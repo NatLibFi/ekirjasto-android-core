@@ -1,6 +1,7 @@
 package org.librarysimplified.main
 
 import android.app.Application
+import android.content.Context
 import android.net.http.HttpResponseCache
 import android.os.Process
 import android.os.StrictMode
@@ -10,6 +11,7 @@ import androidx.core.content.pm.PackageInfoCompat
 import fi.kansalliskirjasto.ekirjasto.testing.TestingOverrides
 import fi.kansalliskirjasto.ekirjasto.util.AppInfoUtil
 import fi.kansalliskirjasto.ekirjasto.util.DataUtil
+import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import io.reactivex.Observable
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.simplified.boot.api.BootEvent
@@ -39,7 +41,9 @@ class MainApplication : Application() {
       },
       bootStringResources = ::MainServicesStrings
     )
-
+  override fun attachBaseContext(base: Context?) {
+    super.attachBaseContext(LocaleHelper.onAttach(base,"fi"))
+  }
   override fun onCreate() {
     super.onCreate()
 
