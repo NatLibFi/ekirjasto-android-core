@@ -15,7 +15,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import fi.kansalliskirjasto.ekirjasto.util.DataUtil
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import io.reactivex.disposables.CompositeDisposable
@@ -161,29 +160,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     }
     this.buttonLanguage.setOnClickListener {
       this.logger.debug("Language button clicked")
-      // Build the dialog
-      val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
-      val languages : Array<String> = arrayOf(getString(R.string.buttonTextFinnish),getString(R.string.buttonTextSwedish),getString(R.string.buttonTextEnglish))
-      val current = LanguageUtil.getUserLanguage(this.requireContext())
-      logger.debug("Current language {}", current)
-      var curr = -1
-      when (current) {
-        "fi" -> curr = 0
-        "sv" -> curr = 1
-        "en" -> curr = 2
-      }
-      alertBuilder.setTitle(R.string.account_application_language)
-      alertBuilder.setSingleChoiceItems(languages, curr) { dialog, checked ->
-        if (checked != curr) {
-          when (checked) {
-            0 -> popUp("fi")
-            1 -> popUp("sv")
-            2-> popUp("en")
-          }
-        }
-        dialog.dismiss()
-      }
-      alertBuilder.create().show()
+      languageOptions()
     }
 
     /*
@@ -436,8 +413,38 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
     this.subscriptions.clear()
   }
+  //Show a an alert box with all language options
+  private fun languageOptions() {
+    // Build the dialog, using the translatable language names
+    val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
+    val languages : Array<String> = arrayOf(
+      getString(R.string.buttonTextFinnish),
+      getString(R.string.buttonTextSwedish),
+      getString(R.string.buttonTextEnglish))
+    val current = LanguageUtil.getUserLanguage(this.requireContext())
+    logger.debug("Current language {}", current)
+    var curr = -1
+    when (current) {
+      "fi" -> curr = 0
+      "sv" -> curr = 1
+      "en" -> curr = 2
+    }
+    alertBuilder.setTitle(R.string.account_application_language)
+    alertBuilder.setSingleChoiceItems(languages, curr) { dialog, checked ->
+      //if the language they choose is not the current one, show the confirmation popup
+      if (checked != curr) {
+        when (checked) {
+          0 -> popUp("fi")
+          1 -> popUp("sv")
+          2-> popUp("en")
+        }
+      }
+      dialog.dismiss()
+    }
+    alertBuilder.create().show()
+  }
 
-  // Show a popup asking if user wants to set chosen language, and inform about restart
+  // Show a popup asking if user wants to set chosen language
   private fun popUp (language: String) {
     logger.debug("Changing language to {}", language)
     val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
@@ -445,7 +452,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       .setMessage(R.string.restartPopupMessage)
       .setTitle(R.string.restartPopupTitle)
       .setPositiveButton(R.string.restartPopupAgree) { dialog, which ->
-        updateLanguageAndRestart(language)
+        //Set locale to the wanted language to be used on restart
+        LocaleHelper.setLocale(this.requireContext(), language)
       }
       .setNegativeButton(R.string.restartPopupCancel) { dialog, which ->
         //do nothing
@@ -453,12 +461,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
     val dialog: AlertDialog = builder.create()
     dialog.show()
-  }
-
-  // Call to update the language and restart
-  private fun updateLanguageAndRestart(language : String) {
-    LocaleHelper.setLocale(this.requireContext(), language)
-    DataUtil.restartApp(this.requireContext())
   }
 
   private fun isPasskeySupported(): Boolean {
