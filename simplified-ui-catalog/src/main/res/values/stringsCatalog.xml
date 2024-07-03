@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <resources>
-  <string name="catalogAccessibilityBookBorrow">Get Button</string>
-  <string name="catalogAccessibilityBookDelete">Delete Button</string>
-  <string name="catalogAccessibilityBookDownload">Download Button</string>
-  <string name="catalogAccessibilityBookDownloadCancel">Cancel download button</string>
-  <string name="catalogAccessibilityBookErrorDetails">Details button</string>
-  <string name="catalogAccessibilityBookErrorDismiss">Dismiss Button</string>
-  <string name="catalogAccessibilityBookErrorRetry">Retry Button</string>
-  <string name="catalogAccessibilityBookListen">Listen Button</string>
+  <string name="catalogAccessibilityBookBorrow">Get</string>
+  <string name="catalogAccessibilityBookDelete">Delete</string>
+  <string name="catalogAccessibilityBookDownload">Download</string>
+  <string name="catalogAccessibilityBookDownloadCancel">Cancel download</string>
+  <string name="catalogAccessibilityBookErrorDetails">Details</string>
+  <string name="catalogAccessibilityBookErrorDismiss">Dismiss</string>
+  <string name="catalogAccessibilityBookErrorRetry">Retry</string>
+  <string name="catalogAccessibilityBookListen">Listen</string>
   <string name="catalogAccessibilityBookPreviewPlay">Play Sample</string>
   <string name="catalogAccessibilityBookPreviewRead">Read Sample</string>
-  <string name="catalogAccessibilityBookRead">Read Button</string>
-  <string name="catalogAccessibilityBookReserve">Reserve Button</string>
-  <string name="catalogAccessibilityBookRevokeHold">Remove Button</string>
-  <string name="catalogAccessibilityBookRevokeLoan">Return Now Button</string>
-  <string name="catalogAccessibilityBookSync">Sync Button</string>
+  <string name="catalogAccessibilityBookRead">Read</string>
+  <string name="catalogAccessibilityBookReserve">Reserve</string>
+  <string name="catalogAccessibilityBookRevokeHold">Remove hold</string>
+  <string name="catalogAccessibilityBookRevokeLoan">Return loan</string>
+  <string name="catalogAccessibilityBookSync">Sync</string>
   <string name="catalogAccessibilityCoverAudiobook">%1$s, audiobook, by %2$s</string>
   <string name="catalogAccessibilityCoverEpub">%1$s, ebook, by %2$s</string>
   <string name="catalogAccessibilityCoverPdf">%1$s, pdf, by %2$s</string>

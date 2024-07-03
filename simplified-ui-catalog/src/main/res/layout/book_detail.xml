@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:focusable="true"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -24,6 +25,7 @@
                 android:layout_height="@dimen/cover_thumbnail_height"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:contentDescription="@null"
                 app:cardCornerRadius="@dimen/cover_corner_radius"
                 app:cardElevation="2dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -69,6 +71,22 @@
                 app:layout_constraintTop_toBottomOf="@id/bookDetailTitle"
                 tools:text="Mary Shelley" />
 
+            <TextView
+                android:id="@+id/bookDetailType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/bookDetailCover"
+                app:layout_constraintTop_toBottomOf="@id/bookDetailAuthors"
+                tools:text="eBook - The New York Public Library" />
+
             <LinearLayout
                 android:id="@+id/bookDetailButtons"
                 android:layout_width="0dp"
@@ -79,7 +97,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/bookDetailCover"
-                app:layout_constraintTop_toBottomOf="@id/bookDetailAuthors">
+                app:layout_constraintTop_toBottomOf="@id/bookDetailType">
 
                 <!-- These views are removed at runtime and are just present for the sake of the UI editor preview -->
 
@@ -130,34 +148,41 @@
             android:layout_marginEnd="@dimen/catalogBookDetailStatusMargin"
             android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/bookDetailDescriptionTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/description_heading_background"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/catalogDescription"
-            android:textSize="@dimen/catalogBookDetailDescriptionFontSize" />
-
-        <TextView
-            android:id="@+id/bookDetailDescriptionText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="Placeholder" />
+            android:orientation="vertical"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/bookDetailDescriptionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/description_heading_background"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/catalogDescription"
+                android:textSize="@dimen/catalogBookDetailDescriptionFontSize" />
+
+            <TextView
+                android:id="@+id/bookDetailDescriptionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Placeholder" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/seeMoreText"
             style="@style/MoreTextStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="end"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|right"
             android:layout_marginEnd="16dp"
             android:text="@string/catalogDetailsMore" />
 
@@ -169,6 +194,11 @@
             android:layout_marginEnd="16dp"
             android:background="@color/colorEkirjastoDivider" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:focusable="true">
         <TextView
             android:id="@+id/bookDetailMetadataTitle"
             android:layout_width="wrap_content"
@@ -189,6 +219,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:orientation="vertical" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bookCellIdle"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/catalogFeedCellHeight">
+    android:minHeight="@dimen/catalogFeedCellHeight"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/bookCellIdleCover"
@@ -86,6 +87,7 @@
         android:orientation="horizontal"
         android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bookCellIdleMeta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bookCellIdleCover">
 
