@@ -60,6 +60,7 @@ import org.slf4j.MDC
 import java.net.HttpURLConnection
 import java.net.URI
 import java.nio.charset.Charset
+import java.util.Arrays
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
@@ -275,10 +276,12 @@ class ProfileAccountLoginTask(
     httpRequest.execute().use { response ->
       when (val status = response.status) {
         is LSHTTPResponseStatus.Responded.OK -> {
+          val responseValues = getAccessTokenAndPatronFromEkirjastoCirculationResponse(
+            node = ObjectMapper().readTree(status.bodyStream)
+          )
           this.credentials = AccountAuthenticationCredentials.Ekirjasto(
-            accessToken = getAccessTokenFromEkirjastoCirculationResponse(
-              node = ObjectMapper().readTree(status.bodyStream)
-            ),
+            accessToken = responseValues[0],
+            patronInfo = responseValues[1],
             ekirjastoToken = request.ekirjastoToken,
             adobeCredentials = null,
             authenticationDescription = request.description.description,
@@ -576,9 +579,16 @@ class ProfileAccountLoginTask(
   }
 
   // Finland
-  private fun getAccessTokenFromEkirjastoCirculationResponse(node: JsonNode): String {
+  /**
+   * Get accessToken and patronInfo from the login response from circulation as a list
+   */
+  private fun getAccessTokenAndPatronFromEkirjastoCirculationResponse(node: JsonNode): List<String> {
+    //This prints out the full response, should be in two parts: access_token which is a string and
+    // patron_info, that is a list of values in a string
+
+    //logger.debug(node.toPrettyString())
     return try {
-      node.get("access_token").asText()
+      listOf(node.get("access_token").asText(), node.get("patron_info").asText().split("\"")[3])
     } catch (e: Exception) {
       this.logger.error("Error getting access token from E-kirjasto circulation token response: ", e)
       throw e
