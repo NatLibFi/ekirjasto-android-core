@@ -203,8 +203,16 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private fun configureNewViewButton(button: Button) {
     button.setOnClickListener {
       logger.debug("New view clicked")
+      val credentials = this.viewModel.account.loginState.credentials
+      val patron = credentials?.let {
+        if (it is AccountAuthenticationCredentials.Ekirjasto) {
+          it.patronInfo
+        } else {
+          null
+        }
+      }
       this.listener.post(
-        AccountDetailEvent.OpenNewView
+        AccountDetailEvent.OpenNewView(patron)
       )
     }
   }

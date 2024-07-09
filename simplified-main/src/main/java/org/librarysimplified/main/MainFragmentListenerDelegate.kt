@@ -401,7 +401,7 @@ internal class MainFragmentListenerDelegate(
       }
 
       is AccountDetailEvent.OpenNewView -> {
-        this.openSettingsNewView()
+        this.openSettingsNewView(event.patron)
         state
       }
 
@@ -659,9 +659,9 @@ internal class MainFragmentListenerDelegate(
     )
   }
 
-  private fun openSettingsNewView() {
+  private fun openSettingsNewView(patron: String?) {
     this.navigator.addFragment(
-      fragment = NewFragment(),
+      fragment = NewFragment.create(patron),
       tab = org.librarysimplified.ui.tabs.R.id.tabSettings
     )
   }

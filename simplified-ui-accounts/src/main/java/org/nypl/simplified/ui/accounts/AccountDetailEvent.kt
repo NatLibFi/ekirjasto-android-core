@@ -20,7 +20,9 @@ sealed class AccountDetailEvent {
 
   object GoUpwards : AccountDetailEvent()
 
-  object OpenNewView : AccountDetailEvent()
+  data class OpenNewView(
+    val patron: String?
+  ) : AccountDetailEvent()
 
   data class OpenWebView(val parameters: AccountCardCreatorParameters) : AccountDetailEvent()
 
