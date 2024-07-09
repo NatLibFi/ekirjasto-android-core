@@ -93,4 +93,11 @@
   <string name="errorPasskeyLoginFailed">Could not sign in with Passkey</string>
   <string name="errorPasskeyRegisterFailed">Error registering a Passkey</string>
   <string name="errorSuomiFiLoginFailed">Could not sign in with Suomi.fi</string>
+  <string name="invite_a_dependent">Invite a Dependent</string>
+  <string name="get_dependents">Get Dependents or Children</string>
+  <string name="dependent_email">Dependent email</string>
+  <string name="send_invitation">Send Invitation</string>
+  <string name="guidetext">Fill in an email to send the invitation. Make sure you type it in correctly before sending.</string>
+  <string name="thanks">Thank you! Your Dependent should receive the invitation shortly if email was entered correctly.</string>
+  <string name="emailNotValid">Enter a Valid Email Address</string>
 </resources>

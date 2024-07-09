@@ -69,6 +69,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private lateinit var buttonLoginPasskey: Button
   private lateinit var buttonRegisterPasskey: Button
+  private lateinit var buttonDependents: Button
   private lateinit var eulaStatement: TextView
   private lateinit var syncBookmarks: ConstraintLayout
   private lateinit var buttonFeedback: Button
@@ -107,6 +108,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
     this.buttonLogout = view.findViewById(R.id.buttonLogout)
     this.buttonLoginSuomiFi = view.findViewById(R.id.buttonLoginSuomiFi)
+    this.buttonDependents = view.findViewById(R.id.buttonInviteDependents)
     this.buttonLoginPasskey = view.findViewById(R.id.buttonLoginPasskey)
     this.buttonRegisterPasskey = view.findViewById(R.id.buttonRegisterPasskey)
     this.eulaStatement = view.findViewById(R.id.eulaStatement)
@@ -162,6 +164,10 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       this.logger.debug("Language button clicked")
       languageOptions()
     }
+    this.buttonDependents.setOnClickListener {
+      this.logger.debug("Dependents button clicked")
+      //openDependents()
+    }
 
     /*
      * Configure the bookmark syncing switch to enable/disable syncing permissions.
@@ -204,6 +210,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     } else {
       this.logger.warn("{} document not found!", button.text.toString())
     }
+  }
+
+  private fun openDependents(button: Button) {
+
+
   }
 
   private fun configureToolbar() {
@@ -252,6 +263,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey.isEnabled = true
     this.buttonLoginSuomiFi.isEnabled = true
     buttonLogout.visibility = GONE
+    buttonDependents.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
 
     if (isPasskeySupported()) {
@@ -267,6 +279,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginSuomiFi.isEnabled = false
     this.buttonLoginPasskey.isEnabled = false
     buttonLogout.visibility = GONE
+    buttonDependents.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
 
     if (isPasskeySupported()) {
@@ -279,6 +292,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginSuomiFi.isEnabled = false
     this.buttonLoginPasskey.isEnabled = false
     buttonLogout.visibility = GONE
+    buttonDependents.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
 
     if (isPasskeySupported()) {
@@ -291,6 +305,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginSuomiFi.isEnabled = true
     this.buttonLoginPasskey.isEnabled = true
     buttonLogout.visibility = GONE
+    buttonDependents.visibility = GONE
     buttonLoginSuomiFi.visibility = VISIBLE
 
     if (isPasskeySupported()) {
@@ -303,6 +318,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private fun OnConfigureAccountLoggedIn(loginState: AccountLoggedIn) {
     buttonLogout.visibility = VISIBLE
+    buttonDependents.visibility = VISIBLE
     buttonLoginSuomiFi.visibility = GONE
     if (isPasskeySupported()) {
       buttonLoginPasskey.visibility = GONE
@@ -316,6 +332,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private fun OnConfigureAccountLoggingOut(loginState: AccountLoginState.AccountLoggingOut) {
     buttonLogout.visibility = GONE
+    buttonDependents.visibility = GONE
     buttonLoginSuomiFi.visibility = GONE
     buttonLoginPasskey.visibility = GONE
     buttonRegisterPasskey.visibility = GONE
@@ -323,6 +340,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
   private fun OnConfigureAccountLogoutFailed(loginState: AccountLoginState.AccountLogoutFailed) {
     buttonLogout.visibility = VISIBLE
+    buttonDependents.visibility = VISIBLE
     buttonLoginSuomiFi.visibility = GONE
 
     if (isPasskeySupported()) {
