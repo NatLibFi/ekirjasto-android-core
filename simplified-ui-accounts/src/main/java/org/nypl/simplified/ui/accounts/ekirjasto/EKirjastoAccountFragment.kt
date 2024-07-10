@@ -164,10 +164,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       this.logger.debug("Language button clicked")
       languageOptions()
     }
-    this.buttonDependents.setOnClickListener {
-      this.logger.debug("Dependents button clicked")
-      //openDependents()
-    }
 
     /*
      * Configure the bookmark syncing switch to enable/disable syncing permissions.
@@ -212,9 +208,22 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     }
   }
 
-  private fun openDependents(button: Button) {
-
-
+  private fun configureDependentsButton(button: Button) {
+    button.setOnClickListener {
+      logger.debug("Dependents clicked")
+      val credentials = this.viewModel.account.loginState.credentials
+      val patron = credentials?.let {
+        if (it is AccountAuthenticationCredentials.Ekirjasto) {
+          it.patronInfo
+        } else {
+          null
+        }
+      }
+      logger.debug("PATRON: {}", patron)
+      this.listener.post(
+        AccountDetailEvent.OpenDependentInvite(patron)
+      )
+    }
   }
 
   private fun configureToolbar() {
@@ -254,6 +263,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
     configureDocViewButton(buttonLicenses, this.viewModel.documents.licenses)
     configureDocViewButton(buttonFaq, this.viewModel.documents.faq)
+
+    /*
+     * Configure the dependents button to switch to the invite fragment
+     */
+    configureDependentsButton(buttonDependents)
 
     val versionString = this.requireContext().getString(R.string.app_version_string, this.viewModel.appVersion)
     this.versionText.text = versionString

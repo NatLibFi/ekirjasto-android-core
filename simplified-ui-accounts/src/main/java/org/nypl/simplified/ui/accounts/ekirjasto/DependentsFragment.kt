@@ -10,15 +10,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import org.librarysimplified.ui.accounts.R
 import org.slf4j.LoggerFactory
 
-class NewFragment : Fragment(R.layout.dependents) {
-  fun create(): NewFragment {
-    val dependentsFragment = NewFragment()
-    return dependentsFragment
-  }
+class DependentsFragment : Fragment(R.layout.dependents) {
+
+  private val patron by lazy { arguments?.getString(PATRON_ID) }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -129,7 +128,6 @@ class NewFragment : Fragment(R.layout.dependents) {
         dependentInfoText.text = getString(R.string.emailNotValid)
       }
     }
-
   }
 
   //validate user input email
@@ -148,5 +146,13 @@ class NewFragment : Fragment(R.layout.dependents) {
     return response
   }
   //todo: post method
+
+  companion object {
+    private const val PATRON_ID = "org.nypl.simplified.ui.accounts.ekirjasto.patron"
+
+    fun create(patron: String?) = DependentsFragment().apply {
+      arguments = bundleOf(PATRON_ID to patron)
+    }
+  }
 
 }

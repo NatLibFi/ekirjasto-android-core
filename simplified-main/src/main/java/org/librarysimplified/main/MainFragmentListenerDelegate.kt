@@ -35,6 +35,7 @@ import org.nypl.simplified.ui.accounts.AccountListFragmentParameters
 import org.nypl.simplified.ui.accounts.AccountListRegistryEvent
 import org.nypl.simplified.ui.accounts.AccountListRegistryFragment
 import org.nypl.simplified.ui.accounts.AccountPickerEvent
+import org.nypl.simplified.ui.accounts.ekirjasto.DependentsFragment
 import org.nypl.simplified.ui.accounts.ekirjasto.EKirjastoAccountFragment
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiEvent
@@ -389,6 +390,11 @@ internal class MainFragmentListenerDelegate(
         state
       }
 
+      is AccountDetailEvent.OpenDependentInvite -> {
+        this.openDependentPage(event.patron)
+        state
+      }
+
       is AccountDetailEvent.OpenDocViewer -> {
         this.openDocViewer(event.title, event.url)
         state
@@ -684,6 +690,12 @@ internal class MainFragmentListenerDelegate(
       fragment = AccountCardCreatorFragment.create(parameters),
       tab = this.navigator.currentTab()
     )
+  }
+  private fun openDependentPage(patron: String?) {
+    this.navigator.addFragment(
+      fragment = DependentsFragment.create(patron),
+      tab = org.librarysimplified.ui.tabs.R.id.tabSettings
+      )
   }
 
   private fun goUpwards() {
