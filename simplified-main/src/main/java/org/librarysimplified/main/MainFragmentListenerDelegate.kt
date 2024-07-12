@@ -391,7 +391,7 @@ internal class MainFragmentListenerDelegate(
       }
 
       is AccountDetailEvent.OpenDependentInvite -> {
-        this.openDependentPage(event.patron)
+        this.openDependentPage(event.patron, event.token)
         state
       }
 
@@ -691,9 +691,9 @@ internal class MainFragmentListenerDelegate(
       tab = this.navigator.currentTab()
     )
   }
-  private fun openDependentPage(patron: String?) {
+  private fun openDependentPage(patron: String?, token: String?) {
     this.navigator.addFragment(
-      fragment = DependentsFragment.create(patron),
+      fragment = DependentsFragment.create(patron, token),
       tab = org.librarysimplified.ui.tabs.R.id.tabSettings
       )
   }

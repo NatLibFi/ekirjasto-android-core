@@ -12,12 +12,33 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
+import org.nypl.simplified.profiles.controller.api.ProfileDependentsLookupRequest
+import org.nypl.simplified.profiles.controller.api.ProfileDependentsPostRequest
+import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.slf4j.LoggerFactory
 
 class DependentsFragment : Fragment(R.layout.dependents) {
+  // Get the service and the profile controller
+  // into which I put the new function, since profiles handles profile changes
+  // might need its own controller
+  val services =
+    Services.serviceDirectory()
+  val profilesController =
+    services.requireService(ProfilesControllerType::class.java)
+
+  companion object {
+    private const val PATRON_ID = "org.nypl.simplified.ui.accounts.ekirjasto.patron"
+    private const val ACCESS_TOKEN = "org.nypl.simplified.ui.accounts.ekirjasto.token"
+
+    fun create(patron: String?, accessToken: String?) = DependentsFragment().apply {
+      arguments = bundleOf(PATRON_ID to patron, ACCESS_TOKEN to accessToken)
+    }
+  }
 
   private val patron by lazy { arguments?.getString(PATRON_ID) }
+  private val token by lazy { arguments?.getString(ACCESS_TOKEN) }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -38,7 +59,16 @@ class DependentsFragment : Fragment(R.layout.dependents) {
     buttonDependents.setOnClickListener {
       logger.debug("Get Dependents Button Pressed!")
       spinner.visibility = VISIBLE
-      //todo: call get method here
+
+      //Do the lookup, not the most simple or pretty way, but
+      //Had struggle with error from networking in main thread so this got past it
+      profilesController.profileDependentsLookup(
+        ProfileDependentsLookupRequest.Ekirjasto(
+          patronInfo = patron!!,
+          ekirjastoToken = token!!
+        )
+      )
+
       val testValue = "testValue"
       val response = getDependents(testValue)
       logger.debug("Response is: $response")
@@ -140,19 +170,30 @@ class DependentsFragment : Fragment(R.layout.dependents) {
   private fun getDependents(testValue: String): String {
     val logger = LoggerFactory.getLogger(EKirjastoAccountFragment::class.java)
     logger.debug("Entered get method")
+    //Trigger the post method
+    profilesController.profileDependentsPost(
+      ProfileDependentsPostRequest.Ekirjasto(
+        ekirjastoToken = token!!,
+        dependent = "Dependent" //change to actual dependent
+      )
+      /* Server wants the info of a dependent in this form. Role is always customer
+      firstname, lastname, govID can be found in the get infromation
+        {
+        locale: "fi",
+        firstName: "Hulianna Katruska",
+        lastName: "",
+        govId: "140319*****",
+        email: "test@example.com",
+        role: "customer",
+        }
+
+         */
+    )
 
 
     val response = "none"
     return response
   }
   //todo: post method
-
-  companion object {
-    private const val PATRON_ID = "org.nypl.simplified.ui.accounts.ekirjasto.patron"
-
-    fun create(patron: String?) = DependentsFragment().apply {
-      arguments = bundleOf(PATRON_ID to patron)
-    }
-  }
 
 }

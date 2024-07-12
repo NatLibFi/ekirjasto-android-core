@@ -51,7 +51,8 @@ sealed class AccountDetailEvent {
   ) : AccountDetailEvent()
 
   data class OpenDependentInvite(
-    val patron: String?
+    val patron: String?,
+    val token: String?
   ) : AccountDetailEvent()
   /**
    * Login has failed and the patron wants to see some details about the error.

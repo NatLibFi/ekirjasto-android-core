@@ -120,6 +120,27 @@ interface ProfilesControllerType {
   ): FluentFuture<TaskResult<Unit>>
 
   /**
+   * Attempt to lookup the dependents info from the suomi.fi servers
+   *
+   * @param request The dependents request
+   * @return A future that returns the result of the dependents request
+   */
+
+  fun profileDependentsLookup( //DONE
+    request: ProfileDependentsLookupRequest
+  ): FluentFuture<TaskResult<Unit>>
+
+  /**
+   * Attempt to post the dependents info from the suomi.fi servers
+   * for one person
+   *
+   * @param request The dependents post request
+   * @return A future that returns the result of the request
+   */
+  fun profileDependentsPost(
+    request: ProfileDependentsPostRequest
+  ): FluentFuture<TaskResult<Unit>>
+  /**
    * Create an account using the given account provider. The operation will fail if
    * an account already exists using the given provider.
    *

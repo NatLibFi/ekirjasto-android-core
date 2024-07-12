@@ -152,7 +152,7 @@ class AccountEkirjastoSuomiFiViewModel(
 
       val mapper = ObjectMapper()
       val jsonNode = mapper.readTree(content)
-
+      //logger.debug(jsonNode.toPrettyString()) //this prints the token that is supposed to be the one from loikka
       val ekirjastoToken = jsonNode["token"]?.asText()
       val exp = jsonNode.get("exp")?.asLong()
 
