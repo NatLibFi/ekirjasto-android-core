@@ -177,17 +177,52 @@ class DependentsFragment : Fragment(R.layout.dependents) {
         dependent = "Dependent" //change to actual dependent
       )
       /* Server wants the info of a dependent in this form. Role is always customer
-      firstname, lastname, govID can be found in the get infromation
-        {
-        locale: "fi",
-        firstName: "Hulianna Katruska",
-        lastName: "",
-        govId: "140319*****",
-        email: "test@example.com",
-        role: "customer",
-        }
+firstname, lastname, govID can be found in the get infromation
+  {
+  locale: "fi",
+  firstName: "Hulianna Katruska",
+  lastName: "",
+  govId: "140319*****",
+  email: "test@example.com",
+  role: "customer",
+  }
 
-         */
+  you can form an object like one above like so:
+  data class User(
+  val locale: String,
+  val firstName: String,
+  val lastName: String,
+  val govId: String,
+  val email: String,
+  val role: String
+  )
+
+  and then
+
+  create a new instance of the user data class with content
+
+  val user = User(
+  locale: "fi",
+  firstName: "Hulianna Katruska",
+  lastName: "",
+  govId: "140319*****",
+  email: "test@example.com",
+  role: "customer"
+
+  and then
+  logger.debug(user)
+
+  to read object into variables we could destructure the user object into variables here:
+
+  val (locale, firstName, lastName, govId, email, role) = user
+  no you can use all values as variable like so:
+
+  logger.debug("Info to print: $variable to use")
+  for example this way:
+  logger.debug("Your govId is: $govId")
+
+   */
+
     )
 
 
