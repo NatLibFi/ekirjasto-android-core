@@ -534,7 +534,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
             this.feedContentLogoHeader.visibility = View.GONE
           }
           is OwnedByAccount -> {
-            this.feedContentLogoHeader.visibility = View.VISIBLE
+            this.feedContentLogoHeader.visibility = View.GONE
             loadImageAndText(accountId = ownership.accountId)
           }
         }
