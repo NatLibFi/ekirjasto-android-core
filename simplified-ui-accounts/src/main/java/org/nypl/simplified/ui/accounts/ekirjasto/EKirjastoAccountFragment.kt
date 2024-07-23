@@ -46,6 +46,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private val subscriptions: CompositeDisposable =
     CompositeDisposable()
   private val listener: FragmentListenerType<AccountDetailEvent> by fragmentListeners()
+  private val triggerListener: FragmentListenerType<TextSizeEvent> by fragmentListeners()
   private val parameters: AccountFragmentParameters by lazy {
     this.requireArguments()[PARAMETERS_ID] as AccountFragmentParameters
   }
@@ -82,6 +83,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var bookmarkSyncProgress: ProgressBar
   private lateinit var bookmarkSyncCheck: SwitchCompat
   private lateinit var bookmarkStatement: TextView
+  private lateinit var buttonTextSize: Button
 
   //inherited elements
   private lateinit var toolbar: PalaceToolbar
@@ -121,6 +123,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLanguage = view.findViewById(R.id.buttonLanguage)
     this.versionText = view.findViewById(R.id.appVersion)
     this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
+    this.buttonTextSize = view.findViewById(R.id.buttonTextScale)
 
 
     this.toolbar =
@@ -161,6 +164,10 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLanguage.setOnClickListener {
       this.logger.debug("Language button clicked")
       languageOptions()
+    }
+    this.buttonTextSize.setOnClickListener {
+      this.logger.debug("Text Button clicked")
+      textSizeOptions()
     }
 
     /*
@@ -461,6 +468,33 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
     val dialog: AlertDialog = builder.create()
     dialog.show()
+  }
+
+  private fun textSizeOptions() {
+    // Build the dialog, using the translatable language names
+    val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
+    val languages : Array<String> = arrayOf("100%", "150%", "200%")
+    val current = 0
+    logger.debug("Current choice {}", current)
+    alertBuilder.setTitle("Text size")
+    alertBuilder.setSingleChoiceItems(languages, current) { dialog, checked ->
+      //if the language they choose is not the current one, show the confirmation popup
+      if (checked != current) {
+        when (checked) {
+          0 -> triggerListener.post(
+            TextSizeEvent.TextSizeSmall
+          )
+          1 -> triggerListener.post(
+            TextSizeEvent.TextSizeMedium
+          )
+          2-> triggerListener.post(
+            TextSizeEvent.TextSizeLarge
+          )
+        }
+      }
+      dialog.dismiss()
+    }
+    alertBuilder.create().show()
   }
 
   private fun isPasskeySupported(): Boolean {

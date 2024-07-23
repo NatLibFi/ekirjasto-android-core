@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.ActionBar
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -42,6 +44,8 @@ import org.nypl.simplified.profiles.api.ProfilesDatabaseType.AnonymousProfileEna
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryComplete
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskResult
+import org.nypl.simplified.ui.accounts.AccountDetailEvent
+import org.nypl.simplified.ui.accounts.ekirjasto.TextSizeEvent
 import org.nypl.simplified.ui.branding.BrandingSplashServiceType
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -57,14 +61,28 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
   private val logger = LoggerFactory.getLogger(MainActivity::class.java)
   private val listenerRepo: ListenerRepository<MainActivityListenedEvent, Unit> by listenerRepositories()
+  private lateinit var fontSizeManager: FontSizeManager
 
   private val defaultViewModelFactory: ViewModelProvider.Factory by lazy {
     MainActivityDefaultViewModelFactory(super.defaultViewModelProviderFactory)
   }
 
   override fun attachBaseContext(newBase: Context?) {
+    fontSizeManager = FontSizeManager(newBase!!)
+    val newConfig = Configuration(newBase.resources.configuration)
+    newConfig.fontScale = fontSizeManager.fontSize.scale
+    applyOverrideConfiguration(newConfig)
     super.attachBaseContext(LocaleHelper.onAttach(newBase))
   }
+
+  private fun updateFontSize(fontSize: FontSize) {
+    fontSizeManager.fontSize = fontSize
+    logger.debug("Current scale")
+    logger.debug(fontSizeManager.fontSize.scale.toString())
+    recreate()
+  }
+
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     this.logger.debug("onCreate (recreating {})", savedInstanceState != null)
@@ -119,6 +137,23 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     openTestLogin(
       prefilledUsername = data.getQueryParameter("username") ?: ""
     )
+  }
+
+  private fun setFontSize(event: TextSizeEvent) {
+    return when (event) {
+      TextSizeEvent.TextSizeSmall -> {
+        updateFontSize(FontSize.SMALL)
+        this.logger.debug("TextSmall")
+      }
+      TextSizeEvent.TextSizeMedium -> {
+        updateFontSize(FontSize.DEFAULT)
+        this.logger.debug("TextMedium")
+      }
+      TextSizeEvent.TextSizeLarge -> {
+        updateFontSize(FontSize.LARGE)
+        this.logger.debug("TextLarge")
+      }
+    }
   }
 
   // "Original" interceptDeepLink()
@@ -300,6 +335,9 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
       is MainActivityListenedEvent.OnboardingEvent ->
         this.handleOnboardingEvent(event.event)
+
+      is MainActivityListenedEvent.TextSizeEvent ->
+        this.setFontSize(event.event)
     }
   }
 
@@ -450,4 +488,29 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
       replace(R.id.mainFragmentHolder, fragment, tag)
     }
   }
+}
+
+class FontSizeManager(val context: Context) {
+
+  private val appCache = AppCache(context)
+
+  var fontSize: FontSize
+    get() {
+      val scale = appCache.getTextSize()
+      return if (scale == -1f) {
+        FontSize.DEFAULT
+      } else {
+        FontSize.entries.first { fontSize -> fontSize.scale == scale }
+      }
+    }
+    set(value) {
+      appCache.setTextSize(value.scale)
+    }
+
+}
+
+enum class FontSize(val scale: Float) {
+  SMALL(0.7f),
+  DEFAULT(1.0f),
+  LARGE(1.3f)
 }
