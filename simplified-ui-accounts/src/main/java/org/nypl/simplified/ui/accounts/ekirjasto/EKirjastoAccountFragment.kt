@@ -479,19 +479,19 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     alertBuilder.setTitle("Text size")
     alertBuilder.setSingleChoiceItems(languages, current) { dialog, checked ->
       //if the language they choose is not the current one, show the confirmation popup
-      if (checked != current) {
-        when (checked) {
-          0 -> triggerListener.post(
-            TextSizeEvent.TextSizeSmall
-          )
-          1 -> triggerListener.post(
-            TextSizeEvent.TextSizeMedium
-          )
-          2-> triggerListener.post(
-            TextSizeEvent.TextSizeLarge
-          )
-        }
+
+      when (checked) {
+        0 -> triggerListener.post(
+          TextSizeEvent.TextSizeSmall
+        )
+        1 -> triggerListener.post(
+          TextSizeEvent.TextSizeMedium
+        )
+        2-> triggerListener.post(
+          TextSizeEvent.TextSizeLarge
+        )
       }
+
       dialog.dismiss()
     }
     alertBuilder.create().show()

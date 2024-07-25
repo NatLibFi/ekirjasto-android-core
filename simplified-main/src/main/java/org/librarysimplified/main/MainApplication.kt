@@ -8,6 +8,7 @@ import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
 import androidx.core.content.pm.PackageInfoCompat
+import com.transifex.txnative.TxNative
 import fi.kansalliskirjasto.ekirjasto.testing.TestingOverrides
 import fi.kansalliskirjasto.ekirjasto.util.AppInfoUtil
 import fi.kansalliskirjasto.ekirjasto.util.DataUtil

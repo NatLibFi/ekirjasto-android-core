@@ -20,6 +20,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.transifex.txnative.TxNative
+import com.transifex.txnative.TxResources
+import com.transifex.txnative.activity.TxBaseAppCompatActivity
+import com.transifex.txnative.wrappers.TxContextWrapper
 import fi.kansalliskirjasto.ekirjasto.testing.ui.TestLoginFragment
 import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import org.librarysimplified.services.api.Services
@@ -68,11 +71,22 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   }
 
   override fun attachBaseContext(newBase: Context?) {
+    logger.debug("ATTACHBASECONTEXT START")
     fontSizeManager = FontSizeManager(newBase!!)
     val newConfig = Configuration(newBase.resources.configuration)
+    val neBBE = TxResources.getSystem().configuration
     newConfig.fontScale = fontSizeManager.fontSize.scale
-    applyOverrideConfiguration(newConfig)
+    neBBE.fontScale = fontSizeManager.fontSize.scale
+    //val newCont = createConfigurationContext(newConfig)
+    logger.debug(newConfig.toString())
+    logger.debug(TxResources.getSystem().configuration.toString())
+    //applyOverrideConfiguration(neBBE)
+
+    logger.debug("START SUPER:ATTACHB....")
     super.attachBaseContext(LocaleHelper.onAttach(newBase))
+    logger.debug("SET COMPAT DELEGATE TO NULL")
+    //mAppCompatDelegate = null
+    logger.debug("ATTACHBASECONTEXT END")
   }
 
   private fun updateFontSize(fontSize: FontSize) {
@@ -87,6 +101,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override fun onCreate(savedInstanceState: Bundle?) {
     this.logger.debug("onCreate (recreating {})", savedInstanceState != null)
     super.onCreate(savedInstanceState)
+    //delegate.setContentView(R.layout.main_host)
     this.logger.debug("onCreate (super completed)")
 
     interceptDeepLink()
@@ -245,9 +260,11 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override val defaultViewModelProviderFactory: ViewModelProvider.Factory
     get() = this.defaultViewModelFactory
 
-  private var mAppCompatDelegate: AppCompatDelegate? = null
+  private var mAppCompatDelegate: AppCompatDelegate? = null //
   override fun getDelegate(): AppCompatDelegate {
+    logger.debug("GETDELEGATETAPAHTUU ALKU")
     if (mAppCompatDelegate == null) {
+      logger.debug("COMPAT DELEGATE NULL, ASETA TXNATIVE")
       mAppCompatDelegate = TxNative.wrapAppCompatDelegate(super.getDelegate(), this)
     }
 
@@ -510,7 +527,7 @@ class FontSizeManager(val context: Context) {
 }
 
 enum class FontSize(val scale: Float) {
-  SMALL(0.7f),
-  DEFAULT(1.0f),
-  LARGE(1.3f)
+  SMALL(1.0f),
+  DEFAULT(1.5f),
+  LARGE(2.0f)
 }
