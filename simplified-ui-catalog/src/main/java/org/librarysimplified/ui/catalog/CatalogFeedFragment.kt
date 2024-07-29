@@ -43,6 +43,7 @@ import org.librarysimplified.ui.catalog.CatalogFeedState.CatalogFeedLoaded.Catal
 import org.librarysimplified.ui.catalog.CatalogFeedState.CatalogFeedLoaded.CatalogFeedWithoutGroups
 import org.librarysimplified.ui.catalog.CatalogFeedState.CatalogFeedLoading
 import org.nypl.simplified.accounts.api.AccountID
+import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.android.ktx.supportActionBar
 import org.nypl.simplified.books.covers.BookCoverProviderType
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
@@ -192,18 +193,6 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     this.feedEmptyMessage =
       this.feedContent.findViewById(R.id.feedEmptyMessage)
 
-    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks) {
-      this.feedEmptyMessage.setText(
-        if (
-          (parameters as CatalogFeedArguments.CatalogFeedArgumentsLocalBooks).selection ==
-          FeedBooksSelection.BOOKS_FEED_HOLDS
-        ) {
-          R.string.feedWithGroupsEmptyHolds
-        } else {
-          R.string.feedWithGroupsEmptyLoaned
-        }
-      )
-    }
 
     this.feedContentFacets =
       this.feedContentHeader.findViewById(R.id.feedHeaderFacets)
@@ -266,6 +255,61 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     this.feedContentLogoHeader.setOnClickListener {
       this.openLogoLink()
     }
+
+    this.reconfigureCatalogUI()
+  }
+
+  /*
+   * Reconfigures the UI based on the log in status of the account.
+   * This effects the texts shown on my books and loans pages.
+   * Triggered in onViewCreated and Start
+   */
+  private fun reconfigureCatalogUI() {
+    //Get the current account's login state from viewModel
+    val loginState = this.viewModel.account.loginState
+    //Ask to login when not logged in or in between, and info about loans and reservations when logged in
+    when (loginState){
+      is AccountLoginState.AccountNotLoggedIn -> this.showLoginText()
+      is AccountLoginState.AccountLoggedIn -> this.showInfoWhenLoggedIn()
+      else -> this.showLoginText()
+    }
+  }
+
+  //Account not logged in, so show text asking for log in
+  private fun showLoginText() {
+    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks) {
+      this.feedEmptyMessage.setText(
+        //Check if shown books are holds or not, set the message that is shown when
+        //viewing loans and holds. When not logged in, this text is always shown
+        if (
+          (parameters as CatalogFeedArguments.CatalogFeedArgumentsLocalBooks).selection ==
+          FeedBooksSelection.BOOKS_FEED_HOLDS
+        ) {
+          R.string.emptyHoldsNotLoggedIn
+        } else {
+          R.string.emptyLoansNotLoggedIn
+        }
+      )
+    }
+  }
+
+  //User is logged in, so we show text that informs about important things concerning loans and
+  //reservations
+  private fun showInfoWhenLoggedIn() {
+    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks) {
+      this.feedEmptyMessage.setText(
+        //Check if shown books are holds or not, set the message that is shown when there are no
+        //books accordingly to loans and reserves when logged in
+        if (
+          (parameters as CatalogFeedArguments.CatalogFeedArgumentsLocalBooks).selection ==
+          FeedBooksSelection.BOOKS_FEED_HOLDS
+        ) {
+          R.string.feedWithGroupsEmptyHolds
+        } else {
+          R.string.feedWithGroupsEmptyLoaned
+        }
+      )
+    }
   }
 
   private fun openLogoLink() {
@@ -294,6 +338,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
     this.feedWithoutGroupsScrollListener = CatalogScrollListener(this.bookCovers)
     this.feedWithoutGroupsList.addOnScrollListener(this.feedWithoutGroupsScrollListener)
+
+    this.reconfigureCatalogUI()
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

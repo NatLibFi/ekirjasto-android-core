@@ -138,6 +138,21 @@ class CatalogFeedViewModel(
         .subscribe(this::onFeedLoaderResult)
     )
 
+  //Take live data that tells about the state of current account, works as there's only one
+  //account (library) so mostRecent is always the correct account
+  private val accountLiveMutable: MutableLiveData<AccountType> =
+    MutableLiveData(
+      this.profilesController
+        .profileCurrent()
+        .mostRecentAccount()
+    )
+
+  val accountLive: LiveData<AccountType> =
+    this.accountLiveMutable
+
+  val account: AccountType =
+    this.accountLive.value!!
+
   private fun onAccountEvent(event: AccountEvent) {
     when (event) {
       is AccountEventCreation.AccountEventCreationSucceeded,
