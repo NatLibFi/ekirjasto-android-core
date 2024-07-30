@@ -7,6 +7,7 @@ import androidx.credentials.exceptions.CreateCredentialCustomException
 import androidx.credentials.exceptions.CreateCredentialInterruptedException
 import androidx.credentials.exceptions.CreateCredentialProviderConfigurationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialDomException
 import androidx.lifecycle.MutableLiveData
@@ -67,10 +68,13 @@ class AccountEkirjastoPasskeyViewModel (
     services.requireService(BuildConfigurationServiceType::class.java)
   private val steps: TaskRecorderType = TaskRecorder.create()
   private var registering: Boolean = false
+  private var cancelled: Boolean = false
 
   val isRegistering : Boolean
   get() = this.registering
 
+  val isCancelled : Boolean
+    get() = this.cancelled
 
 
   private fun handleFailure(e: Exception) {
@@ -88,6 +92,13 @@ class AccountEkirjastoPasskeyViewModel (
         // to register the credential.
         logger.error("CreateCredentialCancellationException")
         steps.currentStepSucceeded("User cancelled request")
+      }
+      is GetCredentialCancellationException -> {
+        // The user intentionally canceled the operation and chose not
+        // to log in with any credential.
+        this.cancelled = true
+        logger.error("GetCredentialCancellationException")
+        steps.currentStepSucceeded("User cancelled login request")
       }
       is CreateCredentialInterruptedException -> {
         // Retry-able error. Consider retrying the call.
