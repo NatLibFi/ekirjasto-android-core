@@ -124,6 +124,7 @@ class AccountEkirjastoSuomiFiViewModel(
       logger.debug("onPageFinished $url")
       url?.let {
         if (it.startsWith(this.description.tunnistus_finish.toString())) {
+          logger.debug(this.description.tunnistus_finish.toString())
           view?.visibility = View.GONE
           view?.evaluateJavascript(
             "(function () { return document.body.textContent; })();"
@@ -142,7 +143,7 @@ class AccountEkirjastoSuomiFiViewModel(
     ) {
 
       logger.debug("Parsing authentication data from result")
-      if (content.isBlank() || content == "null") {
+      if (content.isBlank() || content == "null" || content.contains("ERR_HTTP_RESPONSE_CODE_FAILURE")) {
         logger.debug("Empty response, user exited without signing in")
         this.eventSubject.onNext(
           AccountEkirjastoSuomiFiInternalEvent.Cancel()
