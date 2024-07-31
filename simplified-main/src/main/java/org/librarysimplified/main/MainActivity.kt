@@ -93,7 +93,6 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override fun onCreate(savedInstanceState: Bundle?) {
     this.logger.debug("onCreate (recreating {})", savedInstanceState != null)
     super.onCreate(savedInstanceState)
-    //delegate.setContentView(R.layout.main_host)
     this.logger.debug("onCreate (super completed)")
 
     interceptDeepLink()
