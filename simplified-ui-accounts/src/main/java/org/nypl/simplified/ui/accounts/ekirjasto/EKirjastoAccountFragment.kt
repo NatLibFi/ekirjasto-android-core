@@ -78,12 +78,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonAccessibilityStatement: Button
   private lateinit var buttonLicenses: Button
   private lateinit var buttonFaq: Button
-  private lateinit var buttonLanguage: Button
   private lateinit var versionText: TextView
   private lateinit var bookmarkSyncProgress: ProgressBar
   private lateinit var bookmarkSyncCheck: SwitchCompat
   private lateinit var bookmarkStatement: TextView
-  private lateinit var buttonTextSize: Button
+  private lateinit var buttonPreferences: Button
 
   //inherited elements
   private lateinit var toolbar: PalaceToolbar
@@ -120,10 +119,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
     this.buttonLicenses = view.findViewById(R.id.buttonLicenses)
     this.buttonFaq = view.findViewById(R.id.buttonFaq)
-    this.buttonLanguage = view.findViewById(R.id.buttonLanguage)
     this.versionText = view.findViewById(R.id.appVersion)
     this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
-    this.buttonTextSize = view.findViewById(R.id.buttonTextScale)
+    this.buttonPreferences = view.findViewById(R.id.buttonPreferences)
 
 
     this.toolbar =
@@ -161,14 +159,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       this.logger.debug("Register Passkey clicked")
       onTryRegisterPasskey()
     }
-    this.buttonLanguage.setOnClickListener {
-      this.logger.debug("Language button clicked")
-      languageOptions()
-    }
-    this.buttonTextSize.setOnClickListener {
-      this.logger.debug("Text Button clicked")
-      textSizeOptions()
-    }
 
     /*
      * Configure the bookmark syncing switch to enable/disable syncing permissions.
@@ -193,6 +183,15 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
 
     this.reconfigureAccountUI()
   }
+  private fun configurePreferencesButton(button: Button) {
+    button.setOnClickListener {
+      logger.debug("Preferences clicked")
+      this.listener.post(
+        AccountDetailEvent.OpenPreferences
+      )
+    }
+  }
+
 
   private fun configureDocViewButton(button: Button, document: DocumentType?){
     button.isEnabled = document != null
@@ -250,6 +249,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
     configureDocViewButton(buttonLicenses, this.viewModel.documents.licenses)
     configureDocViewButton(buttonFaq, this.viewModel.documents.faq)
+
+    configurePreferencesButton(buttonPreferences)
 
     val versionString = this.requireContext().getString(R.string.app_version_string, this.viewModel.appVersion)
     this.versionText.text = versionString
@@ -419,82 +420,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.viewModel.account.setLoginState(this.viewModel.account.loginState)
 
     this.subscriptions.clear()
-  }
-  //Show a an alert box with all language options
-  private fun languageOptions() {
-    // Build the dialog, using the translatable language names
-    val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
-    val languages : Array<String> = arrayOf(
-      getString(R.string.buttonTextFinnish),
-      getString(R.string.buttonTextSwedish),
-      getString(R.string.buttonTextEnglish))
-    val current = LanguageUtil.getUserLanguage(this.requireContext())
-    logger.debug("Current language {}", current)
-    var curr = -1
-    when (current) {
-      "fi" -> curr = 0
-      "sv" -> curr = 1
-      "en" -> curr = 2
-    }
-    alertBuilder.setTitle(R.string.account_application_language)
-    alertBuilder.setSingleChoiceItems(languages, curr) { dialog, checked ->
-      //if the language they choose is not the current one, show the confirmation popup
-      if (checked != curr) {
-        when (checked) {
-          0 -> popUp("fi")
-          1 -> popUp("sv")
-          2-> popUp("en")
-        }
-      }
-      dialog.dismiss()
-    }
-    alertBuilder.create().show()
-  }
-
-  // Show a popup asking if user wants to set chosen language
-  private fun popUp (language: String) {
-    logger.debug("Changing language to {}", language)
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
-    builder
-      .setMessage(R.string.restartPopupMessage)
-      .setTitle(R.string.restartPopupTitle)
-      .setPositiveButton(R.string.restartPopupAgree) { dialog, which ->
-        //Set locale to the wanted language to be used on restart
-        LocaleHelper.setLocale(this.requireContext(), language)
-      }
-      .setNegativeButton(R.string.restartPopupCancel) { dialog, which ->
-        //do nothing
-      }
-
-    val dialog: AlertDialog = builder.create()
-    dialog.show()
-  }
-
-  private fun textSizeOptions() {
-    // Build the dialog, using the translatable language names
-    val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
-    val languages : Array<String> = arrayOf("100%", "150%", "200%")
-    val current = 0
-    logger.debug("Current choice {}", current)
-    alertBuilder.setTitle("Text size")
-    alertBuilder.setSingleChoiceItems(languages, current) { dialog, checked ->
-      //if the language they choose is not the current one, show the confirmation popup
-
-      when (checked) {
-        0 -> triggerListener.post(
-          TextSizeEvent.TextSizeSmall
-        )
-        1 -> triggerListener.post(
-          TextSizeEvent.TextSizeMedium
-        )
-        2-> triggerListener.post(
-          TextSizeEvent.TextSizeLarge
-        )
-      }
-
-      dialog.dismiss()
-    }
-    alertBuilder.create().show()
   }
 
   private fun isPasskeySupported(): Boolean {

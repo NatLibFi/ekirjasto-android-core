@@ -153,20 +153,6 @@
             app:layout_constraintTop_toBottomOf="@id/accountTop">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonLanguage"
-                style="@style/Palace.Button.Outlined.Settings.Arrowed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonLanguage" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonTextScale"
-                style="@style/Palace.Button.Outlined.Settings.Arrowed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Text size" />
-
-            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonFaq"
                 style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
@@ -207,6 +193,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_licenses" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonPreferences"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonPreferences" />
 
             <ImageView
                 android:id="@+id/settingsNatLibFiLogo"
