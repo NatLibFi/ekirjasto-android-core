@@ -17,7 +17,6 @@ class AppCache internal constructor(private val sharedPreferences: SharedPrefere
      * SharedPreferences keys
      */
     private const val KEY_SEEN_TUTORIAL = "seen_tutorial"
-    private const val KEY_TEXT_SIZE = "text_size"
 
   }
 
@@ -33,13 +32,5 @@ class AppCache internal constructor(private val sharedPreferences: SharedPrefere
    */
   fun isTutorialSeen(): Boolean {
     return sharedPreferences.getBoolean(KEY_SEEN_TUTORIAL, false)
-  }
-
-  fun setTextSize(size: Float) {
-    sharedPreferences.edit().putFloat(KEY_TEXT_SIZE, size).apply()
-  }
-
-  fun getTextSize(): Float {
-    return sharedPreferences.getFloat(KEY_TEXT_SIZE, 1.0f)
   }
 }

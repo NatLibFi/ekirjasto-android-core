@@ -252,11 +252,9 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override val defaultViewModelProviderFactory: ViewModelProvider.Factory
     get() = this.defaultViewModelFactory
 
-  private var mAppCompatDelegate: AppCompatDelegate? = null //
+  private var mAppCompatDelegate: AppCompatDelegate? = null
   override fun getDelegate(): AppCompatDelegate {
-    logger.debug("GETDELEGATETAPAHTUU ALKU")
     if (mAppCompatDelegate == null) {
-      logger.debug("COMPAT DELEGATE NULL, ASETA TXNATIVE")
       mAppCompatDelegate = TxNative.wrapAppCompatDelegate(super.getDelegate(), this)
     }
 
