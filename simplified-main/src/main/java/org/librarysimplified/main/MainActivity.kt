@@ -153,10 +153,18 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
         this.logger.debug("TextSmall")
       }
       TextSizeEvent.TextSizeMedium -> {
+        updateFontSize(1.25f)
+        this.logger.debug("TextSmall")
+      }
+      TextSizeEvent.TextSizeLarge -> {
         updateFontSize(1.5f)
         this.logger.debug("TextMedium")
       }
-      TextSizeEvent.TextSizeLarge -> {
+      TextSizeEvent.TextSizeExtraLarge -> {
+        updateFontSize(1.75f)
+        this.logger.debug("TextLarge")
+      }
+      TextSizeEvent.TextSizeExtraExtraLarge -> {
         updateFontSize(2.0f)
         this.logger.debug("TextLarge")
       }

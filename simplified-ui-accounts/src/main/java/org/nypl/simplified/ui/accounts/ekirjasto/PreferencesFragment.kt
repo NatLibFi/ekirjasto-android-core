@@ -28,21 +28,12 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
   private lateinit var buttonLanguage: Button
   private lateinit var buttonFontSize: Button
   private lateinit var switchPreferences: SwitchCompat
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     this.buttonLanguage = view.findViewById(R.id.buttonLanguage)
     this.buttonFontSize = view.findViewById(R.id.buttonFontSize)
     this.switchPreferences = view.findViewById(R.id.accountAllowPreferencesCheck)
-
-    //If settings are different from the default, show the switch as checked
-    if(LocaleHelper.getLanguage(this.requireContext()) != "fi" || FontSizeUtil(this.requireContext()).getFontSize() != 1.0f){
-      switchPreferences.isChecked = true
-    }
-    //Have the buttons start in the same state as the switch
-    this.buttonLanguage.isEnabled = switchPreferences.isChecked
-    this.buttonFontSize.isEnabled = switchPreferences.isChecked
   }
 
   override fun onStart() {
@@ -67,6 +58,14 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
         this.buttonLanguage.isEnabled = false
       }
     }
+
+    //If settings are different from the default, show the switch as checked
+    if(LocaleHelper.getLanguage(this.requireContext()) != "fi" || FontSizeUtil(this.requireContext()).getFontSize() != 1.0f){
+      switchPreferences.isChecked = true
+    }
+    //Have the buttons start in the same state as the switch
+    this.buttonLanguage.isEnabled = switchPreferences.isChecked
+    this.buttonFontSize.isEnabled = switchPreferences.isChecked
   }
   //Show a an alert box with all language options
   private fun languageOptions() {
@@ -121,15 +120,17 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
   private fun fontSizeOptions() {
     // Build the dialog
     val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
-    val languages : Array<String> = arrayOf("100%", "150%", "200%")
+    val languages : Array<String> = arrayOf("100%", "125%", "150%", "175%", "200%")
     //Set the ticked value based on the set font size
     val current = FontSizeUtil(this.requireContext()).getFontSize()
     var curr = -1
 
     when (current) {
       1.0f -> curr = 0
-      1.5f -> curr = 1
-      2.0f -> curr = 2
+      1.25f -> curr = 1
+      1.5f -> curr = 2
+      1.75f -> curr = 3
+      2.0f -> curr = 4
     }
 
     logger.debug("Current choice {}", current)
@@ -146,6 +147,12 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
           )
           2 -> listener.post(
             TextSizeEvent.TextSizeLarge
+          )
+          3 -> listener.post(
+            TextSizeEvent.TextSizeExtraLarge
+          )
+          4 -> listener.post(
+            TextSizeEvent.TextSizeExtraExtraLarge
           )
         }
       }

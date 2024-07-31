@@ -7,4 +7,8 @@ sealed class TextSizeEvent {
 
   object TextSizeLarge : TextSizeEvent()
 
+  object TextSizeExtraLarge : TextSizeEvent()
+
+  object TextSizeExtraExtraLarge : TextSizeEvent()
+
 }
