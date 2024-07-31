@@ -142,7 +142,7 @@ class AccountEkirjastoSuomiFiViewModel(
     ) {
 
       logger.debug("Parsing authentication data from result")
-      if (content.isBlank() || content == "null") {
+      if (content.isBlank() || content == "null" || content.contains("ERR_HTTP_RESPONSE_CODE_FAILURE")) {
         logger.debug("Empty response, user exited without signing in")
         this.eventSubject.onNext(
           AccountEkirjastoSuomiFiInternalEvent.Cancel()

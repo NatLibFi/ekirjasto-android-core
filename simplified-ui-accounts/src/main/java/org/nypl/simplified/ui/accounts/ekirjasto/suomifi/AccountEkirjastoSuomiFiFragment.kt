@@ -132,7 +132,8 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
 
   private fun onSuomiFiEventCancel() {
     logger.debug("User canceled login, pop from the back stack")
-    this.parentFragmentManager.popBackStack()
+    //Tell MainFragmentListenerDelegate to go upwards so that the user is pointed away from the error webpage
+    listener.post(AccountEkirjastoSuomiFiEvent.Cancel)
   }
 
   private fun onSuomiFiEventFailed(event: AccountEkirjastoSuomiFiInternalEvent.Failed) {

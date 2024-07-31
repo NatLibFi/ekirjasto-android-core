@@ -93,7 +93,14 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
         } else {
           postPasskeySuccessful(it.result)
         }
-        is TaskResult.Failure<PasskeyAuth> -> postPasskeyFailed(it)
+        is TaskResult.Failure<PasskeyAuth> ->
+          //If failure was caused by user canceling the passkey login
+          //We only want to cancel the login try without showing error message
+          if (this.viewModel.isCancelled) {
+            listener.post(AccountEkirjastoSuomiFiEvent.Cancel)
+          } else {
+            postPasskeyFailed(it)
+          }
       }
     }
   }
