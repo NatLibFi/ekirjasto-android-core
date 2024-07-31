@@ -119,25 +119,35 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
   }
 
   private fun fontSizeOptions() {
-    // Build the dialog, using the translatable language names
+    // Build the dialog
     val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
     val languages : Array<String> = arrayOf("100%", "150%", "200%")
-    val current = 0
-    logger.debug("Current choice {}", current)
-    alertBuilder.setTitle("Text size")
-    alertBuilder.setSingleChoiceItems(languages, current) { dialog, checked ->
-      //if the language they choose is not the current one, show the confirmation popup
+    //Set the ticked value based on the set font size
+    val current = FontSizeUtil(this.requireContext()).getFontSize()
+    var curr = -1
 
-      when (checked) {
-        0 -> listener.post(
-          TextSizeEvent.TextSizeSmall
-        )
-        1 -> listener.post(
-          TextSizeEvent.TextSizeMedium
-        )
-        2-> listener.post(
-          TextSizeEvent.TextSizeLarge
-        )
+    when (current) {
+      1.0f -> curr = 0
+      1.5f -> curr = 1
+      2.0f -> curr = 2
+    }
+
+    logger.debug("Current choice {}", current)
+    alertBuilder.setTitle(R.string.fontSize)
+    alertBuilder.setSingleChoiceItems(languages, curr) { dialog, checked ->
+      //if the size they choose is not the current one, trigger font change
+      if (checked != curr) {
+        when (checked) {
+          0 -> listener.post(
+            TextSizeEvent.TextSizeSmall
+          )
+          1 -> listener.post(
+            TextSizeEvent.TextSizeMedium
+          )
+          2 -> listener.post(
+            TextSizeEvent.TextSizeLarge
+          )
+        }
       }
 
       dialog.dismiss()
