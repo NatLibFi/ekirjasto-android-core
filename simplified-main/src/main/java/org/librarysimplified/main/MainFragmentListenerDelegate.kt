@@ -36,6 +36,7 @@ import org.nypl.simplified.ui.accounts.AccountListRegistryEvent
 import org.nypl.simplified.ui.accounts.AccountListRegistryFragment
 import org.nypl.simplified.ui.accounts.AccountPickerEvent
 import org.nypl.simplified.ui.accounts.ekirjasto.EKirjastoAccountFragment
+import org.nypl.simplified.ui.accounts.ekirjasto.PreferencesFragment
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiEvent
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragment
@@ -399,11 +400,23 @@ internal class MainFragmentListenerDelegate(
         state
       }
 
-      AccountDetailEvent.GoUpwards -> {
+      is AccountDetailEvent.GoUpwards -> {
         this.goUpwards()
         state
       }
+
+      is AccountDetailEvent.OpenPreferences -> {
+        this.openPreferences()
+        state
+      }
     }
+  }
+
+  private fun openPreferences() {
+    this.navigator.addFragment(
+      fragment = PreferencesFragment(),
+      tab = org.librarysimplified.ui.tabs.R.id.tabSettings
+    )
   }
 
   private fun handleAccountSAML20Event(

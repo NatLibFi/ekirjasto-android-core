@@ -131,6 +131,7 @@
             <TextView
                 android:id="@+id/accountSyncBookmarksStatement"
                 style="@style/Palace.TextViewStyle.Settings"
+                android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="32dp"
@@ -150,13 +151,6 @@
             app:layout_constraintHorizontal_bias="0.49"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/accountTop">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonLanguage"
-                style="@style/Palace.Button.Outlined.Settings.Arrowed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonLanguage" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonFaq"
@@ -199,6 +193,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/account_licenses" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonPreferences"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonPreferences" />
 
             <ImageView
                 android:id="@+id/settingsNatLibFiLogo"

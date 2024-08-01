@@ -20,6 +20,11 @@ sealed class AccountDetailEvent {
 
   object GoUpwards : AccountDetailEvent()
 
+  /**
+   * The patron wants to see the preference options.
+   */
+  object OpenPreferences : AccountDetailEvent()
+
   data class OpenWebView(val parameters: AccountCardCreatorParameters) : AccountDetailEvent()
 
   /**

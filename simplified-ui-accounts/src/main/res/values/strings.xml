@@ -86,9 +86,13 @@
   <string name="restartPopupAgree">Confirm</string>
   <string name="restartPopupCancel">Cancel</string>
   <string name="buttonLanguage">Language options</string>
+  <string name="buttonFontSize">Font size</string>
+  <string name="buttonPreferences">Preferences</string>
+  <string name="accountAllowPreferences">Enable preferences</string>
   <string name="buttonTextFinnish">Finnish</string>
   <string name="buttonTextSwedish">Swedish</string>
   <string name="buttonTextEnglish">English</string>
+  <string name="fontSize">Font size</string>
   <string name="errorLoginFailed">Could not sign in</string>
   <string name="errorPasskeyLoginFailed">Could not sign in with Passkey</string>
   <string name="errorPasskeyRegisterFailed">Error registering a Passkey</string>

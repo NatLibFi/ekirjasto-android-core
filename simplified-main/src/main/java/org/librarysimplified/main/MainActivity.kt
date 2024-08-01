@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.ActionBar
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +20,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.transifex.txnative.TxNative
 import fi.kansalliskirjasto.ekirjasto.testing.ui.TestLoginFragment
+import fi.kansalliskirjasto.ekirjasto.util.FontSizeUtil
 import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.login.LoginMainFragment
@@ -42,6 +44,7 @@ import org.nypl.simplified.profiles.api.ProfilesDatabaseType.AnonymousProfileEna
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryComplete
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskResult
+import org.nypl.simplified.ui.accounts.ekirjasto.TextSizeEvent
 import org.nypl.simplified.ui.branding.BrandingSplashServiceType
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -57,14 +60,35 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
   private val logger = LoggerFactory.getLogger(MainActivity::class.java)
   private val listenerRepo: ListenerRepository<MainActivityListenedEvent, Unit> by listenerRepositories()
+  private lateinit var fontSizeManager: FontSizeUtil
 
   private val defaultViewModelFactory: ViewModelProvider.Factory by lazy {
     MainActivityDefaultViewModelFactory(super.defaultViewModelProviderFactory)
   }
 
   override fun attachBaseContext(newBase: Context?) {
-    super.attachBaseContext(LocaleHelper.onAttach(newBase))
+    //Create a new configuration based on the font size that has been set
+    this.fontSizeManager = FontSizeUtil(newBase!!)
+    val newConfig = Configuration(newBase.resources.configuration)
+    newConfig.fontScale = fontSizeManager.getFontSize()
+
+    //Create a new context based on newBase,but with the changed configuration
+    //This method doesn't break Transifex
+    val cont = newBase.createConfigurationContext(newConfig)
+    //LocaleHelper is used to set into local memory the language choice
+    super.attachBaseContext(LocaleHelper.onAttach(cont))
   }
+
+  /**
+   * Set the visible font size. Update is visible to user instantly.
+   */
+  private fun updateFontSize(fontSize: Float) {
+    fontSizeManager.setFontSize(fontSize)
+    //After setting the font size, we want to reload the activity so the changes show
+    recreate()
+  }
+
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     this.logger.debug("onCreate (recreating {})", savedInstanceState != null)
@@ -119,6 +143,31 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     openTestLogin(
       prefilledUsername = data.getQueryParameter("username") ?: ""
     )
+  }
+
+  private fun setFontSize(event: TextSizeEvent) {
+    return when (event) {
+      TextSizeEvent.TextSizeSmall -> {
+        updateFontSize(1.0f)
+        this.logger.debug("TextSmall")
+      }
+      TextSizeEvent.TextSizeMedium -> {
+        updateFontSize(1.25f)
+        this.logger.debug("TextSmall")
+      }
+      TextSizeEvent.TextSizeLarge -> {
+        updateFontSize(1.5f)
+        this.logger.debug("TextMedium")
+      }
+      TextSizeEvent.TextSizeExtraLarge -> {
+        updateFontSize(1.75f)
+        this.logger.debug("TextLarge")
+      }
+      TextSizeEvent.TextSizeExtraExtraLarge -> {
+        updateFontSize(2.0f)
+        this.logger.debug("TextLarge")
+      }
+    }
   }
 
   // "Original" interceptDeepLink()
@@ -300,6 +349,9 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
       is MainActivityListenedEvent.OnboardingEvent ->
         this.handleOnboardingEvent(event.event)
+
+      is MainActivityListenedEvent.TextSizeEvent ->
+        this.setFontSize(event.event)
     }
   }
 

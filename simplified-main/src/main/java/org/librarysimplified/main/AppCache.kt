@@ -17,6 +17,7 @@ class AppCache internal constructor(private val sharedPreferences: SharedPrefere
      * SharedPreferences keys
      */
     private const val KEY_SEEN_TUTORIAL = "seen_tutorial"
+
   }
 
   /**
