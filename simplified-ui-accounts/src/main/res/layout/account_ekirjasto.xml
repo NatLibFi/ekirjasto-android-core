@@ -131,7 +131,6 @@
             <TextView
                 android:id="@+id/accountSyncBookmarksStatement"
                 style="@style/Palace.TextViewStyle.Settings"
-                android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="32dp"
