@@ -31,6 +31,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"
         />
 
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dependentsLoading"
+        app:layout_constraintTop_toBottomOf="@id/buttonDependents"/>
+
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"

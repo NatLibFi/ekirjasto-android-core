@@ -8,25 +8,22 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
-import org.nypl.simplified.profiles.controller.api.ProfileDependentsLookupRequest
-import org.nypl.simplified.profiles.controller.api.ProfileDependentsPostRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.slf4j.LoggerFactory
 
 class DependentsFragment : Fragment(R.layout.dependents) {
-  // Get the service and the profile controller
-  // into which I put the new function, since profiles handles profile changes
-  // might need its own controller
-  val services =
-    Services.serviceDirectory()
-  val profilesController =
-    services.requireService(ProfilesControllerType::class.java)
+  //Viewmodel that handles get/post requests as well as updating dependent list
+  private lateinit var viewModel: DependentsViewModel
+  val logger = LoggerFactory.getLogger(DependentsFragment::class.java)
 
   companion object {
     private const val PATRON_ID = "org.nypl.simplified.ui.accounts.ekirjasto.patron"
@@ -40,58 +37,63 @@ class DependentsFragment : Fragment(R.layout.dependents) {
   private val patron by lazy { arguments?.getString(PATRON_ID) }
   private val token by lazy { arguments?.getString(ACCESS_TOKEN) }
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    //Create the viewmodel
+    this.viewModel = ViewModelProvider(this)[DependentsViewModel::class.java]
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val logger = LoggerFactory.getLogger(EKirjastoAccountFragment::class.java)
+    //Link all the view elements to their code counterparts
     val spinner = view.findViewById<Spinner>(R.id.spinner)
     val emailInput = view.findViewById<EditText>(R.id.email)
     val send = view.findViewById<Button>(R.id.send)
     val buttonDependents = view.findViewById<Button>(R.id.buttonDependents)
     val dependentInfoText = view.findViewById<TextView>(R.id.dependentInfoText)
+    val progressBar = view.findViewById<ProgressBar>(R.id.dependentsLoading)
 
     //set elements to be invisible at start
     emailInput.visibility = GONE
     send.visibility = GONE
     dependentInfoText.visibility = GONE
     spinner.visibility = GONE
+    progressBar.visibility = GONE
 
     //Handle click event of a get dependents button
     buttonDependents.setOnClickListener {
       logger.debug("Get Dependents Button Pressed!")
-      spinner.visibility = VISIBLE
-
-      //Do the lookup, not the most simple or pretty way, but
-      //Had struggle with error from networking in main thread so this got past it
-      profilesController.profileDependentsLookup(
-        ProfileDependentsLookupRequest.Ekirjasto(
-          patronInfo = patron!!,
-          ekirjastoToken = token!!
-        )
-      )
-
-      val testValue = "testValue"
-      val response = getDependents(testValue)
-      logger.debug("Response is: $response")
+      //Call the viewmodel to handle getting the dependents from the server
+      viewModel.lookupDependents()
+      //Show progress bar while we are loading the dependents info
+      progressBar.visibility = VISIBLE
     }
 
+    //Add an adapter for programmatically adding spinner items when there are some
     val adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
     spinner.adapter = adapter
 
-    // Add items to the spinner programmatically
-    adapter.add("Start by Getting Dependents")
-    adapter.add("Another Item for debugging purposes only")
+    //Observe the list of dependents and put them into the spinner and show the spinner when done
+    //also stop showing the progress bar when there is something to show
+    viewModel.dependentListLive.observe(viewLifecycleOwner) { depList ->
+      if (depList.isNotEmpty()) {
+        adapter.add("Start by Getting Dependents")
+        //adapter.add("Another Item for debugging purposes only")
+        depList.forEach { d ->
+          adapter.add(d.firstName)
+        }
+        adapter.notifyDataSetChanged()
+        progressBar.visibility = GONE
+        spinner.visibility = VISIBLE
+      } else {
+        spinner.visibility = GONE
+      }
+    }
 
-    //adapter.remove("Start by Getting Dependents")
-
-    adapter.notifyDataSetChanged()
-
-    //add an adapter for programmatically add spinner items
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-    spinner.adapter = adapter
-
-    //set state of selection -boolean to false and send to debug console
+    //set state of selection boolean to false and send to debug console
     var selected = false
+    var selectedDependent = ""
     logger.debug("State of selection is $selected")
 
     //Set up item selection listener
@@ -101,7 +103,6 @@ class DependentsFragment : Fragment(R.layout.dependents) {
 
         // Handle the selected item here and post selection to debug console
         logger.debug("Item Selected: $selectedItem")
-
 
         //Check if selected other than default value
         //and if so, set input field, info and send button visible
@@ -113,6 +114,7 @@ class DependentsFragment : Fragment(R.layout.dependents) {
         } else {
           selected = true
           logger.debug("State of selection is $selected")
+          selectedDependent = selectedItem
           emailInput.visibility = VISIBLE
           send.visibility = VISIBLE
           dependentInfoText.visibility = VISIBLE
@@ -145,8 +147,8 @@ class DependentsFragment : Fragment(R.layout.dependents) {
         spinner.visibility = GONE
         buttonDependents.visibility = GONE
 
-        //todo: call post method here
-        logger.debug("Entered post method")
+        //Post the dependent info
+        postDependent(selectedDependent,userInput)
 
 
         //reset email field
@@ -166,69 +168,12 @@ class DependentsFragment : Fragment(R.layout.dependents) {
     return userInput.matches(emailRegex.toRegex())
   }
 
-  //todo: get method
-  private fun getDependents(testValue: String): String {
-    val logger = LoggerFactory.getLogger(EKirjastoAccountFragment::class.java)
-    logger.debug("Entered get method")
-    //Trigger the post method
-    profilesController.profileDependentsPost(
-      ProfileDependentsPostRequest.Ekirjasto(
-        ekirjastoToken = token!!,
-        dependent = "Dependent" //change to actual dependent
-      )
-      /* Server wants the info of a dependent in this form. Role is always customer
-firstname, lastname, govID can be found in the get infromation
-  {
-  locale: "fi",
-  firstName: "Hulianna Katruska",
-  lastName: "",
-  govId: "140319*****",
-  email: "test@example.com",
-  role: "customer",
+  //Trigger the post method
+  private fun postDependent(dependentName: String, email: String) {
+    logger.debug("Entered post method")
+    //Get the users language and use it as the dependents language
+    val lang = LanguageUtil.getUserLanguage(this.requireContext())
+    viewModel.postDependent(dependentName, email, lang)
   }
-
-  you can form an object like one above like so:
-  data class User(
-  val locale: String,
-  val firstName: String,
-  val lastName: String,
-  val govId: String,
-  val email: String,
-  val role: String
-  )
-
-  and then
-
-  create a new instance of the user data class with content
-
-  val user = User(
-  locale: "fi",
-  firstName: "Hulianna Katruska",
-  lastName: "",
-  govId: "140319*****",
-  email: "test@example.com",
-  role: "customer"
-
-  and then
-  logger.debug(user)
-
-  to read object into variables we could destructure the user object into variables here:
-
-  val (locale, firstName, lastName, govId, email, role) = user
-  no you can use all values as variable like so:
-
-  logger.debug("Info to print: $variable to use")
-  for example this way:
-  logger.debug("Your govId is: $govId")
-
-   */
-
-    )
-
-
-    val response = "none"
-    return response
-  }
-  //todo: post method
 
 }

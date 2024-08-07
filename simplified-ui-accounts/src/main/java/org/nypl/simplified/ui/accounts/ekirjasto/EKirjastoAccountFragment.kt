@@ -221,14 +221,14 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       }
       val token = credentials?.let {
         if (it is AccountAuthenticationCredentials.Ekirjasto) {
-          it.ekirjastoToken
+          it.accessToken
         } else {
           null
         }
       }
       //print the info sent to the next fragment
       logger.debug("PATRON: {}", patron)
-      logger.debug("PATRONTOKEN: {}", token)
+      logger.debug("ACCESSTOKEN: {}", token)
       this.listener.post(
         AccountDetailEvent.OpenDependentInvite(patron, token)
       )
