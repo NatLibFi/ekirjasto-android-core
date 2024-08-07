@@ -74,8 +74,6 @@ import org.nypl.simplified.profiles.api.ProfilesDatabaseType.AnonymousProfileEna
 import org.nypl.simplified.profiles.controller.api.ProfileAccountCreationStringResourcesType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountDeletionStringResourcesType
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
-import org.nypl.simplified.profiles.controller.api.ProfileDependentsLookupRequest
-import org.nypl.simplified.profiles.controller.api.ProfileDependentsPostRequest
 import org.nypl.simplified.profiles.controller.api.ProfileFeedRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskResult
@@ -400,41 +398,6 @@ class Controller private constructor(
       notificationTokenHttpCalls = notificationTokenHttpCalls,
       loginStrings = this.accountLoginStringResources,
       patronParsers = this.patronUserProfileParsers,
-      request = request
-    ).call()
-  }
-
-  //Trigger the dependents lookup, the future should be changed to a better one
-  //so that the returned data can be observed
-  override fun profileDependentsLookup(
-    request: ProfileDependentsLookupRequest
-  ): FluentFuture<TaskResult<Unit>> {
-    return this.submitTask { this.runProfileDependentsLookup(request) }
-  }
-  private fun runProfileDependentsLookup( //
-    request: ProfileDependentsLookupRequest
-  ): TaskResult<Unit> {
-    return ProfileDependentsLookupTask(
-      http = this.lsHttp,
-      loginStrings = this.accountLoginStringResources,
-      request = request
-    ).call()
-  }
-
-  //Trigger the dependents post, the post not really
-  //returning any information other than success
-  override fun profileDependentsPost( //
-    request: ProfileDependentsPostRequest
-  ): FluentFuture<TaskResult<Unit>> {
-    return this.submitTask { this.runProfileDependentsPost(request) }
-    //.flatMap { result -> this.runSyncIfLoginSucceeded(result, request.accountId) }
-  }
-  private fun runProfileDependentsPost( //
-    request: ProfileDependentsPostRequest
-  ): TaskResult<Unit> {
-    return ProfileDependentsPostTask(
-      http = this.lsHttp,
-      loginStrings = this.accountLoginStringResources,
       request = request
     ).call()
   }
