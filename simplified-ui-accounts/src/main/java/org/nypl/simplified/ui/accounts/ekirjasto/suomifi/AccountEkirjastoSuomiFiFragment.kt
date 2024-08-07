@@ -99,7 +99,9 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
   private fun loadLoginPage() {
     logger.debug("loadLoginPage()")
     val urlSuffix = "&state=app"
-    this.webView.loadUrl("${this.parameters.authenticationDescription.tunnistus_start}${urlSuffix}")
+    this.webView.loadUrl("https://e-kirjasto.loikka.dev/v1/auth/tunnistus/start?locale=fi&state=app:T0011")
+    //TESTESTEST VALUE YLHÄÄLLÄ
+    //this.webView.loadUrl("${this.parameters.authenticationDescription.tunnistus_start}${urlSuffix}")
   }
 
   private fun onSuomiFiEvent(event: AccountEkirjastoSuomiFiInternalEvent) {
