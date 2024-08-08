@@ -2,6 +2,8 @@ package org.nypl.simplified.books.controller
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.TextNode
 import com.google.common.base.Preconditions
 import one.irradia.mime.api.MIMECompatibility
 import one.irradia.mime.api.MIMEType
@@ -63,6 +65,7 @@ import java.nio.charset.Charset
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
+import kotlin.math.log
 
 /**
  * A task that performs a login for the given account in the given profile.
@@ -275,12 +278,12 @@ class ProfileAccountLoginTask(
     httpRequest.execute().use { response ->
       when (val status = response.status) {
         is LSHTTPResponseStatus.Responded.OK -> {
-          val responseValues = getAccessTokenAndPatronFromEkirjastoCirculationResponse(
+          val (accessToken, patronInfo) = getAccessTokenAndPatronFromEkirjastoCirculationResponse(
             node = ObjectMapper().readTree(status.bodyStream)
           )
           this.credentials = AccountAuthenticationCredentials.Ekirjasto(
-            accessToken = responseValues[0],
-            patronInfo = responseValues[1],
+            accessToken = accessToken,
+            patronInfo = patronInfo,
             ekirjastoToken = request.ekirjastoToken,
             adobeCredentials = null,
             authenticationDescription = request.description.description,
@@ -580,13 +583,23 @@ class ProfileAccountLoginTask(
   // Finland
   private fun getAccessTokenAndPatronFromEkirjastoCirculationResponse(node: JsonNode): List<String> {
     //This prints out the full response, should be in two parts: access_token which is a string and
-    // patron_info, that is a list of values in a string
-
+    // patron_info, that is a list of values in a string, so we need to readTree it again to get its
+    // values out
     //logger.debug(node.toPrettyString())
-    return try {
-      listOf(node.get("access_token").asText(), node.get("patron_info").asText().split("\"")[3])
+    try {
+      //Get access token
+      val accessToken = node["access_token"].textValue()
+      //Get patron info, node is textual, so read it as text
+      val patronInfo = node["patron_info"].asText()
+      //Make patron into an object so we can read its values easily
+      val patronObject = ObjectMapper().readTree(patronInfo)
+      //Read the permanent_id from the new object
+      val permanentId = patronObject["permanent_id"].textValue()
+
+      //Return access token and id as a list
+      return listOf(accessToken, permanentId)
     } catch (e: Exception) {
-      this.logger.error("Error getting access token from E-kirjasto circulation token response: ", e)
+      this.logger.error("Error getting access token and patron info from E-kirjasto circulation token response: ", e)
       throw e
     }
   }
