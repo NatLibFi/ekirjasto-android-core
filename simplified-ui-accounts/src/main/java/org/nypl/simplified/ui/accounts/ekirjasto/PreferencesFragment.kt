@@ -37,16 +37,19 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    //Link the layout elements
     this.buttonLanguage = view.findViewById(R.id.buttonLanguage)
     this.buttonFontSize = view.findViewById(R.id.buttonFontSize)
     this.switchPreferences = view.findViewById(R.id.accountAllowPreferencesCheck)
 
+    // Inherit the toolbar
     this.toolbar =
       view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
   }
 
   override fun onStart() {
     super.onStart()
+    // Configure toolbar to keep links and texts up-to-date
     this.configureToolbar()
 
     this.buttonLanguage.setOnClickListener {
@@ -59,6 +62,7 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
       fontSizeOptions()
     }
 
+    //Change the availability of the settings buttons based on the switch
     this.switchPreferences.setOnCheckedChangeListener { buttonView, isChecked ->
       if (isChecked) {
         this.buttonFontSize.isEnabled = true
@@ -127,10 +131,11 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
     dialog.show()
   }
 
+  //Show a popup with the text size options from 100 to 200
   private fun fontSizeOptions() {
     // Build the dialog
     val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
-    val languages : Array<String> = arrayOf("100%", "125%", "150%", "175%", "200%")
+    val fontSizes : Array<String> = arrayOf("100%", "125%", "150%", "175%", "200%")
     //Set the ticked value based on the set font size
     val current = FontSizeUtil(this.requireContext()).getFontSize()
     var curr = -1
@@ -143,9 +148,9 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
       2.0f -> curr = 4
     }
 
-    logger.debug("Current choice {}", current)
+    logger.debug("Current font size choice {}", current)
     alertBuilder.setTitle(R.string.fontSize)
-    alertBuilder.setSingleChoiceItems(languages, curr) { dialog, checked ->
+    alertBuilder.setSingleChoiceItems(fontSizes, curr) { dialog, checked ->
       //if the size they choose is not the current one, trigger font change
       if (checked != curr) {
         when (checked) {
@@ -165,19 +170,28 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
             TextSizeEvent.TextSizeExtraExtraLarge
           )
         }
+      } else {
+        //do nothing
       }
-
       dialog.dismiss()
     }
     alertBuilder.create().show()
   }
+
+  //Configure the toolbar
   private fun configureToolbar() {
+    //Get the action bar from parent
     val actionBar = this.supportActionBar ?: return
+    //Show the bar on the toolbar
     actionBar.show()
+    //Set the back arrow to take user up a level instead of into the catalog
     actionBar.setDisplayHomeAsUpEnabled(true)
+    //Set no help text description
     actionBar.setHomeActionContentDescription(null)
+    //Set the shown title as Settings
     actionBar.setTitle(R.string.AccountTitle)
     this.toolbar.setLogoOnClickListener {
+      //Pressing the back nutton takes you to last fragment, or if there is not one, settings
       this.navListener.post(PreferencesEvent.GoUpwards)
       logger.debug("Backbutton pressed")
     }
