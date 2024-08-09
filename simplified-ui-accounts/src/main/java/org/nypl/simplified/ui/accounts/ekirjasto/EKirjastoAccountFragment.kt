@@ -213,7 +213,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   }
 
   private fun configureToolbar() {
-    val providerName = this.viewModel.account.provider.displayName
     val actionBar = this.supportActionBar ?: return
     actionBar.show()
     actionBar.setDisplayHomeAsUpEnabled(true)
