@@ -186,12 +186,12 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
     actionBar.show()
     //Set the back arrow to take user up a level instead of into the catalog
     actionBar.setDisplayHomeAsUpEnabled(true)
-    //Set no help text description
+    //Set text description to null, text is already provided by the toolbar
     actionBar.setHomeActionContentDescription(null)
     //Set the shown title as Settings
     actionBar.setTitle(R.string.AccountTitle)
     this.toolbar.setLogoOnClickListener {
-      //Pressing the back nutton takes you to last fragment, or if there is not one, settings
+      //Pressing the back button takes you to last fragment, or if there is not one, into settings
       this.navListener.post(PreferencesEvent.GoUpwards)
       logger.debug("Backbutton pressed")
     }
