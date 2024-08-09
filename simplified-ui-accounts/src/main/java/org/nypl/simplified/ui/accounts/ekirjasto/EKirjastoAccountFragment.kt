@@ -219,7 +219,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     actionBar.setDisplayHomeAsUpEnabled(true)
     actionBar.setHomeActionContentDescription(null)
     actionBar.setTitle(R.string.AccountTitle)
-    this.toolbar.logo
     this.toolbar.setLogoOnClickListener {
       this.listener.post(AccountDetailEvent.GoUpwards)
     }

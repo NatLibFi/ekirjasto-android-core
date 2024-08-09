@@ -11,9 +11,12 @@ import fi.kansalliskirjasto.ekirjasto.util.FontSizeUtil
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import org.librarysimplified.ui.accounts.R
+import org.nypl.simplified.android.ktx.supportActionBar
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
+import org.nypl.simplified.ui.accounts.AccountDetailEvent
 import org.slf4j.LoggerFactory
+import org.thepalaceproject.theme.core.PalaceToolbar
 
 class PreferencesFragment : Fragment(R.layout.account_resources) {
   fun create() : PreferencesFragment {
@@ -24,20 +27,27 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
   private val logger =
     LoggerFactory.getLogger(PreferencesFragment::class.java)
   private val listener: FragmentListenerType<TextSizeEvent> by fragmentListeners()
+  private val navListener: FragmentListenerType<PreferencesEvent> by fragmentListeners()
 
   private lateinit var buttonLanguage: Button
   private lateinit var buttonFontSize: Button
   private lateinit var switchPreferences: SwitchCompat
+
+  private lateinit var toolbar: PalaceToolbar
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     this.buttonLanguage = view.findViewById(R.id.buttonLanguage)
     this.buttonFontSize = view.findViewById(R.id.buttonFontSize)
     this.switchPreferences = view.findViewById(R.id.accountAllowPreferencesCheck)
+
+    this.toolbar =
+      view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
   }
 
   override fun onStart() {
     super.onStart()
+    this.configureToolbar()
 
     this.buttonLanguage.setOnClickListener {
       this.logger.debug("Language button clicked")
@@ -160,5 +170,16 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
       dialog.dismiss()
     }
     alertBuilder.create().show()
+  }
+  private fun configureToolbar() {
+    val actionBar = this.supportActionBar ?: return
+    actionBar.show()
+    actionBar.setDisplayHomeAsUpEnabled(true)
+    actionBar.setHomeActionContentDescription(null)
+    actionBar.setTitle(R.string.AccountTitle)
+    this.toolbar.setLogoOnClickListener {
+      this.navListener.post(PreferencesEvent.GoUpwards)
+      logger.debug("Backbutton pressed")
+    }
   }
 }
