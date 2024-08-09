@@ -11,6 +11,7 @@ import org.nypl.simplified.ui.accounts.AccountDetailEvent
 import org.nypl.simplified.ui.accounts.AccountListEvent
 import org.nypl.simplified.ui.accounts.AccountListRegistryEvent
 import org.nypl.simplified.ui.accounts.AccountPickerEvent
+import org.nypl.simplified.ui.accounts.ekirjasto.PreferencesEvent
 import org.nypl.simplified.ui.accounts.saml20.AccountSAML20Event
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiEvent
 import org.nypl.simplified.ui.errorpage.ErrorPageEvent
@@ -33,6 +34,7 @@ class MainFragmentDefaultViewModelFactory(fallbackFactory: ViewModelProvider.Fac
     repository.registerListener(AccountListRegistryEvent::class, MainFragmentListenedEvent::AccountListRegistryEvent)
     repository.registerListener(AccountListEvent::class, MainFragmentListenedEvent::AccountListEvent)
     repository.registerListener(AccountPickerEvent::class, MainFragmentListenedEvent::AccountPickerEvent)
+    repository.registerListener(PreferencesEvent::class, MainFragmentListenedEvent::PreferencesEvent)
     repository.registerListener(MagazinesEvent::class, MainFragmentListenedEvent::MagazinesEvent)
     repository.registerListener(ErrorPageEvent::class, MainFragmentListenedEvent::ErrorPageEvent)
     repository.registerListener(SettingsMainEvent::class, MainFragmentListenedEvent::SettingsMainEvent)
