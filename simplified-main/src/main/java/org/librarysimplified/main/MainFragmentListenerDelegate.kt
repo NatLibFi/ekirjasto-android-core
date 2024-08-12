@@ -36,6 +36,7 @@ import org.nypl.simplified.ui.accounts.AccountListRegistryEvent
 import org.nypl.simplified.ui.accounts.AccountListRegistryFragment
 import org.nypl.simplified.ui.accounts.AccountPickerEvent
 import org.nypl.simplified.ui.accounts.ekirjasto.EKirjastoAccountFragment
+import org.nypl.simplified.ui.accounts.ekirjasto.PreferencesEvent
 import org.nypl.simplified.ui.accounts.ekirjasto.PreferencesFragment
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiEvent
@@ -169,11 +170,25 @@ internal class MainFragmentListenerDelegate(
       is MainFragmentListenedEvent.AccountPickerEvent ->
         this.handleAccountPickerEvent(event.event, state)
 
+      is MainFragmentListenedEvent.PreferencesEvent ->
+        this.handlePreferencesEvent(event.event, state)
+
       is MainFragmentListenedEvent.MagazinesEvent ->
         this.handleMagazinesEvent(event.event, state)
 
       is MainFragmentListenedEvent.ErrorPageEvent ->
         this.handleErrorPageEvent(event.event, state)
+    }
+  }
+
+  private fun handlePreferencesEvent(
+    event: PreferencesEvent,
+    state: MainFragmentState): MainFragmentState {
+    return when (event) {
+      is PreferencesEvent.GoUpwards -> {
+        this.goUpwardsInSettings()
+        state
+      }
     }
   }
 
@@ -707,6 +722,17 @@ internal class MainFragmentListenerDelegate(
     }
     else {
       openCatalog()
+    }
+  }
+
+  private fun goUpwardsInSettings() {
+    logger.debug("goUpwards(), stack size: {}", navigator.backStackSize())
+    val isRoot = (0 == navigator.backStackSize())
+    if (!isRoot) {
+      navigator.popBackStack()
+    }
+    else {
+      openSettingsAccounts()
     }
   }
 

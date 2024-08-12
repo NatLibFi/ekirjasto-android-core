@@ -213,13 +213,11 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   }
 
   private fun configureToolbar() {
-    val providerName = this.viewModel.account.provider.displayName
     val actionBar = this.supportActionBar ?: return
     actionBar.show()
     actionBar.setDisplayHomeAsUpEnabled(true)
     actionBar.setHomeActionContentDescription(null)
     actionBar.setTitle(R.string.AccountTitle)
-    this.toolbar.logo
     this.toolbar.setLogoOnClickListener {
       this.listener.post(AccountDetailEvent.GoUpwards)
     }
