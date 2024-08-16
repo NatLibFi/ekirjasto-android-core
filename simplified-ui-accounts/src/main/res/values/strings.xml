@@ -107,4 +107,7 @@
   <string name="guidetext">Fill in an email where the invitation should be sent. Make sure to type it in correctly before sending.</string>
   <string name="thanks">Thank you! Your dependent should receive the invitation shortly if the email was entered correctly.</string>
   <string name="emailNotValid">Enter a Valid Email Address.</string>
+  <string name="errorFromServer">Something went wrong. Sign out and back in and try again.</string>
+  <string name="errorInCreation">Could not finish request. Check internet connection and try again.</string>
+
 </resources>

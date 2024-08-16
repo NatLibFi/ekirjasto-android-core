@@ -112,14 +112,14 @@ class DependentsViewModel(
             logger.warn("fetchEkirjastoToken error: {}", response)
             logger.warn("Error ${response.status}: ${response.properties?.message}")
             steps.currentStepFailed("Error getting ekirjastoToken", response.properties!!.message)
-            error.postValue("Something went wrong. Try again.")
+            error.postValue("Error")
           }
           is LSHTTPResponseStatus.Failed -> {
             //Handle error by logging and informing user
             logger.warn("fetchEkirjastoToken failed: {}", response)
             logger.warn("Failed ${response.status}: ${response.properties?.message}")
             steps.currentStepFailed("Failed to get ekirjastoToken", response.properties!!.message)
-            error.postValue("Could not finish request, check internet connection and try again.")
+            error.postValue("Failed")
           }
         }
       }
@@ -169,14 +169,14 @@ class DependentsViewModel(
             //Handle error by logging and informing user
             logger.warn("fetchDependents error: {}", response)
             logger.warn("Error ${response.status}: ${response.properties?.message}")
-            error.postValue("Something went wrong. Sign out and back in and try again.")
+            error.postValue("Error")
 
           }
           is LSHTTPResponseStatus.Failed -> {
             //Handle error by logging and informing user
             logger.warn("fetchDependents failed: {}", response)
             logger.warn("Failed ${response.status}: ${response.properties?.message}")
-            error.postValue("Could not finish request. Check internet connection and try again.")
+            error.postValue("Failed")
           }
         }
       }
@@ -225,13 +225,13 @@ class DependentsViewModel(
                 //Handle error by logging and informing user
                 logger.warn("postDependent error: {}", response)
                 logger.warn("Error ${response.status}: ${response.properties?.message}")
-                error.postValue("There was an error, try again.")
+                error.postValue("Error")
               }
               is LSHTTPResponseStatus.Failed -> {
                 //Handle error by logging and informing user
                 logger.warn("postDependent failed: {}", response)
                 logger.warn("Failed ${response.status}: ${response.properties?.message}")
-                error.postValue("Failed to send data to server. Sign out and back in and try again.")
+                error.postValue("Failed")
               }
             }
           }

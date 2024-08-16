@@ -102,9 +102,19 @@ class DependentsFragment : Fragment(R.layout.dependents) {
         dependentInfoText.visibility = VISIBLE
         //Show the invite another -button
         moreDependentsButton.visibility = VISIBLE
-      } else {
+      } else if (error == "Error"){
+        //Error is from the server
         //Set and show error message
-        dependentInfoText.text = error
+        dependentInfoText.text = getString(R.string.errorFromServer)
+        dependentInfoText.visibility = VISIBLE
+        //Show the get dependents button so user can try again
+        buttonDependents.visibility = VISIBLE
+        //Don't show invite more in case of a fail
+        moreDependentsButton.visibility = GONE
+      } else {
+        //Error happened on this end
+        //Set and show error message
+        dependentInfoText.text = getString(R.string.errorInCreation)
         dependentInfoText.visibility = VISIBLE
         //Show the get dependents button so user can try again
         buttonDependents.visibility = VISIBLE
