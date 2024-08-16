@@ -137,6 +137,7 @@ object AccountAuthenticationCredentialsJSON20210512 : AccountAuthenticationCrede
     return AccountAuthenticationCredentials.Ekirjasto(
       accessToken = JSONParserUtilities.getString(obj, "accessToken"),
       ekirjastoToken = JSONParserUtilities.getStringOrNull(obj, "ekirjastoToken")?:"",
+      patronPermanentID = JSONParserUtilities.getString(obj, "patronPermanentID")?:"",
       adobeCredentials = adobeCredentials,
       authenticationDescription = JSONParserUtilities.getStringOrNull(obj, "authenticationDescription"),
       annotationsURI = JSONParserUtilities.getURIOrNull(obj, "annotationsURI"),
