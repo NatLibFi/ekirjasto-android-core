@@ -96,30 +96,34 @@ class DependentsFragment : Fragment(R.layout.dependents) {
       //If there was an error or success, should hide spinner and loading
       spinner.visibility = GONE
       progressBar.visibility = GONE
-      if (error == "Success") {
-        //Set thank you message and show it
-        dependentInfoText.text = getString(R.string.thanks)
-        dependentInfoText.visibility = VISIBLE
-        //Show the invite another -button
-        moreDependentsButton.visibility = VISIBLE
-      } else if (error == "Error"){
-        //Error is from the server
-        //Set and show error message
-        dependentInfoText.text = getString(R.string.errorFromServer)
-        dependentInfoText.visibility = VISIBLE
-        //Show the get dependents button so user can try again
-        buttonDependents.visibility = VISIBLE
-        //Don't show invite more in case of a fail
-        moreDependentsButton.visibility = GONE
-      } else {
-        //Error happened on this end
-        //Set and show error message
-        dependentInfoText.text = getString(R.string.errorInCreation)
-        dependentInfoText.visibility = VISIBLE
-        //Show the get dependents button so user can try again
-        buttonDependents.visibility = VISIBLE
-        //Don't show invite more in case of a fail
-        moreDependentsButton.visibility = GONE
+      when (error) {
+          "Success" -> {
+            //Set thank you message and show it
+            dependentInfoText.text = getString(R.string.thanks)
+            dependentInfoText.visibility = VISIBLE
+            //Show the invite another -button
+            moreDependentsButton.visibility = VISIBLE
+          }
+          "Error" -> {
+            //Error is from the server
+            //Set and show error message
+            dependentInfoText.text = getString(R.string.errorFromServer)
+            dependentInfoText.visibility = VISIBLE
+            //Show the get dependents button so user can try again
+            buttonDependents.visibility = VISIBLE
+            //Don't show invite more in case of a fail
+            moreDependentsButton.visibility = GONE
+          }
+          else -> {
+            //Error happened on this end
+            //Set and show error message
+            dependentInfoText.text = getString(R.string.errorInCreation)
+            dependentInfoText.visibility = VISIBLE
+            //Show the get dependents button so user can try again
+            buttonDependents.visibility = VISIBLE
+            //Don't show invite more in case of a fail
+            moreDependentsButton.visibility = GONE
+          }
       }
     }
 
