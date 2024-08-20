@@ -29,6 +29,7 @@ import java.nio.charset.Charset
 class DependentsViewModel(
 ) : ViewModel() {
 
+  //Get the services needed for functionalities
   private val services = Services.serviceDirectory()
   private val profiles = services.requireService(ProfilesControllerType::class.java)
   private val http = services.requireService(LSHTTPClientType::class.java)
@@ -42,7 +43,7 @@ class DependentsViewModel(
   val dependentListLive: LiveData<List<Dependent>>
     get() = dependentList
 
-  //ekirjasto token returned by circulation
+  //Ekirjasto token returned by circulation
   private lateinit var ekirjastoToken : String
   //dependent post URI
   private lateinit var dependentPostURI: URI
@@ -54,7 +55,9 @@ class DependentsViewModel(
   val errorLive: LiveData<String>
     get() = error
 
-  //Get the used account (we only have one)
+  /**
+   * Get the default account. There is only one account we use, so it should always be found.
+   */
   private fun getDefaultAccount(): AccountType? {
     steps.beginNewStep("Get current account")
     val profile = profiles.profileCurrent()
@@ -69,6 +72,10 @@ class DependentsViewModel(
     return null
   }
 
+  /**
+   * Make calls to server to get ekirjasto token, and use it to
+   * get dependents.
+   */
   fun lookupDependents() {
     //Get account information
     //Get id of default account, that we are always on
@@ -95,8 +102,8 @@ class DependentsViewModel(
     //Get the ekirjastoToken from circulation
     steps.beginNewStep("Get Ekirjasto token")
     this.viewModelScope.launch(Dispatchers.IO) {
-      // Create the request for ekirjasto token
-      val tokenRequest = createGetTokenRequest(ekirjastoTokenUrl!!, circulationToken!!)
+      // Create the request for ekirjasto token, using circulation token as bearer
+      val tokenRequest = createGetRequest(ekirjastoTokenUrl!!, circulationToken!!)
       tokenRequest.execute().use { response ->
         when (val status = response.status) {
           is LSHTTPResponseStatus.Responded.OK -> {
@@ -125,8 +132,9 @@ class DependentsViewModel(
       }
       //Get the dependents
       steps.beginNewStep("Start dependents lookup")
-      //Get dependents request
-      val dependentsRequest = createDependentsRequest(dependentURI, ekirjastoToken)
+
+      //Create dependents request, using ekirjastotoken as bearer
+      val dependentsRequest = createGetRequest(dependentURI, ekirjastoToken)
       dependentsRequest.execute().use { response ->
         when (val status = response.status) {
           is LSHTTPResponseStatus.Responded.OK -> {
@@ -144,10 +152,10 @@ class DependentsViewModel(
             steps.currentStepSucceeded("Dependents looked up and listed")
 
             //list of dependents that are returned to fragment
-            val depends = mutableListOf<Dependent>()
+            val dependents = mutableListOf<Dependent>()
             //iterate through the dependents as long as there are values
             while (itr.hasNext()) {
-              logger.debug("Has a child")
+              //Next dependent from the list
               val dep = itr.next()
               //Convert into a dependent
               val user = Dependent(
@@ -156,11 +164,11 @@ class DependentsViewModel(
                 govId = dep["govId"].asText()
               )
               // add user to list
-              depends.add(user)
+              dependents.add(user)
             }
             steps.beginNewStep("Update dependents list started")
-            //Post the dependent to the server
-            dependentList.postValue(depends)
+            //Update the observable dependents list
+            dependentList.postValue(dependents)
             steps.currentStepSucceeded("Dependents list updated")
             return@launch
           }
@@ -183,24 +191,21 @@ class DependentsViewModel(
     }
   }
 
-  private fun createGetTokenRequest(ekirjastoTokenUri: URI, accessToken: String): LSHTTPRequestType {
-    //Create the ekirjasto token request
-    return this.http.newRequest(ekirjastoTokenUri)
+  /**
+   * Create a get request to provided uri with provided token.
+   */
+  private fun createGetRequest(targetURI: URI, bearerToken: String): LSHTTPRequestType {
+    //Return the request
+    return this.http.newRequest(targetURI)
       .setAuthorization(
-        LSHTTPAuthorizationBearerToken.ofToken(accessToken)
+        LSHTTPAuthorizationBearerToken.ofToken(bearerToken)
       )
       .build()
   }
 
-  private fun createDependentsRequest(dependentURI: URI, token: String) : LSHTTPRequestType{
-    //Request from loikka the dependents, set the token we just got as the bearertoken
-    return this.http.newRequest(dependentURI)
-      .setAuthorization(
-        LSHTTPAuthorizationBearerToken.ofToken(token)
-      )
-      .build()
-  }
-
+  /**
+   * Post dependent information to the server.
+   */
   fun postDependent(dependentName: String, email: String, lang : String) {
       //Get correct dependent
       val correctDependent = dependentList.value?.find { it.firstName == dependentName }
@@ -241,7 +246,9 @@ class DependentsViewModel(
       }
     }
 
-
+  /**
+   * Create a post request with the dependent as the request body.
+   */
   private fun createDependentPost(dependent: Dependent) : LSHTTPRequestType{
     //Get mapper
     val mapper = ObjectMapper()
@@ -253,6 +260,7 @@ class DependentsViewModel(
     this.logger.debug("Post Dependent Request: {}", bodyString)
 
     //Put the dependent into the request as the body, use ekirjastoToken as bearer
+    // Return the request
     return this.http.newRequest(this.dependentPostURI)
       .setAuthorization(
         LSHTTPAuthorizationBearerToken.ofToken(ekirjastoToken)

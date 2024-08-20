@@ -157,9 +157,9 @@ class DependentsFragment : Fragment(R.layout.dependents) {
         }
       }
 
-      //handle nothing selected
+      //handle nothing in spinner selected
       override fun onNothingSelected(parent: AdapterView<*>?) {
-        //no item selected, therefore user cannot continue
+        //no item selected from the spinner, therefore user cannot continue
         //so we are hiding everything
         emailInput.visibility = GONE
         send.visibility = GONE
@@ -216,13 +216,21 @@ class DependentsFragment : Fragment(R.layout.dependents) {
     }
   }
 
-  //validate user input email
+
+  /**
+   * Validate user input email.
+   * Returns true if valid, otherwise false.
+   */
   private fun isEmailValid(userInput: String): Boolean {
     val emailRegex = "^[A-Za-z](.*)(@)(.+)(\\.)(.+)"
     return userInput.matches(emailRegex.toRegex())
   }
 
-  //Trigger the post method
+  /**
+   * Trigger post method for a dependent.
+   * Provides dependent name, email and language to ViewModel.
+   */
+
   private fun postDependent(dependentName: String, email: String) {
     logger.debug("Entered post method")
     //Get the users language and use it as the dependents language
