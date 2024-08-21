@@ -45,7 +45,7 @@ class DependentsViewModel(
 
   //Ekirjasto token returned by circulation
   private lateinit var ekirjastoToken : String
-  //dependent post URI
+  //Dependent post URI
   private lateinit var dependentPostURI: URI
 
   //Error message
@@ -73,8 +73,9 @@ class DependentsViewModel(
   }
 
   /**
-   * Make calls to server to get ekirjasto token, and use it to
-   * get dependents.
+   * Handle the dependents lookup. Function makes a call to circulation to get ekirjasto token,
+   * and uses it to get dependents from API. Updates the found dependents to the observable
+   * dependentList.
    */
   fun lookupDependents() {
     //Get account information

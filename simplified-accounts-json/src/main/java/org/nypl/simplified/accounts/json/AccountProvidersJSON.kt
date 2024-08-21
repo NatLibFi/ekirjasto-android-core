@@ -542,8 +542,8 @@ object AccountProvidersJSON {
           passkey_register_finish = JSONParserUtilities.getURI(container, "passkey_register_finish"),
           tunnistus_start = JSONParserUtilities.getURI(container, "tunnistus_start"),
           tunnistus_finish = JSONParserUtilities.getURI(container, "tunnistus_finish"),
-          relations = JSONParserUtilities.getURI(container,"relations"),
-          invite = JSONParserUtilities.getURI(container,"invite")
+          relations = JSONParserUtilities.getURIOrNull(container,"relations")?:URI("null"),
+          invite = JSONParserUtilities.getURIOrNull(container,"invite")?:URI("null")
         )
       }
 
