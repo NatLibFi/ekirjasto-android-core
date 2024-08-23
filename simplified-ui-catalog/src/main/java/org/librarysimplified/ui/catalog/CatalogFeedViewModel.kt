@@ -181,8 +181,20 @@ class CatalogFeedViewModel(
           ownership.accountId == accountID &&
           feedState is CatalogFeedState.CatalogFeedLoadFailed &&
           feedState.failure is FeedLoaderResult.FeedLoaderFailure.FeedLoaderFailedAuthentication
-        ) {
-          this.logger.debug("reloading feed due to successful login")
+        )  {
+          //Happens only on very specific situation when there is a catalog load fail, caused by authentication
+          this.logger.debug("reloading feed due to successful login after authentication fail")
+          this.reloadFeed()
+        }
+        if ( accountState is AccountLoginState.AccountNotLoggedIn) {
+          this.logger.debug("reloading feed due to log out")
+          this.reloadFeed()
+        }
+        if (accountState is AccountLoginState.AccountLoggedIn) {
+          //We reload feed on login since in some login cases,
+          //(in cases where there are books stored on the device)
+          //the feed shows up empty despite there being loans due to not being updated on login
+          logger.debug("reloading feed due to successful login")
           this.reloadFeed()
         }
         if ( accountState is AccountLoginState.AccountNotLoggedIn) {
