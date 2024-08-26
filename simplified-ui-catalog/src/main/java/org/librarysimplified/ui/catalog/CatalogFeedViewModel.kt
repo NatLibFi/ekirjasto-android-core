@@ -197,10 +197,6 @@ class CatalogFeedViewModel(
           logger.debug("reloading feed due to successful login")
           this.reloadFeed()
         }
-        if ( accountState is AccountLoginState.AccountNotLoggedIn) {
-          this.logger.debug("reloading feed due to log out")
-          this.reloadFeed()
-        }
       }
       CatalogFeedOwnership.CollectedFromAccounts -> {
         if (
