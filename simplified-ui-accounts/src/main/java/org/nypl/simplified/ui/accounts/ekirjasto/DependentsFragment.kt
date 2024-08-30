@@ -232,7 +232,7 @@ class DependentsFragment : Fragment(R.layout.dependents) {
   /**
    * Hide keyboard from the user.
    */
-  fun hideKeyboardFrom(context: Context, view: View) {
+  private fun hideKeyboardFrom(context: Context, view: View) {
     val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(view.windowToken, 0)
   }
