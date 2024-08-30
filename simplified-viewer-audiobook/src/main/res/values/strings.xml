@@ -9,7 +9,10 @@
   <string name="audio_book_player_do_keep">Keep</string>
   <string name="audio_book_player_do_return">Return</string>
   <string name="audio_book_player_error_book_open">Unable to open audio book</string>
-  <string name="audio_book_player_error_engine_open">Unable to initialize audio engine</string>
+  <string name="audio_book_player_error_book_open_data_missing">Some needed data is missing. Log out and back in and load the book again.</string>
+  <string name="audio_book_player_error_book_open_database_error">The book format is not supported. Please report this book through the feedback form.</string>
+  <string name="audio_book_player_error_book_open_audio">There was an error in creating the audio player.</string>
+  <string name="audio_book_player_error_engine_open">Unable to initialize audio engine.</string>
   <string name="audio_book_player_return_question">Would you like to return it?</string>
   <string name="audio_book_player_return_title">Your Audiobook Has Finished</string>
   <string name="audio_book_player_toc_title">Table Of Contents</string>
