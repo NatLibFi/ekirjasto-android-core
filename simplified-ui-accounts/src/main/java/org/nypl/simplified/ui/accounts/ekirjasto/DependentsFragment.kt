@@ -1,9 +1,12 @@
 package org.nypl.simplified.ui.accounts.ekirjasto
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -11,14 +14,12 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
-import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
-import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.slf4j.LoggerFactory
+
 
 class DependentsFragment : Fragment(R.layout.dependents) {
   //Viewmodel that handles get/post requests as well as updating dependent list
@@ -204,6 +205,8 @@ class DependentsFragment : Fragment(R.layout.dependents) {
         buttonDependents.visibility = GONE
         progressBar.visibility = VISIBLE
         dependentInfoText.visibility = GONE
+        //Hide the keyboard if still open
+        this.hideKeyboardFrom(this.requireContext(),this.requireView())
 
         //Post the dependent info
         postDependent(selectedDependent,userInput)
@@ -224,6 +227,14 @@ class DependentsFragment : Fragment(R.layout.dependents) {
   private fun isEmailValid(userInput: String): Boolean {
     val emailRegex = "^[A-Za-z](.*)(@)(.+)(\\.)(.+)"
     return userInput.matches(emailRegex.toRegex())
+  }
+
+  /**
+   * Hide keyboard from the user.
+   */
+  fun hideKeyboardFrom(context: Context, view: View) {
+    val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
   }
 
   /**
