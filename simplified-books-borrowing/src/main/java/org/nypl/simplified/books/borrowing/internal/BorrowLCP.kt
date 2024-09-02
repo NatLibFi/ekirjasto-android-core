@@ -1,5 +1,6 @@
 package org.nypl.simplified.books.borrowing.internal
 
+import kotlinx.coroutines.runBlocking
 import net.java.truevfs.access.TConfig
 import net.java.truevfs.access.TFile
 import net.java.truevfs.access.TVFS
@@ -35,6 +36,10 @@ import org.nypl.simplified.opds.core.OPDSAcquisitionPaths
 import org.nypl.simplified.opds.core.OPDSFeedParserType
 import org.readium.r2.lcp.LcpException
 import org.readium.r2.lcp.license.model.LicenseDocument
+import org.readium.r2.shared.fetcher.ArchiveFetcher
+import org.readium.r2.shared.publication.Link
+import org.readium.r2.shared.util.use
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.net.URI
@@ -64,6 +69,8 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
       )
     }
   }
+  private val logger =
+    LoggerFactory.getLogger(BorrowLCP::class.java)
 
   override fun execute(context: BorrowContextType) {
     try {
@@ -395,6 +402,18 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
         formatHandle.copyInBook(bookFile)
       }
       is BookDatabaseEntryFormatHandleAudioBook -> {
+        //Extract the manifest from book zip file
+        val audioBookManifest = extractManifest(bookFile,context)
+        //If the manifest is available, copy the manifest to memory
+        //Otherwise we don't, and just let the book copy, the opening
+        //book error is caught elsewhere
+        if (audioBookManifest!= null) {
+          formatHandle.copyInManifestAndURI(
+            data = audioBookManifest.file.readBytes(),
+            manifestURI = audioBookManifest.sourceURI
+          )
+        }
+        //Move the book into memory, unsure why we move and not copy
         formatHandle.moveInBook(bookFile)
       }
       is BookDatabaseEntryFormatHandlePDF ->
@@ -402,6 +421,46 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
     }
 
     context.taskRecorder.currentStepSucceeded("Saved book.")
+  }
+
+  /**
+   * Data class for the Manifest that is loaded from the file
+   */
+  private data class Manifest(
+    val file: File,
+    val sourceURI: URI
+  )
+
+  /**
+   * Extract the manifest from the book zip file.
+   * Function assumes that the manifest is a file named manifest.json
+   * Returns a Manifest instance.
+   */
+  private fun extractManifest(bookFile: File, context: BorrowContextType): Manifest? {
+    //The location of the manifest in the zip audio file
+    val manifestURI = URI("manifest.json")
+    val manifestLink = Link(manifestURI.toString())
+    //Path to temporary file, but it contains the same manifest
+    val filePath = bookFile.absolutePath
+
+    this.logger.debug("extractManifest: extracting {} from {}", manifestURI, filePath)
+
+    //Run the manifest extraction from the file
+    val manifestBytes = runBlocking {
+      ArchiveFetcher.fromPath(filePath)?.use { archiveFetcher ->
+        archiveFetcher.get(manifestLink).read().getOrNull()
+      }
+    }
+    //If no manifest is found, log error and return null
+    return if (manifestBytes == null) {
+      logger.error("Unable to extract manifest from audio book file")
+      return null
+    } else {
+      //If all goes well, return a temporary manifest with the loaded data
+      val outputFile = File.createTempFile("manifest", "data", context.cacheDirectory())
+      outputFile.writeBytes(manifestBytes)
+      Manifest(outputFile,manifestURI)
+    }
   }
 
   /**

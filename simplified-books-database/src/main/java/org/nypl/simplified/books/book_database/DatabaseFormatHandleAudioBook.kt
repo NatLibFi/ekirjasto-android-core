@@ -242,6 +242,7 @@ internal class DatabaseFormatHandleAudioBook internal constructor(
     data: ByteArray,
     manifestURI: URI
   ) {
+    logger.debug("Copy manifest and URI to memory")
     val newFormat = synchronized(this.dataLock) {
       FileUtilities.fileWriteBytes(
         data, this.fileManifest

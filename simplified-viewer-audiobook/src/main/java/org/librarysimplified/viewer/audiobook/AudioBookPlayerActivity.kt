@@ -208,10 +208,10 @@ class AudioBookPlayerActivity :
     val a = i.extras!!
 
     this.parameters = a.getSerializable(PARAMETER_ID) as? AudioBookPlayerParameters ?: kotlin.run {
-      val title = this.getString(R.string.audio_book_player_error_book_open)
+      val title = this.getString(R.string.audio_book_player_error_book_open_data_missing)
       this.showErrorWithRunnable(
         context = this,
-        title = title,
+        message = title,
         failure = IllegalStateException(title),
         execute = this::finish
       )
@@ -266,10 +266,10 @@ class AudioBookPlayerActivity :
         .findFormatHandle(BookDatabaseEntryFormatHandleAudioBook::class.java)
 
     if (formatHandleOpt == null) {
-      val title = this.getString(R.string.audio_book_player_error_book_open)
+      val title = this.getString(R.string.audio_book_player_error_book_open_database_error)
       this.showErrorWithRunnable(
         context = this,
-        title = title,
+        message = title,
         failure = IllegalStateException(title),
         execute = this::finish
       )
@@ -412,7 +412,7 @@ class AudioBookPlayerActivity :
   override fun onLoadingFragmentLoadingFailed(exception: Exception) {
     this.showErrorWithRunnable(
       context = this,
-      title = exception.message ?: "",
+      message = exception.message ?: "",
       failure = exception,
       execute = this::finish
     )
@@ -459,7 +459,7 @@ class AudioBookPlayerActivity :
       val title = this.getString(R.string.audio_book_player_error_engine_open)
       this.showErrorWithRunnable(
         context = this,
-        title = title,
+        message = title,
         failure = IllegalStateException(title),
         execute = this::finish
       )
@@ -493,7 +493,7 @@ class AudioBookPlayerActivity :
       val title = this.getString(R.string.audio_book_player_error_book_open)
       this.showErrorWithRunnable(
         context = this,
-        title = title,
+        message = title,
         failure = bookResult.failure,
         execute = this::finish
       )
@@ -1123,11 +1123,11 @@ class AudioBookPlayerActivity :
 
   private fun showErrorWithRunnable(
     context: Activity,
-    title: String,
+    message: String,
     failure: Exception,
     execute: () -> Unit
   ) {
-    this.log.error("error: {}: ", title, failure)
+    this.log.error("error: {}: ", message, failure)
 
     this.uiThread.runOnUIThread {
       if (context.isDestroyed || context.isFinishing) {
@@ -1135,8 +1135,8 @@ class AudioBookPlayerActivity :
       }
 
       MaterialAlertDialogBuilder(context)
-        .setTitle(title)
-        .setMessage(failure.localizedMessage)
+        .setTitle(getString(R.string.audio_book_player_error_book_open))
+        .setMessage(message)
         .setOnDismissListener {
           execute.invoke()
         }
