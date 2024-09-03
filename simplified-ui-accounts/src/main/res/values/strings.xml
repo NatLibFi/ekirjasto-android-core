@@ -105,7 +105,7 @@
   <string name="invite_another_dependent">Invite another Dependent</string>
   <string name="no_dependents">No dependents or children found.</string>
   <string name="guidetext">Fill in an email where the invitation should be sent. Make sure to type it in correctly before sending.</string>
-  <string name="thanks">Thank you! Your dependent should receive the invitation shortly if the email was entered correctly.\n\nThe link should be opened on their personal device. The link leads to website where they can register a passkey. This passkey is can be used to enter e-kirjasto.</string>
+  <string name="thanks">Thank you! Your dependent should receive the invitation shortly if the email was entered correctly.\n\nThe link should be opened on their personal device. The link leads to website where they can register a passkey. This passkey can be used to enter e-kirjasto.</string>
   <string name="emailNotValid">Enter a Valid Email Address.</string>
   <string name="errorFromServer">Something went wrong. Sign out and back in and try again.</string>
   <string name="errorInCreation">Could not finish request. Check internet connection and try again.</string>
