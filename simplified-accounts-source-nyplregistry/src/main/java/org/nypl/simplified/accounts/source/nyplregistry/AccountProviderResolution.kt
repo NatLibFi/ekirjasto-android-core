@@ -316,6 +316,10 @@ class AccountProviderResolution(
       authObject.links.find { link -> link.relation == "passkey_register_start" }?.hrefURI
     links["passkey_register_finish"] =
       authObject.links.find { link -> link.relation == "passkey_register_finish" }?.hrefURI
+    links["relations"] =
+      authObject.links.find { link -> link.relation == "relations" }?.hrefURI
+    links["invite"] =
+      authObject.links.find { link -> link.relation == "invite" }?.hrefURI
 
     val emptyLinks = mutableListOf<String>()
     for ((name, link) in links) {
@@ -340,7 +344,9 @@ class AccountProviderResolution(
       passkey_login_start = links["passkey_login_start"]!!,
       passkey_login_finish = links["passkey_login_finish"]!!,
       passkey_register_start = links["passkey_register_start"]!!,
-      passkey_register_finish = links["passkey_register_finish"]!!
+      passkey_register_finish = links["passkey_register_finish"]!!,
+      relations = links["relations"]!!,
+      invite = links["invite"]!!
     )
   }
 

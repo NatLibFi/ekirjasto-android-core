@@ -110,6 +110,7 @@ object AccountAuthenticationCredentialsJSON {
         authObject.put("@type", "ekirjasto")
         authObject.put("accessToken", credentials.accessToken)
         authObject.put("ekirjastoToken", credentials.ekirjastoToken)
+        authObject.put("patronPermanentID", credentials.patronPermanentID)
       }
     }
 

@@ -398,7 +398,13 @@ sealed class AccountProviderAuthenticationDescription : Serializable {
     val passkey_login_start: URI,
     val passkey_login_finish: URI,
     val passkey_register_start: URI,
-    val passkey_register_finish: URI
+    val passkey_register_finish: URI,
+
+    /**
+     * URIs for dependent lookup.
+     */
+    val relations: URI,
+    val invite: URI,
 
   ) : AccountProviderAuthenticationDescription() {
     override val isLoginPossible: Boolean =

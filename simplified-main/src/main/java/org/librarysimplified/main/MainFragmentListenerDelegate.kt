@@ -38,6 +38,7 @@ import org.nypl.simplified.ui.accounts.AccountPickerEvent
 import org.nypl.simplified.ui.accounts.ekirjasto.EKirjastoAccountFragment
 import org.nypl.simplified.ui.accounts.ekirjasto.PreferencesEvent
 import org.nypl.simplified.ui.accounts.ekirjasto.PreferencesFragment
+import org.nypl.simplified.ui.accounts.ekirjasto.DependentsFragment
 import org.nypl.simplified.ui.accounts.ekirjasto.passkey.AccountEkirjastoPasskeyFragmentParameters
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiEvent
 import org.nypl.simplified.ui.accounts.ekirjasto.suomifi.AccountEkirjastoSuomiFiFragment
@@ -424,6 +425,11 @@ internal class MainFragmentListenerDelegate(
         this.openPreferences()
         state
       }
+
+      is AccountDetailEvent.OpenDependentInvite -> {
+        this.openDependentPage()
+        state
+      }
     }
   }
 
@@ -628,6 +634,12 @@ internal class MainFragmentListenerDelegate(
           comingFromDeepLink = false
         )
       ),
+      tab = org.librarysimplified.ui.tabs.R.id.tabSettings
+    )
+  }
+  private fun openDependentPage() {
+    this.navigator.addFragment(
+      fragment = DependentsFragment(),
       tab = org.librarysimplified.ui.tabs.R.id.tabSettings
     )
   }

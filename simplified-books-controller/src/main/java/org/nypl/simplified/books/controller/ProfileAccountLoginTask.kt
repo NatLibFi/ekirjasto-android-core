@@ -275,10 +275,12 @@ class ProfileAccountLoginTask(
     httpRequest.execute().use { response ->
       when (val status = response.status) {
         is LSHTTPResponseStatus.Responded.OK -> {
+          val (accessToken, patronPermanentID) = getAccessTokenAndPatronFromEkirjastoCirculationResponse(
+            node = ObjectMapper().readTree(status.bodyStream)
+          )
           this.credentials = AccountAuthenticationCredentials.Ekirjasto(
-            accessToken = getAccessTokenFromEkirjastoCirculationResponse(
-              node = ObjectMapper().readTree(status.bodyStream)
-            ),
+            accessToken = accessToken,
+            patronPermanentID = patronPermanentID,
             ekirjastoToken = request.ekirjastoToken,
             adobeCredentials = null,
             authenticationDescription = request.description.description,
@@ -576,11 +578,24 @@ class ProfileAccountLoginTask(
   }
 
   // Finland
-  private fun getAccessTokenFromEkirjastoCirculationResponse(node: JsonNode): String {
-    return try {
-      node.get("access_token").asText()
+  private fun getAccessTokenAndPatronFromEkirjastoCirculationResponse(node: JsonNode): List<String> {
+    //Node should be in two parts: access_token which is a string and
+    // patron_info, that is a list of values in a string, so we need to readTree it again to get its
+    // values out
+    try {
+      //Get access token
+      val accessToken = node["access_token"].textValue()
+      //Get patron info, node is textual, so read it as text
+      val patronInfo = node["patron_info"].asText()
+      //Make patron into an object so we can read its values easily
+      val patronObject = ObjectMapper().readTree(patronInfo)
+      //Read the permanent_id from the new object
+      val permanentId = patronObject["permanent_id"].textValue()
+
+      //Return access token and id as a list
+      return listOf(accessToken, permanentId)
     } catch (e: Exception) {
-      this.logger.error("Error getting access token from E-kirjasto circulation token response: ", e)
+      this.logger.error("Error getting access token and patron info from E-kirjasto circulation token response: ", e)
       throw e
     }
   }

@@ -70,4 +70,9 @@ sealed class AccountDetailEvent {
     val title: String,
     val url: URL
   ) : AccountDetailEvent()
+
+  /**
+   * Open the dependents view.
+   */
+  object OpenDependentInvite : AccountDetailEvent()
 }

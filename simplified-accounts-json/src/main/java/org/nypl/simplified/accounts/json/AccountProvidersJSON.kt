@@ -210,6 +210,8 @@ object AccountProvidersJSON {
         this.putConditionally(authObject, "passkey_register_finish", authentication.passkey_register_finish.toString())
         this.putConditionally(authObject, "tunnistus_start", authentication.tunnistus_start.toString())
         this.putConditionally(authObject, "tunnistus_finish", authentication.tunnistus_finish.toString())
+        this.putConditionally(authObject, "relations", authentication.relations.toString())
+        this.putConditionally(authObject, "invite", authentication.invite.toString())
         authObject
       }
     }
@@ -540,6 +542,8 @@ object AccountProvidersJSON {
           passkey_register_finish = JSONParserUtilities.getURI(container, "passkey_register_finish"),
           tunnistus_start = JSONParserUtilities.getURI(container, "tunnistus_start"),
           tunnistus_finish = JSONParserUtilities.getURI(container, "tunnistus_finish"),
+          relations = JSONParserUtilities.getURIOrNull(container,"relations")?:URI("null"),
+          invite = JSONParserUtilities.getURIOrNull(container,"invite")?:URI("null")
         )
       }
 
