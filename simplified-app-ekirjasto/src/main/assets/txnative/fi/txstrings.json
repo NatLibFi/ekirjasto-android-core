@@ -15,6 +15,9 @@
       "accountAgeVerification" : {
          "string" : "Iän vahvistus"
       },
+      "accountAllowPreferences" : {
+         "string" : "Ota sovellusasetukset käyttöön"
+      },
       "accountCOPPADeleteBooks" : {
          "string" : "Poistetaanko kirjat?"
       },
@@ -31,10 +34,10 @@
          "string" : "Avaa asetukset"
       },
       "accountCardCreatorDialogOpenSettingsMessage" : {
-         "string" : "Palace-sovellus vaatii kertaluonteisen sijainnin tarkistuksen, jotta virtuaalinen kirjastokortti voidaan luoda. Sijaintiasi ei jaeta tällä hetkellä. Ota sijaintitiedot käyttöön Palace-sovelluksessa muuttamalla sijaintiasetuksiasi."
+         "string" : "E-kirjasto-sovellus vaatii kertaluonteisen sijainnin tarkistuksen, jotta virtuaalinen kirjastokortti voidaan luoda. Sijaintiasi ei jaeta tällä hetkellä. Ota sijaintitiedot käyttöön E-kirjasto-sovelluksessa muuttamalla sijaintiasetuksiasi."
       },
       "accountCardCreatorDialogPermissionsMessage" : {
-         "string" : "Palace-sovellus käyttää sijaintiasi yhden kerran kirjastopalvelualueesi vahvistamiseen, jotta virtuaalinen kirjastokorttisi voidaan luoda. Jatka valitsemalla OK."
+         "string" : "E-kirjasto-sovellus käyttää sijaintiasi yhden kerran kirjastopalvelualueesi vahvistamiseen, jotta virtuaalinen kirjastokorttisi voidaan luoda. Jatka valitsemalla OK."
       },
       "accountCardCreatorLabel" : {
          "string" : "Eikö sinulla ole kirjastokorttia?"
@@ -46,7 +49,7 @@
          "string" : "Luo kortti"
       },
       "accountCardCreatorSignUpMessage" : {
-         "string" : "Palace-sovellus käyttää sijaintiasi yhden kerran kirjastopalvelualueesi vahvistamiseksi."
+         "string" : "E-kirjasto-sovellus käyttää sijaintiasi yhden kerran kirjastopalvelualueesi vahvistamiseksi."
       },
       "accountCreateCard" : {
          "string" : "Luo kortti"
@@ -186,6 +189,9 @@
       "account_accessibility_statement" : {
          "string" : "Saavutettavuusseloste"
       },
+      "account_application_language" : {
+         "string" : "Sovelluksen kieli"
+      },
       "account_eula" : {
          "string" : "Käyttäjäsopimus"
       },
@@ -244,7 +250,7 @@
          "string" : "%1$s (%2$d/%3$d)"
       },
       "app_name" : {
-         "string" : ""
+         "string" : "E-kirjasto"
       },
       "app_version_string" : {
          "string" : "E-kirjaston versio %1$s"
@@ -272,6 +278,15 @@
       },
       "audio_book_player_error_book_open" : {
          "string" : "Äänikirjaa ei voida avata"
+      },
+      "audio_book_player_error_book_open_audio" : {
+         "string" : "Virhe äänikirjasoittimen käynnistyksessä."
+      },
+      "audio_book_player_error_book_open_data_missing" : {
+         "string" : "Joitain tiedostoja puuttuu. Kirjaudu ulos ja takaisin sisään."
+      },
+      "audio_book_player_error_book_open_database_error" : {
+         "string" : "Kirjan formaattia ei ole tuettu. Raportoi ongelmasta yhteydenottolomakkeella."
       },
       "audio_book_player_error_engine_open" : {
          "string" : "Äänimoottoria ei voida alustaa"
@@ -636,29 +651,47 @@
       "bootFailedGeneric" : {
          "string" : "Havaitsimme ongelman. Tarkista internetyhteys tai yritä uudelleen sulkemalla sovellus ja avaamalla se uudelleen."
       },
+      "buttonFontSize" : {
+         "string" : "Fonttikoko"
+      },
+      "buttonLanguage" : {
+         "string" : "Kielivalinnat"
+      },
+      "buttonPreferences" : {
+         "string" : "Sovellusasetukset"
+      },
+      "buttonTextEnglish" : {
+         "string" : "Englanti"
+      },
+      "buttonTextFinnish" : {
+         "string" : "Suomi"
+      },
+      "buttonTextSwedish" : {
+         "string" : "Ruotsi"
+      },
       "catalogAccessibilityBookBorrow" : {
-         "string" : "Hae-painike"
+         "string" : "Lainaa"
       },
       "catalogAccessibilityBookDelete" : {
-         "string" : "Poista-painike"
+         "string" : "Poista"
       },
       "catalogAccessibilityBookDownload" : {
-         "string" : "Lataa-painike"
+         "string" : "Lataa"
       },
       "catalogAccessibilityBookDownloadCancel" : {
-         "string" : "Peruuta lataus -painike"
+         "string" : "Peruuta lataus"
       },
       "catalogAccessibilityBookErrorDetails" : {
-         "string" : "Tiedot-painike"
+         "string" : "Tiedot"
       },
       "catalogAccessibilityBookErrorDismiss" : {
-         "string" : "Ohita-painike"
+         "string" : "Ohita"
       },
       "catalogAccessibilityBookErrorRetry" : {
-         "string" : "Yritä uudelleen -painike"
+         "string" : "Yritä uudelleen"
       },
       "catalogAccessibilityBookListen" : {
-         "string" : "Kuuntele-painike"
+         "string" : "Kuuntele"
       },
       "catalogAccessibilityBookPreviewPlay" : {
          "string" : "Toista näyte"
@@ -667,19 +700,19 @@
          "string" : "Lue näyte"
       },
       "catalogAccessibilityBookRead" : {
-         "string" : "Lue-painike"
+         "string" : "Lue"
       },
       "catalogAccessibilityBookReserve" : {
-         "string" : "Varaa-painike"
+         "string" : "Varaa"
       },
       "catalogAccessibilityBookRevokeHold" : {
-         "string" : "Poista-painike"
+         "string" : "Poista"
       },
       "catalogAccessibilityBookRevokeLoan" : {
-         "string" : "Palauta nyt -painike"
+         "string" : "Palauta nyt"
       },
       "catalogAccessibilityBookSync" : {
-         "string" : "Synkronoi-painike"
+         "string" : "Synkronoi"
       },
       "catalogAccessibilityCoverAudiobook" : {
          "string" : "%1$s, äänikirja, tekijä %2$s"
@@ -894,23 +927,41 @@
       "catalogSearch" : {
          "string" : "Hae"
       },
+      "close_tutorial" : {
+         "string" : "Sulje ohjesivut"
+      },
+      "contentDescription1" : {
+         "string" : "Tervetuloa E-kirjastoon! Tämän palvelun sinulle tarjoaa kotikuntasi kirjasto. Seuraava sivu pyyhkäisemällä vasemmalle."
+      },
+      "contentDescription2" : {
+         "string" : "Voit selata e- ja äänikirjoja lajeittain, kirjan tai kirjailijan mukaan tai tutkia kirjastolaisten tekemiä nostolistoja. Seuraava sivu pyyhkäisemällä vasemmalle."
+      },
+      "contentDescription3" : {
+         "string" : "Selaa valikoimaa, lainaa ja lue tai kuuntele! Jos kirja on lainassa, paina varaa, saat sen käyttöösi kun se vapautuu. Seuraava sivu pyyhkäisemällä vasemmalle."
+      },
+      "contentDescription4" : {
+         "string" : "Vai haluatko sittenkin kuunneltavaa? Kokoelmassa myös lukematon määrä äänikirjoja! Klikkaa lainaa ja pääset kuuntelemaan äänikirjan. Sulje ohje pyyhkäisemällä vasemmalle."
+      },
       "contentDescriptionBack" : {
          "string" : "Takaisin"
+      },
+      "contentDescriptionClose" : {
+         "string" : "Sulje haku"
       },
       "contentDescriptionLogo" : {
          "string" : "Logo"
       },
       "contentDescriptionPage1" : {
-         "string" : ""
+         "string" : "Tervetuloa E-kirjastoon! Tämän palvelun sinulle tarjoaa kotikuntasi kirjasto."
       },
       "contentDescriptionPage2" : {
-         "string" : ""
+         "string" : "Voit selata e- ja äänikirjoja lajeittain, kirjan tai kirjailijan mukaan tai tutkia kirjastolaisten tekemiä nostolistoja."
       },
       "contentDescriptionPage3" : {
-         "string" : ""
+         "string" : "Selaa valikoimaa, lainaa ja lue tai kuuntele! Jos kirja on lainassa, paina varaa, saat sen käyttöösi kun se vapautuu."
       },
       "contentDescriptionPage4" : {
-         "string" : ""
+         "string" : "Vai haluatko sittenkin kuunneltavaa? Kokoelmassa myös lukematon määrä äänikirjoja! Klikkaa lainaa ja pääset kuuntelemaan äänikirjan."
       },
       "contentDescriptionSkipButton" : {
          "string" : "Ohita-painike"
@@ -918,11 +969,17 @@
       "contentDescriptionTutorialPage" : {
          "string" : "Tutoriaalisivu"
       },
+      "contentTabDescription" : {
+         "string" : "Ohjesivu"
+      },
       "content_description_back" : {
          "string" : "Takaisin"
       },
       "currentlyBrowsing" : {
          "string" : "Selaat tällä hetkellä"
+      },
+      "dependent_email" : {
+         "string" : ""
       },
       "dialog_manual_passphrase_cancel" : {
          "string" : "Peruuta"
@@ -939,11 +996,26 @@
       "e_kirjasto_logo" : {
          "string" : "E-kirjaston logo"
       },
+      "emailNotValid" : {
+         "string" : ""
+      },
       "emptyBookmarksMessage" : {
          "string" : "Tässä kirjassa ei ole kirjanmerkkejä"
       },
+      "emptyHoldsNotLoggedIn" : {
+         "string" : "Kirjaudu sisään nähdäksesi varauksesi."
+      },
+      "emptyLoansNotLoggedIn" : {
+         "string" : "Kirjaudu sisään nähdäksesi kirjasi."
+      },
       "errorDetailsTitle" : {
          "string" : "Virheen tiedot"
+      },
+      "errorFromServer" : {
+         "string" : ""
+      },
+      "errorInCreation" : {
+         "string" : ""
       },
       "errorLoginFailed" : {
          "string" : "Sisäänkirjautuminen epäonnistui"
@@ -970,10 +1042,10 @@
          "string" : "Virhe sisäänkirjautumisessa. Käynnistä sovellus uudelleen ja yritä uudelleen."
       },
       "eula_agree" : {
-         "string" : "concordare"
+         "string" : "Hyväksy"
       },
       "eula_disagree" : {
-         "string" : "dissentire"
+         "string" : "Kiellä"
       },
       "feedByAuthor" : {
          "string" : "Tekijä"
@@ -1012,7 +1084,7 @@
          "string" : "Kirjat"
       },
       "feedTitleCatalog" : {
-         "string" : "Selaa kirjoja"
+         "string" : "Selaa"
       },
       "feedTitleHolds" : {
          "string" : "Varaukset"
@@ -1022,6 +1094,21 @@
       },
       "feedWithGroupsEmptyLoaned" : {
          "string" : "Sinulla ei ole voimassa olevia lainoja."
+      },
+      "fontSize" : {
+         "string" : "Fonttikoko"
+      },
+      "get_dependents" : {
+         "string" : ""
+      },
+      "guidetext" : {
+         "string" : ""
+      },
+      "invite_a_dependent" : {
+         "string" : ""
+      },
+      "invite_another_dependent" : {
+         "string" : ""
       },
       "loginAuthRequired" : {
          "string" : "Todennus vaaditaan. Jatketaan..."
@@ -1175,6 +1262,9 @@
       },
       "next" : {
          "string" : "Seuraava"
+      },
+      "no_dependents" : {
+         "string" : ""
       },
       "notification_channel_description_loans" : {
          "string" : "Lainoihisi liittyvät ilmoitukset."
@@ -1353,6 +1443,18 @@
       "resolvingUnexpectedException" : {
          "string" : "Odottamaton poikkeus vastaanotettiin ratkaisun aikana!"
       },
+      "restartPopupAgree" : {
+         "string" : "Hyväksy"
+      },
+      "restartPopupCancel" : {
+         "string" : "Peruuta"
+      },
+      "restartPopupMessage" : {
+         "string" : "Valittu kieli otetaan käyttöön kun sovellus käynnistyy seuraavan kerran uudestaan."
+      },
+      "restartPopupTitle" : {
+         "string" : "Vahvista sovelluksen kielen vaihtaminen?"
+      },
       "revokeACSDeleteRights" : {
          "string" : "Poistetaan Adobe ACS:n oikeuksia koskevia tietoja…"
       },
@@ -1473,6 +1575,9 @@
       "selectYear" : {
          "string" : "Valitse vuosi"
       },
+      "select_dependent" : {
+         "string" : ""
+      },
       "selectionAlternateButton" : {
          "string" : "Lisää kirjasto myöhemmin"
       },
@@ -1484,6 +1589,9 @@
       },
       "selectionTitle" : {
          "string" : "Lue e-kirjoja kirjastostasi"
+      },
+      "send_invitation" : {
+         "string" : ""
       },
       "settings" : {
          "string" : "Asetukset"
@@ -1504,7 +1612,7 @@
          "string" : "A a"
       },
       "settingsAbout" : {
-         "string" : "Tietoja Palacesta"
+         "string" : "Tietoja E-kirjastosta"
       },
       "settingsAccessibilityBack" : {
          "string" : "Takaisin"
@@ -1744,10 +1852,10 @@
          "string" : "Jatka kirjautumatta sisään"
       },
       "tabBooks" : {
-         "string" : "Omat lainat"
+         "string" : "Lainat"
       },
       "tabCatalog" : {
-         "string" : "Selaa kirjoja"
+         "string" : "Selaa"
       },
       "tabHolds" : {
          "string" : "Varaukset"
@@ -1793,6 +1901,9 @@
       },
       "testingUsernameInputTitle" : {
          "string" : "Käyttäjänimi:"
+      },
+      "thanks" : {
+         "string" : ""
       },
       "tocAccessBookmarkDelete" : {
          "string" : "Poista kirjanmerkki"

@@ -15,6 +15,9 @@
       "accountAgeVerification" : {
          "string" : "Ålderskontroll"
       },
+      "accountAllowPreferences" : {
+         "string" : ""
+      },
       "accountCOPPADeleteBooks" : {
          "string" : "Radera böcker?"
       },
@@ -31,10 +34,10 @@
          "string" : "Öppna inställningar"
       },
       "accountCardCreatorDialogOpenSettingsMessage" : {
-         "string" : "Palace-appen behöver kontrollera positionen en gång för att skapa ett virtuellt bibliotekskort. För närvarande delar du inte din position. Ändra dina positionsinställningar för att ge Palace-appen åtkomst till din position."
+         "string" : "E-biblioteket-appen behöver kontrollera positionen en gång för att skapa ett virtuellt bibliotekskort. För närvarande delar du inte din position. Ändra dina positionsinställningar för att ge E-biblioteket-appen åtkomst till din position."
       },
       "accountCardCreatorDialogPermissionsMessage" : {
-         "string" : "För att skapa ett virtuellt bibliotekskort kommer Palace-appen att använda din position en gång för att verifiera ditt område för bibliotekstjänster. Peka på OK för att fortsätta."
+         "string" : "För att skapa ett virtuellt bibliotekskort kommer E-biblioteket-appen att använda din position en gång för att verifiera ditt område för bibliotekstjänster. Peka på OK för att fortsätta."
       },
       "accountCardCreatorLabel" : {
          "string" : "Har du inte ett bibliotekskort?"
@@ -46,7 +49,7 @@
          "string" : "Skapa kort"
       },
       "accountCardCreatorSignUpMessage" : {
-         "string" : "Palace-appen kommer att använda din position en gång för att verifiera ditt område för bibliotekstjänster."
+         "string" : "E-biblioteket-appen kommer att använda din position en gång för att verifiera ditt område för bibliotekstjänster."
       },
       "accountCreateCard" : {
          "string" : "Skapa kort"
@@ -124,7 +127,7 @@
          "string" : "Lösenord"
       },
       "accountPasswordResetFailed" : {
-         "string" : "Vi beklagar, vi kunde inte hitta en lämplig app för att återställa ditt lösenord. Skicka ett e-post till %1$s om du behöver rapportera ett problem."
+         "string" : "Vi beklagar, vi kunde inte hitta en lämplig app för att återställa ditt lösenord. Skicka e-post till %1$s om du behöver rapportera ett problem."
       },
       "accountPasswordShow" : {
          "string" : "Visa %1$s"
@@ -154,7 +157,7 @@
          "string" : "Välj ett bibliotek..."
       },
       "accountReportFailed" : {
-         "string" : "Vi beklagar, vi kunde inte hitta en lämplig app för att kontakta supportavdelningen. Skicka ett e-post till %1$s om du behöver rapportera ett problem."
+         "string" : "Vi beklagar, vi kunde inte hitta en lämplig app för att kontakta supportavdelningen. Skicka e-post till %1$s om du behöver rapportera ett problem."
       },
       "accountReportIssue" : {
          "string" : "Rapportera ett problem..."
@@ -186,6 +189,9 @@
       "account_accessibility_statement" : {
          "string" : "Tillgänglighetsutlåtande"
       },
+      "account_application_language" : {
+         "string" : ""
+      },
       "account_eula" : {
          "string" : "Användaravtal"
       },
@@ -211,7 +217,7 @@
          "string" : "Registrera nyckel"
       },
       "account_sync_bookmarks_statement" : {
-         "string" : "Spara ditt läsläge och bomärken på alla dina enheter"
+         "string" : "Spara ditt läsläge och dina bokmärken på alla dina enheter"
       },
       "accounts" : {
          "string" : "Bibliotek"
@@ -244,7 +250,7 @@
          "string" : "%1$s (%2$d av %3$d)"
       },
       "app_name" : {
-         "string" : ""
+         "string" : "E-kirjasto"
       },
       "app_version_string" : {
          "string" : "E-biblioteket version %1$s"
@@ -272,6 +278,15 @@
       },
       "audio_book_player_error_book_open" : {
          "string" : "Det går inte att öppna ljudboken"
+      },
+      "audio_book_player_error_book_open_audio" : {
+         "string" : ""
+      },
+      "audio_book_player_error_book_open_data_missing" : {
+         "string" : ""
+      },
+      "audio_book_player_error_book_open_database_error" : {
+         "string" : ""
       },
       "audio_book_player_error_engine_open" : {
          "string" : "Det går inte att initiera ljudmotorn"
@@ -511,7 +526,7 @@
          "string" : "Av"
       },
       "audiobook_player_toc_bookmarks_dialog_message_delete" : {
-         "string" : "Är du säker att du vill radera detta bokmärke?"
+         "string" : "Är du säker på att du vill radera detta bokmärke?"
       },
       "audiobook_player_toc_bookmarks_dialog_title_delete" : {
          "string" : "Radera"
@@ -601,10 +616,10 @@
          "string" : "%s återstår"
       },
       "bookPreviewFailedMessage" : {
-         "string" : "Det uppstod ett fel när förhandsvisningen av denna bok laddades. Försök på nytt senare."
+         "string" : "Det uppstod ett fel när förhandsvisningen av denna bok laddades ner. Försök på nytt senare."
       },
       "bookPreviewFailedTitle" : {
-         "string" : "Det gick inte att ladda förhandsvisningen av boken"
+         "string" : "Det gick inte att ladda ner förhandsvisningen av boken"
       },
       "bookPreviewPlayerInitialTime" : {
          "string" : "00:00:00"
@@ -636,29 +651,47 @@
       "bootFailedGeneric" : {
          "string" : "Vi upptäckte ett problem. Kontrollera din anslutning eller stäng och starta appen och försök på nytt."
       },
+      "buttonFontSize" : {
+         "string" : ""
+      },
+      "buttonLanguage" : {
+         "string" : ""
+      },
+      "buttonPreferences" : {
+         "string" : ""
+      },
+      "buttonTextEnglish" : {
+         "string" : "Engelska"
+      },
+      "buttonTextFinnish" : {
+         "string" : "Finska"
+      },
+      "buttonTextSwedish" : {
+         "string" : "Svenska"
+      },
       "catalogAccessibilityBookBorrow" : {
-         "string" : "Hämta-knapp"
+         "string" : "Hämta"
       },
       "catalogAccessibilityBookDelete" : {
-         "string" : "Radera-knapp"
+         "string" : "Radera"
       },
       "catalogAccessibilityBookDownload" : {
-         "string" : "Ladda ner-knapp"
+         "string" : "Ladda ner"
       },
       "catalogAccessibilityBookDownloadCancel" : {
-         "string" : "Avbryt nedladdning-knapp"
+         "string" : "Avbryt nedladdning"
       },
       "catalogAccessibilityBookErrorDetails" : {
-         "string" : "Information-knapp"
+         "string" : "Information"
       },
       "catalogAccessibilityBookErrorDismiss" : {
-         "string" : "Avvisa-knapp"
+         "string" : "Avvisa"
       },
       "catalogAccessibilityBookErrorRetry" : {
-         "string" : "Försök på nytt-knapp"
+         "string" : "Försök på nytt"
       },
       "catalogAccessibilityBookListen" : {
-         "string" : "Lyssna-knapp"
+         "string" : "Lyssna"
       },
       "catalogAccessibilityBookPreviewPlay" : {
          "string" : "Spela upp utdrag"
@@ -667,19 +700,19 @@
          "string" : "Läs utdrag"
       },
       "catalogAccessibilityBookRead" : {
-         "string" : "Läs-knapp"
+         "string" : "Läs"
       },
       "catalogAccessibilityBookReserve" : {
-         "string" : "Reservera-knapp"
+         "string" : "Reservera"
       },
       "catalogAccessibilityBookRevokeHold" : {
-         "string" : "Ta bort-knapp"
+         "string" : "Ta bort"
       },
       "catalogAccessibilityBookRevokeLoan" : {
-         "string" : "Returnera nu-knapp"
+         "string" : "Returnera nu"
       },
       "catalogAccessibilityBookSync" : {
-         "string" : "Synkronisera-knapp"
+         "string" : "Synkronisera"
       },
       "catalogAccessibilityCoverAudiobook" : {
          "string" : "%1$s, ljudbok, av %2$s"
@@ -712,10 +745,10 @@
          "string" : "Denna bok kan lånas."
       },
       "catalogBookAvailabilityLoanedIndefinite" : {
-         "string" : "Du har denna bok på lån."
+         "string" : "Du har redan lånat denna bok."
       },
       "catalogBookAvailabilityLoanedTimed" : {
-         "string" : "Du har denna bok på lån i %1$s."
+         "string" : "Denna bok är lånad åt dig i %1$s."
       },
       "catalogBookAvailabilityOpenAccess" : {
          "string" : "Du kan behålla denna bok."
@@ -844,7 +877,7 @@
          "string" : ""
       },
       "catalogMetaLanguage" : {
-         "string" : ""
+         "string" : "Språk"
       },
       "catalogMetaNarrators" : {
          "string" : "Uppläsare"
@@ -894,8 +927,26 @@
       "catalogSearch" : {
          "string" : "Sök"
       },
+      "close_tutorial" : {
+         "string" : ""
+      },
+      "contentDescription1" : {
+         "string" : "Välkommen till e-biblioteket! Denna tjänst erbjuds till dig av din hemkommuns biblioteket."
+      },
+      "contentDescription2" : {
+         "string" : "Du kan bläddra bland e- och ljudböcker enligt genre, bok eller författare eller undersöka bibliotekspersonalens listor med verk de vill."
+      },
+      "contentDescription3" : {
+         "string" : "Bläddra i urvalet, låna och läs eller lyssna! Om boken är utlånad tryck på reservera så får du den när den returneras."
+      },
+      "contentDescription4" : {
+         "string" : "Eller vill du sen också lyssna på något? I samlingen finns även ett otaligt antal ljudböcker! Klicka på låna så kommer du åt att lyssna på ljudboken."
+      },
       "contentDescriptionBack" : {
          "string" : "Tillbaka"
+      },
+      "contentDescriptionClose" : {
+         "string" : ""
       },
       "contentDescriptionLogo" : {
          "string" : "Logotyp"
@@ -918,11 +969,17 @@
       "contentDescriptionTutorialPage" : {
          "string" : "Handledningssida"
       },
+      "contentTabDescription" : {
+         "string" : ""
+      },
       "content_description_back" : {
          "string" : "Tillbaka"
       },
       "currentlyBrowsing" : {
          "string" : "Du bläddrar i"
+      },
+      "dependent_email" : {
+         "string" : ""
       },
       "dialog_manual_passphrase_cancel" : {
          "string" : "Ångra"
@@ -939,11 +996,26 @@
       "e_kirjasto_logo" : {
          "string" : "E-bibliotekets logotyp"
       },
+      "emailNotValid" : {
+         "string" : ""
+      },
       "emptyBookmarksMessage" : {
          "string" : "Det finns inga bokmärken för denna bok"
       },
+      "emptyHoldsNotLoggedIn" : {
+         "string" : ""
+      },
+      "emptyLoansNotLoggedIn" : {
+         "string" : ""
+      },
       "errorDetailsTitle" : {
          "string" : "Felinformation"
+      },
+      "errorFromServer" : {
+         "string" : ""
+      },
+      "errorInCreation" : {
+         "string" : ""
       },
       "errorLoginFailed" : {
          "string" : ""
@@ -970,10 +1042,10 @@
          "string" : "Fel vid inloggning. Vänligen starta om appen och försök på nytt."
       },
       "eula_agree" : {
-         "string" : "concordare"
+         "string" : "Samtycker"
       },
       "eula_disagree" : {
-         "string" : "dissentire"
+         "string" : "Samtycker inte"
       },
       "feedByAuthor" : {
          "string" : "Författare"
@@ -1022,6 +1094,21 @@
       },
       "feedWithGroupsEmptyLoaned" : {
          "string" : "Besök katalogen för att lägga till böcker i Mina böcker."
+      },
+      "fontSize" : {
+         "string" : ""
+      },
+      "get_dependents" : {
+         "string" : ""
+      },
+      "guidetext" : {
+         "string" : ""
+      },
+      "invite_a_dependent" : {
+         "string" : ""
+      },
+      "invite_another_dependent" : {
+         "string" : ""
       },
       "loginAuthRequired" : {
          "string" : "Autentisering krävs. Fortsätter..."
@@ -1175,6 +1262,9 @@
       },
       "next" : {
          "string" : "Nästa"
+      },
+      "no_dependents" : {
+         "string" : ""
       },
       "notification_channel_description_loans" : {
          "string" : "Meddelanden som hänför sig till dina lån."
@@ -1353,6 +1443,18 @@
       "resolvingUnexpectedException" : {
          "string" : "Det uppstod ett oväntat undantag vid matchning!"
       },
+      "restartPopupAgree" : {
+         "string" : ""
+      },
+      "restartPopupCancel" : {
+         "string" : ""
+      },
+      "restartPopupMessage" : {
+         "string" : ""
+      },
+      "restartPopupTitle" : {
+         "string" : ""
+      },
       "revokeACSDeleteRights" : {
          "string" : "Raderar Adobe ACS-behörighetsinformation…"
       },
@@ -1473,6 +1575,9 @@
       "selectYear" : {
          "string" : "Välj år"
       },
+      "select_dependent" : {
+         "string" : ""
+      },
       "selectionAlternateButton" : {
          "string" : "Lägg till ett bibliotek senare"
       },
@@ -1484,6 +1589,9 @@
       },
       "selectionTitle" : {
          "string" : "Läs e-böcker från ditt bibliotek"
+      },
+      "send_invitation" : {
+         "string" : ""
       },
       "settings" : {
          "string" : "Inställningar"
@@ -1504,7 +1612,7 @@
          "string" : "A a"
       },
       "settingsAbout" : {
-         "string" : "Om Palace"
+         "string" : "Om E-biblioteket"
       },
       "settingsAccessibilityBack" : {
          "string" : "Tillbaka"
@@ -1522,7 +1630,7 @@
          "string" : "Använd Open Dyslexic som bokens typsnitt."
       },
       "settingsAccessibilitySetPublisher" : {
-         "string" : "Visa typsnitt och layoutalternativen som fastställts av utgivaren."
+         "string" : "Visa typsnitt och layoutalternativ som fastställts av utgivaren."
       },
       "settingsAccessibilitySetSans" : {
          "string" : "Använd sans-serif som bokens typsnitt."
@@ -1714,7 +1822,7 @@
          "string" : "Utg"
       },
       "settingsPublisherText" : {
-         "string" : "Visa de typsnitt och layoutalternativen som utgivaren fastställt i denna e-bok."
+         "string" : "Visa de typsnitt och layoutalternativ som utgivaren fastställt i denna e-bok."
       },
       "settingsPublisherTitle" : {
          "string" : "Utgivarens standard"
@@ -1794,6 +1902,9 @@
       "testingUsernameInputTitle" : {
          "string" : "Användarnamn:"
       },
+      "thanks" : {
+         "string" : ""
+      },
       "tocAccessBookmarkDelete" : {
          "string" : "Radera ett bokmärke"
       },
@@ -1810,7 +1921,7 @@
          "string" : "Ett fel inträffade vid radering av bokmärket"
       },
       "tocBookmarkDeleteMessage" : {
-         "string" : "Är du säker att du vill radera detta bokmärke?"
+         "string" : "Är du säker på att du vill radera detta bokmärke?"
       },
       "tocBookmarks" : {
          "string" : "Bokmärken"

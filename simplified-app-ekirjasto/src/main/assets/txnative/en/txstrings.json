@@ -15,6 +15,9 @@
       "accountAgeVerification" : {
          "string" : "Age Verification"
       },
+      "accountAllowPreferences" : {
+         "string" : "Enable preferences"
+      },
       "accountCOPPADeleteBooks" : {
          "string" : "Delete books?"
       },
@@ -186,6 +189,9 @@
       "account_accessibility_statement" : {
          "string" : "Accessibility Statement"
       },
+      "account_application_language" : {
+         "string" : "Application language"
+      },
       "account_eula" : {
          "string" : "User Agreement"
       },
@@ -273,8 +279,17 @@
       "audio_book_player_error_book_open" : {
          "string" : "Unable to open audio book"
       },
+      "audio_book_player_error_book_open_audio" : {
+         "string" : "There was an error in creating the audio player."
+      },
+      "audio_book_player_error_book_open_data_missing" : {
+         "string" : "Some needed data is missing. Log out and back in and load the book again."
+      },
+      "audio_book_player_error_book_open_database_error" : {
+         "string" : "The book format is not supported. Please report this book through the feedback form."
+      },
       "audio_book_player_error_engine_open" : {
-         "string" : "Unable to initialize audio engine"
+         "string" : "Unable to initialize audio engine."
       },
       "audio_book_player_return_question" : {
          "string" : "Would you like to return it?"
@@ -636,29 +651,47 @@
       "bootFailedGeneric" : {
          "string" : "We found a problem. Please check your connection or close and reopen the app to retry."
       },
+      "buttonFontSize" : {
+         "string" : "Font size"
+      },
+      "buttonLanguage" : {
+         "string" : "Language options"
+      },
+      "buttonPreferences" : {
+         "string" : "Preferences"
+      },
+      "buttonTextEnglish" : {
+         "string" : "English"
+      },
+      "buttonTextFinnish" : {
+         "string" : "Finnish"
+      },
+      "buttonTextSwedish" : {
+         "string" : "Swedish"
+      },
       "catalogAccessibilityBookBorrow" : {
-         "string" : "Get Button"
+         "string" : "Get"
       },
       "catalogAccessibilityBookDelete" : {
-         "string" : "Delete Button"
+         "string" : "Delete"
       },
       "catalogAccessibilityBookDownload" : {
-         "string" : "Download Button"
+         "string" : "Download"
       },
       "catalogAccessibilityBookDownloadCancel" : {
-         "string" : "Cancel download button"
+         "string" : "Cancel download"
       },
       "catalogAccessibilityBookErrorDetails" : {
-         "string" : "Details button"
+         "string" : "Details"
       },
       "catalogAccessibilityBookErrorDismiss" : {
-         "string" : "Dismiss Button"
+         "string" : "Dismiss"
       },
       "catalogAccessibilityBookErrorRetry" : {
-         "string" : "Retry Button"
+         "string" : "Retry"
       },
       "catalogAccessibilityBookListen" : {
-         "string" : "Listen Button"
+         "string" : "Listen"
       },
       "catalogAccessibilityBookPreviewPlay" : {
          "string" : "Play Sample"
@@ -667,19 +700,19 @@
          "string" : "Read Sample"
       },
       "catalogAccessibilityBookRead" : {
-         "string" : "Read Button"
+         "string" : "Read"
       },
       "catalogAccessibilityBookReserve" : {
-         "string" : "Reserve Button"
+         "string" : "Reserve"
       },
       "catalogAccessibilityBookRevokeHold" : {
-         "string" : "Remove Button"
+         "string" : "Remove hold"
       },
       "catalogAccessibilityBookRevokeLoan" : {
-         "string" : "Return Now Button"
+         "string" : "Return loan"
       },
       "catalogAccessibilityBookSync" : {
-         "string" : "Sync Button"
+         "string" : "Sync"
       },
       "catalogAccessibilityCoverAudiobook" : {
          "string" : "%1$s, audiobook, by %2$s"
@@ -894,11 +927,29 @@
       "catalogSearch" : {
          "string" : "Search"
       },
+      "close_tutorial" : {
+         "string" : "Close tutorial"
+      },
+      "contentDescription1" : {
+         "string" : "Welcome to E-library! This service is provided by your local library. Swipe left for next page."
+      },
+      "contentDescription2" : {
+         "string" : "You can browse e-books and audiobooks by genre, book or author, or browse recommendation lists made by librarians. Swipe left for next page."
+      },
+      "contentDescription3" : {
+         "string" : "Browse the selection, borrow and read or listen! If a book is on loan, press reserve to get it when it becomes available. Swipe left for next page."
+      },
+      "contentDescription4" : {
+         "string" : "Or do you want something to listen to? The collection also includes an untold number of audiobooks! Click borrow to listen to the audiobook. Swipe left to close tutorial."
+      },
       "contentDescriptionBack" : {
          "string" : "Back"
       },
+      "contentDescriptionClose" : {
+         "string" : "Close search"
+      },
       "contentDescriptionLogo" : {
-         "string" : "Logo"
+         "string" : "Return to browse books"
       },
       "contentDescriptionPage1" : {
          "string" : "Welcome to E-library! This service is provided by your local library."
@@ -918,11 +969,17 @@
       "contentDescriptionTutorialPage" : {
          "string" : "Tutorial page"
       },
+      "contentTabDescription" : {
+         "string" : "Tutorial"
+      },
       "content_description_back" : {
          "string" : "Back"
       },
       "currentlyBrowsing" : {
          "string" : "You're currently browsing"
+      },
+      "dependent_email" : {
+         "string" : "Dependent email"
       },
       "dialog_manual_passphrase_cancel" : {
          "string" : "Cancel"
@@ -939,11 +996,26 @@
       "e_kirjasto_logo" : {
          "string" : "E-kirjasto logo"
       },
+      "emailNotValid" : {
+         "string" : "Enter a Valid Email Address."
+      },
       "emptyBookmarksMessage" : {
          "string" : "There are no bookmarks for this book"
       },
+      "emptyHoldsNotLoggedIn" : {
+         "string" : "Sign in to see your reservations."
+      },
+      "emptyLoansNotLoggedIn" : {
+         "string" : "Sign in to see your books."
+      },
       "errorDetailsTitle" : {
          "string" : "Error Details"
+      },
+      "errorFromServer" : {
+         "string" : "Something went wrong. Sign out and back in and try again."
+      },
+      "errorInCreation" : {
+         "string" : "Could not finish request. Check internet connection and try again."
       },
       "errorLoginFailed" : {
          "string" : "Could not sign in"
@@ -1018,10 +1090,25 @@
          "string" : "Holds"
       },
       "feedWithGroupsEmptyHolds" : {
-         "string" : "When you reserve a book from the catalog, it will show up here. Look here from time to time to see if your book is available to download."
+         "string" : "When you reserve a book from the catalog, it will show up here. Look here from time to time to see if your book is available to download.\n Number of reservations is limited to 5."
       },
       "feedWithGroupsEmptyLoaned" : {
-         "string" : "Visit the Catalog to add books to My Books."
+         "string" : "Visit the Catalog to add books to My Books.\n Number of loans is limited to 5.\n Ensure good internet connection when downloading a book and make sure there is enough space on your device."
+      },
+      "fontSize" : {
+         "string" : "Font size"
+      },
+      "get_dependents" : {
+         "string" : "Get Dependents or Children"
+      },
+      "guidetext" : {
+         "string" : "Fill in an email where the invitation should be sent. Make sure to type it in correctly before sending."
+      },
+      "invite_a_dependent" : {
+         "string" : "Invite a Dependent"
+      },
+      "invite_another_dependent" : {
+         "string" : "Invite another Dependent"
       },
       "loginAuthRequired" : {
          "string" : "Authentication is required. Continuing…"
@@ -1175,6 +1262,9 @@
       },
       "next" : {
          "string" : "Next"
+      },
+      "no_dependents" : {
+         "string" : "No dependents or children found."
       },
       "notification_channel_description_loans" : {
          "string" : "Notifications related to your loans."
@@ -1353,6 +1443,18 @@
       "resolvingUnexpectedException" : {
          "string" : "Received an unexpected exception during resolution!"
       },
+      "restartPopupAgree" : {
+         "string" : "Confirm"
+      },
+      "restartPopupCancel" : {
+         "string" : "Cancel"
+      },
+      "restartPopupMessage" : {
+         "string" : "The language is applied the next time the application starts."
+      },
+      "restartPopupTitle" : {
+         "string" : "Confirm changing application language?"
+      },
       "revokeACSDeleteRights" : {
          "string" : "Deleting Adobe ACS rights information…"
       },
@@ -1473,6 +1575,9 @@
       "selectYear" : {
          "string" : "Select Year"
       },
+      "select_dependent" : {
+         "string" : "Select a Dependent"
+      },
       "selectionAlternateButton" : {
          "string" : "Add a Library Later"
       },
@@ -1484,6 +1589,9 @@
       },
       "selectionTitle" : {
          "string" : "Read E-Books from Your Library"
+      },
+      "send_invitation" : {
+         "string" : "Send Invitation"
       },
       "settings" : {
          "string" : "Settings"
@@ -1793,6 +1901,9 @@
       },
       "testingUsernameInputTitle" : {
          "string" : "Username:"
+      },
+      "thanks" : {
+         "string" : "Thank you! Your dependent should receive the invitation shortly if the email was entered correctly.\n\nThe link should be opened on their personal device. The link leads to website where they can register a passkey. This passkey can be used to enter e-kirjasto."
       },
       "tocAccessBookmarkDelete" : {
          "string" : "Delete a bookmark"
