@@ -1,1 +1,4 @@
+- Sovellusasetukset: Kieli- ja fonttikokovalinnat
+- Huollettavien kutsuminen sovelluksesta
+- Paranneltu saavutettavuus
 - Bugikorjauksia
