@@ -181,7 +181,6 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
     readerDialog!!.addContentView(readerWebView!!, paramsWebView)
     readerDialog!!.setOnDismissListener { onReaderClosed() }
     readerDialog!!.show()
-    requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
   }
 
   /**
