@@ -288,6 +288,13 @@ class CatalogBookDetailViewModel(
     this.borrowViewModel.tryDelete(feedEntry.accountID, feedEntry.bookID)
   }
 
+  /**
+   * Function for cancelling download. Needed because class extends
+   * CatalogPagedViewListener. Function is not used but is functional.
+   */
+  override fun cancelDownload(feedEntry: FeedEntry.FeedEntryOPDS) {
+    this.borrowViewModel.tryCancelDownload(feedEntry.accountID, feedEntry.bookID)
+  }
   override fun resetInitialBookStatus(feedEntry: FeedEntry.FeedEntryOPDS) {
     val initialBookStatus = synthesizeBookWithStatus(feedEntry)
     this.bookRegistry.update(initialBookStatus)

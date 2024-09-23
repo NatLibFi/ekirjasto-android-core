@@ -1046,6 +1046,16 @@ class CatalogFeedViewModel(
     this.borrowViewModel.tryDelete(feedEntry.accountID, feedEntry.bookID)
   }
 
+  /**
+   * Try to cancel the current download of a book
+   */
+  override fun cancelDownload(feedEntry: FeedEntry.FeedEntryOPDS) {
+    this.borrowViewModel.tryCancelDownload(feedEntry.accountID, feedEntry.bookID)
+    //Since canceling download deletes the book from local database, we need to sync with
+    //the circulation so that the loan is shown correctly
+    this.syncAccounts()
+  }
+
   override fun borrowMaybeAuthenticated(book: Book) {
     this.openLoginDialogIfNecessary(book.account)
     this.borrowViewModel.tryBorrowMaybeAuthenticated(book)
