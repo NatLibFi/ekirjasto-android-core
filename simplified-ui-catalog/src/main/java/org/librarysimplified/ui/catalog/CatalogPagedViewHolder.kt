@@ -64,6 +64,8 @@ class CatalogPagedViewHolder(
     this.idle.findViewById<TextView>(R.id.bookCellIdleTitle)!!
   private val idleMeta =
     this.idle.findViewById<TextView>(R.id.bookCellIdleMeta)!!
+  private val idleLoanTime =
+    this.idle.findViewById<TextView>(R.id.bookCellIdleLoanTime)!!
   private val idleAuthor =
     this.idle.findViewById<TextView>(R.id.bookCellIdleAuthor)!!
   private val idleButtons =
@@ -288,10 +290,13 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.VISIBLE)
 
     this.idleButtons.removeAllViews()
 
     val loanDuration = getLoanDuration(book)
+
+    this.idleLoanTime.text = context.getString(R.string.catalogLoanTime, loanDuration)
 
     this.idleButtons.addView(
       when {
@@ -347,6 +352,7 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.GONE)
 
     this.idleButtons.removeAllViews()
     this.idleButtons.addView(
@@ -376,6 +382,7 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.GONE)
 
     this.idleButtons.removeAllViews()
     this.idleButtons.addView(
@@ -395,6 +402,15 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.GONE)
+
+    //Do we show how long it's still available the loan?
+    /* TODO:THIS
+    this.idleLoanTime.text =
+      CatalogBookAvailabilityStrings.statusString(this.context.resources, status)
+
+     */
+
 
     this.idleButtons.removeAllViews()
     this.idleButtons.addView(
@@ -427,7 +443,13 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.GONE)
 
+    //Do we show how long it's still available the loan?
+    /* TODO: Show how long till loanable
+    this.idleLoanTime.text =
+      CatalogBookAvailabilityStrings.statusString(this.context.resources, status)
+    */
     this.idleButtons.removeAllViews()
     if (status.isRevocable) {
       this.idleButtons.addView(
@@ -452,13 +474,17 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.VISIBLE)
+
+    val loanDuration = getLoanDuration(book)
+
+    this.idleLoanTime.text = context.getString(R.string.catalogLoanTime, loanDuration)
 
     this.idleButtons.removeAllViews()
 
     when (val format = book.findPreferredFormat()) {
       is BookFormat.BookFormatPDF,
       is BookFormat.BookFormatEPUB -> {
-        val loanDuration = getLoanDuration(book)
         this.idleButtons.addView(
           if (loanDuration.isNotEmpty()) {
             this.buttonCreator.createReadButtonWithLoanDuration(loanDuration) {
@@ -475,7 +501,6 @@ class CatalogPagedViewHolder(
         )
       }
       is BookFormat.BookFormatAudioBook -> {
-        val loanDuration = getLoanDuration(book)
         this.idleButtons.addView(
           if (loanDuration.isNotEmpty()) {
             this.buttonCreator.createListenButtonWithLoanDuration(loanDuration) {
@@ -525,6 +550,7 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.GONE)
 
     this.idleButtons.removeAllViews()
   }
@@ -583,6 +609,7 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.GONE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.GONE)
 
     this.errorDetails.setOnClickListener(null)
     this.errorDismiss.setOnClickListener(null)

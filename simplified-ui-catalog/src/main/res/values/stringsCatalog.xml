@@ -59,6 +59,7 @@
   <string name="catalogLoginRequired">Please sign in to continue.</string>
   <string name="catalogGet">Get</string>
   <string name="catalogHoldCannotCancel">This reservation cannot be cancelled.</string>
+  <string name="catalogLoanTime">On loan for: %1$s</string>
   <string name="catalogInformation">Information</string>
   <string name="catalogListen">Listen</string>
   <string name="catalogMetaCategories">Categories</string>

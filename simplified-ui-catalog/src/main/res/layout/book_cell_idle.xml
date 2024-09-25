@@ -75,6 +75,21 @@
         app:layout_constraintTop_toBottomOf="@id/bookCellIdleAuthor"
         tools:text="eBook - The New York Public Library" />
 
+    <TextView
+        android:id="@+id/bookCellIdleLoanTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="14sp"
+        android:textColor="@color/EkirjastoBlack"
+        android:background="@color/EkirjastoYellow"
+        android:gravity="bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/bookCellIdleCover"
+        app:layout_constraintBottom_toBottomOf="@id/bookCellIdleCover"
+        tools:text="Book on loan for 12 days" />
+
     <LinearLayout
         android:id="@+id/bookCellIdleButtons"
         android:layout_width="0dp"
