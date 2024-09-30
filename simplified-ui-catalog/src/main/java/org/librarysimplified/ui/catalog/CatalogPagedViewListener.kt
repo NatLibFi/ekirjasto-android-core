@@ -26,6 +26,7 @@ interface CatalogPagedViewListener {
 
   fun delete(feedEntry: FeedEntry.FeedEntryOPDS)
 
+  fun cancelDownload(feedEntry: FeedEntry.FeedEntryOPDS)
   fun borrowMaybeAuthenticated(book: Book)
 
   fun resetInitialBookStatus(feedEntry: FeedEntry.FeedEntryOPDS)
