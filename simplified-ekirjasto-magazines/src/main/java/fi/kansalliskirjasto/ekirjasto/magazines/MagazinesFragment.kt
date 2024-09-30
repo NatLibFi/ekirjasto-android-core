@@ -106,7 +106,6 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
       logger.debug("Saved latest browser URL: {}", latestUrl.toString())
     }
     readerDialog?.dismiss()
-    requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     super.onStop()
   }
 
@@ -181,7 +180,6 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
     readerDialog!!.addContentView(readerWebView!!, paramsWebView)
     readerDialog!!.setOnDismissListener { onReaderClosed() }
     readerDialog!!.show()
-    requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
   }
 
   /**
@@ -190,7 +188,6 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
   fun closeReader() {
     logger.debug("closeReader()")
     readerDialog?.dismiss()
-    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
   }
 
   /**
@@ -201,7 +198,6 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
     readerWebView?.destroy()
     readerWebView = null
     readerDialog = null
-    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
   }
 
   private fun getBrowsingUrlBase(): String? {
