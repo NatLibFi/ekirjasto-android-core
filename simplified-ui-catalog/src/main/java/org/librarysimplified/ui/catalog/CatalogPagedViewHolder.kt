@@ -128,6 +128,8 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.idleCover, View.INVISIBLE)
     this.idleCover.setImageDrawable(null)
 
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.INVISIBLE)
+
     this.setVisibilityIfNecessary(this.idleProgress, View.VISIBLE)
     this.idleTitle.text = item.feedEntry.title
     this.idleAuthor.text = item.feedEntry.authorsCommaSeparated
@@ -300,25 +302,18 @@ class CatalogPagedViewHolder(
 
     this.idleButtons.addView(
       when {
-        loanDuration.isNotEmpty() -> {
-          this.buttonCreator.createDownloadButtonWithLoanDuration(loanDuration) {
-            this.listener.borrowMaybeAuthenticated(book)
-          }
-        }
         bookStatus.isOpenAccess -> {
           this.buttonCreator.createGetButton(
             onClick = {
               this.listener.borrowMaybeAuthenticated(book)
-            },
-            heightMatchParent = true
+            }
           )
         }
         else -> {
           this.buttonCreator.createDownloadButton(
             onClick = {
               this.listener.borrowMaybeAuthenticated(book)
-            },
-            heightMatchParent = true
+            }
           )
         }
       }
@@ -330,8 +325,7 @@ class CatalogPagedViewHolder(
         this.buttonCreator.createRevokeLoanButton(
           onClick = {
             this.listener.revokeMaybeAuthenticated(book)
-          },
-          heightMatchParent = true
+          }
         )
       )
     } else if (isBookDeletable(book)) {
@@ -340,10 +334,11 @@ class CatalogPagedViewHolder(
         this.buttonCreator.createRevokeLoanButton(
           onClick = {
             this.listener.delete(this.feedEntry as FeedEntryOPDS)
-          },
-          heightMatchParent = true
+          }
         )
       )
+    } else {
+      this.idleButtons.addView(this.buttonCreator.createButtonSpace())
     }
   }
 
@@ -362,6 +357,7 @@ class CatalogPagedViewHolder(
         }
       )
     )
+    this.idleButtons.addView(this.buttonCreator.createButtonSpace())
   }
 
   private fun onBookStatusReachedLoanLimit() {
@@ -392,6 +388,7 @@ class CatalogPagedViewHolder(
         }
       )
     )
+    this.idleButtons.addView(this.buttonCreator.createButtonSpace())
   }
 
   private fun onBookStatusHeldReady(
@@ -402,14 +399,7 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
-    this.setVisibilityIfNecessary(this.idleLoanTime, View.GONE)
-
-    //Do we show how long it's still available the loan?
-    /* TODO:THIS
-    this.idleLoanTime.text =
-      CatalogBookAvailabilityStrings.statusString(this.context.resources, status)
-
-     */
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.INVISIBLE)
 
 
     this.idleButtons.removeAllViews()
@@ -432,6 +422,8 @@ class CatalogPagedViewHolder(
           }
         )
       )
+    } else {
+      this.idleButtons.addView(this.buttonCreator.createButtonSpace())
     }
   }
 
@@ -443,13 +435,12 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
-    this.setVisibilityIfNecessary(this.idleLoanTime, View.GONE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.VISIBLE)
 
-    //Do we show how long it's still available the loan?
-    /* TODO: Show how long till loanable
+    // Show a short version of the days remaining on hold in the loan time box
     this.idleLoanTime.text =
-      CatalogBookAvailabilityStrings.statusString(this.context.resources, status)
-    */
+      CatalogBookAvailabilityStrings.onHeldShort(this.context.resources, status)
+
     this.idleButtons.removeAllViews()
     if (status.isRevocable) {
       this.idleButtons.addView(
@@ -459,6 +450,7 @@ class CatalogPagedViewHolder(
           }
         )
       )
+      this.idleButtons.addView(this.buttonCreator.createButtonSpace())
     } else {
       this.idleButtons.addView(
         this.buttonCreator.createCenteredTextForButtons(R.string.catalogHoldCannotCancel)
@@ -478,6 +470,7 @@ class CatalogPagedViewHolder(
 
     val loanDuration = getLoanDuration(book)
 
+    //Show how long the book is on loan for
     this.idleLoanTime.text = context.getString(R.string.catalogLoanTime, loanDuration)
 
     this.idleButtons.removeAllViews()
@@ -486,34 +479,20 @@ class CatalogPagedViewHolder(
       is BookFormat.BookFormatPDF,
       is BookFormat.BookFormatEPUB -> {
         this.idleButtons.addView(
-          if (loanDuration.isNotEmpty()) {
-            this.buttonCreator.createReadButtonWithLoanDuration(loanDuration) {
+          this.buttonCreator.createReadButton(
+            onClick = {
               this.listener.openViewer(book, format)
             }
-          } else {
-            this.buttonCreator.createReadButton(
-              onClick = {
-                this.listener.openViewer(book, format)
-              },
-              heightMatchParent = true
-            )
-          }
+          )
         )
       }
       is BookFormat.BookFormatAudioBook -> {
         this.idleButtons.addView(
-          if (loanDuration.isNotEmpty()) {
-            this.buttonCreator.createListenButtonWithLoanDuration(loanDuration) {
+          this.buttonCreator.createListenButton(
+            onClick = {
               this.listener.openViewer(book, format)
             }
-          } else {
-            this.buttonCreator.createListenButton(
-              onClick = {
-                this.listener.openViewer(book, format)
-              },
-              heightMatchParent = true
-            )
-          }
+          )
         )
       }
       null -> {
@@ -527,8 +506,7 @@ class CatalogPagedViewHolder(
         this.buttonCreator.createRevokeLoanButton(
           onClick = {
             this.listener.revokeMaybeAuthenticated(book)
-          },
-          heightMatchParent = true
+          }
         )
       )
     } else if (isBookDeletable(book)) {
@@ -537,10 +515,11 @@ class CatalogPagedViewHolder(
         this.buttonCreator.createRevokeLoanButton(
           onClick = {
             this.listener.delete(this.feedEntry as FeedEntryOPDS)
-          },
-          heightMatchParent = true
+          }
         )
       )
+    } else {
+      this.idleButtons.addView(this.buttonCreator.createButtonSpace())
     }
   }
 
@@ -624,6 +603,7 @@ class CatalogPagedViewHolder(
     this.idleTitle.text = null
     this.progress.setOnClickListener(null)
     this.progressText.setOnClickListener(null)
+    this.idleLoanTime.text = null
 
     this.thumbnailLoading = this.thumbnailLoading?.let { loading ->
       loading.cancel(true)
