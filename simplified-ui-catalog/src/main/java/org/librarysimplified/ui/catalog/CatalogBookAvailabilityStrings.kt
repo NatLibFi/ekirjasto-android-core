@@ -240,7 +240,7 @@ object CatalogBookAvailabilityStrings {
     return String.format("%d %s", TimeUnit.HOURS.toDays(hours), base)
   }
   /**
-   * Construct a short time interval string like "3 w´d", with units up to days, that will be used
+   * Construct a short time interval string like "3 d", with units up to days, that will be used
    * to show the user the duration of a book's hold.
    *
    * @param resources The application resources
