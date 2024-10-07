@@ -74,6 +74,44 @@ object CatalogBookAvailabilityStrings {
     return resources.getString(R.string.catalogBookAvailabilityRevoked)
   }
 
+  /**
+   * Returns a short form of the reserved book's hold information.
+   * Function is public so it can be called past the bookStatus check,
+   * but the book needs to be in status BookStatus.Held.HeldInQueue.
+   */
+  fun onHeldShort(
+    resources: Resources,
+    status: BookStatus.Held.HeldInQueue
+  ): String {
+    val queuePositionOpt : OptionType<Int> = Option.of(status.queuePosition)
+    val endDateOpt : OptionType<DateTime> = Option.of(status.endDate)
+    /*
+     * If there is an availability date, show this in preference to
+     * anything else.
+     */
+    if (endDateOpt is Some<DateTime>) {
+      val endDate = endDateOpt.get()
+      val now = DateTime.now()
+      return resources.getString(
+        R.string.catalogBookAvailabilityHeldTimedShort,
+        this.intervalStringHoldDuration(resources, now, endDate)
+      )
+    }
+
+    /*
+     * If there is a queue position, attempt to show this instead.
+     */
+
+    if (queuePositionOpt is Some<Int>) {
+      return resources.getString(R.string.catalogBookAvailabilityHeldQueueShort, queuePositionOpt.get())
+    }
+
+    /**
+     * Otherwise, show an indefinite hold.
+     */
+
+    return resources.getString(R.string.catalogBookAvailabilityHeldIndefiniteShort)
+  }
   private fun onOpenAccess(resources: Resources): String {
     return resources.getString(R.string.catalogBookAvailabilityOpenAccess)
   }
@@ -200,6 +238,48 @@ object CatalogBookAvailabilityStrings {
 
     val base = resources.getString(R.string.catalogBookIntervalDays)
     return String.format("%d %s", TimeUnit.HOURS.toDays(hours), base)
+  }
+  /**
+   * Construct a short time interval string like "3 d", with units up to days, that will be used
+   * to show the user the duration of a book's hold.
+   *
+   * @param resources The application resources
+   * @param lower The lower bound of the time period
+   * @param upper The upper bound of the time period
+   *
+   * @return A time interval string
+   */
+
+  fun intervalStringHoldDuration(
+    resources: Resources,
+    lower: DateTime,
+    upper: DateTime
+  ): String {
+    val hours = this.calendarHoursBetween(lower, upper)
+    val days = TimeUnit.HOURS.toDays(hours)
+
+    val unit: String
+    val value: Long
+
+    when {
+      // Switch to days after 48 hours.
+      days >= 2 -> {
+        unit = resources.getString(R.string.catalogBookIntervalDaysShort)
+        value = days
+      }
+
+      // Use hours.
+      hours > 0 -> {
+        unit = resources.getString(R.string.catalogBookIntervalHoursShort)
+        value = hours
+      }
+
+      else -> {
+        return ""
+      }
+    }
+
+    return String.format("%d %s", value, unit)
   }
 
   /**

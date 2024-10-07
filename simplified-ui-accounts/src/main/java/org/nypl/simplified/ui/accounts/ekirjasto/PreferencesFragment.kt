@@ -122,9 +122,11 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
       .setPositiveButton(R.string.restartPopupAgree) { dialog, which ->
         //Set locale to the wanted language to be used on restart
         LocaleHelper.setLocale(this.requireContext(), language)
+        dialog.dismiss()
       }
       .setNegativeButton(R.string.restartPopupCancel) { dialog, which ->
         //do nothing
+        dialog.dismiss()
       }
 
     val dialog: AlertDialog = builder.create()
