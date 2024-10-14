@@ -1,12 +1,15 @@
 package org.librarysimplified.ui.catalog
 
 import android.content.Context
+import android.os.Environment
+import android.os.StatFs
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.RecyclerView
 import com.google.common.base.Preconditions
@@ -31,6 +34,8 @@ import org.nypl.simplified.opds.core.OPDSAvailabilityMatcherType
 import org.nypl.simplified.opds.core.OPDSAvailabilityOpenAccess
 import org.nypl.simplified.opds.core.OPDSAvailabilityRevoked
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
+import org.slf4j.LoggerFactory
+import java.io.File
 
 /**
  * A view holder for a single cell in an infinitely-scrolling feed.
@@ -44,6 +49,8 @@ class CatalogPagedViewHolder(
   private val bookCovers: BookCoverProviderType,
   private val profilesController: ProfilesControllerType
 ) : RecyclerView.ViewHolder(parent) {
+
+  private val logger = LoggerFactory.getLogger(CatalogPagedViewHolder::class.java)
 
   private var thumbnailLoading: FluentFuture<Unit>? = null
 
@@ -544,6 +551,54 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
 
     this.progressText.text = book.book.entry.title
+    //Add an onClick listener to the book cell
+    //that links to the book's detail view
+    val onClick: (View) -> Unit = {
+      logger.debug("Open book detail view")
+      this.listener.openBookDetail(this.feedEntry as FeedEntryOPDS)
+    }
+    //Set the clickable area as the whole cell
+    this.progress.setOnClickListener(onClick)
+
+
+    //Check file size, and show popup if file is too big
+    //Check is done only once for each book download
+
+    //Did somehow skip every now and then the case of totalBytes == 0L
+    //So the check is now done on one of the first packets
+    if (status.currentTotalBytes!! < 10000L) {
+      //Expected size of the book that is downloading
+      val expectedSize = status.expectedTotalBytes
+      //How much space is free on the device
+      val freeSpace = getInternalMem()
+      this.logger.debug("Assumed size of file: {}", formatSize(expectedSize))
+
+      //Never should be null, but needs to be checked
+      if (expectedSize != null) {
+        //If size smaller than internal memory, it should technically fit to memory
+        //If doesn't, user gets shown a popup and download is cancelled
+        if (expectedSize < freeSpace) {
+          logger.debug("Enough space for download")
+          logger.debug("Expected size: {}", expectedSize)
+          logger.debug(
+            "Remaining space: {}",
+            formatSize(freeSpace - expectedSize)
+          )
+        } else {
+          logger.debug("Not enough space for download")
+          logger.debug("Already a popup showing: {}", popUpShown)
+          //We don't want to show multiple popups ontop of one another, so we
+          //Show one if one is not already shown
+          if (!popUpShown) {
+            //Show the popup
+            onFileTooBigToStore(freeSpace, expectedSize - freeSpace)
+            //Cancel the download
+            this.listener.cancelDownload(this.feedEntry as FeedEntryOPDS)
+          }
+        }
+      }
+    }
+
 
     val progressPercent = status.progressPercent?.toInt()
     if (progressPercent != null) {
@@ -554,6 +609,78 @@ class CatalogPagedViewHolder(
     }
   }
 
+  /**
+   * Returns the amount of free internal memory there is on the device.
+   */
+  private fun getInternalMem() : Long {
+    // Fetching internal memory information
+    val iPath: File = Environment.getDataDirectory()
+    val iStat = StatFs(iPath.path)
+    val iBlockSize = iStat.blockSizeLong
+    val iAvailableBlocks = iStat.availableBlocksLong
+
+    //Count and return the available internal memory
+    return iAvailableBlocks * iBlockSize
+  }
+
+  /**
+   * Change the bit presentation of a number to
+   * a better understandable form.
+   * Returns a string with the size suffix added.
+   */
+  private fun formatSize(number : Long?) : String {
+    //Expected size in bits that gets changed to the kilobyte or megabyte presentations
+    var expSize: Long = number?: 0L
+    //Suffix, that is either KB or MB
+    var suffix: String? = null
+    //Divide with 1024 to ge the kilobyte presentation, set the suffix
+    if (expSize >= 1024) {
+      suffix = "KB"
+      expSize /= 1024
+      //If possible, divide again to get megabyte presentation, set the suffix
+      if (expSize >= 1024) {
+        suffix = "MB"
+        expSize /= 1024
+      }
+    }
+    //Make the long value into a string
+    val expSizeString = StringBuilder(expSize.toString())
+    //If there is a suffix, add it to the end of the expSize
+    if (suffix != null) {
+      expSizeString.append(suffix)
+    }
+    //Return the size as string
+    return expSizeString.toString()
+  }
+
+  //Boolean that is used to only show one popup at a time
+  //Only true when there is a popup that is currently shown
+  private var popUpShown = false
+
+  /**
+   * If there is no space for the book on the device, show a popup that informs the user about the
+   * required space.
+   */
+  private fun onFileTooBigToStore(deviceSpace: Long, neededSpace : Long) {
+    //Set the popup as shown
+    popUpShown = true
+    logger.debug("Showing size info")
+    //Show a popup with the device space and needed space
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    builder
+      .setMessage(this.context.getString(
+        R.string.bookNotEnoughSpaceMessage,
+        formatSize(deviceSpace),
+        formatSize(neededSpace)))
+      .setTitle(R.string.bookNotEnoughSpaceTitle)
+      .setPositiveButton(R.string.bookNotEnoughSpaceButton) { dialog, which ->
+        //Set the popup as closed
+        popUpShown = false
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+  }
   private fun onBookStatusDownloadWaitingForExternalAuthentication(
     book: Book
   ) {

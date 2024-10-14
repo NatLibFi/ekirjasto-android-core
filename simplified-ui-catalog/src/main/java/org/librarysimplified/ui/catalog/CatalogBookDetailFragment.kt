@@ -1,6 +1,8 @@
 package org.librarysimplified.ui.catalog
 
 import android.os.Bundle
+import android.os.Environment
+import android.os.StatFs
 import android.text.Html
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -41,6 +44,7 @@ import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceToolbar
+import java.io.File
 import java.net.URI
 
 /**
@@ -945,7 +949,6 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         )
       )
     } else {
-      this.buttons.addView(this.buttonCreator.createButtonSizedSpace(), 0)
       this.buttons.addView(this.buttonCreator.createButtonSizedSpace())
     }
 
@@ -994,6 +997,111 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       this.buttons.addView(this.buttonCreator.createCenteredTextForButtons(R.string.catalogDownloading))
       this.checkButtonViewCount()
     }
+    //Check file size, and show popup if file is too big
+
+    //Check the size expected from one of the first packets
+    //bookStatus.currentTotalBytes == 0L does not work, sometimes skips
+    if (bookStatus.currentTotalBytes!! < 10000L) {
+      //Expected size of the book that is downloading
+      val expectedSize = bookStatus.expectedTotalBytes
+      //How much space is free on the device
+      val freeSpace = getInternalMem()
+      this.logger.debug("Assumed size of file: {}", formatSize(expectedSize))
+
+      //Null check the expected size
+      if (expectedSize != null) {
+        //If size smaller than internal memory, it should technically fit to memory
+        if (expectedSize < freeSpace) {
+          logger.debug("Enough space for download")
+          logger.debug(
+            "Remaining space: {}",
+            formatSize(freeSpace - expectedSize)
+          )
+        } else {
+          logger.debug("Not enough space for download")
+          //To avoid showing multiples of the same popup on top of one another,
+          // show only if there currently is no popup showing
+          if (!popUpShown) {
+            //Inform user with a popup when file doesn't fit
+            onFileTooBigToStore(freeSpace, expectedSize - freeSpace)
+            //Cancel the download
+            this.viewModel.cancelDownload()
+          }
+        }
+      }
+    }
+  }
+
+  //A boolean lock used for showing only one copy of the low memory popup at a time
+  private var popUpShown = false
+
+  /**
+   * Returns the amount of free internal memory there is on the device.
+   */
+  private fun getInternalMem() : Long {
+    // Fetching internal memory information
+    val iPath: File = Environment.getDataDirectory()
+    val iStat = StatFs(iPath.path)
+    val iBlockSize = iStat.blockSizeLong
+    val iAvailableBlocks = iStat.availableBlocksLong
+
+    //Count and return the available internal memory
+    return iAvailableBlocks * iBlockSize
+  }
+
+  /**
+   * Change the bit presentation of a value to
+   * a better understandable form.
+   * Returns a string with the size suffix added.
+   */
+  private fun formatSize(number : Long?) : String {
+    //Get the value that needs formatting
+    var expSize: Long = number?: 0L
+    //Create a variable that is made into the suffix
+    var suffix: String? = null
+    //Format the expSize to readable form, either kilo or megabytes
+    if (expSize >= 1024) {
+      suffix = "KB"
+      expSize /= 1024
+      if (expSize >= 1024) {
+        suffix = "MB"
+        expSize /= 1024
+      }
+    }
+    //Make the long value into a string
+    val expSizeString = StringBuilder(expSize.toString())
+    //If there is a suffix, add it to the end of the expSize
+    if (suffix != null) {
+      expSizeString.append(suffix)
+    }
+
+    //Return a string form of the formatted variable
+    return expSizeString.toString()
+  }
+
+  /**
+   * If there is no space for the book on the device, show a popup that informs the user about the
+   * required space.
+   */
+  private fun onFileTooBigToStore(deviceSpace: Long, neededSpace : Long) {
+    //Mark that a popup is currently shown
+    popUpShown = true
+    logger.debug("Showing 'Not enough space' popup")
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    builder
+      .setMessage(getString(
+        R.string.bookNotEnoughSpaceMessage,
+        formatSize(deviceSpace),
+        formatSize(neededSpace)))
+      .setTitle(R.string.bookNotEnoughSpaceTitle)
+      .setPositiveButton(R.string.bookNotEnoughSpaceButton) { dialog, which ->
+        //Set the popup as closed
+        popUpShown = false
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+
   }
 
   private fun onBookStatusDownloadWaitingForExternalAuthentication() {

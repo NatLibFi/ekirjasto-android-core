@@ -95,4 +95,7 @@
   <string name="bookReachedLoanLimitDialogMessage">You have reached your loan limit. You cannot borrow anything further until you return something.</string>
   <string name="bookReachedLoanLimitDialogTitle">Loan limit reached.</string>
   <string name="bookReachedLoanLimitDialogButton">OK</string>
+  <string name="bookNotEnoughSpaceTitle">Not enough space!</string>
+  <string name="bookNotEnoughSpaceMessage">File is too big to store on device. Current free space on device: %1$s. \nFree at least %2$s of space to download the book.</string>
+  <string name="bookNotEnoughSpaceButton">Close</string>
 </resources>
