@@ -15,6 +15,7 @@ import org.librarysimplified.ui.catalog.CatalogFeedArguments
 import org.librarysimplified.ui.catalog.CatalogFeedEvent
 import org.librarysimplified.ui.catalog.CatalogFeedFragment
 import org.librarysimplified.ui.catalog.saml20.CatalogSAML20Event
+import org.librarysimplified.ui.login.LoginMainFragment
 import org.librarysimplified.ui.navigation.tabs.TabbedNavigator
 import org.librarysimplified.viewer.preview.BookPreviewActivity
 import org.nypl.simplified.accounts.api.AccountID
@@ -82,6 +83,12 @@ internal class MainFragmentListenerDelegate(
 
     activity.onBackPressedDispatcher.addCallback(this.fragment) {
       if (navigator.popBackStack()) {
+        //Use the current fragment as Main Fragment so we get
+        //to use the showTabs() function
+        val loginFragment = fragment as MainFragment
+        //Ensure the tabs are shown when pressed back
+        //Only changes something if the shown view is the login fragment where there is no tabs visible
+        loginFragment.showTabs()
         return@addCallback
       }
 
@@ -216,12 +223,7 @@ internal class MainFragmentListenerDelegate(
   ): MainFragmentState {
     return when (event) {
       is CatalogFeedEvent.LoginRequired -> {
-        this.openSettingsAccount(
-          event.account,
-          comingFromBookLoanRequest = true,
-          comingFromDeepLink = false,
-          barcode = null
-        )
+        this.openLogin()
         MainFragmentState.CatalogWaitingForLogin
       }
 
@@ -258,12 +260,7 @@ internal class MainFragmentListenerDelegate(
   ): MainFragmentState {
     return when (event) {
       is CatalogBookDetailEvent.LoginRequired -> {
-        this.openSettingsAccount(
-          event.account,
-          comingFromBookLoanRequest = true,
-          comingFromDeepLink = false,
-          barcode = null
-        )
+        this.openLogin()
         MainFragmentState.BookDetailsWaitingForLogin
       }
 
@@ -746,6 +743,19 @@ internal class MainFragmentListenerDelegate(
     else {
       openSettingsAccounts()
     }
+  }
+
+  private fun openLogin() {
+    this.logger.debug("openLogin")
+    //Add the login fragment, the tab isn't showing so it can be the current one
+    this.navigator.addFragment(
+      fragment = LoginMainFragment.create(),
+      tab = this.navigator.currentTab()
+    )
+    //Use the current fragment as Main Fragment so we get
+    //to use the hideTabs() function
+    val loginFragment = this.fragment as MainFragment
+    loginFragment.hideTabs()
   }
 
   private fun openSettingsAccount(

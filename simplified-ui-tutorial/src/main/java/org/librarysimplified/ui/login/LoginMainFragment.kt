@@ -56,6 +56,12 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
   override val defaultViewModelProviderFactory: ViewModelProvider.Factory
     get() = this.defaultViewModelFactory
 
+  companion object {
+  fun create(): LoginMainFragment {
+    val fragment = LoginMainFragment()
+    return fragment
+  }
+}
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     logger.debug("onViewCreated(), recreating: {}", (savedInstanceState != null))
     super.onViewCreated(view, savedInstanceState)

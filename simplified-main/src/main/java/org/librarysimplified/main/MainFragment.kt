@@ -132,6 +132,19 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
     )
   }
 
+  /**
+   * Hide bottom tabs from the user
+   */
+  fun hideTabs() {
+    bottomView.visibility = View.GONE
+  }
+
+  /**
+   * Show user the bottom tabs
+   */
+  fun showTabs() {
+    bottomView.visibility = View.VISIBLE
+  }
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
       android.R.id.home -> {
