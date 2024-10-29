@@ -47,6 +47,7 @@ class MainApplication : Application() {
   override fun onCreate() {
     super.onCreate()
 
+    INSTANCE = this
     MainLogging.configure(cacheDir)
 
     AppInfoUtil.init(this)
@@ -68,7 +69,6 @@ class MainApplication : Application() {
     this.logStartup()
     MainTransifex.configure(this.applicationContext)
     this.boot.start(this)
-    INSTANCE = this
   }
 
   private fun logStartup() {
