@@ -88,7 +88,7 @@ internal class MainFragmentListenerDelegate(
         val loginFragment = fragment as MainFragment
         //Ensure the tabs are shown when pressed back
         //Only changes something if the shown view is the login fragment where there is no tabs visible
-        loginFragment.showTabs()
+        loginFragment.showBottomNavigationMenu()
         return@addCallback
       }
 
@@ -755,7 +755,7 @@ internal class MainFragmentListenerDelegate(
     //Use the current fragment as Main Fragment so we get
     //to use the hideTabs() function
     val loginFragment = this.fragment as MainFragment
-    loginFragment.hideTabs()
+    loginFragment.hideBottomNavigationMenu()
   }
 
   private fun openSettingsAccount(
