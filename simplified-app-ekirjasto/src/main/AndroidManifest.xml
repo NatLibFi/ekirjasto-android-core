@@ -27,7 +27,7 @@
     <activity
       android:name="org.librarysimplified.main.MainActivity"
       android:exported="true"
-      android:screenOrientation="portrait"
+      android:screenOrientation="fullUser"
       android:launchMode="singleTop">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -63,7 +63,7 @@
         android:name="org.librarysimplified.viewer.preview.BookPreviewActivity"
         android:exported="false"
         android:parentActivityName="org.librarysimplified.main.MainActivity"
-        android:screenOrientation="portrait"
+        android:screenOrientation="fullUser"
         android:theme="@style/PalaceTheme.WithoutActionBar" />
 
     <activity
@@ -71,7 +71,7 @@
       android:configChanges="orientation|keyboardHidden"
       android:exported="false"
       android:parentActivityName="org.librarysimplified.main.MainActivity"
-      android:screenOrientation="portrait"
+      android:screenOrientation="fullUser"
       android:theme="@style/PalaceTheme.WithoutActionBar" />
 
 <!--    <activity-->
@@ -84,12 +84,12 @@
         android:name="org.librarysimplified.viewer.pdf.pdfjs.PdfReaderActivity"
         android:contentDescription="@string/android_app_name"
         android:exported="false"
-        android:screenOrientation="portrait"
+        android:screenOrientation="fullUser"
         android:label="@string/android_app_name" />
 
     <activity
       android:name="org.librarysimplified.viewer.audiobook.AudioBookPlayerActivity"
-      android:screenOrientation="portrait"
+      android:screenOrientation="fullUser"
       android:exported="false"
       android:theme="@style/PalaceTheme.WithoutActionBar" />
 
