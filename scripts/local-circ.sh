@@ -17,13 +17,13 @@ done
 
 # Get IP and UUID for MACOS
 LOCAL_IP=$(ipconfig getifaddr en0)
-UUID=$(psql -U palace -h localhost -d circ -c "SELECT UUID FROM public.libraries ORDER BY id ASC" -t | xargs)
+UUID=$(psql -U palace -h "$LOCAL_IP" -d circ -c "SELECT UUID FROM public.libraries ORDER BY id ASC" -t | xargs)
 
 # Validate values
 [ -z "$LOCAL_IP" ] || [ -z "$UUID" ] && { echo "Error: Failed to get IP or UUID"; exit 1; }
 
 # Replace the values using sed
-sed -i '' "s|val circURL = \"LOCAL_IP_ADDRESS\"|val circURL = \"$LOCAL_IP\"|g" "$GRADLE_FILE"
+sed -i '' "s|val circURL = \"LOCAL_IP_ADDRESS\"|val circURL = \"http://$LOCAL_IP:6500\"|g" "$GRADLE_FILE"
 sed -i '' "s|val libProvider = \"LOCAL_CIRC_LIBRARY_UUID\"|val libProvider = \"$UUID\"|g" "$GRADLE_FILE"
 
 echo "Updated IP: $LOCAL_IP"
