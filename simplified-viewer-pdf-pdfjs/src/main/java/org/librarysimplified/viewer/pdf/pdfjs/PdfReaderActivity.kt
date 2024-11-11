@@ -122,11 +122,9 @@ class PdfReaderActivity : AppCompatActivity() {
 
   private fun completeReaderSetup(params: PdfReaderParameters, isSavedInstanceStateNull: Boolean) {
     this.loadingBar.visibility = View.GONE
-
-    if (isSavedInstanceStateNull) {
-      createWebView()
-      createPdfServer(params.drmInfo, params.pdfFile)
-    }
+    // Since the views are destroyed on config change, always recreate the webView
+    createWebView()
+    createPdfServer(params.drmInfo, params.pdfFile)
   }
 
   private fun restoreSavedPosition(params: PdfReaderParameters, isSavedInstanceStateNull: Boolean) {
