@@ -405,6 +405,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   private fun configureToolbarActions() {
     this.toolbar.inflateMenu(menu.top_toolbar_menu)
     this.bottomToolbar.inflateMenu(menu.bottom_toolbar_menu)
+
     this.toolbar.setNavigationOnClickListener { this.onToolbarNavigationSelected() }
 
     val backbutton:LinearLayout = this.toolbar.findViewById(org.librarysimplified.viewer.audiobook.R.id.backButton)
@@ -534,7 +535,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     this.playerPosition.isEnabled = false
     this.playerPositionDragging = false
 
-    this.playerPosition.setOnTouchListener { _, event -> this.handleTouchOnSeekbar(event) }
+    this.playerPosition.setOnSeekBarChangeListener(createSeekbarChangeListener())
 
     this.playerTimeCurrent = view.findViewById(R.id.player_time)!!
     this.playerTimeMaximum = view.findViewById(R.id.player_time_maximum)!!
@@ -570,28 +571,35 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     }
   }
 
-  private fun handleTouchOnSeekbar(event: MotionEvent?): Boolean {
-    return when (event?.action) {
-      MotionEvent.ACTION_DOWN -> {
-        this.playerPositionDragging = true
-        this.playerPosition.onTouchEvent(event)
-      }
+  /**
+   * Create a new OnSeekbarChangeListener
+   */
+  private fun createSeekbarChangeListener(): SeekBar.OnSeekBarChangeListener {
+    return object : SeekBar.OnSeekBarChangeListener {
+      // Handle when the progress changes
+      override fun onProgressChanged(
+        seek: SeekBar,
+        progress: Int, fromUser: Boolean
+      ) {
 
-      MotionEvent.ACTION_UP -> {
-        if (this.playerPositionDragging) {
-          this.playerPositionDragging = false
-          this.onReleasedPlayerPositionBar()
+        // If the change is made by the user, set the player position as dragging
+        // So the thumb follows the user's touch
+        if (fromUser) {
+          playerPositionDragging = true
         }
-        this.playerPosition.onTouchEvent(event)
       }
 
-      MotionEvent.ACTION_CANCEL -> {
-        this.playerPositionDragging = false
-        this.playerPosition.onTouchEvent(event)
+      // Handle when the user starts tracking touch
+      override fun onStartTrackingTouch(seek: SeekBar) {
+        // No need to do anything
       }
 
-      else -> {
-        this.playerPosition.onTouchEvent(event)
+      // Handle when the user stops tracking touch
+      override fun onStopTrackingTouch(seek: SeekBar) {
+        // Set the dragging as stopped
+        playerPositionDragging = false
+        // Run the function that moves the player to matching spot with the seekbar
+        onReleasedPlayerPositionBar()
       }
     }
   }
