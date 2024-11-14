@@ -200,9 +200,9 @@ android {
             versionCode = versionCodeBase + 4
             // Set as default flavor, otherwise alphabetically first will be the default
             isDefault = true
-            val circURL = "LOCAL_IP_ADDRESS"
+            val circURL = "http://1.2.3.4:6500" // remember to include port, if necessary
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
-            val libProvider = "LOCAL_CIRC_LIBRARY_UUID"
+            val libProvider = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" // format: 8-4-4-4-12
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("dev") {
