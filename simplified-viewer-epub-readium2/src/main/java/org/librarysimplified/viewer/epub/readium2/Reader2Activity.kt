@@ -215,10 +215,13 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
           SR2TOCFragment::class.java.name
         )
 
-    //Add the reader to the stack, add a tag to find the fragment on reconfiguration
-      this.supportFragmentManager.beginTransaction()
-        .add(R.id.reader2FragmentHost, this.readerFragment, "reader")
-        .commit()
+    if (savedInstanceState == null) {
+      //If this is the first time using onCreate
+      //Add the reader to the stack, add a tag to find the fragment on reconfiguration
+        this.supportFragmentManager.beginTransaction()
+          .add(R.id.reader2FragmentHost, this.readerFragment, "reader")
+          .commit()
+    }
   }
 
   override fun onStart() {

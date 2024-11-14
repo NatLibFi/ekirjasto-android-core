@@ -28,7 +28,9 @@
       android:name="org.librarysimplified.main.MainActivity"
       android:exported="true"
       android:screenOrientation="fullUser"
-      android:launchMode="singleTop">
+        android:configChanges="orientation|screenSize"
+        android:theme="@style/PalaceTheme.WithoutActionBar"
+        android:launchMode="singleTop">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -83,6 +85,7 @@
     <activity
         android:name="org.librarysimplified.viewer.pdf.pdfjs.PdfReaderActivity"
         android:contentDescription="@string/android_app_name"
+        android:configChanges="orientation|screenSize"
         android:exported="false"
         android:screenOrientation="fullUser"
         android:label="@string/android_app_name" />
@@ -91,6 +94,7 @@
       android:name="org.librarysimplified.viewer.audiobook.AudioBookPlayerActivity"
       android:screenOrientation="fullUser"
       android:exported="false"
+        android:configChanges="orientation|screenSize"
       android:theme="@style/PalaceTheme.WithoutActionBar" />
 
 <!--    <activity-->
