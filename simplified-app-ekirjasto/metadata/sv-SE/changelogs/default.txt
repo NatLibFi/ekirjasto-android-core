@@ -1,1 +1,3 @@
-- Olika buggfixar
+- Buggfixar
+- UI fixar
+– Förbättrad tillgänglighet
