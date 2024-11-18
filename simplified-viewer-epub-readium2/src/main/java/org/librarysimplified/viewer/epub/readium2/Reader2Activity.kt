@@ -194,26 +194,33 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
       WebView.setWebContentsDebuggingEnabled(true)
     }
 
-    if (savedInstanceState == null) {
-      this.readerFragment =
-        this.supportFragmentManager.fragmentFactory.instantiate(
-          this.classLoader,
-          SR2ReaderFragment::class.java.name
-        )
-      this.searchFragment =
+    //Check if there are fragments with matching tags already in the backstack
+    //If yes, set the existing ones into the variables
+    //If no, initiate a new fragment of the same kind
+      this.readerFragment = this.supportFragmentManager.findFragmentByTag("reader") ?:
+      this.supportFragmentManager.fragmentFactory.instantiate(
+      this.classLoader,
+      SR2ReaderFragment::class.java.name
+      )
+
+      this.searchFragment = this.supportFragmentManager.findFragmentByTag("search") ?:
         this.supportFragmentManager.fragmentFactory.instantiate(
           this.classLoader,
           SR2SearchFragment::class.java.name
         )
-      this.tocFragment =
+
+      this.tocFragment = this.supportFragmentManager.findFragmentByTag("toc") ?:
         this.supportFragmentManager.fragmentFactory.instantiate(
           this.classLoader,
           SR2TOCFragment::class.java.name
         )
 
-      this.supportFragmentManager.beginTransaction()
-        .add(R.id.reader2FragmentHost, this.readerFragment)
-        .commit()
+    if (savedInstanceState == null) {
+      //If this is the first time using onCreate
+      //Add the reader to the stack, add a tag to find the fragment on reconfiguration
+        this.supportFragmentManager.beginTransaction()
+          .add(R.id.reader2FragmentHost, this.readerFragment, "reader")
+          .commit()
     }
   }
 
@@ -228,7 +235,6 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
     super.onStop()
     this.controllerSubscription?.dispose()
     this.viewSubscription?.dispose()
-
     /*
      * If the activity is finishing, send an analytics event.
      */
@@ -564,13 +570,22 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
 
     this.logger.debug("TOC opening")
 
-    val transaction = this.supportFragmentManager.beginTransaction()
-      .hide(this.readerFragment)
+    // Work around a lifecycle related crash.
+    if (!this::readerFragment.isInitialized) {
+      return
+    }
 
+    //Hide the readerFragment to show the toc
+    val transaction =
+      this.supportFragmentManager.beginTransaction()
+        .hide(this.readerFragment)
+
+    //If a toc has already been added, show it, if not create a new one
     if (this.tocFragment.isAdded) {
       transaction.show(tocFragment)
     } else {
-      transaction.add(R.id.reader2FragmentHost, this.tocFragment)
+      //Add the toc to the stack, add a tag to find the fragment on reconfiguration
+      transaction.add(R.id.reader2FragmentHost, this.tocFragment, "toc")
     }
 
     transaction.commit()
@@ -599,13 +614,16 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
 
     this.logger.debug("Search opening")
 
+    //Hide the reader to show search
     val transaction = this.supportFragmentManager.beginTransaction()
       .hide(this.readerFragment)
 
+    //If there already is a searchFragment in the stack, show it, if not, create a new one
     if (this.searchFragment.isAdded) {
       transaction.show(searchFragment)
     } else {
-      transaction.add(R.id.reader2FragmentHost, this.searchFragment)
+      //Add the search to the stack, add a tag to find the fragment on reconfiguration
+      transaction.add(R.id.reader2FragmentHost, this.searchFragment, "search")
     }
 
     transaction.commit()
