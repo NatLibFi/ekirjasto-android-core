@@ -1,1 +1,3 @@
 - Bugikorjauksia
+- UI korjauksia
+- Paranneltu saavutettavuus
