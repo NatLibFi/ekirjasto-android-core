@@ -567,6 +567,15 @@
       "bookIsOnHold" : {
          "string" : "Kirjasta %1$s on tehty varaus"
       },
+      "bookNotEnoughSpaceButton" : {
+         "string" : "Sulje"
+      },
+      "bookNotEnoughSpaceMessage" : {
+         "string" : "Tiedosto on liian iso tallennettavaksi laitteellesi. Tämän hetkinen tallennustila laitteellasi on %1$s. \nVapauta vähintään %2$s ladataksesi tämän kirjan laitteellesi."
+      },
+      "bookNotEnoughSpaceTitle" : {
+         "string" : "Laitteellasi ei ole riittävästi tallennustilaa!"
+      },
       "bookOpenFailedMessage" : {
          "string" : "Kirjan avaamisessa tapahtui virhe: (%1$s): %2$s."
       },
@@ -732,11 +741,20 @@
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "Jonotat tätä kirjaa."
       },
+      "catalogBookAvailabilityHeldIndefiniteShort" : {
+         "string" : "Varattu"
+      },
       "catalogBookAvailabilityHeldQueue" : {
          "string" : "Olet tämän kirjan jonossa sijalla %1$d."
       },
+      "catalogBookAvailabilityHeldQueueShort" : {
+         "string" : "Sijalla: %1$d"
+      },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "Voit lainata tämän kirjan seuraavan ajan kuluttua: %1$s."
+      },
+      "catalogBookAvailabilityHeldTimedShort" : {
+         "string" : "Saatavilla: %1$s"
       },
       "catalogBookAvailabilityHoldable" : {
          "string" : "Kaikki tämän kirjan kappaleet ovat tällä hetkellä lainassa."
@@ -855,6 +873,9 @@
       "catalogListen" : {
          "string" : "Kuuntele"
       },
+      "catalogLoanTime" : {
+         "string" : "Laina-aikaa jäljellä: %1$s"
+      },
       "catalogLoginRequired" : {
          "string" : "Jatka kirjautumalla sisään."
       },
@@ -949,7 +970,7 @@
          "string" : "Sulje haku"
       },
       "contentDescriptionLogo" : {
-         "string" : "Logo"
+         "string" : "Palaa näkymään Selaa"
       },
       "contentDescriptionPage1" : {
          "string" : "Tervetuloa E-kirjastoon! Tämän palvelun sinulle tarjoaa kotikuntasi kirjasto."
@@ -979,7 +1000,7 @@
          "string" : "Selaat tällä hetkellä"
       },
       "dependent_email" : {
-         "string" : ""
+         "string" : "Huollettavan sähköpostiosoite"
       },
       "dialog_manual_passphrase_cancel" : {
          "string" : "Peruuta"
@@ -997,7 +1018,7 @@
          "string" : "E-kirjaston logo"
       },
       "emailNotValid" : {
-         "string" : ""
+         "string" : "Syötä validi sähköpostiosoite."
       },
       "emptyBookmarksMessage" : {
          "string" : "Tässä kirjassa ei ole kirjanmerkkejä"
@@ -1012,10 +1033,10 @@
          "string" : "Virheen tiedot"
       },
       "errorFromServer" : {
-         "string" : ""
+         "string" : "Jotain meni pieleen. Kirjaudu ulos ja takaisin sisään yrittääksesi uudelleen."
       },
       "errorInCreation" : {
-         "string" : ""
+         "string" : "Pyyntöä ei voitu suorittaa loppuun. Tarkista verkkoyhteytesi ja yritä uudelleen."
       },
       "errorLoginFailed" : {
          "string" : "Sisäänkirjautuminen epäonnistui"
@@ -1090,25 +1111,25 @@
          "string" : "Varaukset"
       },
       "feedWithGroupsEmptyHolds" : {
-         "string" : "Sinulla ei ole voimassa olevia varauksia."
+         "string" : "Jos sinulla on varauksia, ne näytetään täällä. Tarkista ajoittain onko varauksesi ladattavissa.\nVarauksia saa olla enintään 5."
       },
       "feedWithGroupsEmptyLoaned" : {
-         "string" : "Sinulla ei ole voimassa olevia lainoja."
+         "string" : "Lainauksesi näytetään täällä.\nLainauksia voi olla enintään 5 kappaletta.\nVarmista riittävä internetyhteys ladatessasi kirjoja sekä tarkista onko puhelimessasi riittävästi tilaa."
       },
       "fontSize" : {
          "string" : "Fonttikoko"
       },
       "get_dependents" : {
-         "string" : ""
+         "string" : "Kutsu lapsi tai muu huollettava"
       },
       "guidetext" : {
-         "string" : ""
+         "string" : "Syötä sähköpostiosoite johon kutsu lähetetään. Varmista että sähköpostiosoite on kirjoitettu oikein ennen lähettämistä."
       },
       "invite_a_dependent" : {
-         "string" : ""
+         "string" : "Kutsu huollettava"
       },
       "invite_another_dependent" : {
-         "string" : ""
+         "string" : "Kutsu toinen huollettava"
       },
       "loginAuthRequired" : {
          "string" : "Todennus vaaditaan. Jatketaan..."
@@ -1264,7 +1285,7 @@
          "string" : "Seuraava"
       },
       "no_dependents" : {
-         "string" : ""
+         "string" : "Lapsia tai muita huollettavia ei löytynyt"
       },
       "notification_channel_description_loans" : {
          "string" : "Lainoihisi liittyvät ilmoitukset."
@@ -1576,7 +1597,7 @@
          "string" : "Valitse vuosi"
       },
       "select_dependent" : {
-         "string" : ""
+         "string" : "Valitse huollettava"
       },
       "selectionAlternateButton" : {
          "string" : "Lisää kirjasto myöhemmin"
@@ -1591,7 +1612,7 @@
          "string" : "Lue e-kirjoja kirjastostasi"
       },
       "send_invitation" : {
-         "string" : ""
+         "string" : "Lähetä kutsu"
       },
       "settings" : {
          "string" : "Asetukset"
@@ -1903,7 +1924,7 @@
          "string" : "Käyttäjänimi:"
       },
       "thanks" : {
-         "string" : ""
+         "string" : "Kiitos! Huollettavasi pitäisi saada kutsu pian jos sähköposti oli kirjoitettu oikein.\n\nLinkki tulee aukaista kutsutun omalla laitteella. Kutsu vie verkkosivulle, jossa kutsutun tulee luoda itselleen pääsyavain. Pääsyavainta voidaan käyttää E-kirjaston sovellukseen kirjautumiseen."
       },
       "tocAccessBookmarkDelete" : {
          "string" : "Poista kirjanmerkki"

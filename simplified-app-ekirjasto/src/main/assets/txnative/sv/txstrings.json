@@ -16,7 +16,7 @@
          "string" : "Ålderskontroll"
       },
       "accountAllowPreferences" : {
-         "string" : ""
+         "string" : "Aktivera inställningarna i applikationen"
       },
       "accountCOPPADeleteBooks" : {
          "string" : "Radera böcker?"
@@ -190,13 +190,13 @@
          "string" : "Tillgänglighetsutlåtande"
       },
       "account_application_language" : {
-         "string" : ""
+         "string" : "Språket på applikationen"
       },
       "account_eula" : {
          "string" : "Användaravtal"
       },
       "account_faq" : {
-         "string" : ""
+         "string" : "Vanliga frågor"
       },
       "account_leave_feedback" : {
          "string" : "Ge respons"
@@ -250,7 +250,7 @@
          "string" : "%1$s (%2$d av %3$d)"
       },
       "app_name" : {
-         "string" : "E-kirjasto"
+         "string" : "E-biblioteket"
       },
       "app_version_string" : {
          "string" : "E-biblioteket version %1$s"
@@ -280,13 +280,13 @@
          "string" : "Det går inte att öppna ljudboken"
       },
       "audio_book_player_error_book_open_audio" : {
-         "string" : ""
+         "string" : "Det uppstod ett fel i att skapa ljudspelaren."
       },
       "audio_book_player_error_book_open_data_missing" : {
-         "string" : ""
+         "string" : "Några nödvändiga data saknas. Logga ut och tillbaka in och ladda boken igen."
       },
       "audio_book_player_error_book_open_database_error" : {
-         "string" : ""
+         "string" : "Bokformatet stöds inte. Rapportera gärna denna bok via feedback-formuläret."
       },
       "audio_book_player_error_engine_open" : {
          "string" : "Det går inte att initiera ljudmotorn"
@@ -567,6 +567,15 @@
       "bookIsOnHold" : {
          "string" : "Boken '%1$s' har reserverats"
       },
+      "bookNotEnoughSpaceButton" : {
+         "string" : "Stäng"
+      },
+      "bookNotEnoughSpaceMessage" : {
+         "string" : "Filen är för stor för din enhet. För tillfället har du: %1$s utrymme på din enhet.\nFrigör åtminstone %2$s utrymme på din enhet för att ladda ner boken."
+      },
+      "bookNotEnoughSpaceTitle" : {
+         "string" : "Det finns inte tillräckligt med utrymme på din enhet!"
+      },
       "bookOpenFailedMessage" : {
          "string" : "Ett fel inträffade när boken skulle öppnas: (%1$s): %2$s."
       },
@@ -652,22 +661,22 @@
          "string" : "Vi upptäckte ett problem. Kontrollera din anslutning eller stäng och starta appen och försök på nytt."
       },
       "buttonFontSize" : {
-         "string" : ""
+         "string" : "Teckenstorlek"
       },
       "buttonLanguage" : {
-         "string" : ""
+         "string" : "Språkalternativ"
       },
       "buttonPreferences" : {
-         "string" : ""
+         "string" : "Inställningar"
       },
       "buttonTextEnglish" : {
-         "string" : "Engelska"
+         "string" : "engelska"
       },
       "buttonTextFinnish" : {
-         "string" : "Finska"
+         "string" : "finska"
       },
       "buttonTextSwedish" : {
-         "string" : "Svenska"
+         "string" : "svenska"
       },
       "catalogAccessibilityBookBorrow" : {
          "string" : "Hämta"
@@ -732,11 +741,20 @@
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "Du har reserverat denna bok."
       },
+      "catalogBookAvailabilityHeldIndefiniteShort" : {
+         "string" : "Reserverad"
+      },
       "catalogBookAvailabilityHeldQueue" : {
          "string" : "Du är på plats %1$d i kön till denna bok."
       },
+      "catalogBookAvailabilityHeldQueueShort" : {
+         "string" : "Din plats i kön: %1$"
+      },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "Du kommer att kunna låna denna bok om %1$s."
+      },
+      "catalogBookAvailabilityHeldTimedShort" : {
+         "string" : "Tillgänglig: %1$"
       },
       "catalogBookAvailabilityHoldable" : {
          "string" : "Alla kopior av denna bok är för närvarande utlånade."
@@ -855,6 +873,9 @@
       "catalogListen" : {
          "string" : "Lyssna"
       },
+      "catalogLoanTime" : {
+         "string" : "Tillgänglig att lånas: %1$"
+      },
       "catalogLoginRequired" : {
          "string" : "Logga in för att fortsätta."
       },
@@ -871,10 +892,10 @@
          "string" : "Format"
       },
       "catalogMetaId" : {
-         "string" : ""
+         "string" : "ISBN"
       },
       "catalogMetaIllustrators" : {
-         "string" : ""
+         "string" : "Illustratörer"
       },
       "catalogMetaLanguage" : {
          "string" : "Språk"
@@ -889,7 +910,7 @@
          "string" : "Utgivare"
       },
       "catalogMetaTranslators" : {
-         "string" : ""
+         "string" : "Översättare"
       },
       "catalogMetaUpdatedDate" : {
          "string" : "Uppdaterad"
@@ -928,40 +949,40 @@
          "string" : "Sök"
       },
       "close_tutorial" : {
-         "string" : ""
+         "string" : "Stäng handledningen"
       },
       "contentDescription1" : {
-         "string" : "Välkommen till e-biblioteket! Denna tjänst erbjuds till dig av din hemkommuns biblioteket."
+         "string" : "Välkommen till e-biblioteket! Denna tjänst erbjuds till dig av din hemkommuns biblioteket. Svep åt vänster för nästa sidan. "
       },
       "contentDescription2" : {
-         "string" : "Du kan bläddra bland e- och ljudböcker enligt genre, bok eller författare eller undersöka bibliotekspersonalens listor med verk de vill."
+         "string" : "Du kan bläddra bland e- och ljudböcker enligt genre, bok eller författare eller undersöka bibliotekspersonalens listor med verk de vill. Svep åt vänster för nästa sidan."
       },
       "contentDescription3" : {
-         "string" : "Bläddra i urvalet, låna och läs eller lyssna! Om boken är utlånad tryck på reservera så får du den när den returneras."
+         "string" : "Bläddra i urvalet, låna och läs eller lyssna! Om boken är utlånad, tryck på reservera för att få den när den blir tillgänglig. Svep åt vänster för nästa sida."
       },
       "contentDescription4" : {
-         "string" : "Eller vill du sen också lyssna på något? I samlingen finns även ett otaligt antal ljudböcker! Klicka på låna så kommer du åt att lyssna på ljudboken."
+         "string" : "Eller vill du sen också lyssna på något? I samlingen finns även ett otaligt antal ljudböcker! Klicka på låna så kommer du åt att lyssna på ljudboken. Svep åt vänster för att stänga handledningen."
       },
       "contentDescriptionBack" : {
          "string" : "Tillbaka"
       },
       "contentDescriptionClose" : {
-         "string" : ""
+         "string" : "Stäng sökning"
       },
       "contentDescriptionLogo" : {
-         "string" : "Logotyp"
+         "string" : "Gå tillbaka för att bläddra i böcker"
       },
       "contentDescriptionPage1" : {
-         "string" : ""
+         "string" : "Välkommen till E-biblioteket! Denna tjänst erbjuds till dig av din hemkommuns biblioteket."
       },
       "contentDescriptionPage2" : {
-         "string" : ""
+         "string" : "Du kan bläddra bland e- och ljudböcker enligt genre, bok eller författare eller undersöka bibliotekspersonalens listor med verk de vill."
       },
       "contentDescriptionPage3" : {
-         "string" : ""
+         "string" : "Bläddra i urvalet, låna och läs eller lyssna! Om boken är utlånad, tryck på reservera för att få den när den blir tillgänglig."
       },
       "contentDescriptionPage4" : {
-         "string" : ""
+         "string" : "Eller vill du ha något att lyssna på? Samlingen innehåller också ett oräkneligt antal ljudböcker! Klicka på låna för att lyssna på ljudboken."
       },
       "contentDescriptionSkipButton" : {
          "string" : "Hoppa över-knapp"
@@ -970,7 +991,7 @@
          "string" : "Handledningssida"
       },
       "contentTabDescription" : {
-         "string" : ""
+         "string" : "Handledning"
       },
       "content_description_back" : {
          "string" : "Tillbaka"
@@ -979,7 +1000,7 @@
          "string" : "Du bläddrar i"
       },
       "dependent_email" : {
-         "string" : ""
+         "string" : "Det minderåriga barnets e-post"
       },
       "dialog_manual_passphrase_cancel" : {
          "string" : "Ångra"
@@ -997,34 +1018,34 @@
          "string" : "E-bibliotekets logotyp"
       },
       "emailNotValid" : {
-         "string" : ""
+         "string" : "Ange en giltig e- postadress."
       },
       "emptyBookmarksMessage" : {
          "string" : "Det finns inga bokmärken för denna bok"
       },
       "emptyHoldsNotLoggedIn" : {
-         "string" : ""
+         "string" : "Logga in för att se dina bokningar."
       },
       "emptyLoansNotLoggedIn" : {
-         "string" : ""
+         "string" : "Skriv in dig för att se dina böcker."
       },
       "errorDetailsTitle" : {
          "string" : "Felinformation"
       },
       "errorFromServer" : {
-         "string" : ""
+         "string" : "Något gick fel. Logga ut och tillbaka in och försök igen."
       },
       "errorInCreation" : {
-         "string" : ""
+         "string" : "Kunde inte avsluta begäran. Kontrollera internetuppkopplingen och försök igen."
       },
       "errorLoginFailed" : {
-         "string" : ""
+         "string" : "Kunde inte logga in"
       },
       "errorPasskeyLoginFailed" : {
-         "string" : ""
+         "string" : "Kunde inte logga in med nyckelkod"
       },
       "errorPasskeyRegisterFailed" : {
-         "string" : ""
+         "string" : "Fel vid registrering av nyckelkod"
       },
       "errorSendReport" : {
          "string" : "Sänd till supportavdelningen"
@@ -1033,7 +1054,7 @@
          "string" : "Steg"
       },
       "errorSuomiFiLoginFailed" : {
-         "string" : ""
+         "string" : "Kunde inte logga in med Suomi.fi"
       },
       "errorTitle" : {
          "string" : "Här är felloggen som skapats över ditt problem:"
@@ -1096,19 +1117,19 @@
          "string" : "Besök katalogen för att lägga till böcker i Mina böcker."
       },
       "fontSize" : {
-         "string" : ""
+         "string" : "Teckenstorlek"
       },
       "get_dependents" : {
-         "string" : ""
+         "string" : "Sök minderåriga barn"
       },
       "guidetext" : {
-         "string" : ""
+         "string" : "Fyll i ett e-postmeddelande där inbjudan ska skickas. Se till att skriva den korrekt innan du skickar."
       },
       "invite_a_dependent" : {
-         "string" : ""
+         "string" : "Bjud in ett minderårigt barn"
       },
       "invite_another_dependent" : {
-         "string" : ""
+         "string" : "Bjud in ett annat minderårigt barn"
       },
       "loginAuthRequired" : {
          "string" : "Autentisering krävs. Fortsätter..."
@@ -1258,13 +1279,13 @@
          "string" : "Dina data har migrerats!"
       },
       "natlibfi_logo" : {
-         "string" : ""
+         "string" : "Finlands nationalbiblioteks logotyp"
       },
       "next" : {
          "string" : "Nästa"
       },
       "no_dependents" : {
-         "string" : ""
+         "string" : "Inga minderåriga barn hittades."
       },
       "notification_channel_description_loans" : {
          "string" : "Meddelanden som hänför sig till dina lån."
@@ -1444,16 +1465,16 @@
          "string" : "Det uppstod ett oväntat undantag vid matchning!"
       },
       "restartPopupAgree" : {
-         "string" : ""
+         "string" : "Bekräfta"
       },
       "restartPopupCancel" : {
-         "string" : ""
+         "string" : "Avbryt"
       },
       "restartPopupMessage" : {
-         "string" : ""
+         "string" : "Språket tillämpas nästa gång applikationen startar."
       },
       "restartPopupTitle" : {
-         "string" : ""
+         "string" : "Bekräfta ändring av programspråk?"
       },
       "revokeACSDeleteRights" : {
          "string" : "Raderar Adobe ACS-behörighetsinformation…"
@@ -1576,7 +1597,7 @@
          "string" : "Välj år"
       },
       "select_dependent" : {
-         "string" : ""
+         "string" : "Välj ett minderårigt barn"
       },
       "selectionAlternateButton" : {
          "string" : "Lägg till ett bibliotek senare"
@@ -1591,7 +1612,7 @@
          "string" : "Läs e-böcker från ditt bibliotek"
       },
       "send_invitation" : {
-         "string" : ""
+         "string" : "Skicka inbjudan"
       },
       "settings" : {
          "string" : "Inställningar"
@@ -1903,7 +1924,7 @@
          "string" : "Användarnamn:"
       },
       "thanks" : {
-         "string" : ""
+         "string" : "Ditt minderåriga barn bör få en inbjudan snart. Råd dem att öppna länken i e-postmeddelandet på sin enhet och skapa en nyckelkod. Denna nyckelkod kan användas för att logga in."
       },
       "tocAccessBookmarkDelete" : {
          "string" : "Radera ett bokmärke"
