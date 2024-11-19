@@ -567,6 +567,15 @@
       "bookIsOnHold" : {
          "string" : "A reservation has been placed for the book '%1$s'"
       },
+      "bookNotEnoughSpaceButton" : {
+         "string" : "Close"
+      },
+      "bookNotEnoughSpaceMessage" : {
+         "string" : "File is too big to store on device. Current free space on device: %1$s. \nFree at least %2$s of space to download the book."
+      },
+      "bookNotEnoughSpaceTitle" : {
+         "string" : "Not enough space!"
+      },
       "bookOpenFailedMessage" : {
          "string" : "There was an error opening the book: (%1$s): %2$s."
       },
@@ -732,11 +741,20 @@
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "You have this book on hold."
       },
+      "catalogBookAvailabilityHeldIndefiniteShort" : {
+         "string" : "On hold"
+      },
       "catalogBookAvailabilityHeldQueue" : {
          "string" : "You are at position %1$d in the queue for this book."
       },
+      "catalogBookAvailabilityHeldQueueShort" : {
+         "string" : "At position: %1$d"
+      },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "You will be able to borrow this book in %1$s."
+      },
+      "catalogBookAvailabilityHeldTimedShort" : {
+         "string" : "Available in: %1$s"
       },
       "catalogBookAvailabilityHoldable" : {
          "string" : "All copies of this book are currently on loan."
@@ -854,6 +872,9 @@
       },
       "catalogListen" : {
          "string" : "Listen"
+      },
+      "catalogLoanTime" : {
+         "string" : "On loan for: %1$s"
       },
       "catalogLoginRequired" : {
          "string" : "Please sign in to continue."
