@@ -3,6 +3,7 @@ package org.nypl.simplified.feeds.api
 import org.librarysimplified.http.api.LSHTTPProblemReport
 import org.nypl.simplified.presentableerror.api.PresentableErrorType
 import org.nypl.simplified.presentableerror.api.Presentables
+import org.slf4j.LoggerFactory
 import java.net.URI
 
 /**
@@ -63,6 +64,8 @@ sealed class FeedLoaderResult {
 
   companion object {
 
+    private val logger =
+      LoggerFactory.getLogger(FeedLoaderResult::class.java)
     /**
      * Wrap an exception, producing a general feed loading error.
      */
@@ -71,6 +74,7 @@ sealed class FeedLoaderResult {
       uri: URI,
       exception: Throwable
     ): FeedLoaderFailure {
+      logger.debug(exception.toString())
       return FeedLoaderFailure.FeedLoaderFailedGeneral(
         problemReport = null,
         exception =

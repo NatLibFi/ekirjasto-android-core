@@ -106,7 +106,13 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
             this.handleOKRequest(context, currentURI, status)
           }
           is LSHTTPResponseStatus.Responded.Error -> {
-            this.handleHTTPError(context, status)
+            if (status.properties.originalStatus == 401) {
+              //AccessToken old, try refreshing!
+              //If returns success, execute the request again
+              //Else inform user that they need to log back in
+            } else {
+              this.handleHTTPError(context, status)
+            }
           }
           is LSHTTPResponseStatus.Failed -> {
             this.handleHTTPFailure(context, status)

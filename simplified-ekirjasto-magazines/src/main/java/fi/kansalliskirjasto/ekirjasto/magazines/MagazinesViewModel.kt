@@ -145,6 +145,7 @@ class MagazinesViewModel(
       }
       is MagazinesHttpResult.MagazinesHttpFailure -> {
         logger.debug("got MagazinesHttpFailure: {}", result.message)
+
         onTokenResult(null)
       }
     }

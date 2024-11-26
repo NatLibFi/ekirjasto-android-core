@@ -132,6 +132,15 @@ sealed class ProfileAccountLoginRequest {
   ) : ProfileAccountLoginRequest()
 
   /**
+   * A request to refresh access token using the possibly old access token.
+   */
+  data class EkirjastoAccessTokenRefresh (
+    override val accountId: AccountID,
+    val description: AccountProviderAuthenticationDescription.Ekirjasto,
+    val accessToken: String,
+  ) : ProfileAccountLoginRequest()
+
+  /**
    * A request to cancel waiting for a login using E-kirjasto authentication.
    */
 

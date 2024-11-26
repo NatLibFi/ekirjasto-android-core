@@ -184,6 +184,10 @@ class CatalogFeedViewModel(
         )  {
           //Happens only on very specific situation when there is a catalog load fail, caused by authentication
           this.logger.debug("reloading feed due to successful login after authentication fail")
+
+          //Could maybe be done here ?
+
+
           this.reloadFeed()
         }
         if ( accountState is AccountLoginState.AccountNotLoggedIn) {
@@ -519,7 +523,7 @@ class CatalogFeedViewModel(
     }
   }
 
-  private fun updateBasicTokenCredentials(
+  private fun updateBasicTokenCredentials( //OO
     feedLoaderResult: FeedLoaderResult,
     account: AccountType?
   ) {
