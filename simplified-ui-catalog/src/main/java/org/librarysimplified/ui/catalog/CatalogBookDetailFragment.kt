@@ -793,7 +793,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   ) {
     this.buttons.removeAllViews()
     
-    val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
+    //val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
+    val createPreviewButton = false
 
     when (bookStatus) {
       is BookStatus.Held.HeldInQueue -> {
