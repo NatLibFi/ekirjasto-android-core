@@ -708,8 +708,10 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   ) {
     this.buttons.removeAllViews()
 
-    val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
-
+    // Do not createPreviewButton button, regarless of statuses
+    //val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
+    val createPreviewButton = false
+    
 //    if (createPreviewButton) {
 //      this.buttons.addView(this.buttonCreator.createButtonSpace())
 //    } else {
@@ -791,7 +793,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   ) {
     this.buttons.removeAllViews()
     
-    val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
+    //val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
+    val createPreviewButton = false
 
     when (bookStatus) {
       is BookStatus.Held.HeldInQueue -> {
