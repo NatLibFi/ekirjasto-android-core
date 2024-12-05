@@ -185,15 +185,5 @@ sealed class AccountAuthenticationCredentials {
     ): AccountAuthenticationCredentials {
       return this.copy(adobeCredentials = newCredentials)
     }
-
-    fun updateAccessToken(accessToken: String?): Ekirjasto {
-      return if (!accessToken.isNullOrBlank()) {
-        this.copy(
-          accessToken = accessToken
-        )
-      } else {
-        this
-      }
-    }
   }
 }

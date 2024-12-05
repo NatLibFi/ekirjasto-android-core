@@ -11,6 +11,7 @@ import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.addCredentialsToProperties
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.getAccessToken
 import org.nypl.simplified.accounts.api.AccountReadableType
+import org.nypl.simplified.books.book_registry.BookStatus
 import org.nypl.simplified.books.book_registry.BookStatus.Held.HeldInQueue
 import org.nypl.simplified.books.book_registry.BookStatus.Held.HeldReady
 import org.nypl.simplified.books.book_registry.BookStatus.Loaned.LoanedNotDownloaded
@@ -106,13 +107,7 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
             this.handleOKRequest(context, currentURI, status)
           }
           is LSHTTPResponseStatus.Responded.Error -> {
-            if (status.properties.originalStatus == 401) {
-              //AccessToken old, try refreshing!
-              //If returns success, execute the request again
-              //Else inform user that they need to log back in
-            } else {
-              this.handleHTTPError(context, status)
-            }
+            this.handleHTTPError(context, status)
           }
           is LSHTTPResponseStatus.Failed -> {
             this.handleHTTPFailure(context, status)
@@ -147,6 +142,10 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
     val report = status.properties.problemReport
     if (report != null) {
       context.taskRecorder.addAttributes(report.toMap())
+
+      if (status.properties.originalStatus == 401) {
+        //Trigger token update
+      }
 
       if (report.type == "http://librarysimplified.org/terms/problem/loan-already-exists") {
         context.taskRecorder.currentStepSucceeded("It turns out we already had a loan for this book.")

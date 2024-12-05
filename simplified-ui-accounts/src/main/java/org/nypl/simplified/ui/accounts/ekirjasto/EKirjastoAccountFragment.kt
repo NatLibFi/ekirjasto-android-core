@@ -66,6 +66,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonLoginPasskey: Button
   private lateinit var buttonRegisterPasskey: Button
   private lateinit var buttonDependents: Button
+
+  private lateinit var buttonRefresh: Button
+
   private lateinit var eulaStatement: TextView
   private lateinit var syncBookmarks: ConstraintLayout
   private lateinit var buttonFeedback: Button
@@ -107,6 +110,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonLoginPasskey = view.findViewById(R.id.buttonLoginPasskey)
     this.buttonRegisterPasskey = view.findViewById(R.id.buttonRegisterPasskey)
     this.buttonDependents = view.findViewById(R.id.buttonInviteDependents)
+
+    this.buttonRefresh = view.findViewById(R.id.buttonRefreshToken)
+
     this.eulaStatement = view.findViewById(R.id.eulaStatement)
     this.buttonAccessibilityStatement = view.findViewById(R.id.accessibilityStatement)
     this.syncBookmarks = view.findViewById(R.id.accountSyncBookmarks)
@@ -200,6 +206,24 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     }
   }
 
+  private fun configureRefreshButton(button: Button) {
+    button.setOnClickListener{
+      logger.debug("Try refreshing accessToken.")
+      val authenticationDescription = this.viewModel.authenticationDescription
+      val credentials = this.viewModel.account.loginState.credentials as AccountAuthenticationCredentials.Ekirjasto
+      val accessToken = credentials.accessToken
+
+      //Launch accessToken refresh
+      this.viewModel.tryAccessTokenRefresh(
+        ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh(
+          accountId = this.parameters.accountID,
+          description = authenticationDescription,
+          accessToken = accessToken
+        )
+      )
+    }
+  }
+
   private fun configureDocViewButton(button: Button, document: DocumentType?){
     button.isEnabled = document != null
     if (document != null) {
@@ -266,6 +290,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
      * Configure the dependents button to switch to the invite fragment
      */
     configureDependentsButton(buttonDependents)
+
+    configureRefreshButton(buttonRefresh)
 
     //Set version text that's shown on the bottom of the page
     val versionString = this.requireContext().getString(R.string.app_version_string, this.viewModel.appVersion)

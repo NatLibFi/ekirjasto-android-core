@@ -104,24 +104,4 @@ interface AccountType : AccountReadableType {
       }
     }
   }
-
-  /**
-   * Update the account's access token if the current credentials are from the Ekirjasto type. This
-   * is needed because the access token may have been updated after a refresh request, so we need to update
-   * the credentials.
-   *
-   * @throws AccountsDatabaseException On database errors
-   */
-  @Throws(AccountsDatabaseException::class)
-  fun updateEkirjastoTokenCredentials(
-    accessToken: String?
-  ) {
-     return updateCredentialsIfAvailable { currentCredentials ->
-      if (currentCredentials is AccountAuthenticationCredentials.Ekirjasto) {
-        currentCredentials.updateAccessToken(accessToken)
-      } else {
-        currentCredentials
-      }
-    }
-  }
 }

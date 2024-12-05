@@ -183,7 +183,7 @@ class ProfileAccountLoginTask(
           this.runEkirjastoComplete(this.request)
         }
 
-        is EkirjastoAccessTokenRefresh -> {
+        is EkirjastoAccessTokenRefresh -> {//
           this.runEkirjastoTokenRefresh(this.request)
         }
 
@@ -356,6 +356,7 @@ class ProfileAccountLoginTask(
     request: EkirjastoAccessTokenRefresh
   ) : TaskResult<Unit> {
     val authenticationURI = request.description.authenticate
+    //Use the possibly old accessToken as the bearer
     val httpRequest = this.http.newRequest(authenticationURI)
       .setAuthorization(
         LSHTTPAuthorizationBearerToken.ofToken(request.accessToken)
@@ -369,6 +370,10 @@ class ProfileAccountLoginTask(
           val (accessToken, patronPermanentID) = getAccessTokenAndPatronFromEkirjastoCirculationResponse(
             node = ObjectMapper().readTree(status.bodyStream)
           )
+          //Log token
+          logger.debug("NEW TOKEN: {}", accessToken)
+          //Log in again using the credentials gained
+          //Set ekirjasto token as null
           this.credentials = AccountAuthenticationCredentials.Ekirjasto(
             accessToken = accessToken,
             patronPermanentID = patronPermanentID,
@@ -378,6 +383,8 @@ class ProfileAccountLoginTask(
             annotationsURI = null,
             deviceRegistrationURI = null
           )
+          //Handle the rest as normal login
+          //Might not be needed
           this.steps.currentStepSucceeded("Ekirjasto authenticate successful")
           this.steps.beginNewStep("Handle Patron User Profile")
           this.handlePatronUserProfile()
@@ -768,7 +775,7 @@ class ProfileAccountLoginTask(
       }
 
       is EkirjastoComplete,
-      is EkirjastoAccessTokenRefresh,
+      is EkirjastoAccessTokenRefresh,//
       is EkirjastoPasskeyComplete,
       is EkirjastoCancel -> {
           this.account.provider.authentication is Ekirjasto ||
@@ -972,7 +979,7 @@ class ProfileAccountLoginTask(
       is OAuthWithIntermediaryComplete,
       is OAuthWithIntermediaryCancel,
       is EkirjastoComplete,
-      is EkirjastoAccessTokenRefresh,
+      is EkirjastoAccessTokenRefresh,//
       is EkirjastoCancel -> {
         when (this.account.loginState) {
           is AccountLoggingInWaitingForExternalAuthentication -> {
@@ -1084,7 +1091,7 @@ class ProfileAccountLoginTask(
         this.request.description
       }
       is EkirjastoPasskeyComplete,
-      is EkirjastoAccessTokenRefresh,
+      is EkirjastoAccessTokenRefresh,//
       is EkirjastoComplete -> {
         when (val loginState = this.account.loginState) {
           is AccountLoggingIn -> {

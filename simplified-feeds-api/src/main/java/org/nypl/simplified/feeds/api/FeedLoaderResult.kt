@@ -74,7 +74,6 @@ sealed class FeedLoaderResult {
       uri: URI,
       exception: Throwable
     ): FeedLoaderFailure {
-      logger.debug(exception.toString())
       return FeedLoaderFailure.FeedLoaderFailedGeneral(
         problemReport = null,
         exception =

@@ -209,6 +209,13 @@ class EkirjastoAccountViewModel(
     this.profilesController.profileAccountLogin(request)
   }
 
+  fun tryAccessTokenRefresh(request: ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh) {
+    logger.debug("OLD TOKEN {}", request.accessToken)
+    //Launch the refresh from the main controller of the app
+    //Can add reaction here if wanted, like a popup
+    this.profilesController.profileAccountAccessTokenRefresh(request)
+  }
+
   fun tryLogout() {
     this.pendingLogout = true
 

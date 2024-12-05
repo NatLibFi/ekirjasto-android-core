@@ -18,6 +18,7 @@ import org.nypl.drm.core.AdobeAdeptExecutorType
 import org.nypl.simplified.accounts.api.AccountEvent
 import org.nypl.simplified.accounts.api.AccountEventUpdated
 import org.nypl.simplified.accounts.api.AccountID
+import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.accounts.api.AccountLoginStringResourcesType
 import org.nypl.simplified.accounts.api.AccountLogoutStringResourcesType
 import org.nypl.simplified.accounts.api.AccountProviderType
@@ -402,19 +403,30 @@ class Controller private constructor(
     ).call()
   }
 
-  override fun profileAccountAccessTokenRefresh(
+  override fun profileAccountAccessTokenRefresh(//
     request: ProfileAccountLoginRequest
   ): FluentFuture<TaskResult<Unit>> {
+    //Can be used to show a popup after failure
+    //Unsure what to do if successful
     return this.submitTask { this.runProfileAccountAccessTokenRefresh(request) }
-      .flatMap { result -> this.runPopupIfUpdateFailed(result, request.accountId) }
-    TODO("Not yet implemented")
+      //.flatMap { result -> this.runPopupIfUpdateFailed(result, request.accountId) }
   }
 
-  private fun runProfileAccountAccessTokenRefresh(
+  private fun runProfileAccountAccessTokenRefresh(//
     request: ProfileAccountLoginRequest
   ): TaskResult<Unit> {
     val profile = this.profileCurrent()
     val account = profile.account(request.accountId)
+    //Set the login state to reflect that we are doing some authentication things
+    //Is needed because otherwise the token refresh is considered and un-needed login try
+    //And is not done
+    account.setLoginState(
+      AccountLoginState.AccountLoggingInWaitingForExternalAuthentication(
+        account.provider.authentication,
+        "accessToken refreshing"
+      )
+    )
+
     return ProfileAccountLoginTask(
       adeptExecutor = this.adobeDrm,
       http = this.lsHttp,
@@ -427,14 +439,14 @@ class Controller private constructor(
     ).call()
   }
 
-  private fun runPopupIfUpdateFailed(
+  private fun runPopupIfUpdateFailed(//
     result: TaskResult<Unit>,
     accountID: AccountID
   ): FluentFuture<TaskResult<Unit>> {
     return when (result) {
       is TaskResult.Success -> {
         this.logger.debug("accessToken update succeeded: retry previous action")
-        TODO()
+        FluentFutureExtensions.fluentFutureOfValue(result)
       }
       is TaskResult.Failure -> {
         this.logger.debug("refresh didn't succeed: inform user about logging in again and refresh views")
@@ -545,7 +557,7 @@ class Controller private constructor(
   override fun profileAccountLogout(
     accountID: AccountID
   ): FluentFuture<TaskResult<Unit>> {
-    //CALL THIS IF REFRESH UNSUCCESSFUL?
+    //CALL THIS IF REFRESH UNSUCCESSFUL???
     return this.submitTask {
       val profile = this.profileCurrent()
       val account = profile.account(accountID)
