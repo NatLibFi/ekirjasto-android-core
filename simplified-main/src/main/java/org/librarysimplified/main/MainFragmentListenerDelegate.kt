@@ -331,7 +331,6 @@ internal class MainFragmentListenerDelegate(
     this.profilesController.profileUpdate { description ->
       description.copy(preferences = description.preferences.copy(mostRecentAccount = accountID))
     }.get()
-    this.profilesController.profileCurrent()
   }
 
   private fun handleAccountListEvent(
@@ -502,6 +501,10 @@ internal class MainFragmentListenerDelegate(
     return when (event) {
       MagazinesEvent.GoUpwards -> {
         this.goUpwards()
+        state
+      }
+      MagazinesEvent.LoginRequired -> {
+        openLogin()
         state
       }
       else -> state

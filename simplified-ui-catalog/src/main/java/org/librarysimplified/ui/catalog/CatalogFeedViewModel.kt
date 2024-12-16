@@ -1083,4 +1083,12 @@ class CatalogFeedViewModel(
       )
     }
   }
+  /**
+   * Opens the login dialog without any checks
+   */
+  override fun openLoginDialog(accountID: AccountID) {
+    this.listener.post(
+      CatalogFeedEvent.LoginRequired(accountID)
+    )
+  }
 }

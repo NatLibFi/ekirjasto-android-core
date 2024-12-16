@@ -24,6 +24,7 @@ import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.opdsFeedEnt
 import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.opdsFeedEntryParseError
 import org.nypl.simplified.books.borrowing.internal.BorrowHTTP.isMimeTypeAcceptable
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException
+import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowAccessTokenExpired
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowReachedLoanLimit
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskFailed
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskHaltedEarly
@@ -120,6 +121,8 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
     } catch (e: BorrowReachedLoanLimit) {
       context.bookReachedLoanLimit()
       throw e
+    } catch (e: BorrowAccessTokenExpired) {
+      throw e
     }
   }
 
@@ -143,10 +146,6 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
     if (report != null) {
       context.taskRecorder.addAttributes(report.toMap())
 
-      if (status.properties.originalStatus == 401) {
-        //Trigger token update
-      }
-
       if (report.type == "http://librarysimplified.org/terms/problem/loan-already-exists") {
         context.taskRecorder.currentStepSucceeded("It turns out we already had a loan for this book.")
         context.bookPublishStatus(
@@ -169,6 +168,11 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
 
     if (report?.type == "http://librarysimplified.org/terms/problem/loan-limit-reached") {
       throw BorrowReachedLoanLimit()
+    }
+
+    //Trigger a special exception if access token has expired
+    if (report?.type == "http://librarysimplified.org/terms/problem/credentials-invalid") {
+      throw BorrowAccessTokenExpired()
     }
 
     throw BorrowSubtaskFailed()

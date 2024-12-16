@@ -128,7 +128,7 @@ interface ProfilesControllerType {
    */
 
   fun profileAccountAccessTokenRefresh(
-    request: ProfileAccountLoginRequest
+    request: ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh
   ): FluentFuture<TaskResult<Unit>>
 
   /**

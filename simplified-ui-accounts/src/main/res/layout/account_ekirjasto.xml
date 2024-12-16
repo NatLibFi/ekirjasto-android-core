@@ -70,14 +70,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/invite_a_dependent" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonRefreshToken"
-                style="@style/Palace.Button.Outlined.Settings.Arrowed"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Refresh token" />
-
             <TextView
                 android:id="@+id/eulaStatement"
                 style="@style/Palace.TextViewStyle.Settings"

@@ -275,6 +275,13 @@ class CatalogPagedViewHolder(
     bookStatus: BookStatus.FailedLoan,
     book: Book
   ) {
+    //If fail is due to token expiration, treat specially
+    if (bookStatus.message.contains("401") || bookStatus.message.contains("400")) {
+      logger.debug("token refresh failed, trigger popup")
+      if (!popUpShown) {
+        onLogInNeeded(book)
+      }
+    }
     this.setVisibilityIfNecessary(this.corrupt, View.GONE)
     this.setVisibilityIfNecessary(this.error, View.VISIBLE)
     this.setVisibilityIfNecessary(this.idle, View.GONE)
@@ -289,6 +296,29 @@ class CatalogPagedViewHolder(
     this.errorRetry.setOnClickListener {
       this.listener.borrowMaybeAuthenticated(book)
     }
+  }
+
+
+  /**
+   * Show a popup informing user of token expiration and open up the login page when dismissed.
+   */
+  private fun onLogInNeeded(book: Book) {
+    logger.debug("Showing 'Please login' popup")
+    //Ensure only one popup is shown at a time
+    popUpShown = true
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    builder
+      .setMessage(R.string.bookSessionExpiredMessage)
+      .setTitle(R.string.bookSessionExpiredTitle)
+      .setPositiveButton(R.string.bookSessionExpiredButton) { dialog, which ->
+        listener.openLoginDialog(book.account)
+        popUpShown = false
+        dialog.dismiss()
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+
   }
 
   private fun onBookStatusLoanedNotDownloaded(
@@ -676,6 +706,7 @@ class CatalogPagedViewHolder(
       .setPositiveButton(R.string.bookNotEnoughSpaceButton) { dialog, which ->
         //Set the popup as closed
         popUpShown = false
+        dialog.dismiss()
       }
 
     val dialog: AlertDialog = builder.create()

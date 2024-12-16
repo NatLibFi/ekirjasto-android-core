@@ -1,7 +1,9 @@
 package org.nypl.simplified.books.controller
 
 import com.google.common.collect.ImmutableList
+import com.google.common.util.concurrent.AsyncFunction
 import com.google.common.util.concurrent.FluentFuture
+import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListeningExecutorService
 import com.google.common.util.concurrent.MoreExecutors
 import com.google.common.util.concurrent.SettableFuture
@@ -15,12 +17,14 @@ import org.joda.time.Instant
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.drm.core.AdobeAdeptExecutorType
+import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
 import org.nypl.simplified.accounts.api.AccountEvent
 import org.nypl.simplified.accounts.api.AccountEventUpdated
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.accounts.api.AccountLoginStringResourcesType
 import org.nypl.simplified.accounts.api.AccountLogoutStringResourcesType
+import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.api.AccountProviderType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.accounts.database.api.AccountsDatabaseNonexistentException
@@ -403,17 +407,31 @@ class Controller private constructor(
     ).call()
   }
 
-  override fun profileAccountAccessTokenRefresh(//
-    request: ProfileAccountLoginRequest
+  /**
+   * The function that should be called from other parths of the code
+   * if they received the 401 request to refresh the accessToken.
+   * Function attempts to refresh the token and returns a FluentFuture
+   * of the result. On success, the action that triggered the 401 should be
+   * attempted again. On failure, user should be asked to log in again.
+   */
+  override fun profileAccountAccessTokenRefresh(
+    request: ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh
   ): FluentFuture<TaskResult<Unit>> {
     //Can be used to show a popup after failure
-    //Unsure what to do if successful
+    //Success just returns task success
+    logger.debug("profileAccountAccessTokenRefresh")
     return this.submitTask { this.runProfileAccountAccessTokenRefresh(request) }
-      //.flatMap { result -> this.runPopupIfUpdateFailed(result, request.accountId) }
+      .flatMap { result -> this.runLoginStateChangeIfUpdateFailed(result, request.accountId) }
   }
 
-  private fun runProfileAccountAccessTokenRefresh(//
-    request: ProfileAccountLoginRequest
+  /**
+   * Function triggered by profileAccountAccessTokenRefresh. Runs the task of refreshing
+   * the token and handles login state changes. Requires a ProfileAccountLogin request
+   * matching to the EkirjastoAccessTokenRefresh request.
+   * Returns the actual task result.
+   */
+  private fun runProfileAccountAccessTokenRefresh(
+    request: ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh
   ): TaskResult<Unit> {
     val profile = this.profileCurrent()
     val account = profile.account(request.accountId)
@@ -426,7 +444,8 @@ class Controller private constructor(
         "accessToken refreshing"
       )
     )
-
+    //Run the profileAccountLoginTask, where the request is a
+    //ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh
     return ProfileAccountLoginTask(
       adeptExecutor = this.adobeDrm,
       http = this.lsHttp,
@@ -439,17 +458,31 @@ class Controller private constructor(
     ).call()
   }
 
-  private fun runPopupIfUpdateFailed(//
+  /**
+   * Handle the refresh result in the appropriate manner.
+   */
+  private fun runLoginStateChangeIfUpdateFailed(
     result: TaskResult<Unit>,
     accountID: AccountID
   ): FluentFuture<TaskResult<Unit>> {
     return when (result) {
       is TaskResult.Success -> {
-        this.logger.debug("accessToken update succeeded: retry previous action")
+        this.logger.debug("accessToken update succeeded: retrying previous action")
+        //No need to do anything here anymore, so we just return the success value
         FluentFutureExtensions.fluentFutureOfValue(result)
       }
       is TaskResult.Failure -> {
         this.logger.debug("refresh didn't succeed: inform user about logging in again and refresh views")
+        //Do not trigger actual logout here, as the books are deleted on logout, which is not user friendly
+        //When the logout is not deliberately done by the user
+        val profile = this.profileCurrent()
+        val account = profile.account(accountID)
+
+        //Instead of full logout, set the state of current account to AccountNotLoggedIn
+        //This way the user maintains their downloads
+        account.setLoginState(
+          AccountLoginState.AccountNotLoggedIn
+        )
         FluentFutureExtensions.fluentFutureOfValue(result)
       }
     }
@@ -557,7 +590,6 @@ class Controller private constructor(
   override fun profileAccountLogout(
     accountID: AccountID
   ): FluentFuture<TaskResult<Unit>> {
-    //CALL THIS IF REFRESH UNSUCCESSFUL???
     return this.submitTask {
       val profile = this.profileCurrent()
       val account = profile.account(accountID)
@@ -647,6 +679,50 @@ class Controller private constructor(
         borrows[bookID] = borrowTask
         borrowTask.execute()
       }
+    ).transformAsync(AsyncFunction { taskResult ->
+      //Transform the answer if the server responded with 401, marked by the result being
+      //"accessToken refresh needed"
+      if (taskResult is TaskResult.Success<*> && taskResult.result == "accessToken refresh needed") {
+        //Run the accessToken refresh
+        executeProfileAccountAccessTokenRefresh(accountID).transformAsync(AsyncFunction { tokenResult ->
+          //In order to make the user not have to do anything
+          //Try to take the loan again if the accessToken refresh is successful
+          if (tokenResult is TaskResult.Success) {
+            logger.debug("Attempt to execute borrow again")
+            val borrowTask = borrows[bookID]!!
+            submitTask(Callable { borrowTask.execute() })
+          } else {
+            //If token lookup fails, return the need to show the login popup
+            Futures.immediateFuture(tokenResult)
+          }
+        }, MoreExecutors.directExecutor())
+      } else {
+        //In all other cases, return the value of the original borrowTask
+        Futures.immediateFuture(taskResult)
+      }
+    }, MoreExecutors.directExecutor())
+  }
+
+  /**
+   * Execute the account token refresh. If it succeeds, the previous task should be rerun.
+   */
+  fun executeProfileAccountAccessTokenRefresh ( accountID: AccountID
+  ): FluentFuture<TaskResult<Unit>>{
+    logger.debug("AttemptingAccessTokenRefresh")
+    //Lookup all the values needed to make the ProfileAccountLoginRequest
+    //We only have ekirjastoProfile, so currentProfile is always the correct one
+    val profile = this.profileCurrent()
+    val account = profile.account(accountID)
+    val credentials = account.loginState.credentials as AccountAuthenticationCredentials.Ekirjasto
+    val authenticationDescription = account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
+    val accessToken = credentials.accessToken
+    //Run the refresh and return the fluent future
+    return this.profileAccountAccessTokenRefresh(
+      ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh(
+        accountId = accountID,
+        description = authenticationDescription,
+        accessToken = accessToken
+      )
     )
   }
 
@@ -707,18 +783,52 @@ class Controller private constructor(
   ): FluentFuture<TaskResult<Unit>> {
     this.publishRequestingDelete(bookId)
     return this.submitTask(
-      BookRevokeTask(
-        accountID = accountID,
-        profileID = this.profileCurrent().id,
-        profiles = this.profiles,
-        adobeDRM = this.adobeDrm,
-        bookID = bookId,
-        bookRegistry = this.bookRegistry,
-        feedLoader = this.feedLoader,
-        onNewBookEntry = onNewBookEntry,
-        revokeStrings = this.revokeStrings
-      )
-    )
+      Callable<TaskResult<Unit>> {
+        val revokeTask = BookRevokeTask(
+          accountID = accountID,
+          profileID = this.profileCurrent().id,
+          profiles = this.profiles,
+          adobeDRM = this.adobeDrm,
+          bookID = bookId,
+          bookRegistry = this.bookRegistry,
+          feedLoader = this.feedLoader,
+          onNewBookEntry = onNewBookEntry,
+          revokeStrings = this.revokeStrings
+        )
+        revokeTask.call()
+      }
+    ).transformAsync(AsyncFunction { taskResult ->
+      //Check if the result was a need to refresh the accessToken
+      //BookRevokeTask does special error handling, and if the result is 401, it throws
+      //A special error, which can be caught with the error code of "accessTokenExpired"
+      if (taskResult is TaskResult.Failure<Unit> && taskResult.lastErrorCode == "accessTokenExpired" ) {
+        //In order to make the user not have to do anything
+        //Try to return the book again if the accessToken refresh is successful
+        executeProfileAccountAccessTokenRefresh(accountID).transformAsync(AsyncFunction { tokenResult ->
+          if (tokenResult is TaskResult.Success) {
+            logger.debug("Attempt to execute return again")
+            val revokeTask = BookRevokeTask(
+              accountID = accountID,
+              profileID = this.profileCurrent().id,
+              profiles = this.profiles,
+              adobeDRM = this.adobeDrm,
+              bookID = bookId,
+              bookRegistry = this.bookRegistry,
+              feedLoader = this.feedLoader,
+              onNewBookEntry = onNewBookEntry,
+              revokeStrings = this.revokeStrings
+            )
+            submitTask(Callable { revokeTask.call() })
+          } else {
+            //If accessToken refresh fails, return the result that should popup the login
+            Futures.immediateFuture(tokenResult)
+          }
+        }, MoreExecutors.directExecutor())
+      } else {
+        //In other errors return the normal bookRevoke answer
+        Futures.immediateFuture(taskResult)
+      }
+    }, MoreExecutors.directExecutor())
   }
 
   override fun bookDelete(

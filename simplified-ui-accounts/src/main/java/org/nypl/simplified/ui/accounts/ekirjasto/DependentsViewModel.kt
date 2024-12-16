@@ -1,5 +1,6 @@
 package org.nypl.simplified.ui.accounts.ekirjasto
 
+import androidx.annotation.GuardedBy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.google.common.util.concurrent.AsyncFunction
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.MoreExecutors
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import one.irradia.mime.api.MIMEType
@@ -19,9 +26,12 @@ import org.librarysimplified.services.api.Services
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.database.api.AccountType
+import org.nypl.simplified.futures.FluentFutureExtensions.map
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
+import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.slf4j.LoggerFactory
 import java.net.URI
 import java.nio.charset.Charset
@@ -32,6 +42,7 @@ class DependentsViewModel(
   //Get the services needed for functionalities
   private val services = Services.serviceDirectory()
   private val profiles = services.requireService(ProfilesControllerType::class.java)
+  private val dependentsHttp= services.requireService(DependentsHttp::class.java)
   private val http = services.requireService(LSHTTPClientType::class.java)
   private val logger = LoggerFactory.getLogger(DependentsViewModel::class.java)
   private val steps: TaskRecorderType = TaskRecorder.create()
@@ -43,10 +54,39 @@ class DependentsViewModel(
   val dependentListLive: LiveData<List<Dependent>>
     get() = dependentList
 
-  //Ekirjasto token returned by circulation
-  private lateinit var ekirjastoToken : String
+  //Create dependentsHttpResults we want to observe changes to
+  @GuardedBy("dependentsHttpResults")
+  private val dependentsHttpResults =
+    PublishSubject.create<DependentsHttpResult>()
+
+  //Observe the changes of the dependentsHTTPResults
+  private val subscriptions =
+    CompositeDisposable(
+      dependentsHttpResults
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(this::onDependentsHttpResult)
+    )
+
   //Dependent post URI
   private lateinit var dependentPostURI: URI
+
+  //Mutable state of the dependents
+  private val stateMutable: MutableLiveData<DependentsState> =
+    MutableLiveData(DependentsState.DependentsLoading(null))
+
+  //Observable state
+  val stateLive: LiveData<DependentsState>
+    get() = stateMutable
+
+  //Actual state, returns statelive when asked by observers
+  private val state: DependentsState
+    get() = stateLive.value!!
+
+  //The ekirjasto token currently stored in fragment state
+  //Is ekirjasto token if successful token has been fetched
+  //Otherwise null
+  val token: String?
+    get() = state.ekirjastoToken
 
   //Error message
   private val error =  MutableLiveData<String>()
@@ -73,11 +113,10 @@ class DependentsViewModel(
   }
 
   /**
-   * Handle the dependents lookup. Function makes a call to circulation to get ekirjasto token,
-   * and uses it to get dependents from API. Updates the found dependents to the observable
-   * dependentList.
+   * Handle the ekirjastoToken lookup. Function makes a call to circulation to get ekirjasto token
+   * and updates dependentsHTTPresult.
    */
-  fun lookupDependents() {
+  fun lookupTokenForDependents() {
     //Get account information
     //Get id of default account, that we are always on
     val accountId = getDefaultAccount()!!.id
@@ -92,116 +131,121 @@ class DependentsViewModel(
       account.provider.authentication as? AccountProviderAuthenticationDescription.Ekirjasto
     steps.beginNewStep("Get token and patron info from profile")
     val circulationToken = credentials?.accessToken
-    val patron = credentials?.patronPermanentID
     steps.currentStepSucceeded("Token and patron found in profile")
     steps.beginNewStep("Get the dependent and token URIs from description")
     val ekirjastoTokenUrl = ekirjastoAuthDescription?.ekirjasto_token
-    val dependentURI = URI(ekirjastoAuthDescription?.relations.toString().replace("patron", patron!!))
     this.dependentPostURI = ekirjastoAuthDescription?.invite!!
     steps.currentStepSucceeded("URIs found in description")
 
     //Get the ekirjastoToken from circulation
     steps.beginNewStep("Get Ekirjasto token")
-    this.viewModelScope.launch(Dispatchers.IO) {
-      // Create the request for ekirjasto token, using circulation token as bearer
-      val tokenRequest = createGetRequest(ekirjastoTokenUrl!!, circulationToken!!)
-      tokenRequest.execute().use { response ->
-        when (val status = response.status) {
-          is LSHTTPResponseStatus.Responded.OK -> {
-            //return gives us a token that is to be used in loikka calls
-            val mapper = ObjectMapper()
-            val jsonNode = mapper.readTree(status.bodyStream)
-            //extract the token from answer
-            ekirjastoToken = jsonNode.get("token").asText()
-            steps.currentStepSucceeded("Got Ekirjasto token")
-          }
-          is LSHTTPResponseStatus.Responded.Error -> {
-            //Handle error by logging and informing user
-            logger.warn("fetchEkirjastoToken error: {}", response)
-            logger.warn("Error ${response.status}: ${response.properties?.message}")
-            steps.currentStepFailed("Error getting ekirjastoToken", response.properties!!.message)
-            error.postValue("Error")
-          }
-          is LSHTTPResponseStatus.Failed -> {
-            //Handle error by logging and informing user
-            logger.warn("fetchEkirjastoToken failed: {}", response)
-            logger.warn("Failed ${response.status}: ${response.properties?.message}")
-            steps.currentStepFailed("Failed to get ekirjastoToken", response.properties!!.message)
-            error.postValue("Failed")
-          }
-        }
-      }
-      //Get the dependents
-      steps.beginNewStep("Start dependents lookup")
+    val future = dependentsHttp.fetchURI(
+      ekirjastoTokenUrl!!,
+      circulationToken!!,
+      false
+    )
+    future.map { dependentsHttpResult ->
+      logger.debug("dependentsHttpResult: {}", dependentsHttpResult)
 
-      //Create dependents request, using ekirjastotoken as bearer
-      val dependentsRequest = createGetRequest(dependentURI, ekirjastoToken)
-      dependentsRequest.execute().use { response ->
-        when (val status = response.status) {
-          is LSHTTPResponseStatus.Responded.OK -> {
-            //currently call returns list of items, that are the dependents
-            //the list is called items (for some reason)
-
-            //Get a mapper for mapping the dependent values
-            val mapper = ObjectMapper()
-            //Read into json node the server answer
-            val jsonNode = mapper.readTree(status.bodyStream)
-            //create an array node from the values listed as items
-            val arrayNode = jsonNode["items"] as ArrayNode
-            //get an iterator of the elements aka. dependents
-            val itr = arrayNode.elements()
-            steps.currentStepSucceeded("Dependents looked up and listed")
-
-            //list of dependents that are returned to fragment
-            val dependents = mutableListOf<Dependent>()
-            //iterate through the dependents as long as there are values
-            while (itr.hasNext()) {
-              //Next dependent from the list
-              val dep = itr.next()
-              //Convert into a dependent
-              val user = Dependent(
-                firstName = dep["firstName"].asText(),
-                lastName = dep["lastName"].asText(),
-                govId = dep["govId"].asText()
-              )
-              // add user to list
-              dependents.add(user)
-            }
-            steps.beginNewStep("Update dependents list started")
-            //Update the observable dependents list
-            dependentList.postValue(dependents)
-            steps.currentStepSucceeded("Dependents list updated")
-            return@launch
-          }
-
-          is LSHTTPResponseStatus.Responded.Error -> {
-            //Handle error by logging and informing user
-            logger.warn("fetchDependents error: {}", response)
-            logger.warn("Error ${response.status}: ${response.properties?.message}")
-            error.postValue("Error")
-
-          }
-          is LSHTTPResponseStatus.Failed -> {
-            //Handle error by logging and informing user
-            logger.warn("fetchDependents failed: {}", response)
-            logger.warn("Failed ${response.status}: ${response.properties?.message}")
-            error.postValue("Failed")
-          }
-        }
+      //Update the dependentsHttpResult that is observed with the returned one
+      synchronized(dependentsHttpResult) {
+        dependentsHttpResults.onNext(dependentsHttpResult)
       }
     }
   }
 
   /**
-   * Create a get request to provided uri with provided token.
+   * Observer for changes in the DependentsHttpResult. Takes action
+   * based on which result is returned. Is responsible for triggering token refresh
+   * if needed.
    */
-  private fun createGetRequest(targetURI: URI, bearerToken: String): LSHTTPRequestType {
-    //Return the request
-    return this.http.newRequest(targetURI)
-      .setAuthorization(
-        LSHTTPAuthorizationBearerToken.ofToken(bearerToken)
-      )
-      .build()
+  private fun onDependentsHttpResult(result: DependentsHttpResult) {
+    logger.debug("run onDependentsHttpResult")
+    when (result) {
+      is DependentsHttpResult.DependentsHttpTokenSuccess -> {
+        //ekirjastoToken was fetched successfully
+        logger.debug("got MagazinesHttpSuccess: {}", result.ekirjastoToken)
+        onTokenResult(result.ekirjastoToken)
+      }
+      is DependentsHttpResult.DependentsHttpTokenError -> {
+        //If error is 401, we try to refresh the circulation token
+        if (result.message == "accessToken refresh needed") {
+          logger.debug("Try refreshing accessToken")
+          val account = profiles.profileCurrent().mostRecentAccount()
+          val authenticationDescription = account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
+          val credentials = account.loginState.credentials as AccountAuthenticationCredentials.Ekirjasto
+          val accessToken = credentials.accessToken
+
+          //Launch accessToken refresh
+          val refreshResult = profiles.profileAccountAccessTokenRefresh(
+            ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh(
+              accountId = account.id,
+              description = authenticationDescription,
+              accessToken = accessToken
+            )
+          ).transformAsync(AsyncFunction { taskResult ->
+            //If refresh successful, lookup ekirjastoToken again
+            if(taskResult is TaskResult.Success) {
+              this.lookupTokenForDependents()
+            }
+            //Otherwise just return the result
+            Futures.immediateFuture(taskResult)
+          }, MoreExecutors.directExecutor())
+        } else {
+          //On other results errors in token lookup, token result is set to null
+          logger.debug("got DependentsHttpError: {}", result.message)
+          //Inform fragment about error
+          error.postValue("Error")
+          onTokenResult(null)
+        }
+      }
+      is DependentsHttpResult.DependentsHttpTokenFailure -> {
+        //Inform the fragment to show the failure message
+        error.postValue("Failure")
+        //Set the token as failure
+        onTokenResult("Failure")
+      }
+      is DependentsHttpResult.DependentsHttpDependentLookupSuccess -> {
+        //create an array node from the values listed as items
+        steps.beginNewStep("Update dependents list started")
+        //Update the observable dependents list
+        dependentList.postValue(result.dependents)
+        steps.currentStepSucceeded("Dependents list updated")
+      }
+      is DependentsHttpResult.DependentsHttpDependentLookupFailure -> {
+        //Handle failure by logging and informing user
+        logger.warn(result.message)
+        error.postValue("Failure")
+        onTokenResult("Failure")
+      }
+
+      is DependentsHttpResult.DependentsHttpDependentLookupError -> {
+        //Handle error by logging and informing user
+        logger.warn(result.message)
+        error.postValue("Error")
+        onTokenResult("Error")
+      }
+
+    }
+  }
+
+  /**
+   * Update the state based on the response.
+   */
+  private fun onTokenResult(token: String?) {
+    if (token == null) {
+      stateMutable.value = DependentsState.EkirjastoTokenLoadFailed(null)
+    }
+    if (token == "refresh") {
+      stateMutable.value = DependentsState.DependentsLoading(null)
+    }
+    if (token == "Error") {
+      stateMutable.value = DependentsState.DependentsLookupError(null)
+    }
+    //If ekirjastoToken lookup successful, set the token into the state
+    else {
+      stateMutable.value = DependentsState.DependentsTokenFound(token)
+    }
   }
 
   /**
@@ -247,6 +291,42 @@ class DependentsViewModel(
       }
     }
 
+  fun lookupDependents() {
+    //Get the dependents
+    steps.beginNewStep("Start dependents lookup")
+//Get account information
+    //Get id of default account, that we are always on
+    val accountId = getDefaultAccount()!!.id
+    //We only have one profile, ekirjasto
+    val profile = profiles.profileCurrent()
+    //Get the matching account from ekirjasto
+    val account = profile.account(accountId)
+    //Credentials are of the type Ekirjasto always
+    val credentials = account.loginState.credentials as? AccountAuthenticationCredentials.Ekirjasto
+    //AuthDescription contains URIs used
+    val ekirjastoAuthDescription =
+      account.provider.authentication as? AccountProviderAuthenticationDescription.Ekirjasto
+    steps.beginNewStep("Get token and patron info from profile")
+
+    val patron = credentials?.patronPermanentID
+    val dependentURI = URI(ekirjastoAuthDescription?.relations.toString().replace("patron", patron!!))
+    //Create dependents request, using ekirjastotoken as bearer
+
+    steps.beginNewStep("Get Ekirjasto token")
+    val future = dependentsHttp.fetchURI(
+      dependentURI,
+      token!!,
+      true
+    )
+    future.map { dependentsHttpResult ->
+      logger.debug("dependentsHttpResult: {}", dependentsHttpResult)
+
+      synchronized(dependentsHttpResult) {
+        dependentsHttpResults.onNext(dependentsHttpResult)
+      }
+    }
+  }
+
   /**
    * Create a post request with the dependent as the request body.
    */
@@ -264,7 +344,7 @@ class DependentsViewModel(
     // Return the request
     return this.http.newRequest(this.dependentPostURI)
       .setAuthorization(
-        LSHTTPAuthorizationBearerToken.ofToken(ekirjastoToken)
+        LSHTTPAuthorizationBearerToken.ofToken(token!!)
       )
       .setMethod(
         LSHTTPRequestBuilderType.Method.Post(
@@ -273,5 +353,9 @@ class DependentsViewModel(
         )
       )
       .build()
+  }
+  override fun onCleared() {
+    super.onCleared()
+    subscriptions.clear()
   }
 }

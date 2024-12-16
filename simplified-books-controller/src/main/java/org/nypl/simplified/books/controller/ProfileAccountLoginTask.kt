@@ -183,7 +183,7 @@ class ProfileAccountLoginTask(
           this.runEkirjastoComplete(this.request)
         }
 
-        is EkirjastoAccessTokenRefresh -> {//
+        is EkirjastoAccessTokenRefresh -> {
           this.runEkirjastoTokenRefresh(this.request)
         }
 
@@ -367,11 +367,10 @@ class ProfileAccountLoginTask(
     httpRequest.execute().use { response ->
       when (val status = response.status) {
         is LSHTTPResponseStatus.Responded.OK -> {
+          //Get the updatable values from the response
           val (accessToken, patronPermanentID) = getAccessTokenAndPatronFromEkirjastoCirculationResponse(
             node = ObjectMapper().readTree(status.bodyStream)
           )
-          //Log token
-          logger.debug("NEW TOKEN: {}", accessToken)
           //Log in again using the credentials gained
           //Set ekirjasto token as null
           this.credentials = AccountAuthenticationCredentials.Ekirjasto(
@@ -384,7 +383,6 @@ class ProfileAccountLoginTask(
             deviceRegistrationURI = null
           )
           //Handle the rest as normal login
-          //Might not be needed
           this.steps.currentStepSucceeded("Ekirjasto authenticate successful")
           this.steps.beginNewStep("Handle Patron User Profile")
           this.handlePatronUserProfile()
@@ -403,13 +401,12 @@ class ProfileAccountLoginTask(
 
         is LSHTTPResponseStatus.Responded.Error -> {
           //If refresh ask returns 401, user needs to log back in
-          //handleAccessTokenError(authenticationURI, status)
-          if(status.properties.problemReport?.status == 401) {
-            //NEEDS TO LOG IN AGAIN, INFORM USER OR THROW login POPUP
+          //But should log out on all errors
+          if(status.properties.problemReport?.status != 401) {
+            //If status is not 401, the error is unexpected, so handle the error but log out still
+            handleProfileAccountLoginError(authenticationURI, status)
           }
           this.steps.currentStepSucceeded("accessToken refresh denied, manual log in required")
-          this.account.setLoginState(AccountLoggingOut(this.account.loginState.credentials!!, ""))
-          //Trigger logout at calling spot due to failure finish?
           return this.steps.finishFailure()
         }
 
