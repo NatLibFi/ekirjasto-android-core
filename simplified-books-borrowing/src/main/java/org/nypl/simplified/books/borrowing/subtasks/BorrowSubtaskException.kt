@@ -32,4 +32,10 @@ sealed class BorrowSubtaskException : Exception() {
    */
 
   class BorrowReachedLoanLimit : BorrowSubtaskException()
+
+  /**
+   * The subtask failed because access token has expired. The borrow should be attempted
+   * again after trying to refresh the token.
+   */
+  class BorrowAccessTokenExpired : BorrowSubtaskException()
 }

@@ -45,6 +45,7 @@ import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.Ek
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoInitiatePassKey
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoInitiateSuomiFi
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoPasskeyComplete
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryCancel
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryComplete
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OAuthWithIntermediaryInitiate
@@ -180,6 +181,10 @@ class ProfileAccountLoginTask(
 
         is EkirjastoComplete -> {
           this.runEkirjastoComplete(this.request)
+        }
+
+        is EkirjastoAccessTokenRefresh -> {
+          this.runEkirjastoTokenRefresh(this.request)
         }
 
         is EkirjastoCancel -> {
@@ -344,6 +349,77 @@ class ProfileAccountLoginTask(
       )
     )
     return this.steps.finishSuccess(Unit)
+  }
+
+  // Finland
+  private fun runEkirjastoTokenRefresh(
+    request: EkirjastoAccessTokenRefresh
+  ) : TaskResult<Unit> {
+    val authenticationURI = request.description.authenticate
+    //Use the possibly old accessToken as the bearer
+    val httpRequest = this.http.newRequest(authenticationURI)
+      .setAuthorization(
+        LSHTTPAuthorizationBearerToken.ofToken(request.accessToken)
+      )
+      .setMethod(Post(ByteArray(0), MIMECompatibility.applicationOctetStream))
+      .build()
+    this.steps.beginNewStep("Updating accessToken")
+    httpRequest.execute().use { response ->
+      when (val status = response.status) {
+        is LSHTTPResponseStatus.Responded.OK -> {
+          //Get the updatable values from the response
+          val (accessToken, patronPermanentID) = getAccessTokenAndPatronFromEkirjastoCirculationResponse(
+            node = ObjectMapper().readTree(status.bodyStream)
+          )
+          //Log in again using the credentials gained
+          //Set ekirjasto token as null
+          this.credentials = AccountAuthenticationCredentials.Ekirjasto(
+            accessToken = accessToken,
+            patronPermanentID = patronPermanentID,
+            ekirjastoToken = null,
+            adobeCredentials = null,
+            authenticationDescription = request.description.description,
+            annotationsURI = null,
+            deviceRegistrationURI = null
+          )
+          //Handle the rest as normal login
+          this.steps.currentStepSucceeded("Ekirjasto authenticate successful")
+          this.steps.beginNewStep("Handle Patron User Profile")
+          this.handlePatronUserProfile()
+          this.steps.beginNewStep("Device Activation")
+          this.runDeviceActivation()
+          this.steps.currentStepSucceeded("Device Activation complete")
+          this.steps.beginNewStep("Update LoginState to Logged in")
+          this.account.setLoginState(AccountLoggedIn(this.credentials))
+          this.steps.currentStepSucceeded("Login State updated")
+          notificationTokenHttpCalls.registerFCMTokenForProfileAccount(
+            account = account,
+          )
+          this.steps.currentStepSucceeded("accessToken Response OK, credentials updated")
+          return this.steps.finishSuccess(Unit)
+        }
+
+        is LSHTTPResponseStatus.Responded.Error -> {
+          //If refresh ask returns 401, user needs to log back in
+          //But should log out on all errors
+          if(status.properties.problemReport?.status != 401) {
+            //If status is not 401, the error is unexpected, so handle the error but log out still
+            handleProfileAccountLoginError(authenticationURI, status)
+          }
+          this.steps.currentStepSucceeded("accessToken refresh denied, manual log in required")
+          return this.steps.finishFailure()
+        }
+
+        is LSHTTPResponseStatus.Failed -> {
+          this.steps.currentStepFailed(
+            "Connection failed when fetching authentication token.",
+            "connectionFailed",
+            status.exception
+          )
+          throw status.exception
+        }
+      }
+    }
   }
 
   private fun runSAML20Cancel(
@@ -696,6 +772,7 @@ class ProfileAccountLoginTask(
       }
 
       is EkirjastoComplete,
+      is EkirjastoAccessTokenRefresh,
       is EkirjastoPasskeyComplete,
       is EkirjastoCancel -> {
           this.account.provider.authentication is Ekirjasto ||
@@ -894,12 +971,12 @@ class ProfileAccountLoginTask(
         )
         true
       }
-
       is SAML20Cancel,
       is SAML20Complete,
       is OAuthWithIntermediaryComplete,
       is OAuthWithIntermediaryCancel,
       is EkirjastoComplete,
+      is EkirjastoAccessTokenRefresh,
       is EkirjastoCancel -> {
         when (this.account.loginState) {
           is AccountLoggingInWaitingForExternalAuthentication -> {
@@ -1010,8 +1087,8 @@ class ProfileAccountLoginTask(
       is EkirjastoInitiateSuomiFi -> {
         this.request.description
       }
-
       is EkirjastoPasskeyComplete,
+      is EkirjastoAccessTokenRefresh,
       is EkirjastoComplete -> {
         when (val loginState = this.account.loginState) {
           is AccountLoggingIn -> {

@@ -13,6 +13,7 @@ sealed class MagazinesState {
 
   data class MagazinesLoadFailed(
     override val arguments: MagazinesArguments,
+    val login: Boolean = false
   ) : MagazinesState()
 
   data class MagazinesBrowsing(

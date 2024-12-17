@@ -105,6 +105,12 @@ class MockProfilesController(
     return FluentFuture.from(SettableFuture.create())
   }
 
+  override fun profileAccountAccessTokenRefresh(
+    request: ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh
+  ): FluentFuture<TaskResult<Unit>> {
+    return FluentFuture.from(SettableFuture.create())
+  }
+
   override fun profileAccountCreate(provider: URI): FluentFuture<TaskResult<AccountType>> {
     return FluentFuture.from(SettableFuture.create())
   }

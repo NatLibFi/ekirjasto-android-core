@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
@@ -55,7 +56,9 @@ class DependentsFragment : Fragment(R.layout.dependents) {
     buttonDependents.setOnClickListener {
       logger.debug("Get Dependents Button Pressed!")
       //Call the viewmodel to handle getting the dependents from the server
-      viewModel.lookupDependents()
+      //We start it by looking up the needed token, and when we get the result
+      //We handle the actual lookup for dependents
+      viewModel.lookupTokenForDependents()
       //Show progress bar while we are loading the dependents info
       buttonDependents.visibility = GONE
       progressBar.visibility = VISIBLE
@@ -90,6 +93,22 @@ class DependentsFragment : Fragment(R.layout.dependents) {
       progressBar.visibility = GONE
       //After loading we want to show the dependents lookup button again
       buttonDependents.visibility = VISIBLE
+    }
+
+    //Observe the state of the viewModel
+    //If the dependents token lookup is successful
+    //We can trigger the actual lookup of the dependents
+    viewModel.stateLive.observe(viewLifecycleOwner) {state ->
+      when (state) {
+        is DependentsState.DependentsTokenFound -> {
+          viewModel.lookupDependents()
+        }
+        is DependentsState.DependentsLoading,
+        is DependentsState.EkirjastoTokenLoadFailed,
+        is DependentsState.DependentsLookupError -> {
+          //do nothing, handled with the error observer
+        }
+      }
     }
 
     //Observe possible error states that the user should be informed of

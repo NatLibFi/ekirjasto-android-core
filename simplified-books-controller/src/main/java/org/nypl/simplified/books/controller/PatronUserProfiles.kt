@@ -171,6 +171,7 @@ internal object PatronUserProfiles {
     val exception = Exception()
     when (result.properties.status) {
       HttpURLConnection.HTTP_UNAUTHORIZED -> {
+        logger.debug("AccessToken refresh needed, not handled in PatronUserProfiles")
         taskRecorder.currentStepFailed("Invalid credentials!", "invalidCredentials", exception)
         throw exception
       }

@@ -21,6 +21,7 @@ import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.noSupported
 import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.profileNotFound
 import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.subtaskFailed
 import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.unexpectedException
+import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowAccessTokenExpired
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowReachedLoanLimit
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskCancelled
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskHaltedEarly
@@ -106,6 +107,9 @@ class BorrowTask private constructor(
       return when (val start = this.request) {
         is BorrowRequest.Start -> this.executeStart(start)
       }
+    } catch (e: BorrowAccessTokenExpired) {
+      this.warn("accessToken expired")
+      this.taskRecorder.finishSuccess("accessToken refresh needed")
     } catch (e: BorrowFailedHandled) {
       this.warn("handled: ", e)
       this.taskRecorder.finishFailure<Unit>()
@@ -243,7 +247,14 @@ class BorrowTask private constructor(
       throw e
     } catch (e: BorrowReachedLoanLimit) {
       step.resolution = TaskStepFailed(
-        message = "Subtask '$name' raised an unexpected exception",
+        message = "Subtask '$name' raised an exception: LoanLimit reached",
+        exception = e,
+        errorCode = subtaskFailed
+      )
+      throw e
+    } catch (e: BorrowAccessTokenExpired) {
+      step.resolution = TaskStepFailed(
+        message = "Subtask '$name' raised an exception: AccessToken expired",
         exception = e,
         errorCode = subtaskFailed
       )

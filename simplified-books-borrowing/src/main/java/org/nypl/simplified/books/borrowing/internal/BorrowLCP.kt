@@ -26,6 +26,7 @@ import org.nypl.simplified.books.book_database.api.BookDatabaseEntryFormatHandle
 import org.nypl.simplified.books.book_database.api.BookDatabaseEntryFormatHandle.BookDatabaseEntryFormatHandlePDF
 import org.nypl.simplified.books.borrowing.BorrowContextType
 import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.lcpNotSupported
+import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowAccessTokenExpired
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskCancelled
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskFailed
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskHaltedEarly
@@ -197,6 +198,10 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
     val report = status.properties.problemReport
     if (report != null) {
       context.taskRecorder.addAttributes(report.toMap())
+    }
+    if (report?.status == 401) {
+      //Throw accessToken error so it can be picked up in BorrowTask
+      throw BorrowAccessTokenExpired()
     }
     context.taskRecorder.currentStepFailed(
       message = "HTTP request failed: ${status.properties.originalStatus} ${status.properties.message}",

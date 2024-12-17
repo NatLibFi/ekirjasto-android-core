@@ -14,7 +14,5 @@ sealed class MagazinesEvent {
     val parameters: ErrorPageParameters
   ) : MagazinesEvent()
 
-  data class LoginRequired(
-    val account: AccountID
-  ) : MagazinesEvent()
+  object LoginRequired: MagazinesEvent()
 }

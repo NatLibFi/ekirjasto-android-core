@@ -13,6 +13,7 @@ import android.webkit.WebView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -310,10 +311,34 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
         browsingLayout.visibility = View.VISIBLE
       }
       is MagazinesState.MagazinesLoadFailed -> {
+        //Check if the fail has come from failed refresh request
+        if (state.login) {
+          //If it is, open the login
+          onLogInNeeded()
+        }
         logger.warn("Set state to failed")
         configureToolbar(showToolbar = true)
         signInPromptLayout.visibility = View.VISIBLE
       }
     }
+  }
+
+  /**
+   * Show a popup informing user of token expiration and open up the login page when dismissed.
+   */
+  private fun onLogInNeeded() {
+    logger.debug("Showing 'Please login' popup")
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    builder
+      .setMessage(R.string.magazinesSessionExpiredMessage)
+      .setTitle(R.string.magazinesSessionExpiredTitle)
+      .setPositiveButton(R.string.magazinesSessionExpiredButton) { dialog, which ->
+        listener.post(MagazinesEvent.LoginRequired)
+        dialog.dismiss()
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+
   }
 }
