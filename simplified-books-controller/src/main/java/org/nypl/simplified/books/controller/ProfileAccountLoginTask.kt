@@ -772,7 +772,7 @@ class ProfileAccountLoginTask(
       }
 
       is EkirjastoComplete,
-      is EkirjastoAccessTokenRefresh,//
+      is EkirjastoAccessTokenRefresh,
       is EkirjastoPasskeyComplete,
       is EkirjastoCancel -> {
           this.account.provider.authentication is Ekirjasto ||
@@ -976,7 +976,7 @@ class ProfileAccountLoginTask(
       is OAuthWithIntermediaryComplete,
       is OAuthWithIntermediaryCancel,
       is EkirjastoComplete,
-      is EkirjastoAccessTokenRefresh,//
+      is EkirjastoAccessTokenRefresh,
       is EkirjastoCancel -> {
         when (this.account.loginState) {
           is AccountLoggingInWaitingForExternalAuthentication -> {
@@ -1088,7 +1088,7 @@ class ProfileAccountLoginTask(
         this.request.description
       }
       is EkirjastoPasskeyComplete,
-      is EkirjastoAccessTokenRefresh,//
+      is EkirjastoAccessTokenRefresh,
       is EkirjastoComplete -> {
         when (val loginState = this.account.loginState) {
           is AccountLoggingIn -> {

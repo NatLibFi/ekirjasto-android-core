@@ -649,9 +649,10 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     bookStatus: BookStatus.FailedLoan,
   ) {
     //If error is 401 or 400, it's a response to the tried and failed token refresh
-    //So they get special treatmenr
+    //So they get special treatment
     if (bookStatus.message.contains("401") || bookStatus.message.contains("400")) {
       logger.debug("session expired, trigger login popup")
+      //show popup if there already isn't one showing
       if (!popUpShown) {
         onLogInNeeded()
       }
