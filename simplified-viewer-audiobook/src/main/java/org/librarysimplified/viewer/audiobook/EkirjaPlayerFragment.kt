@@ -15,7 +15,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -141,6 +140,10 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   private var playerPositionCurrentOffset: Long = 0L
   private var playerEventSubscription: Subscription? = null
   private var playerSleepTimerEventSubscription: Subscription? = null
+
+  //Variables used for keeping the visible player position in sync with the player
+  private var updatePlayerPosition = false
+  private var lastStartedPlayerPosition = 0
 
   private val log = LoggerFactory.getLogger(PlayerFragment::class.java)
 
@@ -523,10 +526,9 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     this.playPauseButton.setOnClickListener { this.onPressedPlay() }
 
     this.playerSkipForwardButton = view.findViewById(R.id.player_jump_forwards)
-    this.playerSkipForwardButton.setOnClickListener { this.player.skipForward() }
+    this.playerSkipForwardButton.setOnClickListener { this.skipForward() }
     this.playerSkipBackwardButton = view.findViewById(R.id.player_jump_backwards)
-    this.playerSkipBackwardButton.setOnClickListener { this.player.skipBack() }
-
+    this.playerSkipBackwardButton.setOnClickListener { this.skipBack() }
     this.playerWaiting = view.findViewById(R.id.player_waiting_buffering)
     this.playerWaiting.text = ""
     this.playerWaiting.contentDescription = null
@@ -563,6 +565,22 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     initializeService()
   }
 
+  /**
+   * Ensure that the player position is updated, and then return the player skip backward.
+   */
+  private fun skipBack() {
+    updatePlayerPosition = true
+    return player.skipBack()
+  }
+
+  /**
+   * Ensure that the player position is updated, and then return the player skip forward.
+   */
+  private fun skipForward() {
+    updatePlayerPosition = true
+    return player.skipForward()
+  }
+
   override fun onResume() {
     super.onResume()
     if (this::playerService.isInitialized) {
@@ -581,11 +599,31 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
         seek: SeekBar,
         progress: Int, fromUser: Boolean
       ) {
-
         // If the change is made by the user, set the player position as dragging
         // So the thumb follows the user's touch
         if (fromUser) {
           playerPositionDragging = true
+        }
+
+        //Since the player does a poor job of knowing when the chapter is over, we handle skipping to
+        //the next chapter here
+        if (!fromUser) {
+          /*
+           The following conditions need to be met in order to skip:
+           - Progress bar is in the max position (so by our counts, the chapter is over)
+           - We arent currently updating the position already (otherwise would skip chapters multiple times in a row)
+           - Last started is less than seek's max (otherwise would skip chapters when a new chapter has just started)
+           - Play speed isn't normal (since in that case, player works fine and skips correctly)
+          */
+          if (seek.max == progress && !updatePlayerPosition && lastStartedPlayerPosition < seek.max && currentPlaybackRate != PlayerPlaybackRate.NORMAL_TIME) {
+            //Set player position to be updatable, so that this call is not called multiple times until all is up to date
+            updatePlayerPosition = true
+            player.skipToNextChapter(0)
+          }
+          if (progress == 0) {
+            // If progress is 0, we want to update the player position, in order for the player to be in correct time
+            updatePlayerPosition = true
+          }
         }
       }
 
@@ -598,21 +636,32 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
       override fun onStopTrackingTouch(seek: SeekBar) {
         // Set the dragging as stopped
         playerPositionDragging = false
+        // Update the position, as otherwise the timing is incorrect
+        updatePlayerPosition = true
         // Run the function that moves the player to matching spot with the seekbar
-        onReleasedPlayerPositionBar()
+        onReleasedPlayerPositionBar(null)
       }
     }
   }
 
-  private fun onReleasedPlayerPositionBar() {
+  private fun onReleasedPlayerPositionBar(limit : Int?) {
     this.log.debug("onReleasedPlayerPositionBar")
 
+    // Adjust is used to skip the player a few seconds backwards when switching player speed
+    // Without this, changing the speed could skip a second or so forwards
+    // This way user wont miss anything
+    val adjust = limit ?: 0
     val spine = this.playerPositionCurrentSpine
     if (spine != null) {
+      //Get the position to jump to from the player seekbar's progress, move back the amount of adjust
       val target = spine.position.copy(
-        currentOffset = TimeUnit.MILLISECONDS.convert(this.playerPosition.progress.toLong(),
+        currentOffset = TimeUnit.MILLISECONDS.convert(this.playerPosition.progress.minus(adjust).toLong(),
           TimeUnit.SECONDS)
       )
+      log.debug("Moved position of spine to:")
+      log.debug(this.playerPosition.progress.toLong().toString())
+      //If player is already playing, jump to a position and continue playing
+      //If not, just move the playhead
       if (this.player.isPlaying) {
         this.player.playAtLocation(target)
       } else {
@@ -747,6 +796,13 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   }
 
   private fun onPlayerEventPlaybackRateChanged(event: PlayerEventPlaybackRateChanged) {
+    // Check if the speed was actually changed from the current one
+    // As this is sometimes triggered without the speed actually changing
+    if (currentPlaybackRate != event.rate) {
+      //Move the player back two seconds so user doesn't miss audio
+      onReleasedPlayerPositionBar(2)
+      updatePlayerPosition = true
+    }
     this.uiThread.runOnUIThread(
       Runnable {
         safelyPerformOperations {
@@ -786,6 +842,8 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
           this.playPauseButton.setOnClickListener { this.onPressedPlay() }
           this.playPauseButton.contentDescription =
             this.getString(R.string.audiobook_accessibility_play)
+          // As this event usually means something has changed, update the player position
+          updatePlayerPosition = true
           this.configureSpineElementText(event.spineElement, isPlaying = false)
           this.onEventUpdateTimeRelatedUI(event.spineElement, event.offsetMilliseconds)
         }
@@ -967,33 +1025,78 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     spineElement: PlayerSpineElementType,
     offsetMilliseconds: Long
   ) {
-    this.playerPosition.max =
-      spineElement.duration?.standardSeconds?.toInt() ?: Int.MAX_VALUE
+    // The maximum position of the playerPosition is the length of the book,
+    // that is set to the spine element
+    // The length is always the same, no matter the speed
+    this.playerPosition.max = spineElement.duration?.standardSeconds?.toInt() ?: Int.MAX_VALUE
+
+    // If we want to update player position, we do it here
+    // Updating player position means to change the timestamp of where was the last spot player spot
+    // was adjusted
+    // Meaning, the time before this position is considered as going on normal speed
+    // and the time after this, is considered to be sped up, and the pointer moves accordingly
+    // to this assumption
+    if (updatePlayerPosition) {
+      log.debug("updatePlayerPosition")
+
+      // Set the current position as the latest started position
+      lastStartedPlayerPosition = TimeUnit.MILLISECONDS.toSeconds(offsetMilliseconds).toInt()
+      // Set the player update as done
+      // So the same spot doesn't update multiple times
+      updatePlayerPosition = false
+    }
 
     this.playerPosition.isEnabled = true
 
     this.playerPositionCurrentSpine = spineElement
     this.playerPositionCurrentOffset = offsetMilliseconds
 
+    // Check if user is moving the pointer or not
     if (!this.playerPositionDragging) {
+      // Adjust the position of our progress tap
+      // The idea is: Consider time before latest position to have gone normal speed
+      // Aka: This is the last moment the player is in sync with our visual seekbar
+      // after which the pointer needs to move based on the speed the audio has
+      // in order to visually represent the correct spot in the audio
       this.playerPosition.progress =
-        TimeUnit.MILLISECONDS.toSeconds(offsetMilliseconds).toInt()
+        lastStartedPlayerPosition
+          .plus(
+            (TimeUnit.MILLISECONDS.toSeconds(
+              offsetMilliseconds
+            ).minus(lastStartedPlayerPosition
+            )).times(currentPlaybackRate.speed)).toInt()
+      /*
+      log.debug("Last started: {}", lastStartedPlayerPosition)
+      log.debug("Difference of last started and player position: {}", (TimeUnit.MILLISECONDS.toSeconds(
+        offsetMilliseconds
+      ).minus(lastStartedPlayerPosition
+      ).times(currentPlaybackRate.speed)))
+      log.debug("Player position: {}", this.playerPosition.progress.toString())
+       */
     }
 
+    val currTime = TimeUnit.SECONDS.toMillis(lastStartedPlayerPosition
+      .plus(
+        (TimeUnit.MILLISECONDS.toSeconds(
+          offsetMilliseconds
+        ).minus(lastStartedPlayerPosition
+        )).times(currentPlaybackRate.speed)).toLong())
     playerRemainingBookTime.text =
       PlayerTimeStrings.hourMinuteTextFromRemainingTime(
         requireContext(),
-        getCurrentAudiobookRemainingDuration(spineElement) - offsetMilliseconds
+        (getCurrentAudiobookRemainingDuration(spineElement) - currTime).div(currentPlaybackRate.speed).toLong()
       )
 
+    // The visual presentation of how much of the chapter is left
     this.playerTimeMaximum.text =
       PlayerTimeStrings.hourMinuteSecondTextFromDurationOptional(spineElement.duration
-        ?.minus(offsetMilliseconds))
+        ?.minus(currTime))
     this.playerTimeMaximum.contentDescription =
       this.playerTimeRemainingSpokenOptional(offsetMilliseconds, spineElement.duration)
 
+    // The visual presentation of how much of the chapter is done
     this.playerTimeCurrent.text =
-      PlayerTimeStrings.hourMinuteSecondTextFromMilliseconds(offsetMilliseconds)
+      PlayerTimeStrings.hourMinuteSecondTextFromMilliseconds(currTime)
     this.playerTimeCurrent.contentDescription =
       this.playerTimeCurrentSpoken(offsetMilliseconds)
 
