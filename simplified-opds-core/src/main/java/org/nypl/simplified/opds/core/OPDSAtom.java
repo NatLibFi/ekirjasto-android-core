@@ -60,4 +60,20 @@ final class OPDSAtom implements Serializable
       OPDSXML.getFirstChildElementTextWithName(e, OPDSFeedConstants.ATOM_URI, "updated");
     return OPDSDateParsers.dateTimeParser().parseDateTime(e_updated_raw);
   }
+
+  static OptionType<DateTime> findSelected(
+    final Element e)
+    throws DOMException, ParseException
+  {
+    final OptionType<Element> e_opt =
+      OPDSXML.getFirstChildElementWithNameOptional(
+        e, OPDSFeedConstants.ATOM_URI, "selected");
+
+    return e_opt.mapPartial(
+      (PartialFunctionType<Element, DateTime, ParseException>) er -> {
+        final String text = er.getTextContent();
+        final String trimmed = text.trim();
+        return OPDSDateParsers.dateTimeParser().parseDateTime(trimmed);
+      });
+  }
 }

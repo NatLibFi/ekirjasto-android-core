@@ -75,4 +75,9 @@ sealed class AccountDetailEvent {
    * Open the dependents view.
    */
   object OpenDependentInvite : AccountDetailEvent()
+
+  /**
+   * FIXFIX Open selectedfragment
+   */
+  object OpenSelectedFragment : AccountDetailEvent()
 }

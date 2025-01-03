@@ -114,4 +114,26 @@ interface BooksControllerType {
     accountID: AccountID,
     bookID: BookID
   ): FluentFuture<TaskResult<Unit>>
+
+  /**
+   * Add the chosen book to a list of selected books.
+   *
+   * @param accountID The account that selected the book
+   * @param bookID The ID of the book
+   */
+  fun bookAddToSelected(
+    accountID: AccountID,
+    feedEntry: FeedEntry.FeedEntryOPDS
+  ) : FluentFuture<TaskResult<*>>
+
+  /**
+   * Remove the chosen book to a list of selected books.
+   *
+   * @param accountID The account that removed the book
+   * @param bookID The ID of the book
+   */
+  fun bookRemoveFromSelected(
+    accountID: AccountID,
+    feedEntry: FeedEntry.FeedEntryOPDS
+  ) : FluentFuture<TaskResult<*>>
 }

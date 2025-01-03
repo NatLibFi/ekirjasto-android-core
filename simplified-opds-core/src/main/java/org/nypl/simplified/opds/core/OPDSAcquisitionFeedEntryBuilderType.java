@@ -107,6 +107,14 @@ public interface OPDSAcquisitionFeedEntryBuilderType {
     OptionType<URI> uri);
 
   /**
+   * Set selected
+   *
+   * @param selected Selected DateTime or not
+   */
+  OPDSAcquisitionFeedEntryBuilderType setSelectedOption(
+    OptionType<DateTime> selected);
+
+  /**
    * @param uri The alternate URI
    */
 

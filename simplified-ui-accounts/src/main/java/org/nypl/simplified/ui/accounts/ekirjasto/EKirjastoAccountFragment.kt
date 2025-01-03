@@ -80,6 +80,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var bookmarkStatement: TextView
   private lateinit var buttonPreferences: Button
 
+  //FIXFIX
+  private lateinit var buttonSelected: Button
+
   //inherited elements
   private lateinit var toolbar: PalaceToolbar
 
@@ -119,6 +122,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.versionText = view.findViewById(R.id.appVersion)
     this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
     this.buttonPreferences = view.findViewById(R.id.buttonPreferences)
+    this.buttonSelected = view.findViewById(R.id.buttonSelected)
 
 
     this.toolbar =
@@ -200,6 +204,16 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     }
   }
 
+  private fun configureSelectedButton(button: Button) {
+    //Clicking the button opens the dependents fragment
+    button.setOnClickListener {
+      logger.debug("Selected clicked")
+      this.listener.post(
+        AccountDetailEvent.OpenSelectedFragment
+      )
+    }
+  }
+
   private fun configureDocViewButton(button: Button, document: DocumentType?){
     button.isEnabled = document != null
     if (document != null) {
@@ -266,6 +280,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
      * Configure the dependents button to switch to the invite fragment
      */
     configureDependentsButton(buttonDependents)
+
+    configureSelectedButton(buttonSelected)
 
     //Set version text that's shown on the bottom of the page
     val versionString = this.requireContext().getString(R.string.app_version_string, this.viewModel.appVersion)

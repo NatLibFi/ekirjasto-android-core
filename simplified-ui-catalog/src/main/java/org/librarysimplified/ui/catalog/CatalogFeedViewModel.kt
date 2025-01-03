@@ -980,6 +980,20 @@ class CatalogFeedViewModel(
     )
   }
 
+  override fun selectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
+    booksController.bookAddToSelected(
+      accountID = profilesController.profileCurrent().mostRecentAccount().id,
+      feedEntry = feedEntry
+    )
+  }
+
+  override fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
+    booksController.bookRemoveFromSelected(
+      accountID = profilesController.profileCurrent().mostRecentAccount().id,
+      feedEntry = feedEntry
+    )
+  }
+
   override fun openBookPreview(feedEntry: FeedEntry.FeedEntryOPDS) {
     // do nothing
   }

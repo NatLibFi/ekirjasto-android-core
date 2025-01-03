@@ -295,6 +295,17 @@ class CatalogBookDetailViewModel(
   override fun cancelDownload(feedEntry: FeedEntry.FeedEntryOPDS) {
     this.borrowViewModel.tryCancelDownload(feedEntry.accountID, feedEntry.bookID)
   }
+
+  override fun selectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
+    //NOT MADE BUTTON HERE YET
+    TODO("Not yet implemented")
+  }
+
+  override fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
+    //NOT MADE BUTTON HERE YET
+    TODO("Not yet implemented")
+  }
+
   override fun resetInitialBookStatus(feedEntry: FeedEntry.FeedEntryOPDS) {
     val initialBookStatus = synthesizeBookWithStatus(feedEntry)
     this.bookRegistry.update(initialBookStatus)

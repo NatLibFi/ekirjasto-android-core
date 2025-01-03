@@ -1,7 +1,9 @@
 package org.librarysimplified.main
 
+import android.net.Uri
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -14,6 +16,7 @@ import org.librarysimplified.ui.catalog.CatalogBookDetailFragmentParameters
 import org.librarysimplified.ui.catalog.CatalogFeedArguments
 import org.librarysimplified.ui.catalog.CatalogFeedEvent
 import org.librarysimplified.ui.catalog.CatalogFeedFragment
+import org.librarysimplified.ui.catalog.CatalogFeedOwnership
 import org.librarysimplified.ui.catalog.saml20.CatalogSAML20Event
 import org.librarysimplified.ui.login.LoginMainFragment
 import org.librarysimplified.ui.navigation.tabs.TabbedNavigator
@@ -60,6 +63,7 @@ import org.nypl.simplified.ui.settings.SettingsMainEvent
 import org.nypl.simplified.viewer.api.Viewers
 import org.nypl.simplified.viewer.spi.ViewerPreferences
 import org.slf4j.LoggerFactory
+import java.net.URI
 import java.net.URL
 
 internal class MainFragmentListenerDelegate(
@@ -377,7 +381,6 @@ internal class MainFragmentListenerDelegate(
             this.navigator.popBackStack()
             MainFragmentState.EmptyState
           }
-
           else -> {
             state
           }
@@ -425,6 +428,20 @@ internal class MainFragmentListenerDelegate(
 
       is AccountDetailEvent.OpenDependentInvite -> {
         this.openDependentPage()
+        state
+      }
+
+      //FIXFIX
+      is AccountDetailEvent.OpenSelectedFragment -> {
+        val accountID = profilesController.profileCurrent().mostRecentAccount().id
+        val selectedURI = profilesController.profileCurrent().mostRecentAccount().provider.selectedURI!!
+        val  arguments = CatalogFeedArguments.CatalogFeedArgumentsRemote(
+          title = "Selected",
+          ownership = CatalogFeedOwnership.OwnedByAccount(accountID),
+          feedURI = selectedURI,
+          isSearchResults = false
+        )
+        this.openFeed(arguments)
         state
       }
     }

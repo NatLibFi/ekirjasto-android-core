@@ -10,10 +10,12 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.RecyclerView
 import com.google.common.base.Preconditions
 import com.google.common.util.concurrent.FluentFuture
+import com.io7m.jfunctional.Some
 import org.joda.time.DateTime
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookFormat
@@ -77,6 +79,8 @@ class CatalogPagedViewHolder(
     this.idle.findViewById<TextView>(R.id.bookCellIdleAuthor)!!
   private val idleButtons =
     this.idle.findViewById<ViewGroup>(R.id.bookCellIdleButtons)!!
+  private val idleSelectedButton =
+    this.idle.findViewById<ImageView>(R.id.bookCellIdleSelect)!!
 
   private val progressProgress =
     this.parent.findViewById<ProgressBar>(R.id.bookCellInProgressBar)!!
@@ -150,6 +154,22 @@ class CatalogPagedViewHolder(
       BookFormats.BookFormatDefinition.BOOK_FORMAT_PDF ->
         context.getString(R.string.catalogBookFormatPDF)
       null -> ""
+    }
+    //If there is a selected date, the book is selected
+    if (item.feedEntry.selected is Some<DateTime>) {
+      //Set the drawable as the "checked" version
+      this.idleSelectedButton.setImageDrawable(
+        ContextCompat.getDrawable(context,R.drawable.outline_bookmark_border_24)
+      )
+      this.idleSelectedButton.setOnClickListener{
+        //Remove book from selected
+        this.listener.unselectBook(item)
+      }
+    } else {
+      this.idleSelectedButton.setOnClickListener {
+        //Add book to selected
+        this.listener.selectBook(item)
+      }
     }
 
     val targetHeight =

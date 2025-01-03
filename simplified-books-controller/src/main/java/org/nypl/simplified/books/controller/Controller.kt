@@ -731,6 +731,51 @@ class Controller private constructor(
     )
   }
 
+  override fun bookAddToSelected(
+    accountID: AccountID,
+    feedEntry: FeedEntry.FeedEntryOPDS
+
+  ) : FluentFuture<TaskResult<*>> {
+    val profile = this.profileCurrent()
+    val account = profile.account(accountID)
+
+    //FIXFIXFIX
+    //Add 401 handling
+    //Add successful reload?
+    return this.submitTask(
+      Callable <TaskResult<*>>{
+        val bookSelectTask = BookSelectTask(
+          HTTPClient = this.lsHttp,
+          account = account,
+          feedEntry =feedEntry.feedEntry
+        )
+        bookSelectTask.execute()
+      }
+    )
+  }
+
+  override fun bookRemoveFromSelected(
+    accountID: AccountID,
+    feedEntry: FeedEntry.FeedEntryOPDS
+  ): FluentFuture<TaskResult<*>> {
+    val profile = this.profileCurrent()
+    val account = profile.account(accountID)
+
+    //FIXFIXFIX
+    //Add 401 handling
+    //Add successful reload?
+    return this.submitTask(
+      Callable <TaskResult<*>>{
+        val bookUnselectTask = BookUnselectTask(
+          HTTPClient = this.lsHttp,
+          account = account,
+          feedEntry =feedEntry.feedEntry
+        )
+        bookUnselectTask.execute()
+      }
+    )
+  }
+
   override fun profileAnyIsCurrent(): Boolean =
     this.profiles.currentProfile().isSome
 

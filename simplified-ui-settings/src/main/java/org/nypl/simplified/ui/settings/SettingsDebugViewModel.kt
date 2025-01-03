@@ -271,6 +271,7 @@ class SettingsDebugViewModel(application: Application) : AndroidViewModel(applic
         isProduction = true,
         license = URI.create("http://www.librarysimplified.org/iclicenses.html"),
         loansURI = URI.create("https://qa-circulation.openebooks.us/USOEI/loans/"),
+        selectedURI = null,
         logo = null,
         mainColor = "teal",
         patronSettingsURI = URI.create("https://qa-circulation.openebooks.us/USOEI/patrons/me/"),

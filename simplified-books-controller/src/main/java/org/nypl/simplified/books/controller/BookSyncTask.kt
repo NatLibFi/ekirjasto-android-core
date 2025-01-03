@@ -100,7 +100,52 @@ class BookSyncTask(
         .build()
 
     val response = request.execute()
-    return when (val status = response.status) {
+    when (val status = response.status) {
+      is LSHTTPResponseStatus.Responded.OK -> {
+        this.onHTTPOK(
+          stream = status.bodyStream ?: ByteArrayInputStream(ByteArray(0)),
+          provider = provider,
+          account = account,
+          accessToken = status.getAccessToken()
+        )
+      }
+      is LSHTTPResponseStatus.Responded.Error -> {
+        val recovered = this.onHTTPError(status, account)
+
+        if (recovered) {
+          //this.taskRecorder.finishSuccess(Unit)
+        } else {
+          val message = String.format("%s: %d: %s", provider.loansURI, status.properties.status, status.properties.message)
+          val exception = IOException(message)
+          this.taskRecorder.currentStepFailed(
+            message = message,
+            errorCode = "syncFailed",
+            exception = exception
+          )
+          throw TaskFailedHandled(exception)
+        }
+      }
+      is LSHTTPResponseStatus.Failed ->
+        throw IOException(status.exception)
+    }
+
+    //Do the same for selected
+    //FIXFIX
+    //Check if this is needed
+    val selectedURI = provider.selectedURI
+    if (selectedURI == null) {
+      this.logger.debug("no selected URI, aborting!")
+      return this.taskRecorder.finishSuccess(Unit)
+    }
+
+    val selectedRequest =
+      this.http.newRequest(selectedURI)
+        .setAuthorization(AccountAuthenticatedHTTP.createAuthorization(credentials))
+        .addCredentialsToProperties(credentials)
+        .build()
+
+    val selectedResponse = selectedRequest.execute()
+    when (val status =selectedResponse.status) {
       is LSHTTPResponseStatus.Responded.OK -> {
         this.onHTTPOK(
           stream = status.bodyStream ?: ByteArrayInputStream(ByteArray(0)),
@@ -116,7 +161,7 @@ class BookSyncTask(
         if (recovered) {
           this.taskRecorder.finishSuccess(Unit)
         } else {
-          val message = String.format("%s: %d: %s", provider.loansURI, status.properties.status, status.properties.message)
+          val message = String.format("%s: %d: %s", provider.selectedURI, status.properties.status, status.properties.message)
           val exception = IOException(message)
           this.taskRecorder.currentStepFailed(
             message = message,
@@ -129,6 +174,7 @@ class BookSyncTask(
       is LSHTTPResponseStatus.Failed ->
         throw IOException(status.exception)
     }
+    return this.taskRecorder.finishSuccess(Unit)
   }
 
   private fun fetchPatronUserProfile(
