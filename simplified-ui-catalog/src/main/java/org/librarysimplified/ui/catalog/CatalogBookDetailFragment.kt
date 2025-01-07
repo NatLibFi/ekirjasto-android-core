@@ -545,7 +545,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     if (book.book.entry.selected is Some<DateTime>) {
       //Set the drawable as the "checked" version
       this.selected.setImageDrawable(
-        ContextCompat.getDrawable(this.requireContext(), R.drawable.outline_bookmark_border_24)
+        ContextCompat.getDrawable(this.requireContext(), R.drawable.baseline_check_circle_24)
       )
       //Add the audio description
       this.selected.contentDescription = getString(R.string.catalogAccessibilityBookUnselect)

@@ -159,7 +159,7 @@ class CatalogPagedViewHolder(
     if (item.feedEntry.selected is Some<DateTime>) {
       //Set the drawable as the "checked" version
       this.idleSelectedButton.setImageDrawable(
-        ContextCompat.getDrawable(context,R.drawable.outline_bookmark_border_24)
+        ContextCompat.getDrawable(context,R.drawable.baseline_check_circle_24)
       )
       //Set audio description to the button
       this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookSelect)
