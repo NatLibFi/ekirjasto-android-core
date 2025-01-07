@@ -161,11 +161,19 @@ class CatalogPagedViewHolder(
       this.idleSelectedButton.setImageDrawable(
         ContextCompat.getDrawable(context,R.drawable.outline_bookmark_border_24)
       )
+      //Set audio description to the button
+      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookSelect)
       this.idleSelectedButton.setOnClickListener{
         //Remove book from selected
         this.listener.unselectBook(item)
       }
     } else {
+      //Set the "unchecked" icon version
+      this.idleSelectedButton.setImageDrawable(
+        ContextCompat.getDrawable(context,R.drawable.round_add_circle_outline_24)
+      )
+      //Add audio description
+      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookSelect)
       this.idleSelectedButton.setOnClickListener {
         //Add book to selected
         this.listener.selectBook(item)

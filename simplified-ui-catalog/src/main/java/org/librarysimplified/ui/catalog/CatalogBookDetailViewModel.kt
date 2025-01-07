@@ -21,6 +21,7 @@ import org.nypl.simplified.books.book_registry.BookRegistryType
 import org.nypl.simplified.books.book_registry.BookStatus
 import org.nypl.simplified.books.book_registry.BookStatusEvent
 import org.nypl.simplified.books.book_registry.BookWithStatus
+import org.nypl.simplified.books.controller.api.BooksControllerType
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.feeds.api.Feed
 import org.nypl.simplified.feeds.api.FeedEntry
@@ -50,6 +51,7 @@ class CatalogBookDetailViewModel(
   private val bookRegistry: BookRegistryType,
   private val buildConfiguration: BuildConfigurationServiceType,
   private val borrowViewModel: CatalogBorrowViewModel,
+  private val booksController: BooksControllerType,
   private val parameters: CatalogBookDetailFragmentParameters,
   private val listener: FragmentListenerType<CatalogBookDetailEvent>
 ) : ViewModel(), CatalogPagedViewListener {
@@ -297,13 +299,17 @@ class CatalogBookDetailViewModel(
   }
 
   override fun selectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
-    //NOT MADE BUTTON HERE YET
-    TODO("Not yet implemented")
+    booksController.bookAddToSelected(
+      accountID = profilesController.profileCurrent().mostRecentAccount().id,
+      feedEntry = feedEntry
+    )
   }
 
   override fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
-    //NOT MADE BUTTON HERE YET
-    TODO("Not yet implemented")
+    booksController.bookAddToSelected(
+      accountID = profilesController.profileCurrent().mostRecentAccount().id,
+      feedEntry = feedEntry
+    )
   }
 
   override fun resetInitialBookStatus(feedEntry: FeedEntry.FeedEntryOPDS) {

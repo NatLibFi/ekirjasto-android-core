@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -135,6 +136,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var summary: TextView
   private lateinit var title: TextView
   private lateinit var type: TextView
+  private lateinit var selected: ImageView
   private lateinit var toolbar: PalaceToolbar
 
   private val dateYearFormatter =
@@ -217,6 +219,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       view.findViewById(R.id.feedLoading)
     this.report =
       view.findViewById(R.id.bookDetailReport)
+    this.selected =
+      view.findViewById(R.id.bookDetailSelect)
 
     this.debugStatus =
       view.findViewById(R.id.bookDetailDebugStatus)
@@ -537,6 +541,31 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private fun reconfigureUI(book: BookWithStatus, bookPreviewStatus: BookPreviewStatus) {
     this.debugStatus.text = book.javaClass.simpleName
 
+    //If there is a selected date, the book is selected
+    if (book.book.entry.selected is Some<DateTime>) {
+      //Set the drawable as the "checked" version
+      this.selected.setImageDrawable(
+        ContextCompat.getDrawable(this.requireContext(), R.drawable.outline_bookmark_border_24)
+      )
+      //Add the audio description
+      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookUnselect)
+
+      this.selected.setOnClickListener {
+        //Set the button click to unselect the book
+        this.viewModel.unselectBook(this.parameters.feedEntry)
+    }
+    }else {
+      //Set the "unchecked" icon version
+      this.selected.setImageDrawable(
+        ContextCompat.getDrawable(this.requireContext(),R.drawable.round_add_circle_outline_24)
+      )
+      //Add audio description
+      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookSelect)
+      this.selected.setOnClickListener {
+        //Add book to selected
+        this.viewModel.selectBook(this.parameters.feedEntry)
+      }
+    }
     when (val status = book.status) {
       is BookStatus.Held -> {
         this.onBookStatusHeld(status, bookPreviewStatus)

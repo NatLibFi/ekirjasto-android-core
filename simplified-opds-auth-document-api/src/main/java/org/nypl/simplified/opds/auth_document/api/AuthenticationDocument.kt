@@ -72,7 +72,7 @@ data class AuthenticationDocument(
   val loansURI: URI? =
     this.links.find { link -> link.relation == "http://opds-spec.org/shelf" }?.hrefURI
 
-  val selectedURI: URI? = //FIXFIX change to correct
+  val selectedURI: URI? = //FIXFIX change to correct : http://opds-spec.org/shelf/selected_books
     this.links.find { link -> link.relation == "http://opds-spec.org/shelf" }?.hrefURI
 
   val cardCreatorURI: URI? =
