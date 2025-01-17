@@ -637,7 +637,7 @@
          "string" : "30"
       },
       "bookReachedLoanLimitDialogButton" : {
-         "string" : "OK"
+         "string" : "Confirm"
       },
       "bookReachedLoanLimitDialogMessage" : {
          "string" : "You have reached your loan limit. You cannot borrow anything further until you return something."
@@ -647,6 +647,15 @@
       },
       "bookReturned" : {
          "string" : "The book '%1$s' has been successfully returned"
+      },
+      "bookSessionExpiredButton" : {
+         "string" : "Confirm"
+      },
+      "bookSessionExpiredMessage" : {
+         "string" : "Your session has expired, please log in again."
+      },
+      "bookSessionExpiredTitle" : {
+         "string" : "Session expired!"
       },
       "bookmarkEnd" : {
          "string" : "At the end of the chapter."
@@ -1259,6 +1268,15 @@
       },
       "magazinesHeader" : {
          "string" : "Magazines"
+      },
+      "magazinesSessionExpiredButton" : {
+         "string" : "Confirm"
+      },
+      "magazinesSessionExpiredMessage" : {
+         "string" : "Your session has expired, please log in again."
+      },
+      "magazinesSessionExpiredTitle" : {
+         "string" : "Session expired!"
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : "Visit the settings to sign in"
