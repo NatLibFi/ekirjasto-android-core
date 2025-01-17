@@ -746,7 +746,7 @@ dependencies {
     }
     else {
         println("Using production liblcp AAR")
-        implementation("readium:liblcp:2.1.0@aar")
+        implementation("readium:liblcp:4.1.0@aar")
     }
 
     /** For missing passkey libraries **/
