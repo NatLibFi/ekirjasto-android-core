@@ -79,7 +79,7 @@
          "string" : "Loggar in med %1$s"
       },
       "accountEkirjastoPassKeyLabel" : {
-         "string" : "Inloggning med nyckel"
+         "string" : "Inloggning med nyckelkod"
       },
       "accountEkirjastoSuomiFiLabel" : {
          "string" : "Suomi.fi-inloggning"
@@ -121,7 +121,7 @@
          "string" : "Fler alternativ"
       },
       "accountPasskeyCreate" : {
-         "string" : "Registrera nyckel"
+         "string" : "Registrera nyckelkod"
       },
       "accountPassword" : {
          "string" : "Lösenord"
@@ -205,7 +205,7 @@
          "string" : "Mjukvarulicenser"
       },
       "account_login_passkey" : {
-         "string" : "Logga in med nyckel"
+         "string" : "Logga in med nyckelkod"
       },
       "account_login_suomifi" : {
          "string" : "Logga in med Suomi.fi"
@@ -214,7 +214,7 @@
          "string" : "Logga in med Suomi.fi"
       },
       "account_register_passkey" : {
-         "string" : "Registrera nyckel"
+         "string" : "Registrera nyckelkod"
       },
       "account_sync_bookmarks_statement" : {
          "string" : "Spara ditt läsläge och dina bokmärken på alla dina enheter"
@@ -648,6 +648,15 @@
       "bookReturned" : {
          "string" : "Boken '%1$s' har returnerats"
       },
+      "bookSessionExpiredButton" : {
+         "string" : ""
+      },
+      "bookSessionExpiredMessage" : {
+         "string" : ""
+      },
+      "bookSessionExpiredTitle" : {
+         "string" : ""
+      },
       "bookmarkEnd" : {
          "string" : "I slutet av kapitlet."
       },
@@ -748,13 +757,13 @@
          "string" : "Du är på plats %1$d i kön till denna bok."
       },
       "catalogBookAvailabilityHeldQueueShort" : {
-         "string" : "Din plats i kön: %1$"
+         "string" : "Din plats i kön: %1$d"
       },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "Du kommer att kunna låna denna bok om %1$s."
       },
       "catalogBookAvailabilityHeldTimedShort" : {
-         "string" : "Tillgänglig: %1$"
+         "string" : "Tillgänglig om: %1$s"
       },
       "catalogBookAvailabilityHoldable" : {
          "string" : "Alla kopior av denna bok är för närvarande utlånade."
@@ -874,7 +883,7 @@
          "string" : "Lyssna"
       },
       "catalogLoanTime" : {
-         "string" : "Tillgänglig att lånas: %1$"
+         "string" : "Denna bok är lånad åt dig i %1$s."
       },
       "catalogLoginRequired" : {
          "string" : "Logga in för att fortsätta."
@@ -1114,7 +1123,7 @@
          "string" : "När du reserverar en bok i katalogen visas den här. Återkom då och då för att se om boken kan laddas ner."
       },
       "feedWithGroupsEmptyLoaned" : {
-         "string" : "Besök katalogen för att lägga till böcker i Mina böcker."
+         "string" : "Besök katalogen för att lägga till böcker i Mina lån."
       },
       "fontSize" : {
          "string" : "Teckenstorlek"
@@ -1195,7 +1204,7 @@
          "string" : "Användarnamn"
       },
       "login_passkey" : {
-         "string" : "Logga in med nyckel"
+         "string" : "Logga in med nyckelkod"
       },
       "login_suomifi" : {
          "string" : "Logga in med Suomi.fi"
@@ -1258,7 +1267,16 @@
          "string" : "Uppdaterar OPDS-posten för boken %1$s…"
       },
       "magazinesHeader" : {
-         "string" : "Tidningar"
+         "string" : "Tidskrifter"
+      },
+      "magazinesSessionExpiredButton" : {
+         "string" : ""
+      },
+      "magazinesSessionExpiredMessage" : {
+         "string" : ""
+      },
+      "magazinesSessionExpiredTitle" : {
+         "string" : ""
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : "Gå till inställningar för att logga in"
@@ -1873,7 +1891,7 @@
          "string" : "Fortsätt utan att logga in"
       },
       "tabBooks" : {
-         "string" : "Mina böcker"
+         "string" : "Mina lån"
       },
       "tabCatalog" : {
          "string" : "Bläddra bland böcker"
@@ -1882,7 +1900,7 @@
          "string" : "Reservationer"
       },
       "tabMagazines" : {
-         "string" : "Tidningar"
+         "string" : "Tidskrifter"
       },
       "tabProfile" : {
          "string" : "Profil"
