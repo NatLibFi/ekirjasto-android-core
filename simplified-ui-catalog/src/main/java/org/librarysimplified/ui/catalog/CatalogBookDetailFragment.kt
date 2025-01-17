@@ -648,6 +648,16 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private fun onBookStatusFailedLoan(
     bookStatus: BookStatus.FailedLoan,
   ) {
+    //If error is 401 or 400, it's a response to the tried and failed token refresh
+    //So they get special treatment
+    if (bookStatus.message.contains("401") || bookStatus.message.contains("400")) {
+      logger.debug("session expired, trigger login popup")
+      //show popup if there already isn't one showing
+      if (!popUpShown) {
+        onLogInNeeded()
+      }
+    }
+
     this.buttons.removeAllViews()
     this.buttons.addView(
       this.buttonCreator.createDismissButton {
@@ -672,6 +682,28 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     this.statusIdle.visibility = View.INVISIBLE
     this.statusFailed.visibility = View.VISIBLE
     this.statusFailedText.text = this.resources.getText(R.string.catalogOperationFailed)
+  }
+
+  /**
+   * Show a popup informing user of token expiration and open up the login page when dismissed.
+   */
+  private fun onLogInNeeded() {
+    logger.debug("Showing 'Please login' popup")
+    //Ensure only one popup is shown at a time
+    popUpShown = true
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    builder
+      .setMessage(R.string.bookSessionExpiredMessage)
+      .setTitle(R.string.bookSessionExpiredTitle)
+      .setPositiveButton(R.string.bookSessionExpiredButton) { dialog, which ->
+        this.viewModel.openLoginDialog(parameters.feedEntry.accountID)
+        popUpShown = false
+        dialog.dismiss()
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+
   }
 
   private fun onBookStatusRevoked(
@@ -1035,7 +1067,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     }
   }
 
-  //A boolean lock used for showing only one copy of the low memory popup at a time
+  //A boolean lock used for showing only one copy of a popup at a time
   private var popUpShown = false
 
   /**

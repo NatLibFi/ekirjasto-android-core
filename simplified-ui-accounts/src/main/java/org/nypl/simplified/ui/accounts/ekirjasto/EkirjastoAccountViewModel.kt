@@ -208,7 +208,7 @@ class EkirjastoAccountViewModel(
     this.loginExplicitlyRequested = true
     this.profilesController.profileAccountLogin(request)
   }
-
+  
   fun tryLogout() {
     this.pendingLogout = true
 

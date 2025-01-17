@@ -120,6 +120,18 @@ interface ProfilesControllerType {
   ): FluentFuture<TaskResult<Unit>>
 
   /**
+   * Attempt to refresh accessToken for the given account of the current profile. This is attempted
+   * using the accessToken currently linked to the account.
+   *
+   * @param request The refresh request
+   * @return A future that returns the result of the refresh
+   */
+
+  fun profileAccountAccessTokenRefresh(
+    request: ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh
+  ): FluentFuture<TaskResult<Unit>>
+
+  /**
    * Create an account using the given account provider. The operation will fail if
    * an account already exists using the given provider.
    *

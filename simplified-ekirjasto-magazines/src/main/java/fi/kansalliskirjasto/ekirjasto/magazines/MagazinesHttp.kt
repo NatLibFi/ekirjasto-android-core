@@ -59,6 +59,12 @@ class MagazinesHttp(
         }
         is LSHTTPResponseStatus.Responded.Error -> {
           logger.warn("fetchSynchronously error: {}", response)
+          if (status.properties.originalStatus == 401) {
+            //Inform about the need to refresh the accessToken
+            return MagazinesHttpResult.MagazinesHttpFailure(
+              message = "accessToken refresh needed"
+            )
+          }
           return MagazinesHttpResult.MagazinesHttpFailure(
             message = "Error ${response.status}: ${response.properties?.message}"
             //exception = e,

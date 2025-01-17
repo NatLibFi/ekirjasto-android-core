@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":simplified-metrics-api"))
     implementation(project(":simplified-oauth"))
     implementation(project(":simplified-presentableerror-api"))
+    implementation(project(":simplified-futures"))
     implementation(project(":simplified-profiles-api"))
     implementation(project(":simplified-profiles-controller-api"))
     implementation(project(":simplified-reader-api"))

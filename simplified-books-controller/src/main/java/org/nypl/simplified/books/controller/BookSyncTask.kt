@@ -46,7 +46,7 @@ class BookSyncTask(
   private val accountID: AccountID,
   profileID: ProfileID,
   profiles: ProfilesDatabaseType,
-  private val booksController: BooksControllerType,
+  private val booksController: Controller,
   private val accountRegistry: AccountProviderRegistryType,
   private val bookRegistry: BookRegistryType,
   private val feedLoader: FeedLoaderType,
@@ -341,11 +341,27 @@ class BookSyncTask(
     result: LSHTTPResponseStatus.Responded.Error,
     account: AccountType
   ): Boolean {
-    if (result.properties.status == 401) {
-      this.logger.debug("removing credentials due to 401 server response")
-      account.setLoginState(AccountLoginState.AccountNotLoggedIn)
-      return true
+    when(account.loginState.credentials) {
+      is AccountAuthenticationCredentials.Ekirjasto -> {
+        if (result.properties.status == 401) {
+          this.logger.debug("refresh credentials due to 401 server response")
+          //Launch accessToken refresh
+          booksController.executeProfileAccountAccessTokenRefresh(accountID)
+          //Returns true, as it's not an actual error, so can continue normally
+          //Don't set as logged out, as can possibly be logged in with tokenRefresh
+          //If logout is needed, it is handled in another part of the code
+          return true
+        }
+      }
+      else -> {
+        if (result.properties.status == 401) {
+          this.logger.debug("removing credentials due to 401 server response")
+          account.setLoginState(AccountLoginState.AccountNotLoggedIn)
+          return true
+        }
+      }
     }
+
     return false
   }
 }
