@@ -1,4 +1,5 @@
 1.2.0
-- Bugikorjauksia
+- Korjattu bugi joka aiheutti joillakin käyttäjillä virheellisen uloskirjautumisen
+- Muita bugikorjauksia
 - UI korjauksia
 - Paranneltu saavutettavuus
