@@ -1,4 +1,5 @@
 1.2.0
-- Buggfixar
+- Fixade en bugg som fick vissa användare att logga ut
+- Andra buggfixar
 - UI fixar
 – Förbättrad tillgänglighet
