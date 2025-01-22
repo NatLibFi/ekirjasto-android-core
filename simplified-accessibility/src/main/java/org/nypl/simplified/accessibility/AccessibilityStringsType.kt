@@ -13,4 +13,6 @@ interface AccessibilityStringsType {
   fun bookFailedLoan(title: String): String
   fun bookFailedDownload(title: String): String
   fun bookLoanLimitReached(): String
+  fun bookSelected(title: String): String
+  fun bookUnselected(title: String): String
 }

@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":simplified-parser-api"))
     implementation(project(":simplified-patron-api"))
     implementation(project(":simplified-presentableerror-api"))
+    implementation(project(":simplified-futures"))
     implementation(project(":simplified-profiles-api"))
     implementation(project(":simplified-profiles-controller-api"))
     implementation(project(":simplified-services-api"))

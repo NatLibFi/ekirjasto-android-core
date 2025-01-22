@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -30,6 +31,7 @@ import org.librarysimplified.services.api.Services
 import org.nypl.simplified.android.ktx.supportActionBar
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookFormat
+import org.nypl.simplified.books.api.BookID
 import org.nypl.simplified.books.book_database.api.BookFormats
 import org.nypl.simplified.books.book_registry.BookPreviewStatus
 import org.nypl.simplified.books.book_registry.BookStatus
@@ -612,6 +614,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       is BookStatus.DownloadExternalAuthenticationInProgress -> {
         this.onBookStatusDownloadExternalAuthenticationInProgress()
       }
+      is BookStatus.Selected -> this.onBookStatusBookSelected(book.book.id, status)
+      is BookStatus.Unselected -> this.onBookStatusBookUnselected(book.book.id, status)
     }
   }
 
@@ -791,6 +795,23 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     viewModel.resetInitialBookStatus(this.parameters.feedEntry)
   }
 
+  /**
+   * Show a toast for successful select and trigger status reset
+   */
+  private fun onBookStatusBookSelected(bookID: BookID, status: BookStatus) {
+    Toast.makeText(this.requireContext(), getString(R.string.catalogBookSelect), Toast.LENGTH_SHORT).show()
+    viewModel.resetPreviousBookStatus(bookID, status, true)
+    logger.debug("BookStatusReset")
+  }
+
+  /**
+   * Show a toast for successful unselect and trigger status reset
+   */
+  private fun onBookStatusBookUnselected(bookID: BookID, status: BookStatus) {
+    Toast.makeText(this.requireContext(), getString(R.string.catalogBookUnselect), Toast.LENGTH_SHORT).show()
+    viewModel.resetPreviousBookStatus(bookID, status, false)
+    logger.debug("BookStatusResetToPrevious")
+  }
   private fun onBookStatusHoldable(
     bookStatus: BookStatus.Holdable,
     bookPreviewStatus: BookPreviewStatus

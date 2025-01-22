@@ -280,6 +280,8 @@ internal class ProfileFeedTask(
       is BookStatus.Loaned,
       is BookStatus.RequestingDownload,
       is BookStatus.RequestingLoan,
+      is BookStatus.Selected,
+      is BookStatus.Unselected,
       is BookStatus.RequestingRevoke ->
         true
     }
@@ -303,6 +305,8 @@ internal class ProfileFeedTask(
       is BookStatus.RequestingDownload,
       is BookStatus.RequestingLoan,
       is BookStatus.RequestingRevoke,
+      is BookStatus.Selected,
+      is BookStatus.Unselected,
       is BookStatus.Revoked ->
         false
     }

@@ -119,7 +119,7 @@ interface BooksControllerType {
    * Add the chosen book to a list of selected books.
    *
    * @param accountID The account that selected the book
-   * @param bookID The ID of the book
+   * @param feedEntry The FeedEntry for the book
    */
   fun bookAddToSelected(
     accountID: AccountID,

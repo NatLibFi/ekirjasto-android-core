@@ -270,6 +270,7 @@ class CatalogFeedViewModel(
         is BookStatus.Loaned,
         is BookStatus.Revoked -> {
           if (this.state.arguments.isLocallyGenerated) {
+            //Selecting and unselecting can trigger this for a book that is not on loan
             this.reloadFeed()
           }
         }
@@ -285,6 +286,8 @@ class CatalogFeedViewModel(
         is BookStatus.RequestingDownload,
         is BookStatus.RequestingLoan,
         is BookStatus.RequestingRevoke,
+        is BookStatus.Selected,
+        is BookStatus.Unselected,
         null -> {
           // do nothing
         }
@@ -1025,6 +1028,32 @@ class CatalogFeedViewModel(
     }
 
     this.bookRegistry.update(initialBookStatus)
+  }
+
+  /**
+   * Reset the book in registry to its previous status, or generate a new one from the available information
+   * if there isn't one
+   */
+  override fun resetPreviousBookStatus(bookID: BookID, status: BookStatus, selected: Boolean) {
+    logger.debug("Resetting status: {}", status)
+    //Cast tho the correct status depending if select is true or not
+    val previousStatus: BookStatus? = if (selected) {
+      val currentStatus = status as BookStatus.Selected
+      currentStatus.previousStatus
+    } else {
+      val currentStatus = status as BookStatus.Unselected
+      currentStatus.previousStatus
+    }
+    // If there is a previous status, set that as the new status in book registry
+    if (previousStatus != null) {
+      val bookWithStatus = this.bookRegistry.bookOrNull(bookID)
+      this.bookRegistry.update(BookWithStatus(bookWithStatus!!.book, previousStatus))
+    } else {
+      // The book for certain has been added to the bookRegistry so if no status provided, create
+      //one from the bookRegistry entry
+      val bookWithStatus = this.bookRegistry.bookOrNull(bookID)
+      this.bookRegistry.update(BookWithStatus(bookWithStatus!!.book, BookStatus.fromBook(bookWithStatus.book)))
+    }
   }
 
   override fun registerObserver(

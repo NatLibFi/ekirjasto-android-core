@@ -4,8 +4,8 @@
   <string name="catalogAccessibilityBookBorrow">Get</string>
   <string name="catalogAccessibilityBookDelete">Delete</string>
   <string name="catalogAccessibilityBookDownload">Download</string>
-  <string name="catalogAccessibilityBookSelect">Add book to your selected books</string>
-  <string name="catalogAccessibilityBookUnselect">Remove book from your selected books</string>
+  <string name="catalogAccessibilityBookSelect">Add this book to your selected books</string>
+  <string name="catalogAccessibilityBookUnselect">Remove this book from your selected books</string>
   <string name="catalogAccessibilityBookDownloadCancel">Cancel download</string>
   <string name="catalogAccessibilityBookErrorDetails">Details</string>
   <string name="catalogAccessibilityBookErrorDismiss">Dismiss</string>
@@ -93,7 +93,8 @@
   <string name="catalogSearch">Search</string>
   <string name="catalogDurationFormat">%1$s hours, %2$s minutes</string>
   <string name="catalogDetailsMore">Read more</string>
-
+  <string name="catalogBookSelect">%1$s added to favorites</string>
+  <string name="catalogBookUnselect">%1$s removed from favorites</string>
   <string name="bookReachedLoanLimitDialogMessage">You have reached your loan limit. You cannot borrow anything further until you return something.</string>
   <string name="bookReachedLoanLimitDialogTitle">Loan limit reached.</string>
   <string name="bookReachedLoanLimitDialogButton">OK</string>

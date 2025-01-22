@@ -266,6 +266,8 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
       is BookStatus.RequestingDownload,
       is BookStatus.RequestingLoan,
       is BookStatus.RequestingRevoke,
+      is BookStatus.Selected,
+      is BookStatus.Unselected,
       is BookStatus.Revoked,
       null -> {
         // do nothing

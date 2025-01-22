@@ -107,6 +107,7 @@ class CatalogBookDetailViewModel(
     mutableMapOf()
 
   private fun onBookStatusEvent(event: BookStatusEvent) {
+    logger.debug("ALALALALALLALALALALALALALALLA")
     val bookWithStatus = this.createBookWithStatus()
     this.bookWithStatusMutable.value = Pair(bookWithStatus, bookWithStatusMutable.value!!.second)
   }
@@ -261,6 +262,7 @@ class CatalogBookDetailViewModel(
     feedEntry: FeedEntry.FeedEntryOPDS,
     callback: (BookWithStatus) -> Unit
   ) {
+    logger.debug("Observer registered")
     this.bookModels.getOrPut(feedEntry.bookID, { BookModel(feedEntry) }).onBookChanged.add(callback)
     this.notifyBookStatus(feedEntry, callback)
   }
@@ -306,7 +308,7 @@ class CatalogBookDetailViewModel(
   }
 
   override fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
-    booksController.bookAddToSelected(
+    booksController.bookRemoveFromSelected(
       accountID = profilesController.profileCurrent().mostRecentAccount().id,
       feedEntry = feedEntry
     )
@@ -316,6 +318,30 @@ class CatalogBookDetailViewModel(
     val initialBookStatus = synthesizeBookWithStatus(feedEntry)
     this.bookRegistry.update(initialBookStatus)
     this.bookWithStatusMutable.value = Pair(initialBookStatus, BookPreviewStatus.None)
+  }
+
+  /**
+   * Reset to the previous status provided in the current status, if not provided, generate it from the book.
+   */
+  override fun resetPreviousBookStatus(bookID: BookID, status: BookStatus, selected: Boolean) {
+    //Cast tho the correct status depending if select is true or not
+    val previousStatus: BookStatus? = if (selected) {
+      val currentStatus = status as BookStatus.Selected
+      currentStatus.previousStatus
+    } else {
+      val currentStatus = status as BookStatus.Unselected
+      currentStatus.previousStatus
+    }
+    // If there is a previous status, set that as the new status in book registry
+    if (previousStatus != null) {
+      val bookWithStatus = this.bookRegistry.bookOrNull(bookID)
+      this.bookRegistry.update(BookWithStatus(bookWithStatus!!.book, previousStatus))
+    } else {
+      // The book for certain has been added to the bookRegistry so if no status provided, create
+      //one from the bookRegistry entry
+      val bookWithStatus = this.bookRegistry.bookOrNull(bookID)
+      this.bookRegistry.update(BookWithStatus(bookWithStatus!!.book, BookStatus.fromBook(bookWithStatus.book)))
+    }
   }
 
   override fun borrowMaybeAuthenticated(book: Book) {

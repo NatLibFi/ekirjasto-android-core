@@ -1,7 +1,9 @@
 package org.nypl.simplified.books.controller
 
 import com.google.common.collect.ImmutableList
+import com.google.common.util.concurrent.AsyncFunction
 import com.google.common.util.concurrent.FluentFuture
+import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListeningExecutorService
 import com.google.common.util.concurrent.MoreExecutors
 import com.google.common.util.concurrent.SettableFuture
@@ -26,7 +28,9 @@ import org.nypl.simplified.accounts.database.api.AccountsDatabaseNonexistentExce
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryEvent
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryType
 import org.nypl.simplified.analytics.api.AnalyticsType
+import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookID
+import org.nypl.simplified.books.api.BookIDs
 import org.nypl.simplified.books.book_registry.BookPreviewRegistryType
 import org.nypl.simplified.books.book_registry.BookRegistryType
 import org.nypl.simplified.books.book_registry.BookStatus
@@ -36,6 +40,7 @@ import org.nypl.simplified.books.borrowing.BorrowRequirements
 import org.nypl.simplified.books.borrowing.BorrowTask
 import org.nypl.simplified.books.borrowing.BorrowTaskType
 import org.nypl.simplified.books.borrowing.SAMLDownloadContext
+import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes
 import org.nypl.simplified.books.controller.api.BookRevokeStringResourcesType
 import org.nypl.simplified.books.controller.api.BooksControllerType
 import org.nypl.simplified.books.controller.api.BooksPreviewControllerType
@@ -741,13 +746,13 @@ class Controller private constructor(
 
     //FIXFIXFIX
     //Add 401 handling
-    //Add successful reload?
     return this.submitTask(
-      Callable <TaskResult<*>>{
+      Callable<TaskResult<*>> {
         val bookSelectTask = BookSelectTask(
           HTTPClient = this.lsHttp,
           account = account,
-          feedEntry =feedEntry.feedEntry
+          feedEntry = feedEntry.feedEntry,
+          bookRegistry = bookRegistry
         )
         bookSelectTask.execute()
       }
@@ -763,13 +768,13 @@ class Controller private constructor(
 
     //FIXFIXFIX
     //Add 401 handling
-    //Add successful reload?
     return this.submitTask(
       Callable <TaskResult<*>>{
         val bookUnselectTask = BookUnselectTask(
           HTTPClient = this.lsHttp,
           account = account,
-          feedEntry =feedEntry.feedEntry
+          feedEntry =feedEntry.feedEntry,
+          bookRegistry = bookRegistry
         )
         bookUnselectTask.execute()
       }

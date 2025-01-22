@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -130,7 +131,7 @@ class CatalogPagedViewHolder(
     }
   }
 
-  private fun onFeedEntryOPDS(item: FeedEntryOPDS) {
+  private fun onFeedEntryOPDS(item: FeedEntryOPDS, book: Book) {
     this.setVisibilityIfNecessary(this.corrupt, View.GONE)
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
@@ -156,7 +157,7 @@ class CatalogPagedViewHolder(
       null -> ""
     }
     //If there is a selected date, the book is selected
-    if (item.feedEntry.selected is Some<DateTime>) {
+    if (book.entry.selected is Some<DateTime>) {
       //Set the drawable as the "checked" version
       this.idleSelectedButton.setImageDrawable(
         ContextCompat.getDrawable(context,R.drawable.baseline_check_circle_24)
@@ -173,7 +174,7 @@ class CatalogPagedViewHolder(
         ContextCompat.getDrawable(context,R.drawable.round_add_circle_outline_24)
       )
       //Add audio description
-      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookSelect)
+      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookUnselect)
       this.idleSelectedButton.setOnClickListener {
         //Add book to selected
         this.listener.selectBook(item)
@@ -198,7 +199,7 @@ class CatalogPagedViewHolder(
   }
 
   private fun onBookChanged(bookWithStatus: BookWithStatus) {
-    this.onFeedEntryOPDS(this.feedEntry as FeedEntryOPDS)
+    this.onFeedEntryOPDS(this.feedEntry as FeedEntryOPDS, bookWithStatus.book)
     this.onBookWithStatus(bookWithStatus)
     this.checkSomethingIsVisible()
   }
@@ -256,6 +257,8 @@ class CatalogPagedViewHolder(
         this.onBookStatusDownloadWaitingForExternalAuthentication(book.book)
       is BookStatus.DownloadExternalAuthenticationInProgress ->
         this.onBookStatusDownloadExternalAuthenticationInProgress(book.book)
+      is BookStatus.Selected -> this.onBookStatusSelected(book)
+      is BookStatus.Unselected -> this.onBookStatusUnselected(book)
     }
   }
 
@@ -731,6 +734,24 @@ class CatalogPagedViewHolder(
 
     this.progressText.text = book.entry.title
     this.progressProgress.isIndeterminate = true
+  }
+
+  /**
+   * Show toast informing user that the book has been added to selected books
+   * and reset bookStatus to what it was before selection
+   */
+  private fun onBookStatusSelected(book: BookWithStatus) {
+    Toast.makeText(this.context, context.getString(R.string.catalogBookSelect, book.book.entry.title), Toast.LENGTH_SHORT).show()
+    this.listener.resetPreviousBookStatus(book.book.id, book.status, true)
+  }
+
+  /**
+   * Show toast informing user that the book has been removed from selected books
+   * and reset bookStatus to what it was before
+   */
+  private fun onBookStatusUnselected(book: BookWithStatus) {
+    Toast.makeText(this.context, context.getString(R.string.catalogBookUnselect, book.book.entry.title), Toast.LENGTH_SHORT).show()
+    this.listener.resetPreviousBookStatus(book.book.id, book.status, false)
   }
 
   fun unbind() {

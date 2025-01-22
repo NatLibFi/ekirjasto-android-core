@@ -1,5 +1,6 @@
 package org.nypl.simplified.books.controller
 
+import com.io7m.jfunctional.None
 import com.io7m.jfunctional.Some
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.http.api.LSHTTPResponseStatus
@@ -24,6 +25,7 @@ import org.nypl.simplified.books.book_registry.BookWithStatus
 import org.nypl.simplified.books.controller.api.BooksControllerType
 import org.nypl.simplified.feeds.api.FeedLoaderType
 import org.nypl.simplified.feeds.api.FeedLoading
+import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
 import org.nypl.simplified.opds.core.OPDSAvailabilityRevoked
 import org.nypl.simplified.opds.core.OPDSFeedParserType
 import org.nypl.simplified.opds.core.OPDSParseException
@@ -65,10 +67,12 @@ class BookSyncTask(
     this.logger.debug("syncing account {}", account.id)
     this.taskRecorder.beginNewStep("Syncing...")
 
+    //Handle keys
     MDC.put(MDCKeys.ACCOUNT_INTERNAL_ID, account.id.uuid.toString())
     MDC.put(MDCKeys.ACCOUNT_PROVIDER_NAME, account.provider.displayName)
     MDC.put(MDCKeys.ACCOUNT_PROVIDER_ID, account.provider.id.toString())
 
+    //Update provider
     val provider = this.updateAccountProvider(account)
     val providerAuth = provider.authentication
     if (providerAuth == AccountProviderAuthenticationDescription.Anonymous) {
@@ -76,6 +80,7 @@ class BookSyncTask(
       return this.taskRecorder.finishSuccess(Unit)
     }
 
+    //Get credentials to use for request authentication
     val credentials = account.loginState.credentials
     if (credentials == null) {
       this.logger.debug("no credentials, aborting!")
@@ -87,33 +92,34 @@ class BookSyncTask(
       credentials = credentials
     )
 
+    //The URI to use for getting the loans
     val loansURI = provider.loansURI
     if (loansURI == null) {
       this.logger.debug("no loans URI, aborting!")
       return this.taskRecorder.finishSuccess(Unit)
     }
-
+    //Loan request
     val request =
       this.http.newRequest(loansURI)
         .setAuthorization(AccountAuthenticatedHTTP.createAuthorization(credentials))
         .addCredentialsToProperties(credentials)
         .build()
 
+    //Initialize loans stream
+    var loansStream : InputStream = ByteArrayInputStream(ByteArray(0))
+
+    //Execute loan fetch
     val response = request.execute()
     when (val status = response.status) {
       is LSHTTPResponseStatus.Responded.OK -> {
-        this.onHTTPOK(
-          stream = status.bodyStream ?: ByteArrayInputStream(ByteArray(0)),
-          provider = provider,
-          account = account,
-          accessToken = status.getAccessToken()
-        )
+        // Save stream for later use
+        loansStream = status.bodyStream ?: ByteArrayInputStream(ByteArray(0))
       }
       is LSHTTPResponseStatus.Responded.Error -> {
         val recovered = this.onHTTPError(status, account)
 
         if (recovered) {
-          //this.taskRecorder.finishSuccess(Unit)
+          this.taskRecorder.finishSuccess(Unit)
         } else {
           val message = String.format("%s: %d: %s", provider.loansURI, status.properties.status, status.properties.message)
           val exception = IOException(message)
@@ -129,29 +135,29 @@ class BookSyncTask(
         throw IOException(status.exception)
     }
 
-    //Do the same for selected
-    //FIXFIX
-    //Check if this is needed
+    // Do the same for selected feed
     val selectedURI = provider.selectedURI
     if (selectedURI == null) {
       this.logger.debug("no selected URI, aborting!")
       return this.taskRecorder.finishSuccess(Unit)
     }
-
-    val selectedRequest =
+    //Select request
+    val selectRequest =
       this.http.newRequest(selectedURI)
         .setAuthorization(AccountAuthenticatedHTTP.createAuthorization(credentials))
         .addCredentialsToProperties(credentials)
         .build()
 
-    val selectedResponse = selectedRequest.execute()
-    when (val status =selectedResponse.status) {
+    //Execute selected fetch
+    val selectedResponse = selectRequest.execute()
+    return when (val status = selectedResponse.status) {
       is LSHTTPResponseStatus.Responded.OK -> {
-        this.onHTTPOK(
-          stream = status.bodyStream ?: ByteArrayInputStream(ByteArray(0)),
+        //Handle both the loans and selected streams so the books are added into the database
+        this.onHTTPOKMultipleFeeds(
+          loansStream = loansStream,
+          selectedStream = status.bodyStream ?: ByteArrayInputStream(ByteArray(0)),
           provider = provider,
-          account = account,
-          accessToken = status.getAccessToken()
+          account = account
         )
         this.taskRecorder.finishSuccess(Unit)
       }
@@ -174,7 +180,6 @@ class BookSyncTask(
       is LSHTTPResponseStatus.Failed ->
         throw IOException(status.exception)
     }
-    return this.taskRecorder.finishSuccess(Unit)
   }
 
   private fun fetchPatronUserProfile(
@@ -255,6 +260,10 @@ class BookSyncTask(
     }
   }
 
+  /**
+   * On successful HTTP request, update basicToken credentials
+   * and parse the given feed, saving the books into the book registry.
+   */
   @Throws(IOException::class)
   private fun onHTTPOK(
     stream: InputStream,
@@ -323,6 +332,158 @@ class BookSyncTask(
           } else {
             this.logger.debug("[{}] deleting", existingId.brief())
             this.updateRegistryForBook(account, dbEntry)
+            dbEntry.delete()
+          }
+        } else {
+          this.logger.debug("[{}] keeping", existingId.brief())
+        }
+      } catch (x: Throwable) {
+        this.logger.error("[{}]: unable to delete entry: ", existingId.value(), x)
+      }
+    }
+
+    /*
+     * Finish the revocation of any books that need it.
+     */
+
+    for (revoke_id in revoking) {
+      this.logger.debug("[{}] revoking", revoke_id.brief())
+      this.booksController.bookRevoke(account.id, revoke_id)
+    }
+  }
+
+  /**
+   * Handle successful HTTP with multiple feeds
+   */
+  @Throws(IOException::class)
+  private fun onHTTPOKMultipleFeeds(
+    loansStream: InputStream,
+    selectedStream: InputStream,
+    provider: AccountProviderType,
+    account: AccountType
+  ) {
+    //Parse multiple streams into one
+    loansStream.use { loans ->
+      this.parseSelectedAndLoansFeeds(loans, selectedStream, provider, account)
+    }
+  }
+
+  /**
+   * Parse together two feeds and add the books into the database. Removes from the
+   * database entries that are not available in either of the feeds.
+   */
+  @Throws(OPDSParseException::class)
+  private fun parseSelectedAndLoansFeeds(
+    loansStream: InputStream,
+    selectedStream: InputStream,
+    provider: AccountProviderType,
+    account: AccountType
+  ) {
+    //Parse loans
+    val loansFeed = this.feedParser.parse(provider.selectedURI, loansStream)
+
+    //Parse selected
+    val selectedFeed = this.feedParser.parse(provider.selectedURI, selectedStream)
+
+    //Combine the feed entries from both feeds into one list, create new IDs for them
+    val loansMap = loansFeed.feedEntries.associateBy { BookIDs.newFromOPDSEntry(it) }
+    val selectedMap = selectedFeed.feedEntries.associateBy { BookIDs.newFromOPDSEntry(it) }
+
+    //Get all non-duplicate IDs
+    val allBookIDs = (loansMap.keys + selectedMap.keys).toSet()
+
+    //Initiate the list for the combined feed entries
+    val combinedFeedEntries = mutableListOf<OPDSAcquisitionFeedEntry>()
+
+    //Map values based on their id
+    allBookIDs.map { id ->
+      //Get the entries for id for both feeds
+      val loansEntry = loansMap[id]
+      val selectedEntry = selectedMap[id]
+
+      //If there is a loans entry, use it as a base
+      if (loansEntry != null) {
+        //If there is a selected entry, we want to copy its selected value to the loans entry
+        if (selectedEntry != null) {
+          //Create new entry based on the loans entry and replace the values you want to replace
+          //Which currently only selected info
+          val newEntry = OPDSAcquisitionFeedEntry.newBuilderFrom(loansEntry)
+            .setSelectedOption(selectedEntry.selected)
+            .build()
+          //Add the new entry
+          combinedFeedEntries.add(newEntry)
+        } else {
+          // If book is not selected, we can just add the loans entry
+          combinedFeedEntries.add(loansEntry)
+        }
+      } else {
+        //If there is no loans entry, we can just add the selected entry
+        combinedFeedEntries.add(selectedEntry!!)
+      }
+    }
+
+    /*
+     * Obtain the set of books that are on disk already. If any
+     * of these books are not selected and not loaned, then they have
+     * expired and/or are unselected and should be deleted.
+     */
+
+    val bookDatabase = account.bookDatabase
+    val existing = bookDatabase.books()
+
+    /*
+     * Handle each book in the combined feed by checking if matching book is in database
+     */
+    val receivedBooks = HashSet<BookID>(64)
+    for (opdsEntry in combinedFeedEntries) {
+      // Create new id for the entry (will match the ID of the book in the registry, if any)
+      val bookId = BookIDs.newFromOPDSEntry(opdsEntry)
+      // Add to the received loans
+      receivedBooks.add(bookId)
+
+      this.logger.debug("[{}] updating", bookId.brief())
+
+      // Try to add the book to the database
+      // Update old entries or add new ones
+      try {
+        //Create a new database entry, or update old one
+        val databaseEntry = bookDatabase.createOrUpdate(bookId, opdsEntry)
+        //get the book we just added and refresh the registry
+        val book = databaseEntry.book
+        //Update the book state in the registry, create the status based on the book entry
+        this.bookRegistry.update(BookWithStatus(book, BookStatus.fromBook(book)))
+      } catch (e: BookDatabaseException) {
+        this.logger.error("[{}] unable to update database entry: ", bookId.brief(), e)
+      }
+    }
+
+    /*
+     * Now delete/revoke any book that previously existed, but is not in the
+     * received set of IDs we formed previously.
+     */
+
+    // Initiate the list into which we collect the book's IDs that need to be revoked
+    //Not just deleted
+    val revoking = HashSet<BookID>(existing.size)
+    //Go through all id:s in database
+    for (existingId in existing) {
+      try {
+        this.logger.debug("[{}] checking for deletion", existingId.brief())
+
+        //If book not in loans or selected, delete it
+        if (!allBookIDs.contains(existingId)) {
+          val dbEntry = bookDatabase.entry(existingId)
+          val a = dbEntry.book.entry.availability
+          val b = dbEntry.book.entry.selected
+          // If the book availability is revoked, it should be revoked
+          if (a is OPDSAvailabilityRevoked) {
+            revoking.add(existingId)
+          } else {
+            //Otherwide just deleting will do
+            this.logger.debug("[{}] deleting", existingId.brief())
+            //Load the single entry and add the "neutral" version to the book
+            this.updateRegistryForBook(account, dbEntry)
+            //Delete entry from database
             dbEntry.delete()
           }
         } else {
