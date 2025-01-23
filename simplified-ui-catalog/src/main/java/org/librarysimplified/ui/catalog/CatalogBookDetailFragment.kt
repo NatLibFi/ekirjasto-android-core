@@ -614,8 +614,12 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       is BookStatus.DownloadExternalAuthenticationInProgress -> {
         this.onBookStatusDownloadExternalAuthenticationInProgress()
       }
-      is BookStatus.Selected -> this.onBookStatusBookSelected(book.book.id, status)
-      is BookStatus.Unselected -> this.onBookStatusBookUnselected(book.book.id, status)
+      is BookStatus.Selected -> {
+        this.onBookStatusBookSelected(book.book.id,book.book.entry.title, status)
+      }
+      is BookStatus.Unselected -> {
+        this.onBookStatusBookUnselected(book.book.id, book.book.entry.title,status)
+      }
     }
   }
 
@@ -798,8 +802,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   /**
    * Show a toast for successful select and trigger status reset
    */
-  private fun onBookStatusBookSelected(bookID: BookID, status: BookStatus) {
-    Toast.makeText(this.requireContext(), getString(R.string.catalogBookSelect), Toast.LENGTH_SHORT).show()
+  private fun onBookStatusBookSelected(bookID: BookID, title: String, status: BookStatus) {
+    Toast.makeText(this.requireContext(), getString(R.string.catalogBookSelect, title), Toast.LENGTH_SHORT).show()
     viewModel.resetPreviousBookStatus(bookID, status, true)
     logger.debug("BookStatusReset")
   }
@@ -807,8 +811,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   /**
    * Show a toast for successful unselect and trigger status reset
    */
-  private fun onBookStatusBookUnselected(bookID: BookID, status: BookStatus) {
-    Toast.makeText(this.requireContext(), getString(R.string.catalogBookUnselect), Toast.LENGTH_SHORT).show()
+  private fun onBookStatusBookUnselected(bookID: BookID,  title: String, status: BookStatus) {
+    Toast.makeText(this.requireContext(), getString(R.string.catalogBookUnselect, title), Toast.LENGTH_SHORT).show()
     viewModel.resetPreviousBookStatus(bookID, status, false)
     logger.debug("BookStatusResetToPrevious")
   }
