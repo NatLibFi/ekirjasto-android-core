@@ -73,7 +73,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonUserAgreement: Button
   private lateinit var buttonAccessibilityStatement: Button
   private lateinit var buttonLicenses: Button
-  private lateinit var buttonFaq: Button
+  private lateinit var buttonInstructions: Button
   private lateinit var versionText: TextView
   private lateinit var bookmarkSyncProgress: ProgressBar
   private lateinit var bookmarkSyncCheck: SwitchCompat
@@ -115,7 +115,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonPrivacyPolicy = view.findViewById(R.id.buttonPrivacyPolicy)
     this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
     this.buttonLicenses = view.findViewById(R.id.buttonLicenses)
-    this.buttonFaq = view.findViewById(R.id.buttonFaq)
+    this.buttonInstructions = view.findViewById(R.id.buttonInstructions)
     this.versionText = view.findViewById(R.id.appVersion)
     this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
     this.buttonPreferences = view.findViewById(R.id.buttonPreferences)
@@ -254,7 +254,18 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     configureDocViewButton(buttonPrivacyPolicy, this.viewModel.documents.privacyPolicy)
     configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
     configureDocViewButton(buttonLicenses, this.viewModel.documents.licenses)
-    configureDocViewButton(buttonFaq, this.viewModel.documents.faq)
+    //Configure the doc buttons to the correct language version
+    when (LanguageUtil.getUserLanguage(this.requireContext())) {
+      "fi" -> {
+      configureDocViewButton(buttonInstructions, this.viewModel.documents.instructionsFI)
+      }
+      "sv" -> {
+      configureDocViewButton(buttonInstructions, this.viewModel.documents.instructionsSV)
+      }
+      else -> {
+        configureDocViewButton(buttonInstructions, this.viewModel.documents.instructionsEN)
+      }
+    }
 
     /*
      * Configure preferences button to open the preferences fragment

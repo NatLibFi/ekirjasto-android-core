@@ -48,6 +48,21 @@ interface DocumentStoreType {
   val licenses: DocumentType?
 
   /**
+   * @return The application Instruction in finnish, if any.
+   */
+  val instructionsFI: DocumentType?
+
+  /**
+   * @return The application Instruction in swedish, if any.
+   */
+  val instructionsSV: DocumentType?
+
+  /**
+   * @return The application Instruction in english, if any.
+   */
+  val instructionsEN: DocumentType?
+
+  /**
    * @return The application FAQ, if any.
    */
 
