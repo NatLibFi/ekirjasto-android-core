@@ -107,7 +107,6 @@ class CatalogBookDetailViewModel(
     mutableMapOf()
 
   private fun onBookStatusEvent(event: BookStatusEvent) {
-    logger.debug("ALALALALALLALALALALALALALALLA")
     val bookWithStatus = this.createBookWithStatus()
     this.bookWithStatusMutable.value = Pair(bookWithStatus, bookWithStatusMutable.value!!.second)
   }
