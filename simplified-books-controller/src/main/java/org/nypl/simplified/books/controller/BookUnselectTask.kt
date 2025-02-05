@@ -176,7 +176,7 @@ class BookUnselectTask (
     val statusOld = this.bookRegistry.bookStatusOrNull(bookID)
 
     //Shows the correct popup before possibly removing the entry
-    this.bookRegistry.updateIfStatusIsMoreImportant(
+    this.bookRegistry.update(
       BookWithStatus(
         newValue.book,
         BookStatus.Unselected(bookID, statusOld))

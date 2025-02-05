@@ -430,20 +430,6 @@ internal class MainFragmentListenerDelegate(
         this.openDependentPage()
         state
       }
-
-      //FIXFIX
-      is AccountDetailEvent.OpenSelectedFragment -> {
-        val accountID = profilesController.profileCurrent().mostRecentAccount().id
-        val selectedURI = profilesController.profileCurrent().mostRecentAccount().provider.selectedURI!!
-        val  arguments = CatalogFeedArguments.CatalogFeedArgumentsRemote(
-          title = "Selected",
-          ownership = CatalogFeedOwnership.OwnedByAccount(accountID),
-          feedURI = selectedURI,
-          isSearchResults = false
-        )
-        this.openFeed(arguments)
-        state
-      }
     }
   }
 

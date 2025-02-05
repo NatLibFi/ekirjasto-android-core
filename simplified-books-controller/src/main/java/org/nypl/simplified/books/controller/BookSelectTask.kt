@@ -219,7 +219,7 @@ class BookSelectTask (
     val oldBookStatus = this.bookRegistry.bookStatusOrNull(book.id)
     logger.debug("OLD BOOK STATUS :{}",oldBookStatus)
     //If successful, update the state of the book in database to selected, so other things happen
-    this.bookRegistry.updateIfStatusIsMoreImportant(
+    this.bookRegistry.update(
       BookWithStatus(
         book = updatedEntry.book,
         status = BookStatus.Selected(updatedEntry.book.id, oldBookStatus)

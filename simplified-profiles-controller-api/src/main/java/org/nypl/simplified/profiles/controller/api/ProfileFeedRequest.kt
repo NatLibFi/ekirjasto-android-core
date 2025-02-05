@@ -5,6 +5,7 @@ import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.feeds.api.FeedBooksSelection
 import org.nypl.simplified.feeds.api.FeedBooksSelection.BOOKS_FEED_LOANED
 import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.Sorting.SortBy
+import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.FilteringForFeed.FilterBy
 import org.nypl.simplified.feeds.api.FeedFacetPseudoTitleProviderType
 import java.net.URI
 
@@ -37,6 +38,12 @@ data class ProfileFeedRequest(
    */
 
   val title: String,
+
+  /**
+   * The current local feed facet.
+   */
+
+  val filterBy: FilterBy = FilterBy.FILTER_BY_LOANS,
 
   /**
    * The active sorting facet.

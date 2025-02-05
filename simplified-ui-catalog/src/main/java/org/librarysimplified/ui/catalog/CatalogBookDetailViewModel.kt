@@ -599,6 +599,15 @@ class CatalogBookDetailViewModel(
           title = ""
         )
       }
+
+      is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks -> {
+        CatalogFeedArguments.CatalogFeedArgumentsRemote(
+          feedURI = uri,
+          isSearchResults = false,
+          ownership = CatalogFeedOwnership.OwnedByAccount(accountID),
+          title = ""
+        )
+      }
     }
   }
 

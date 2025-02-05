@@ -79,12 +79,12 @@ class BookRegistry private constructor(
       val updatePri = status.status.priority
 
       if (currentPri.priority <= updatePri.priority) {
-        this.logger.debug("current {} <= {}, updating", current, status)
+        this.logger.debug("current {} <= {}, updating", current.status, status.status)
         this.update(status)
         return
       }
 
-      this.logger.debug("current {} > {}, not updating", current, status)
+      this.logger.debug("current {} > {}, not updating", current.status, status.status)
     } else {
       this.update(status)
     }

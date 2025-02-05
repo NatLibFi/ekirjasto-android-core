@@ -1,5 +1,6 @@
 package org.nypl.simplified.books.controller
 
+import com.io7m.jfunctional.None
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.books.book_registry.BookRegistryReadableType
@@ -13,6 +14,8 @@ import org.nypl.simplified.feeds.api.FeedFacet
 import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.FilteringForAccount
 import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.Sorting
 import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.Sorting.SortBy
+import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.FilteringForFeed
+import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.FilteringForFeed.FilterBy
 import org.nypl.simplified.feeds.api.FeedSearch
 import org.nypl.simplified.profiles.controller.api.ProfileFeedRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
@@ -39,7 +42,9 @@ internal class ProfileFeedTask(
      * Generate facets.
      */
 
-    val facetGroups = this.makeFacets()
+    //Chose the tabs we want to show on the my books page
+    val doSelectFacets = request.feedSelection != FeedBooksSelection.BOOKS_FEED_HOLDS
+    val facetGroups = this.makeFacets(doSelectFacets)
     val facets = facetGroups.values.flatten()
 
     val feed =
@@ -57,14 +62,25 @@ internal class ProfileFeedTask(
       val books = this.collectAllBooks(this.bookRegistry)
       this.logger.debug("collected {} candidate books", books.size)
 
+      //Get the correct filter based on the bookStatus of the books in the registry
       val filter = this.selectFeedFilter(this.request)
+      //Filter the books based on their bookStatus
       this.filterBooks(filter, books)
       this.logger.debug("after filtering, {} candidate books remain", books.size)
+      //If we look at selected feed, filter out the non selected books
+      //This is not done by the filtering, since the selection can not be seen from bookStatus
+      if(this.request.feedSelection == FeedBooksSelection.BOOKS_FEED_SELECTED) {
+        this.searchSelectedBooks(books)
+        this.logger.debug("after selecting, {} candidate books remain", books.size)
+      }
+      //If there is a search term, filter the unfitting books out
       this.searchBooks(this.request.search, books)
       this.logger.debug("after searching, {} candidate books remain", books.size)
+      //Sort the books in the way we want
       this.sortBooks(this.request.sortBy, books)
       this.logger.debug("after sorting, {} candidate books remain", books.size)
 
+      //Create feed entries for all the books
       for (book in books) {
         feed.entriesInOrder.add(
           FeedEntry.FeedEntryOPDS(
@@ -80,13 +96,25 @@ internal class ProfileFeedTask(
     }
   }
 
-  private fun makeFacets(): Map<String, List<FeedFacet>> {
+  /**
+   * Create the facets shown on the top of the feed. If fragment should handle
+   * multiple different feeds (or selections), create the feed selection facets.
+   * @param showSelectionFacets true, if fragment should have navigation facets for different feeds
+   */
+  private fun makeFacets(showSelectionFacets: Boolean): Map<String, List<FeedFacet>> {
+    //The facets for switching between multiple feeds
+    val selecting = this.makeSelectionFacets()
+    //The facets for sorting
     val sorting = this.makeSortingFacets()
+    //The facets for filtering
     val filtering = this.makeFilteringFacets()
     val results = mutableMapOf<String, List<FeedFacet>>()
+    //If we want to show the feed facet, add it
+    if (showSelectionFacets) {
+      results[selecting.first] = selecting.second
+    }
     results[sorting.first] = sorting.second
     results[filtering.first] = filtering.second
-    check(results.size == 2)
     return results.toMap()
   }
 
@@ -109,9 +137,42 @@ internal class ProfileFeedTask(
     return Pair(this.request.facetTitleProvider.collection, facets)
   }
 
+  private fun makeSelectionFacets(): Pair<String, List<FeedFacet>> {
+    val facets = mutableListOf<FeedFacet>()
+    //Create entries for all FilterBy options
+    val values = FilterBy.entries.toTypedArray()
+    //Create a facet for each of the bookFilters
+    for (filterFacet in values) {
+      //Set the activity of the facet based on the FilterBy of the request
+      val active = filterFacet == this.request.filterBy
+      //Get the translatable title of the tab
+      val title =
+        when (filterFacet) {
+          FilterBy.FILTER_BY_LOANS -> this.request.facetTitleProvider.showTabLoans
+          FilterBy.FILTER_BY_HOLDS -> this.request.facetTitleProvider.showTabHolds
+          FilterBy.FILTER_BY_SELECTED -> this.request.facetTitleProvider.showTabSelected
+        }
+      //Determine which feed should be shown, based on  what we're filtering by
+      val selectedFeed =
+        when(filterFacet) {
+          FilterBy.FILTER_BY_LOANS -> FeedBooksSelection.BOOKS_FEED_LOANED
+          FilterBy.FILTER_BY_HOLDS -> FeedBooksSelection.BOOKS_FEED_HOLDS
+          FilterBy.FILTER_BY_SELECTED -> FeedBooksSelection.BOOKS_FEED_SELECTED
+        }
+      //Currently we don't want to show the button for holds feed
+      //So we don't add it to the facets
+
+      if (selectedFeed != FeedBooksSelection.BOOKS_FEED_HOLDS) {
+        facets.add(FilteringForFeed(title, active, selectedFeed, filterFacet))
+      }
+    }
+    //The name is not shown anywhere, so have it just be something relevant
+    return Pair("FeedTabs", facets)
+  }
+
   private fun makeSortingFacets(): Pair<String, List<FeedFacet>> {
     val facets = mutableListOf<FeedFacet>()
-    val values = SortBy.values()
+    val values = SortBy.entries.toTypedArray()
     for (sortingFacet in values) {
       val active = sortingFacet == this.request.sortBy
       val title =
@@ -147,6 +208,22 @@ internal class ProfileFeedTask(
   }
 
   /**
+   * Removes books that should not be in the selected book list.
+   */
+  private fun searchSelectedBooks(
+    books: ArrayList<BookWithStatus>
+  ) {
+    val iterator = books.iterator()
+    while (iterator.hasNext()) {
+      val book = iterator.next()
+      //If there is no selected info, remove from books
+      if (book.book.entry.selected is None) {
+        iterator.remove()
+      }
+    }
+  }
+
+  /**
    * Split the given search string into a list of uppercase search terms.
    */
 
@@ -174,7 +251,7 @@ internal class ProfileFeedTask(
   }
 
   private fun sortBooksByTitle(books: ArrayList<BookWithStatus>) {
-    Collections.sort(books) { book0, book1 ->
+    books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
       entry0.title.compareTo(entry1.title)
@@ -182,7 +259,7 @@ internal class ProfileFeedTask(
   }
 
   private fun sortBooksByAuthor(books: ArrayList<BookWithStatus>) {
-    Collections.sort(books) { book0, book1 ->
+    books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
       val authors1 = entry0.authors
@@ -313,6 +390,17 @@ internal class ProfileFeedTask(
   }
 
   /**
+   * Return true if the book is usable for selected feed
+   */
+  private fun usableForSelectedFeed(status: BookStatus): Boolean {
+    //Allow the usage for any Bookstatus, expect a book when the book is just unselected
+    return when (status) {
+      is BookStatus.Unselected -> false
+      else -> true
+    }
+  }
+
+  /**
    * @return `true` if any of the given search terms match the given book, or the list of
    * search terms is empty
    */
@@ -350,6 +438,7 @@ internal class ProfileFeedTask(
     return when (request.feedSelection) {
       FeedBooksSelection.BOOKS_FEED_LOANED -> ::usableForBooksFeed
       FeedBooksSelection.BOOKS_FEED_HOLDS -> ::usableForHoldsFeed
+      FeedBooksSelection.BOOKS_FEED_SELECTED -> ::usableForSelectedFeed
     }
   }
 }

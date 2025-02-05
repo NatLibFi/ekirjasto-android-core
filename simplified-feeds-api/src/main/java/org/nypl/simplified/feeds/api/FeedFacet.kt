@@ -44,6 +44,36 @@ sealed class FeedFacet : Serializable {
     ) : FeedFacetPseudo()
 
     /**
+     * A feed select facet.
+     */
+    data class FilteringForFeed(
+      override val title: String,
+      override val isActive: Boolean,
+      val selectedFeed: FeedBooksSelection,
+      val filterBy: FilterBy
+    ) : FeedFacetPseudo() {
+      enum class FilterBy {
+
+        /**
+         * Filter loans.
+         */
+
+        FILTER_BY_LOANS,
+
+        /**
+         * Filter holds.
+         */
+
+        FILTER_BY_HOLDS,
+
+        /**
+         * Filter the selected.
+         */
+        FILTER_BY_SELECTED
+      }
+    }
+
+    /**
      * A sorting facet.
      */
 

@@ -15,6 +15,7 @@ import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
 import org.librarysimplified.mdc.MDCKeys
 import org.librarysimplified.ui.catalog.CatalogFeedArguments.CatalogFeedArgumentsLocalBooks
+import org.librarysimplified.ui.catalog.CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks
 import org.librarysimplified.ui.catalog.CatalogFeedArguments.CatalogFeedArgumentsRemote
 import org.librarysimplified.ui.catalog.CatalogFeedState.CatalogFeedLoaded
 import org.librarysimplified.ui.catalog.CatalogFeedState.CatalogFeedLoaded.CatalogFeedEmpty
@@ -46,6 +47,7 @@ import org.nypl.simplified.feeds.api.FeedEntry
 import org.nypl.simplified.feeds.api.FeedFacet
 import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo
 import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.FilteringForAccount
+import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.FilteringForFeed
 import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.Sorting
 import org.nypl.simplified.feeds.api.FeedFacetPseudoTitleProviderType
 import org.nypl.simplified.feeds.api.FeedLoaderResult
@@ -265,12 +267,11 @@ class CatalogFeedViewModel(
     if (event is BookStatusEvent.BookStatusEventRemoved && this.state.arguments.isLocallyGenerated) {
       this.reloadFeed()
     } else {
-      when (event.statusNow) {
+      when (val status = event.statusNow) {
         is BookStatus.Held,
         is BookStatus.Loaned,
         is BookStatus.Revoked -> {
           if (this.state.arguments.isLocallyGenerated) {
-            //Selecting and unselecting can trigger this for a book that is not on loan
             this.reloadFeed()
           }
         }
@@ -286,8 +287,22 @@ class CatalogFeedViewModel(
         is BookStatus.RequestingDownload,
         is BookStatus.RequestingLoan,
         is BookStatus.RequestingRevoke,
-        is BookStatus.Selected,
-        is BookStatus.Unselected,
+        is BookStatus.Selected -> {
+          //No clue why this needs the status check, but it does, as otherwise it keeps
+          //triggering this reload every chance it gets
+          if (this.state.arguments.isLocallyGenerated && status is BookStatus.Selected) {
+            //Reload the feeds when book selected or unselected so
+            //What the user sees in the favorites feed is up to date
+            this.reloadFeed()
+          }
+        }
+        is BookStatus.Unselected -> {
+          if (this.state.arguments.isLocallyGenerated) {
+            //Reload the feeds when book selected or unselected so
+            //What the user sees in the favorites feed is up to date
+            this.reloadFeed()
+          }
+        }
         null -> {
           // do nothing
         }
@@ -335,25 +350,30 @@ class CatalogFeedViewModel(
   fun syncAccounts() {
     when (val arguments = state.arguments) {
       is CatalogFeedArgumentsLocalBooks -> {
-        this.syncAccounts(arguments)
+        this.syncAccounts(arguments.filterAccount)
       }
       is CatalogFeedArgumentsRemote -> {
       }
+      is CatalogFeedArgumentsAllLocalBooks ->
+        this.syncAccounts(arguments.filterAccount)
     }
   }
 
-  private fun syncAccounts(arguments: CatalogFeedArgumentsLocalBooks) {
+  /**
+   * Sync the books in the book register, based on possible accountID.
+   */
+  private fun syncAccounts(filterAccountID: AccountID?) {
     val profile =
       this.profilesController.profileCurrent()
     val accountsToSync =
-      if (arguments.filterAccount == null) {
+      if (filterAccountID == null) {
         // Sync all accounts
         this.logger.debug("[{}]: syncing all accounts", this.instanceId)
         profile.accounts()
       } else {
         // Sync the account we're filtering on
-        this.logger.debug("[{}]: syncing account {}", this.instanceId, arguments.filterAccount)
-        profile.accounts().filterKeys { it == arguments.filterAccount }
+        this.logger.debug("[{}]: syncing account {}", this.instanceId, filterAccountID)
+        profile.accounts().filterKeys { it == filterAccountID }
       }
 
     for (account in accountsToSync.keys) {
@@ -375,8 +395,67 @@ class CatalogFeedViewModel(
         this.doLoadRemoteFeed(arguments)
       is CatalogFeedArgumentsLocalBooks ->
         this.doLoadLocalFeed(arguments)
+      is CatalogFeedArgumentsAllLocalBooks ->
+        this.doLoadLocalCombinationFeed(arguments)
     }
   }
+  /**
+   * Load a locally-generated feed that has multiple feeds combined.
+   */
+  private fun doLoadLocalCombinationFeed(
+    arguments: CatalogFeedArgumentsAllLocalBooks
+  ) {
+    this.logger.debug("[{}]: loading local feed {}", this.instanceId, arguments.filterBy.name)
+
+    MDC.remove(MDCKeys.FEED_URI)
+    MDC.remove(MDCKeys.ACCOUNT_INTERNAL_ID)
+    MDC.remove(MDCKeys.ACCOUNT_PROVIDER_ID)
+    MDC.remove(MDCKeys.ACCOUNT_PROVIDER_NAME)
+
+    val booksUri = URI.create("Books")
+    val request =
+      ProfileFeedRequest(
+        facetTitleProvider = CatalogFacetPseudoTitleProvider(this.resources),
+        feedSelection = arguments.selection,
+        filterByAccountID = arguments.filterAccount,
+        filterBy = arguments.filterBy,
+        search = arguments.searchTerms,
+        sortBy = arguments.sortBy,
+        title = arguments.title,
+        uri = booksUri
+      )
+
+    val future = this.profilesController.profileFeed(request)
+      .map { feed ->
+        if (arguments.filterBy == FilteringForFeed.FilterBy.FILTER_BY_LOANS) {
+          feed.entriesInOrder.removeAll { feedEntry ->
+            feedEntry is FeedEntry.FeedEntryOPDS &&
+              feedEntry.feedEntry.availability is OPDSAvailabilityLoaned &&
+              feedEntry.feedEntry.availability.endDate.getOrNull()?.isBeforeNow == true
+          }
+        }
+        if (arguments.updateHolds) {
+          bookRegistry.updateHolds(
+            numberOfHolds = feed.entriesInOrder.filter { feedEntry ->
+              feedEntry is FeedEntry.FeedEntryOPDS &&
+                feedEntry.feedEntry.availability is OPDSAvailabilityHeldReady
+            }.size
+          )
+        }
+        FeedLoaderResult.FeedLoaderSuccess(
+          feed = feed,
+          accessToken = null
+        ) as FeedLoaderResult
+      }
+      .onAnyError { ex -> FeedLoaderResult.wrapException(booksUri, ex) }
+
+    this.createNewStatus(
+      account = null,
+      arguments = arguments,
+      future = future
+    )
+  }
+
 
   /**
    * Load a locally-generated feed.
@@ -632,7 +711,8 @@ class CatalogFeedViewModel(
       return CatalogFeedEmpty(
         arguments = arguments,
         search = feed.feedSearch,
-        title = feed.feedTitle
+        title = feed.feedTitle,
+        facetsByGroup = feed.facetsByGroup
       )
     }
 
@@ -689,6 +769,14 @@ class CatalogFeedViewModel(
       get() = this.resources.getString(R.string.feedShowAll)
     override val showOnLoan: String
       get() = this.resources.getString(R.string.feedShowOnLoan)
+    override val showTabSelected: String
+      get() = this.resources.getString(R.string.feedFacetSelected)
+
+    override val showTabLoans: String
+      get() = this.resources.getString(R.string.feedFacetLoans)
+
+    override val showTabHolds: String
+      get() = this.resources.getString(R.string.feedFacetHolds)
   }
 
   val accountProvider: AccountProviderType?
@@ -874,6 +962,44 @@ class CatalogFeedViewModel(
           }
         }
       }
+
+      is CatalogFeedArgumentsAllLocalBooks -> {
+        when (search) {
+          is FeedSearch.FeedSearchLocal -> {
+            //Get the tab we are in from the stored values
+            //Otherwise search and filter always reset to loans
+            val oldValues = state.arguments as CatalogFeedArgumentsAllLocalBooks
+
+            return CatalogFeedArgumentsAllLocalBooks(
+              filterAccount = currentArguments.filterAccount,
+              ownership = currentArguments.ownership,
+              searchTerms = query,
+              selection = oldValues.selection,
+              sortBy = currentArguments.sortBy,
+              filterBy = oldValues.filterBy,
+              title = currentArguments.title,
+              updateHolds = currentArguments.updateHolds
+            )
+          }
+          is FeedSearch.FeedSearchOpen1_1 -> {
+            //Get the tab we are in from the stored values
+            //Otherwise search and filter always reset to loans
+            val oldValues = state.arguments as CatalogFeedArgumentsAllLocalBooks
+
+            return CatalogFeedArgumentsAllLocalBooks(
+              filterAccount = currentArguments.filterAccount,
+              ownership = currentArguments.ownership,
+              searchTerms = query,
+              selection = oldValues.selection,
+              sortBy = currentArguments.sortBy,
+              filterBy = oldValues.filterBy,
+              title = currentArguments.title,
+              updateHolds = currentArguments.updateHolds
+            )
+          }
+        }
+
+      }
     }
   }
 
@@ -912,6 +1038,11 @@ class CatalogFeedViewModel(
           "Can't transition local to remote feed: ${this.feedArguments.title} -> $title"
         )
       }
+
+      is CatalogFeedArgumentsAllLocalBooks ->
+        throw IllegalStateException(
+          "Can't transition local to remote feed: ${this.feedArguments.title} -> $title"
+        )
     }
   }
 
@@ -972,6 +1103,72 @@ class CatalogFeedViewModel(
               title = facet.title,
               updateHolds = currentArguments.updateHolds
             )
+
+          is FilteringForFeed ->
+            CatalogFeedArgumentsAllLocalBooks(
+              title = facet.title,
+              ownership = currentArguments.ownership,
+              sortBy = currentArguments.sortBy,
+              searchTerms = currentArguments.searchTerms,
+              selection = facet.selectedFeed,
+              filterBy = facet.filterBy,
+              filterAccount = currentArguments.filterAccount,
+              updateHolds = currentArguments.updateHolds
+            )
+        }
+      }
+
+      is CatalogFeedArgumentsAllLocalBooks -> {
+        when (facet) {
+          is FeedFacet.FeedFacetOPDS ->
+            throw IllegalStateException("Cannot transition from a local feed to a remote feed.")
+          is FilteringForAccount -> {
+            //Get the tab we are in from the stored values
+            //Otherwise search and filter always reset to loans
+            val oldValues = state.arguments as CatalogFeedArgumentsAllLocalBooks
+
+            return CatalogFeedArgumentsAllLocalBooks(
+              title = currentArguments.title,
+              ownership = currentArguments.ownership,
+              sortBy = currentArguments.sortBy,
+              searchTerms = currentArguments.searchTerms,
+              selection = oldValues.selection,
+              filterBy = oldValues.filterBy,
+              filterAccount = facet.account,
+              updateHolds = currentArguments.updateHolds
+            )
+          }
+          is FilteringForFeed -> {
+            // From the old state, use the information of which selection and filter we are currently in
+            //Otherwise they will reset to the assumed value of loans
+            val oldValues = state.arguments as CatalogFeedArgumentsAllLocalBooks
+
+            return CatalogFeedArgumentsAllLocalBooks(
+              title = facet.title,
+              ownership = currentArguments.ownership,
+              sortBy = oldValues.sortBy,
+              searchTerms = currentArguments.searchTerms,
+              selection = facet.selectedFeed,
+              filterBy = facet.filterBy,
+              filterAccount = currentArguments.filterAccount,
+              updateHolds = currentArguments.updateHolds
+            )
+          }
+          is Sorting -> {
+            // From the old state, use the information of which selection and filter we are currently in
+            //Otherwise they will reset to the assumed value of loans
+            val oldValues = state.arguments as CatalogFeedArgumentsAllLocalBooks
+            return CatalogFeedArgumentsAllLocalBooks(
+              title = facet.title,
+              ownership = currentArguments.ownership,
+              sortBy = facet.sortBy,
+              searchTerms = currentArguments.searchTerms,
+              selection = oldValues.selection,
+              filterBy = oldValues.filterBy,
+              filterAccount = currentArguments.filterAccount,
+              updateHolds = currentArguments.updateHolds
+            )
+          }
         }
       }
     }
