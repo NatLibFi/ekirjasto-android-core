@@ -138,8 +138,8 @@ class BookSyncTask(
         .build()
 
     //Execute the fetch
-    val selectedResponse = feedRequest.execute()
-    return when (val status = selectedResponse.status) {
+    val feedResponse = feedRequest.execute()
+    return when (val status = feedResponse.status) {
       is LSHTTPResponseStatus.Responded.OK -> {
         //If answer is okay
         //Return the response stream
