@@ -186,7 +186,7 @@ class FeedLoader private constructor(
     accountId: AccountID,
     uri: URI
   ): FeedLoaderResult {
-    val streamMaybe = this.contentResolver.openInputStream(uri)//
+    val streamMaybe = this.contentResolver.openInputStream(uri)
     return if (streamMaybe != null) {
       streamMaybe.use { stream ->
         FeedLoaderSuccess(

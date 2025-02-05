@@ -277,7 +277,7 @@ object AccountProvidersJSON {
       val loansURI =
         JSONParserUtilities.getURIOrNull(obj, "loansURI")
       val selectedURI =
-        JSONParserUtilities.getURIOrNull(obj, "loansURI")//Wrong URI
+        JSONParserUtilities.getURIOrNull(obj, "selectedURI")
       val patronSettingsURI =
         JSONParserUtilities.getURIOrNull(obj, "patronSettingsURI")
       val privacyPolicy =

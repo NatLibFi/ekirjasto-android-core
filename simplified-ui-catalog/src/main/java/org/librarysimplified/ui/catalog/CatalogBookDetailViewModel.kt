@@ -261,7 +261,6 @@ class CatalogBookDetailViewModel(
     feedEntry: FeedEntry.FeedEntryOPDS,
     callback: (BookWithStatus) -> Unit
   ) {
-    logger.debug("Observer registered")
     this.bookModels.getOrPut(feedEntry.bookID, { BookModel(feedEntry) }).onBookChanged.add(callback)
     this.notifyBookStatus(feedEntry, callback)
   }
