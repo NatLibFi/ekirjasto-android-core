@@ -92,74 +92,58 @@ class BookSyncTask(
       credentials = credentials
     )
 
-    //The URI to use for getting the loans
-    val loansURI = provider.loansURI
-    if (loansURI == null) {
-      this.logger.debug("no loans URI, aborting!")
-      return this.taskRecorder.finishSuccess(Unit)
+    //Get the loans stream
+    val loansStream: InputStream? = fetchFeed(
+      provider.loansURI,
+      credentials,
+      account
+    )
+    //Get the selected stream
+    val selectedStream: InputStream? = fetchFeed(
+      provider.selectedURI,
+      credentials,
+      account
+    )
+    //If both fetches went fine, we combine the streams
+    //And update database and registry
+    if (loansStream != null && selectedStream != null) {
+      this.onHTTPOKMultipleFeeds(
+        loansStream = loansStream,
+        selectedStream = selectedStream,
+        provider = provider,
+        account = account
+      )
     }
-    //Loan request
-    val request =
-      this.http.newRequest(loansURI)
+    return this.taskRecorder.finishSuccess(Unit)
+  }
+
+  /**
+   * Fetch a feed from the URI provided.
+   */
+  private fun fetchFeed(
+    uri: URI?,
+    credentials: AccountAuthenticationCredentials,
+    account: AccountType
+  ) : InputStream? {
+    if (uri == null) {
+      this.logger.debug("no fetch URI, aborting!")
+      this.taskRecorder.finishSuccess(Unit)
+      return null
+    }
+    //Create the request
+    val feedRequest =
+      this.http.newRequest(uri)
         .setAuthorization(AccountAuthenticatedHTTP.createAuthorization(credentials))
         .addCredentialsToProperties(credentials)
         .build()
 
-    //Initialize loans stream
-    var loansStream : InputStream = ByteArrayInputStream(ByteArray(0))
-
-    //Execute loan fetch
-    val response = request.execute()
-    when (val status = response.status) {
-      is LSHTTPResponseStatus.Responded.OK -> {
-        // Save stream for later use
-        loansStream = status.bodyStream ?: ByteArrayInputStream(ByteArray(0))
-      }
-      is LSHTTPResponseStatus.Responded.Error -> {
-        val recovered = this.onHTTPError(status, account)
-
-        if (recovered) {
-          this.taskRecorder.finishSuccess(Unit)
-        } else {
-          val message = String.format("%s: %d: %s", provider.loansURI, status.properties.status, status.properties.message)
-          val exception = IOException(message)
-          this.taskRecorder.currentStepFailed(
-            message = message,
-            errorCode = "syncFailed",
-            exception = exception
-          )
-          throw TaskFailedHandled(exception)
-        }
-      }
-      is LSHTTPResponseStatus.Failed ->
-        throw IOException(status.exception)
-    }
-
-    // Do the same for selected feed
-    val selectedURI = provider.selectedURI
-    if (selectedURI == null) {
-      this.logger.debug("no selected URI, aborting!")
-      return this.taskRecorder.finishSuccess(Unit)
-    }
-    //Select request
-    val selectRequest =
-      this.http.newRequest(selectedURI)
-        .setAuthorization(AccountAuthenticatedHTTP.createAuthorization(credentials))
-        .addCredentialsToProperties(credentials)
-        .build()
-
-    //Execute selected fetch
-    val selectedResponse = selectRequest.execute()
+    //Execute the fetch
+    val selectedResponse = feedRequest.execute()
     return when (val status = selectedResponse.status) {
       is LSHTTPResponseStatus.Responded.OK -> {
-        //Handle both the loans and selected streams so the books are added into the database
-        this.onHTTPOKMultipleFeeds(
-          loansStream = loansStream,
-          selectedStream = status.bodyStream ?: ByteArrayInputStream(ByteArray(0)),
-          provider = provider,
-          account = account
-        )
-        this.taskRecorder.finishSuccess(Unit)
+        //If answer is okay
+        //Return the response stream
+        status.bodyStream ?: ByteArrayInputStream(ByteArray(0))
       }
       is LSHTTPResponseStatus.Responded.Error -> {
         val recovered = this.onHTTPError(status, account)
@@ -167,7 +151,7 @@ class BookSyncTask(
         if (recovered) {
           this.taskRecorder.finishSuccess(Unit)
         } else {
-          val message = String.format("%s: %d: %s", provider.selectedURI, status.properties.status, status.properties.message)
+          val message = String.format("%s: %d: %s", uri, status.properties.status, status.properties.message)
           val exception = IOException(message)
           this.taskRecorder.currentStepFailed(
             message = message,
@@ -176,6 +160,7 @@ class BookSyncTask(
           )
           throw TaskFailedHandled(exception)
         }
+        null
       }
       is LSHTTPResponseStatus.Failed ->
         throw IOException(status.exception)
@@ -470,7 +455,7 @@ class BookSyncTask(
       try {
         this.logger.debug("[{}] checking for deletion", existingId.brief())
 
-        //If book not in loans or selected, delete it
+        //If book not in loans or selected, handle it accordingly
         if (!allBookIDs.contains(existingId)) {
           val dbEntry = bookDatabase.entry(existingId)
           val a = dbEntry.book.entry.availability
