@@ -375,7 +375,7 @@ class BookSyncTask(
     val selectedMap = selectedFeed.feedEntries.associateBy { BookIDs.newFromOPDSEntry(it) }
 
     //Get all non-duplicate IDs
-    val allBookIDs = (loansMap.keys + selectedMap.keys).toSet()
+    val allBookIDs = (loansMap.keys + selectedMap.keys)
 
     //Initiate the list for the combined feed entries
     val combinedFeedEntries = mutableListOf<OPDSAcquisitionFeedEntry>()
