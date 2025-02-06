@@ -135,7 +135,8 @@ class AccountProviderResolution(
           supportsReservations = supportsReservations,
           updated = updated,
           location = this.description.location,
-          alternateURI = alternateURI
+          alternateURI = alternateURI,
+          selectedURI = authDocument?.selectedURI
         )
 
       taskRecorder.finishSuccess(accountProvider)

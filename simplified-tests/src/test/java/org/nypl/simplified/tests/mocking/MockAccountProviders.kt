@@ -47,7 +47,8 @@ object MockAccountProviders {
       supportsReservations = false,
       updated = DateTime.parse("2000-01-01T00:00:00Z"),
       location = null,
-      alternateURI = URI.create("https://www.example.com/alternate")
+      alternateURI = URI.create("https://www.example.com/alternate"),
+      selectedURI = null
     )
   }
 
