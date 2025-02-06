@@ -502,6 +502,10 @@ internal class MainFragmentListenerDelegate(
         this.goUpwards()
         state
       }
+      MagazinesEvent.LoginRequired -> {
+        openLogin()
+        state
+      }
       else -> state
     }
   }

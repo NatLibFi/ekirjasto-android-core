@@ -694,4 +694,13 @@ class CatalogBookDetailViewModel(
       CatalogBookDetailEvent.OpenErrorPage(errorPageParameters)
     )
   }
+
+  /**
+   * Open the login dialog without any checks, profile is ekirjasto.
+   */
+  override fun openLoginDialog(accountID: AccountID) {
+    this.listener.post(
+      CatalogBookDetailEvent.LoginRequired(accountID)
+    )
+  }
 }

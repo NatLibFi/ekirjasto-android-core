@@ -648,6 +648,15 @@
       "bookReturned" : {
          "string" : "Kirja %1$s on palautettu onnistuneesti"
       },
+      "bookSessionExpiredButton" : {
+         "string" : ""
+      },
+      "bookSessionExpiredMessage" : {
+         "string" : ""
+      },
+      "bookSessionExpiredTitle" : {
+         "string" : ""
+      },
       "bookmarkEnd" : {
          "string" : "Luvun lopussa."
       },
@@ -754,7 +763,7 @@
          "string" : "Voit lainata tämän kirjan seuraavan ajan kuluttua: %1$s."
       },
       "catalogBookAvailabilityHeldTimedShort" : {
-         "string" : "Saatavilla: %1$s"
+         "string" : "Saatavilla: %1$s kuluttua"
       },
       "catalogBookAvailabilityHoldable" : {
          "string" : "Kaikki tämän kirjan kappaleet ovat tällä hetkellä lainassa."
@@ -1081,7 +1090,7 @@
          "string" : "Kaikki"
       },
       "feedEmpty" : {
-         "string" : "Ei hakutuloksia."
+         "string" : "Ei hakutuloksia"
       },
       "feedLoadingError" : {
          "string" : "Luettelon lataamisessa tapahtui virhe."
@@ -1259,6 +1268,15 @@
       },
       "magazinesHeader" : {
          "string" : "Lehdet"
+      },
+      "magazinesSessionExpiredButton" : {
+         "string" : ""
+      },
+      "magazinesSessionExpiredMessage" : {
+         "string" : ""
+      },
+      "magazinesSessionExpiredTitle" : {
+         "string" : ""
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : "Kirjaudu sisään siirtymällä asetuksiin"

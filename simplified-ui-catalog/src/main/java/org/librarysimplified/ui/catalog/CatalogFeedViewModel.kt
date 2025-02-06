@@ -186,6 +186,7 @@ class CatalogFeedViewModel(
         )  {
           //Happens only on very specific situation when there is a catalog load fail, caused by authentication
           this.logger.debug("reloading feed due to successful login after authentication fail")
+
           this.reloadFeed()
         }
         if ( accountState is AccountLoginState.AccountNotLoggedIn) {
@@ -1321,5 +1322,13 @@ class CatalogFeedViewModel(
         CatalogFeedEvent.LoginRequired(accountID)
       )
     }
+  }
+  /**
+   * Opens the login dialog without any checks
+   */
+  override fun openLoginDialog(accountID: AccountID) {
+    this.listener.post(
+      CatalogFeedEvent.LoginRequired(accountID)
+    )
   }
 }

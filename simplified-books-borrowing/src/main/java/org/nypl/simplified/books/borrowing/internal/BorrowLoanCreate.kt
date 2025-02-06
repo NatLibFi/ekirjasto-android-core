@@ -11,6 +11,7 @@ import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.addCredentialsToProperties
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.getAccessToken
 import org.nypl.simplified.accounts.api.AccountReadableType
+import org.nypl.simplified.books.book_registry.BookStatus
 import org.nypl.simplified.books.book_registry.BookStatus.Held.HeldInQueue
 import org.nypl.simplified.books.book_registry.BookStatus.Held.HeldReady
 import org.nypl.simplified.books.book_registry.BookStatus.Loaned.LoanedNotDownloaded
@@ -23,6 +24,7 @@ import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.opdsFeedEnt
 import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes.opdsFeedEntryParseError
 import org.nypl.simplified.books.borrowing.internal.BorrowHTTP.isMimeTypeAcceptable
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException
+import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowAccessTokenExpired
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowReachedLoanLimit
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskFailed
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskHaltedEarly
@@ -119,6 +121,8 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
     } catch (e: BorrowReachedLoanLimit) {
       context.bookReachedLoanLimit()
       throw e
+    } catch (e: BorrowAccessTokenExpired) {
+      throw e
     }
   }
 
@@ -164,6 +168,11 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
 
     if (report?.type == "http://librarysimplified.org/terms/problem/loan-limit-reached") {
       throw BorrowReachedLoanLimit()
+    }
+
+    //Trigger a special exception if access token has expired
+    if (report?.type == "http://librarysimplified.org/terms/problem/credentials-invalid") {
+      throw BorrowAccessTokenExpired()
     }
 
     throw BorrowSubtaskFailed()

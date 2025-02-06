@@ -159,11 +159,11 @@
             app:layout_constraintTop_toBottomOf="@id/accountTop">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonFaq"
+                android:id="@+id/buttonInstructions"
                 style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/account_faq" />
+                android:text="@string/account_instructions" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonFeedback"

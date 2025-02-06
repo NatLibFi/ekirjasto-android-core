@@ -119,7 +119,10 @@ class BookRevokeTask(
   }
 
   override fun onFailure(result: TaskResult.Failure<Unit>) {
-    this.publishBookStatus(BookStatus.FailedRevoke(this.bookID, result))
+    //Don't show the error info if the token needs to refresh
+    if (result.lastErrorCode != "accessTokenExpired") {
+      this.publishBookStatus(BookStatus.FailedRevoke(this.bookID, result))
+    }
   }
 
   private fun debug(message: String, vararg arguments: Any?) =
@@ -369,7 +372,8 @@ class BookRevokeTask(
       is FeedLoaderFailedAuthentication -> {
         val message = this.revokeStrings.revokeServerNotifyFeedFailed
         this.taskRecorder.addAttributesIfPresent(feedResult.problemReport?.toMap())
-        this.taskRecorder.currentStepFailed(message, "feedLoaderFailed", feedResult.exception)
+        //Set the error code so that the 401 error can be caught
+        this.taskRecorder.currentStepFailed(message, "accessTokenExpired", feedResult.exception)
         throw TaskFailedHandled(feedResult.exception)
       }
     }

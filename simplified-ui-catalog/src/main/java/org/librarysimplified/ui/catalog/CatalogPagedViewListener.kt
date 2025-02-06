@@ -1,5 +1,6 @@
 package org.librarysimplified.ui.catalog
 
+import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookFormat
 import org.nypl.simplified.books.api.BookID
@@ -35,6 +36,8 @@ interface CatalogPagedViewListener {
   fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS)
 
   fun borrowMaybeAuthenticated(book: Book)
+
+  fun openLoginDialog(accountID: AccountID)
 
   fun resetInitialBookStatus(feedEntry: FeedEntry.FeedEntryOPDS)
 

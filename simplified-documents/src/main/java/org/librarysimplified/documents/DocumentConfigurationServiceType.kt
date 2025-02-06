@@ -47,8 +47,25 @@ interface DocumentConfigurationServiceType {
   val licenses: DocumentConfiguration?
 
   /**
-   * @return The application FAQ, if any.
+   * @return The User instructions in finnish, if any.
    */
 
+  val instructionsFI: DocumentConfiguration?
+
+  /**
+   * @return The User instructions in swedish, if any.
+   */
+
+  val instructionsSV: DocumentConfiguration?
+
+  /**
+   * @return The User instructions in english, if any.
+   */
+
+  val instructionsEN: DocumentConfiguration?
+
+  /**
+   * @return The application FAQ, if any.
+   */
   val faq: DocumentConfiguration?
 }

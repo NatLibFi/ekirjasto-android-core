@@ -4,4 +4,7 @@
     <string name="magazinesHeader">Magazines</string>
     <string name="magazinesSignInRequiredTitle">Signing in required</string>
     <string name="magazinesSignInRequiredSubtitle">Visit the settings to sign in</string>
+    <string name="magazinesSessionExpiredTitle">Session expired!</string>
+    <string name="magazinesSessionExpiredMessage">Your session has expired, please log in again.</string>
+    <string name="magazinesSessionExpiredButton">Confirm</string>
 </resources>

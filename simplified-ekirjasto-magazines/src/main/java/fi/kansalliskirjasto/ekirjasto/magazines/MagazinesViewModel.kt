@@ -1,6 +1,7 @@
 package fi.kansalliskirjasto.ekirjasto.magazines
 
 import android.content.res.Resources
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,9 @@ import org.nypl.simplified.analytics.api.AnalyticsType
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.futures.FluentFutureExtensions.map
 import org.nypl.simplified.listeners.api.FragmentListenerType
+import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
+import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.ui.thread.api.UIExecutor
 import org.slf4j.LoggerFactory
 import java.util.UUID
@@ -144,8 +147,42 @@ class MagazinesViewModel(
         onTokenResult(result.body.get("token").asText())
       }
       is MagazinesHttpResult.MagazinesHttpFailure -> {
-        logger.debug("got MagazinesHttpFailure: {}", result.message)
-        onTokenResult(null)
+        if (result.message == "accessToken refresh needed") {
+          logger.debug("Try refreshing accessToken")
+          val account = profilesController.profileCurrent().mostRecentAccount()
+          val authenticationDescription = account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
+          val credentials = account.loginState.credentials as AccountAuthenticationCredentials.Ekirjasto
+          val accessToken = credentials.accessToken
+
+          //Launch accessToken refresh
+          val refreshResult = profilesController.profileAccountAccessTokenRefresh(
+            ProfileAccountLoginRequest.EkirjastoAccessTokenRefresh(
+              accountId = account.id,
+              description = authenticationDescription,
+              accessToken = accessToken
+            )
+          )
+          when (refreshResult.get()) {
+            is TaskResult.Success -> {
+              //Do nothing, refresh happens automatically on login
+            }
+
+            is TaskResult.Failure -> {
+              //Set the state as load failed
+              //Set login as true, so we actually trigger the popup and login screen
+              stateMutable.value = MagazinesState.MagazinesLoadFailed(
+                arguments,
+                true
+              )
+            }
+          }
+          //Keep showing the loading screen until the token refresh happens
+          //This is fine as if the refresh is successful, the magazines will be refreshed
+          onTokenResult("refresh")
+        } else {
+          logger.debug("got MagazinesHttpFailure: {}", result.message)
+          onTokenResult(null)
+        }
       }
     }
   }
@@ -157,6 +194,10 @@ class MagazinesViewModel(
 
     if (token == null) {
       stateMutable.value = MagazinesState.MagazinesLoadFailed(newArguments)
+    }
+    if (token == "refresh") {
+      //If we start doing refresh, just show the loading view for that time
+      MagazinesState.MagazinesLoading(arguments)
     }
     else {
       stateMutable.value = MagazinesState.MagazinesBrowsing(newArguments)

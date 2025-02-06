@@ -113,6 +113,7 @@ import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.tenprint.TenPrintGenerator
 import org.nypl.simplified.tenprint.TenPrintGeneratorType
 import org.nypl.simplified.threads.NamedThreadPools
+import org.nypl.simplified.ui.accounts.ekirjasto.DependentsHttp
 import org.nypl.simplified.ui.images.ImageAccountIconRequestHandler
 import org.nypl.simplified.ui.images.ImageLoaderType
 import org.nypl.simplified.ui.screen.ScreenSizeInformation
@@ -850,6 +851,17 @@ internal object MainServices {
         MagazinesHttp(
           http = lsHTTP,
           exec = NamedThreadPools.namedThreadPool(1, "magazines-http", 19)
+        )
+      }
+    )
+
+    addService(
+      message = strings.bootingGeneral("dependents HTTP"),
+      interfaceType = DependentsHttp::class.java,
+      serviceConstructor = {
+        DependentsHttp(
+          http = lsHTTP,
+          exec = NamedThreadPools.namedThreadPool(1, "dependents-http", 19)
         )
       }
     )
