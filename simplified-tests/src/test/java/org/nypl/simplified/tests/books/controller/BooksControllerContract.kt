@@ -384,6 +384,14 @@ abstract class BooksControllerContract {
         .setBody(this.simpleUserProfile())
     )
 
+    //Loans response, should throw the error instantly without even reaching selected
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(400)
+        .setBody("")
+    )
+
+    //Selected response, should not reach here, but also should throw error
     this.server.enqueue(
       MockResponse()
         .setResponseCode(400)
@@ -433,7 +441,13 @@ abstract class BooksControllerContract {
         .setResponseCode(200)
         .setBody(this.simpleUserProfile())
     )
-
+    //401 in loans
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(401)
+        .setBody("")
+    )
+    //401  in selected
     this.server.enqueue(
       MockResponse()
         .setResponseCode(401)
