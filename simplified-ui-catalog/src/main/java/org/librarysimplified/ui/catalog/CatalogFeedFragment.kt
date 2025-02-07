@@ -291,6 +291,13 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         }
       )
     }
+    //If user is viewing the multiple feed view, set the message to always be the same
+    //No matter the view
+    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks) {
+      this.feedEmptyMessage.setText(
+        R.string.emptyBooksNotLoggedIn
+      )
+    }
   }
 
   //User is logged in, so we show text that informs about important things concerning loans and
@@ -308,6 +315,20 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         } else {
           R.string.feedWithGroupsEmptyLoaned
         }
+      )
+    }
+    //Set the feed empty message for a multifeed view, show special message for selected
+    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks) {
+      this.feedEmptyMessage.setText(
+      //Add a special text to selected, otherwise show loans text
+      if (
+        (parameters as CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks).selection ==
+        FeedBooksSelection.BOOKS_FEED_SELECTED
+      ) {
+        R.string.feedWithGroupsEmptySelected
+      } else {
+        R.string.feedWithGroupsEmptyLoaned
+      }
       )
     }
   }
@@ -356,6 +377,9 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     val currentQuery = when (parameters) {
       is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks -> {
         (parameters as CatalogFeedArguments.CatalogFeedArgumentsLocalBooks).searchTerms.orEmpty()
+      }
+      is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks -> {
+        (parameters as CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks).searchTerms.orEmpty()
       }
       is CatalogFeedArguments.CatalogFeedArgumentsRemote -> {
         val uri =
@@ -462,6 +486,15 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     this.feedLoading.visibility = View.INVISIBLE
     this.feedNavigation.visibility = View.INVISIBLE
 
+    //If we are viewing multiple feed view, we want to show the top facets even if
+    //The feed is empty
+    if (feedState.arguments is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks) {
+      if (feedState.facetsByGroup != null) {
+        // If there are some top level facets,configure them so they are shown on an empty view
+        this.configureFacetTabs(FeedFacets.findEntryPointFacetGroup(feedState.facetsByGroup), feedContentTabs)
+        feedContentHeader.visibility = View.VISIBLE
+      }
+    }
     this.configureLogoHeader(feedState)
     this.configureToolbar()
   }

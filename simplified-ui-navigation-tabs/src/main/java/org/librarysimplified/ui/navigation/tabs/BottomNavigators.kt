@@ -66,7 +66,7 @@ object BottomNavigators {
             )
           },
           R.id.tabBooks to {
-            createBooksFragment(
+            createCombinationFragment(
               context = context,
               id = R.id.tabBooks,
               profilesController = profilesController,
@@ -229,6 +229,9 @@ object BottomNavigators {
     )
   }
 
+  /**
+   * Create a fragment for showing the loaned books.
+   */
   private fun createBooksFragment(
     context: Context,
     id: Int,
@@ -269,6 +272,89 @@ object BottomNavigators {
     )
   }
 
+  /**
+   * Create a fragment for showing the selected books.
+   */
+  private fun createSelectedFragment(
+    context: Context,
+    id: Int,
+    profilesController: ProfilesControllerType,
+    settingsConfiguration: BuildConfigurationServiceType,
+    defaultProvider: AccountProviderType
+  ): Fragment {
+    logger.debug("[{}]: creating selected fragment", id)
+
+    //Choose the account we want to use, in our case, currently always null
+    val filterAccountId =
+      if (settingsConfiguration.showBooksFromAllAccounts) {
+        null
+      } else {
+        pickDefaultAccount(profilesController, defaultProvider).id
+      }
+
+    //Choose the feed owner, currently we always collect from all accounts
+    val ownership =
+      if (filterAccountId == null) {
+        CatalogFeedOwnership.CollectedFromAccounts
+      } else {
+        CatalogFeedOwnership.OwnedByAccount(filterAccountId)
+      }
+
+    //Create the fragment hacing the selection be the selected
+    return CatalogFeedFragment.create(
+      CatalogFeedArguments.CatalogFeedArgumentsLocalBooks(
+        filterAccount = filterAccountId,
+        ownership = ownership,
+        searchTerms = null,
+        selection = FeedBooksSelection.BOOKS_FEED_SELECTED,
+        sortBy = FeedFacet.FeedFacetPseudo.Sorting.SortBy.SORT_BY_TITLE,
+        title = "Favorites",
+        updateHolds = false
+      )
+    )
+  }
+
+  /**
+   * Create a new fragment from the bookRegister with the option to switch between
+   * multiple different views, like loans and selected books.
+   */
+  private fun createCombinationFragment(
+    context: Context,
+    id: Int,
+    profilesController: ProfilesControllerType,
+    settingsConfiguration: BuildConfigurationServiceType,
+    defaultProvider: AccountProviderType
+  ): Fragment {
+    logger.debug("[{}]: creating combination fragment", id)
+
+    //Check if should show all books in the registry or the books of one account
+    val filterAccountId =
+      if (settingsConfiguration.showBooksFromAllAccounts) {
+        null
+      } else {
+        pickDefaultAccount(profilesController, defaultProvider).id
+      }
+    // Choose the owner, should be the ID of the account currently logged in
+    val ownership =
+      if (filterAccountId == null) {
+        CatalogFeedOwnership.CollectedFromAccounts
+      } else {
+        CatalogFeedOwnership.OwnedByAccount(filterAccountId)
+      }
+    //Create the fragment, enter from the loans
+    return CatalogFeedFragment.create(
+      CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks(
+        filterAccount = filterAccountId,
+        ownership = ownership,
+        searchTerms = null,
+        sortBy = FeedFacet.FeedFacetPseudo.Sorting.SortBy.SORT_BY_TITLE,
+        filterBy = FeedFacet.FeedFacetPseudo.FilteringForFeed.FilterBy.FILTER_BY_LOANS,
+        selection = FeedBooksSelection.BOOKS_FEED_LOANED,
+        title = context.getString(R.string.tabBooks),
+        updateHolds = false
+      )
+    )
+  }
   private fun createCatalogFragment(
     id: Int,
     feedArguments: CatalogFeedArguments.CatalogFeedArgumentsRemote

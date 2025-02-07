@@ -17,4 +17,7 @@ interface FeedFacetPseudoTitleProviderType {
   val show: String
   val showAll: String
   val showOnLoan: String
+  val showTabSelected: String
+  val showTabLoans: String
+  val showTabHolds: String
 }

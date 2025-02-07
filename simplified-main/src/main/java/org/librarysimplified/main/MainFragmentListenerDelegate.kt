@@ -377,7 +377,6 @@ internal class MainFragmentListenerDelegate(
             this.navigator.popBackStack()
             MainFragmentState.EmptyState
           }
-
           else -> {
             state
           }

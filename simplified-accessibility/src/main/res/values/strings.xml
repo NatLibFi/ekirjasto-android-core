@@ -9,4 +9,6 @@
   <string name="bookIsOnHold">A reservation has been placed for the book \'%1$s\'</string>
   <string name="bookReturned">The book \'%1$s\' has been successfully returned</string>
   <string name="reachedLoanLimit">You have reached your loan limit</string>
+  <string name="bookSelected">The book \'%1$s\' has been added to favorites</string>
+  <string name="bookUnselected">The book \'%1$s\' has been removed from favorites</string>
 </resources>

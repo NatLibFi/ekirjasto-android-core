@@ -200,6 +200,32 @@ sealed class BookStatus {
   }
 
   /**
+   * The book has just been added to the selected list. This status should be reset.
+   */
+  data class Selected(
+    override val id: BookID,
+
+    val previousStatus: BookStatus?
+  ) : BookStatus() {
+
+    override val priority: BookStatusPriorityOrdering
+      get() = BookStatusPriorityOrdering.BOOK_STATUS_SELECTED
+  }
+
+  /**
+   * The book has just been removed from the selected list. This status should be reset.
+   */
+  data class Unselected(
+    override val id: BookID,
+
+    val previousStatus: BookStatus?
+  ) : BookStatus() {
+
+    override val priority: BookStatusPriorityOrdering
+      get() = BookStatusPriorityOrdering.BOOK_STATUS_UNSELECTED
+  }
+
+  /**
    * The given book not available for loan, but may be placed on hold.
    */
 
