@@ -232,7 +232,14 @@ class SyncBookRefreshToken {
         .setHeader(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN, "ghij")
         .setBody(this.simpleUserProfile())
     )
+    //Loans feed
+    this.webServer.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(Buffer().readFrom(resource("testBooksSyncNewEntries.xml")))
+    )
 
+    //Selected feed
     this.webServer.enqueue(
       MockResponse()
         .setResponseCode(200)
