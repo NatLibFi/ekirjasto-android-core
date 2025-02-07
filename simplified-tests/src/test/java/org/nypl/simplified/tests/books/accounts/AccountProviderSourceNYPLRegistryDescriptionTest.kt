@@ -434,7 +434,7 @@ class AccountProviderSourceNYPLRegistryDescriptionTest {
       updated = DateTime.parse("1970-01-01T00:00:00.000Z"),
       location = null,
       alternateURI = URI.create("https://www.example.com/alternate"),
-      selectedURI = null
+      selectedURI = URI("http://www.example.com/shelf.xml")
     )
 
     Assertions.assertEquals(provider, result.result)
@@ -598,7 +598,7 @@ class AccountProviderSourceNYPLRegistryDescriptionTest {
       updated = DateTime.parse("1970-01-01T00:00:00.000Z"),
       location = null,
       alternateURI = URI.create("https://www.example.com/alternate"),
-      selectedURI = null
+      selectedURI = URI("http://www.example.com/shelf.xml")
     )
 
     Assertions.assertEquals(provider, result.result)
@@ -742,7 +742,7 @@ class AccountProviderSourceNYPLRegistryDescriptionTest {
       updated = DateTime.parse("1970-01-01T00:00:00.000Z"),
       location = null,
       alternateURI = URI.create("https://www.example.com/alternate"),
-      selectedURI = null
+      selectedURI = URI("http://www.example.com/shelf.xml")
     )
 
     Assertions.assertEquals(provider, result.result)

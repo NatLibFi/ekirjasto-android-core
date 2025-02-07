@@ -560,10 +560,18 @@ abstract class BooksControllerContract {
         .setResponseCode(200)
         .setBody(this.simpleUserProfile())
     )
+    //For loans
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
         .setBody("Unlikely!")
+    )
+
+    //For selected
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody("Still unlikely!")
     )
 
     val result = controller.booksSync(account.id).get()
@@ -612,6 +620,14 @@ abstract class BooksControllerContract {
         .setBody(this.simpleUserProfile())
     )
 
+    //Setup for loans
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(Buffer().readFrom(resource("testBooksSyncNewEntries.xml")))
+    )
+
+    //Setup for selected
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
@@ -700,6 +716,14 @@ abstract class BooksControllerContract {
      * Populate the database by syncing against a feed that contains books.
      */
 
+    //Loans
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(Buffer().readFrom(resource("testBooksSyncNewEntries.xml")))
+    )
+
+    //Selected
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
@@ -729,11 +753,20 @@ abstract class BooksControllerContract {
         .setResponseCode(200)
         .setBody(this.simpleUserProfile())
     )
+    //Loans
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
         .setBody(Buffer().readFrom(resource("testBooksSyncRemoveEntries.xml")))
     )
+
+    //Selected
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(Buffer().readFrom(resource("testBooksSyncRemoveEntries.xml")))
+    )
+
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
@@ -819,6 +852,14 @@ abstract class BooksControllerContract {
         .setBody(this.simpleUserProfile())
     )
 
+    //First setup for loans
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(Buffer().readFrom(resource("testBooksDelete.xml")))
+    )
+
+    //First setup for selected
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
@@ -953,7 +994,14 @@ abstract class BooksControllerContract {
         .setResponseCode(200)
         .setBody(this.simpleUserProfile())
     )
+    //Setup for loans
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(Buffer().readFrom(resource("testBooksSyncNewEntries.xml")))
+    )
 
+    //Setup for selected
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
