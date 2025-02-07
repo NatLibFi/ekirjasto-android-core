@@ -48,7 +48,7 @@ object MockAccountProviders {
       updated = DateTime.parse("2000-01-01T00:00:00Z"),
       location = null,
       alternateURI = URI.create("https://www.example.com/alternate"),
-      selectedURI = URI.create("http://$host:$port/accounts0/loans.xml")
+      selectedURI = null
     )
   }
 
