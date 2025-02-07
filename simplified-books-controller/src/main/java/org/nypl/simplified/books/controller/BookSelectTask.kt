@@ -6,6 +6,7 @@ import org.librarysimplified.http.api.LSHTTPRequestBuilderType
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.addCredentialsToProperties
+import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookIDs
@@ -16,31 +17,42 @@ import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
 import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntryParser
 import org.nypl.simplified.opds.core.OPDSParseException
 import org.nypl.simplified.opds.core.getOrNull
+import org.nypl.simplified.profiles.api.ProfileID
+import org.nypl.simplified.profiles.api.ProfilesDatabaseType
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
+import java.io.IOException
 import java.io.InputStream
 import java.net.URI
 
+/**
+ * Task for selecting a particular book, and adding it to the favorites list.
+ * Extends the AbstractBookTask class.
+ */
 class BookSelectTask (
+  private val accountID: AccountID,
+  profileID: ProfileID,
+  profiles: ProfilesDatabaseType,
   private val HTTPClient: LSHTTPClientType,
-  private val account: AccountType,
   private val feedEntry: OPDSAcquisitionFeedEntry,
   private val bookRegistry: BookRegistryType
-) {
+) : AbstractBookTask(accountID, profileID, profiles) {
 
-  private lateinit var taskRecorder: TaskRecorderType
+  override val taskRecorder: TaskRecorderType =
+    TaskRecorder.create()
 
-  private val logger =
+  override fun onFailure(result: TaskResult.Failure<Unit>) {
+    //Do nothing
+  }
+
+  override val logger =
     LoggerFactory.getLogger(BookSelectTask::class.java)
 
-  fun execute() : TaskResult<*> {
-    this.taskRecorder = TaskRecorder.create()
-
+  override fun execute(account: AccountType) : TaskResult.Success<Unit> {
     //First create database entry, so we have something we can post status to
-
     this.taskRecorder.beginNewStep("Create database entry")
     //ID of the book, can be new
     val bookID = BookIDs.newFromOPDSEntry(this.feedEntry)
@@ -48,7 +60,7 @@ class BookSelectTask (
     val bookInitial =
       Book(
         id = bookID,
-        account = account.id,
+        account = this.accountID,
         cover = null,
         thumbnail = null,
         entry = feedEntry,
@@ -56,7 +68,7 @@ class BookSelectTask (
       )
 
     // Get either the book that already was in database, or initialize a new database entry
-    val book = this.getOrCreateBookDatabaseEntry(bookInitial, feedEntry)
+    val book = this.getOrCreateBookDatabaseEntry(account, bookInitial, feedEntry)
 
     this.taskRecorder.currentStepSucceeded("Initial database entry successful")
 
@@ -67,7 +79,7 @@ class BookSelectTask (
       val baseURI = feedEntry.alternate.getOrNull()
       if (baseURI == null) {
         logger.debug("No alternate link to use as basis for request")
-        return taskRecorder.finishFailure<Unit>()
+        return taskRecorder.finishSuccess(Unit)
       }
 
       //Form the select URI by adding the desired path
@@ -100,16 +112,16 @@ class BookSelectTask (
         when (val status = response.status) {
           is LSHTTPResponseStatus.Responded.OK -> {
             // Parse the answer and store the new value to the database and book register
-            this.handleOKRequest(currentURI, status, book)
-            return taskRecorder.finishSuccess("Success")
+            this.handleOKRequest(account, currentURI, status, book)
+            return taskRecorder.finishSuccess(Unit)
           }
           is LSHTTPResponseStatus.Responded.Error -> {
             this.handleHTTPError(status)
-            return taskRecorder.finishFailure<Unit>()
+            return taskRecorder.finishSuccess(Unit)
           }
           is LSHTTPResponseStatus.Failed -> {
             this.handleHTTPFailure(status)
-            return taskRecorder.finishFailure<Unit>()
+            return taskRecorder.finishSuccess(Unit)
           }
         }
       }
@@ -120,13 +132,14 @@ class BookSelectTask (
   }
 
   private fun getOrCreateBookDatabaseEntry(
+    account: AccountType,
     book: Book,
     entry: OPDSAcquisitionFeedEntry
   ): Book {
     this.taskRecorder.beginNewStep("Setting up a book database entry...")
 
     try {
-      val database = this.account.bookDatabase
+      val database = account.bookDatabase
 
       //If the book is already in the database, use that book instead of the generated one
       //If the book is not, we initialize a db entry with the given book
@@ -162,26 +175,39 @@ class BookSelectTask (
   private fun handleHTTPError(
     status: LSHTTPResponseStatus.Responded.Error
   ) {
-    val report = status.properties.problemReport
-    if (report != null) {
-      taskRecorder.addAttributes(report.toMap())
+    if (status.properties.status == 401) {
+      //Create an exception that is handled in AbstractBookTask and forwarded to Controller,
+      //From where the BookSelectTask was called
+      val message = String.format("bookSelect failed, bad credentials")
+      val exception = IOException(message)
+      //Fail the current step
+      this.taskRecorder.currentStepFailed(
+        message = message,
+        errorCode = "accessTokenExpired",
+        exception = exception
+      )
+      this.logger.debug("refresh credentials due to 401 server response")
+      //Failure is checked and handled in Controller, where the tokenRefresh is triggered
+      //Don't set as logged out, as can possibly be logged in with tokenRefresh
+      throw TaskFailedHandled(exception)
+    } else {
+      val report = status.properties.problemReport
+      if (report != null) {
+        taskRecorder.addAttributes(report.toMap())
+      }
+
+      taskRecorder.currentStepFailed(
+        message = "HTTP request failed: ${status.properties.originalStatus} ${status.properties.message}",
+        errorCode = "SelectedError",
+        exception = null
+      )
+
+      throw SelectTaskException.SelectTaskFailed()
     }
-
-    taskRecorder.currentStepFailed(
-      message = "HTTP request failed: ${status.properties.originalStatus} ${status.properties.message}",
-      errorCode = "SelectedError",
-      exception = null
-    )
-
-    //Catch 401 with special handling in controller
-    if (report?.type == "http://librarysimplified.org/terms/problem/credentials-invalid") {
-      throw SelectTaskException.SelectAccessTokenExpired()
-    }
-
-    throw SelectTaskException.SelectTaskFailed()
   }
 
   private fun handleOKRequest(
+    account: AccountType,
     uri: URI,
     status: LSHTTPResponseStatus.Responded.OK,
     book: Book
@@ -193,7 +219,7 @@ class BookSelectTask (
     val entry = this.parseOPDSFeedEntry(inputStream, uri)
 
     //get database
-    val database = this.account.bookDatabase
+    val database = account.bookDatabase
 
     //The version in database might be carrying loan information
     //And just overwriting the existing entry with the new one would not carry that information over

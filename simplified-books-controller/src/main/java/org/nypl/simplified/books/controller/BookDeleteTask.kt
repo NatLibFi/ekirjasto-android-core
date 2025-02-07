@@ -50,9 +50,11 @@ class BookDeleteTask(
 
       //If the book is still selected, don't delete the book, just update
       if (entry.book.entry.selected is Some<DateTime>) {
+        logger.debug("Book is selected, don't delete, just update")
         this.bookRegistry.update(BookWithStatus(entry.book, BookStatus.fromBook(entry.book)))
       } else {
         //Otherwise delete the db and registry entries
+        logger.debug("Book not selected delete from database and register")
         entry.delete()
         this.bookRegistry.clearFor(entry.book.id)
       }

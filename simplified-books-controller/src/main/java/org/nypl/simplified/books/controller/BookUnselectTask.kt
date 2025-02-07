@@ -10,6 +10,7 @@ import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.mdc.MDCKeys
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.addCredentialsToProperties
+import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.BookID
 import org.nypl.simplified.books.api.BookIDs
@@ -24,29 +25,38 @@ import org.nypl.simplified.opds.core.OPDSAvailabilityLoanable
 import org.nypl.simplified.opds.core.OPDSAvailabilityType
 import org.nypl.simplified.opds.core.OPDSParseException
 import org.nypl.simplified.opds.core.getOrNull
+import org.nypl.simplified.profiles.api.ProfileID
+import org.nypl.simplified.profiles.api.ProfilesDatabaseType
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import java.io.ByteArrayInputStream
+import java.io.IOException
 import java.io.InputStream
 import java.net.URI
 
+/**
+ * Task for unselecting a particular book, removing it from the favorites list.
+ * Extends the AbstractBookTask class.
+ */
+
 class BookUnselectTask (
+  private val accountID: AccountID,
+  profileID: ProfileID,
+  profiles: ProfilesDatabaseType,
   private val HTTPClient: LSHTTPClientType,
-  private val account: AccountType,
   private val feedEntry: OPDSAcquisitionFeedEntry,
   private val bookRegistry: BookRegistryType
-) {
+) : AbstractBookTask(accountID, profileID, profiles) {
 
-  private lateinit var taskRecorder: TaskRecorderType
-
-  private val logger =
+  override val taskRecorder: TaskRecorderType =
+    TaskRecorder.create()
+  override val logger =
     LoggerFactory.getLogger(BookUnselectTask::class.java)
 
-  fun execute() : TaskResult<*> {
-    this.taskRecorder = TaskRecorder.create()
+  override fun execute(account: AccountType): TaskResult.Success<Unit> {
     taskRecorder.beginNewStep("Creating an OPDS Unselect...")
 
     try {
@@ -63,7 +73,7 @@ class BookUnselectTask (
       val baseURI = feedEntry.alternate.getOrNull()
       if (baseURI == null) {
         logger.debug("No link to form")
-        return taskRecorder.finishFailure<Unit>()
+        return taskRecorder.finishSuccess(Unit)
       }
       //Form the select URI by adding the desired path
       val currentURI = URI.create(baseURI.toString().plus("/unselect_book"))
@@ -95,16 +105,16 @@ class BookUnselectTask (
         when (val status = response.status) {
           is LSHTTPResponseStatus.Responded.OK -> {
             //If successful, store returned value to bookRegistry
-            this.handleOKRequest(currentURI, status, databaseEntry, bookID)
-            return taskRecorder.finishSuccess("Success")
+            this.handleOKRequest(account, currentURI, status, databaseEntry, bookID)
+            return taskRecorder.finishSuccess(Unit)
           }
           is LSHTTPResponseStatus.Responded.Error -> {
             this.handleHTTPError(status)
-            return taskRecorder.finishFailure<Unit>()
+            return taskRecorder.finishSuccess(Unit)
           }
           is LSHTTPResponseStatus.Failed -> {
             this.handleHTTPFailure(status)
-            return taskRecorder.finishFailure<Unit>()
+            return taskRecorder.finishSuccess(Unit)
           }
         }
       }
@@ -112,6 +122,10 @@ class BookUnselectTask (
       //Catch a special error for access token expiration
       throw e
     }
+  }
+
+  override fun onFailure(result: TaskResult.Failure<Unit>) {
+    //Do nothing
   }
 
   private fun handleHTTPFailure(
@@ -128,29 +142,45 @@ class BookUnselectTask (
   private fun handleHTTPError(
     status: LSHTTPResponseStatus.Responded.Error
   ) {
-    val report = status.properties.problemReport
-    if (report != null) {
-      taskRecorder.addAttributes(report.toMap())
+
+    if (status.properties.status == 401) {
+      //Create an exception that is handled in AbstractBookTask and forwarded to Controller,
+      //From where the BookUnselectTask was called
+      val message = String.format("bookSelect failed, bad credentials")
+      val exception = IOException(message)
+      //Fail the current step
+      this.taskRecorder.currentStepFailed(
+        message = message,
+        errorCode = "accessTokenExpired",
+        exception = exception
+      )
+      this.logger.debug("refresh credentials due to 401 server response")
+      //Failure is checked and handled in Controller, where the tokenRefresh is triggered
+      //Don't set as logged out, as can possibly be logged in with tokenRefresh
+      throw TaskFailedHandled(exception)
+
+    } else {
+
+      val report = status.properties.problemReport
+      if (report != null) {
+        taskRecorder.addAttributes(report.toMap())
+      }
+
+      taskRecorder.currentStepFailed(
+        message = "HTTP request failed: ${status.properties.originalStatus} ${status.properties.message}",
+        errorCode = "UnselectError",
+        exception = null
+      )
+
+      throw SelectTaskException.UnselectTaskFailed()
     }
-
-    taskRecorder.currentStepFailed(
-      message = "HTTP request failed: ${status.properties.originalStatus} ${status.properties.message}",
-      errorCode = "UnselectError",
-      exception = null
-    )
-
-    //Catch 401 with special handling in controller
-    if (report?.type == "http://librarysimplified.org/terms/problem/credentials-invalid") {
-      throw SelectTaskException.SelectAccessTokenExpired()
-    }
-
-    throw SelectTaskException.UnselectTaskFailed()
   }
 
   /**
    * Update the database and registry so that the selected info is removed
    */
   private fun handleOKRequest(
+    account: AccountType,
     uri: URI,
     status: LSHTTPResponseStatus.Responded.OK,
     databaseEntry: BookDatabaseEntryType,
@@ -203,7 +233,7 @@ class BookUnselectTask (
         errorCode = "Parse error",
         exception = e
       )
-      throw SelectTaskException.SelectTaskFailed()
+      throw SelectTaskException.UnselectTaskFailed()
     }
   }
 }

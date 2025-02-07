@@ -93,11 +93,15 @@ class BookSyncTask(
     )
 
     //Get the loans stream
-    val loansStream: InputStream? = fetchFeed(
+    //Continue execution only if successful
+    //Otherwise it's useless and can trigger multiple refresh
+    //requests in row, which makes the logout happen unnecessarily
+    val loansStream: InputStream = fetchFeed(
       provider.loansURI,
       credentials,
       account
-    )
+    ) ?: return this.taskRecorder.finishSuccess(Unit)
+
     //Get the selected stream
     val selectedStream: InputStream? = fetchFeed(
       provider.selectedURI,
@@ -106,7 +110,7 @@ class BookSyncTask(
     )
     //If both fetches went fine, we combine the streams
     //And update database and registry
-    if (loansStream != null && selectedStream != null) {
+    if (selectedStream != null) {
       this.onHTTPOKMultipleFeeds(
         loansStream = loansStream,
         selectedStream = selectedStream,
@@ -535,14 +539,22 @@ class BookSyncTask(
   ): Boolean {
     when(account.loginState.credentials) {
       is AccountAuthenticationCredentials.Ekirjasto -> {
+        //If the answer is 401, refresh needs to be triggered
         if (result.properties.status == 401) {
+          //Create an exception that is handled in AbstractBookTask and forwarded to Controller,
+          //From where the BookSyncTask was called
+          val message = String.format("bookSync failed, bad credentials")
+          val exception = IOException(message)
+          //Fail the current step
+          this.taskRecorder.currentStepFailed(
+            message = message,
+            errorCode = "accessTokenExpired",
+            exception = exception
+          )
           this.logger.debug("refresh credentials due to 401 server response")
-          //Launch accessToken refresh
-          booksController.executeProfileAccountAccessTokenRefresh(accountID)
-          //Returns true, as it's not an actual error, so can continue normally
+          //Failure is checked and handled in Controller, where the tokenRefresh is triggered
           //Don't set as logged out, as can possibly be logged in with tokenRefresh
-          //If logout is needed, it is handled in another part of the code
-          return true
+          throw TaskFailedHandled(exception)
         }
       }
       else -> {
