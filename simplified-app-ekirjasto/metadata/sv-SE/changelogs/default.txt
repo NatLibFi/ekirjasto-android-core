@@ -1,5 +1,2 @@
-1.2.0
-- Fixade en bugg som fick vissa användare att logga ut
-- Andra buggfixar
+1.2.1
 - UI fixar
-– Förbättrad tillgänglighet

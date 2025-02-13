@@ -1,5 +1,2 @@
-1.2.0
-- Korjattu bugi joka aiheutti joillakin käyttäjillä virheellisen uloskirjautumisen
-- Muita bugikorjauksia
-- UI korjauksia
-- Paranneltu saavutettavuus
+1.2.1
+- UI-korjauksia
