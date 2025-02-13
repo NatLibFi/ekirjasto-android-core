@@ -1,5 +1,2 @@
-1.2.0
-- Fixed a bug causing some users to get incorrectly logged out
-- Other bug fixes
+1.2.1
 - UI fixes
-- Improved accessibility
