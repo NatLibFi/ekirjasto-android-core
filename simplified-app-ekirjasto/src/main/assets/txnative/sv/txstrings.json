@@ -198,6 +198,9 @@
       "account_faq" : {
          "string" : "Vanliga frågor"
       },
+      "account_instructions" : {
+         "string" : "Anvisningar"
+      },
       "account_leave_feedback" : {
          "string" : "Ge respons"
       },
@@ -649,10 +652,10 @@
          "string" : "Boken '%1$s' har returnerats"
       },
       "bookSessionExpiredButton" : {
-         "string" : ""
+         "string" : "OK"
       },
       "bookSessionExpiredMessage" : {
-         "string" : ""
+         "string" : "Din session har löpt ut, vänligen logga in igen."
       },
       "bookSessionExpiredTitle" : {
          "string" : ""

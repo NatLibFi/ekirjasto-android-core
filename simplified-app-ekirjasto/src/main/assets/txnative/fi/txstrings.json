@@ -198,6 +198,9 @@
       "account_faq" : {
          "string" : "Usein kysytyt kysymykset"
       },
+      "account_instructions" : {
+         "string" : "Käyttöohjeet"
+      },
       "account_leave_feedback" : {
          "string" : "Anna palautetta"
       },
@@ -637,7 +640,7 @@
          "string" : "30"
       },
       "bookReachedLoanLimitDialogButton" : {
-         "string" : "OK"
+         "string" : "Vahvista"
       },
       "bookReachedLoanLimitDialogMessage" : {
          "string" : "Olet saavuttanut lainarajasi. Et voi lainata enää mitään ennen kuin palautat jotain."
@@ -649,13 +652,13 @@
          "string" : "Kirja %1$s on palautettu onnistuneesti"
       },
       "bookSessionExpiredButton" : {
-         "string" : ""
+         "string" : "Vahvista"
       },
       "bookSessionExpiredMessage" : {
-         "string" : ""
+         "string" : "Istunto on vanhentunut, kirjaudu uudelleen sisään."
       },
       "bookSessionExpiredTitle" : {
-         "string" : ""
+         "string" : "Istunto on vanhentunut!"
       },
       "bookmarkEnd" : {
          "string" : "Luvun lopussa."
@@ -1270,13 +1273,13 @@
          "string" : "Lehdet"
       },
       "magazinesSessionExpiredButton" : {
-         "string" : ""
+         "string" : "Vahvista"
       },
       "magazinesSessionExpiredMessage" : {
-         "string" : ""
+         "string" : "Istunto on vanhentunut, kirjaudu uudelleen sisään."
       },
       "magazinesSessionExpiredTitle" : {
-         "string" : ""
+         "string" : "Istunto on vanhentunut!"
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : "Kirjaudu sisään siirtymällä asetuksiin"
