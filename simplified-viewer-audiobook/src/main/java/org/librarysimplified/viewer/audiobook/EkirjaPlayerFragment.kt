@@ -1065,14 +1065,6 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
               offsetMilliseconds
             ).minus(lastStartedPlayerPosition
             )).times(currentPlaybackRate.speed)).toInt()
-      /*
-      log.debug("Last started: {}", lastStartedPlayerPosition)
-      log.debug("Difference of last started and player position: {}", (TimeUnit.MILLISECONDS.toSeconds(
-        offsetMilliseconds
-      ).minus(lastStartedPlayerPosition
-      ).times(currentPlaybackRate.speed)))
-      log.debug("Player position: {}", this.playerPosition.progress.toString())
-       */
     }
 
     val currTime = TimeUnit.SECONDS.toMillis(lastStartedPlayerPosition
