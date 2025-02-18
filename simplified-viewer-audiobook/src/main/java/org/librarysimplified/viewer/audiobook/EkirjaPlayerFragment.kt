@@ -441,6 +441,9 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     this.menuPlaybackRateText?.text =
       PlayerPlaybackRateAdapter.textOfRate(this.player.playbackRate)
 
+    //Add the translated title
+    this.menuPlaybackRate.title = this.resources.getString(R.string.audiobook_player_menu_playback_rate_title)
+
     /*
      * On API versions older than 23, playback rate changes will have no effect. There is no
      * point showing the menu.
@@ -471,11 +474,15 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     this.menuSleep.actionView?.contentDescription = this.sleepTimerContentDescriptionSetUp()
 
     this.menuSleepText = this.menuSleep.actionView?.findViewById(R.id.player_menu_sleep_text)
+    //Add the translated title
+    this.menuSleep.title = this.resources.getString(R.string.audiobook_player_menu_sleep_title)
 
     this.menuTOC = this.toolbar.menu.findItem(R.id.player_menu_toc)
     this.menuTOC.setOnMenuItemClickListener { this.onMenuTOCSelected() }
 
     this.menuAddBookmark = this.bottomToolbar.menu.findItem(R.id.player_menu_add_bookmark)
+    //Add the translated title
+    this.menuAddBookmark.title = this.resources.getString(R.string.audiobook_player_menu_add_bookmark_title)
     this.menuAddBookmark.setOnMenuItemClickListener { this.onMenuAddBookmarkSelected() }
     /*
      * Subscribe to player and timer events. We do the subscription here (as late as possible)
@@ -1145,7 +1152,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   }
 
   private fun spineElementText(spineElement: PlayerSpineElementType): String {
-    return spineElement.title ?: this.getString(
+    return spineElement.title ?: this.getString(//
       R.string.audiobook_player_toc_track_n,
       spineElement.index + 1
     )
