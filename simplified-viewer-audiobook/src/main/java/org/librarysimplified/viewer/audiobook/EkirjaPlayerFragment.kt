@@ -1152,7 +1152,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   }
 
   private fun spineElementText(spineElement: PlayerSpineElementType): String {
-    return spineElement.title ?: this.getString(//
+    return spineElement.title ?: this.getString(
       R.string.audiobook_player_toc_track_n,
       spineElement.index + 1
     )
