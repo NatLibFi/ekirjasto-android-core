@@ -113,7 +113,7 @@ class BookRevokeTask(
       val updatedEntry = OPDSAcquisitionFeedEntry.newBuilderFrom(this.databaseEntry.book.entry)
         .setSelectedOption(revokeBook.book.entry.selected)
         .build()
-      //Write the entry to the datsabase
+      //Write the entry to the database
       this.databaseEntry.writeOPDSEntry(updatedEntry)
       //Update the book registry, based on the book that we just updated to database
       this.publishStatusFromDatabase()

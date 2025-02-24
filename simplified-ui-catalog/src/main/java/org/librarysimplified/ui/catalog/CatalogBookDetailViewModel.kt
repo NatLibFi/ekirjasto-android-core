@@ -11,6 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import net.jcip.annotations.GuardedBy
 import org.nypl.simplified.accounts.api.AccountID
+import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.Book
@@ -38,6 +39,7 @@ import org.nypl.simplified.opds.core.OPDSAvailabilityMatcherType
 import org.nypl.simplified.opds.core.OPDSAvailabilityOpenAccess
 import org.nypl.simplified.opds.core.OPDSAvailabilityRevoked
 import org.nypl.simplified.profiles.api.ProfilePreferences
+import org.nypl.simplified.profiles.api.ProfileReadableType
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
@@ -299,10 +301,17 @@ class CatalogBookDetailViewModel(
   }
 
   override fun selectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
-    booksController.bookAddToSelected(
-      accountID = profilesController.profileCurrent().mostRecentAccount().id,
-      feedEntry = feedEntry
-    )
+    //Check if we are logged in, if not, show login
+    val account = this.profilesController.profileCurrent().mostRecentAccount()
+    if (account.loginState is AccountLoginState.AccountNotLoggedIn) {
+      openLoginDialog(account.id)
+    } else {
+      //If logged in, try adding book to selected
+      booksController.bookAddToSelected(
+        accountID = profilesController.profileCurrent().mostRecentAccount().id,
+        feedEntry = feedEntry
+      )
+    }
   }
 
   override fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS) {

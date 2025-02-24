@@ -1184,10 +1184,18 @@ class CatalogFeedViewModel(
   }
 
   override fun selectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
-    booksController.bookAddToSelected(
-      accountID = profilesController.profileCurrent().mostRecentAccount().id,
-      feedEntry = feedEntry
-    )
+    //Check if logged in
+    val account = this.profilesController.profileCurrent().mostRecentAccount()
+    if (account.loginState is AccountLoginState.AccountNotLoggedIn) {
+      //Show login page if not
+      openLoginDialog(account.id)
+    } else {
+      //Otherwise try selecting the book
+      booksController.bookAddToSelected(
+        accountID = profilesController.profileCurrent().mostRecentAccount().id,
+        feedEntry = feedEntry
+      )
+    }
   }
 
   override fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
