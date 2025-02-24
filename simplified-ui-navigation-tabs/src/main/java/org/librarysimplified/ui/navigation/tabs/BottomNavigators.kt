@@ -74,10 +74,10 @@ object BottomNavigators {
               defaultProvider = accountProviders.defaultProvider
             )
           },
-          R.id.tabHolds to {
-            createHoldsFragment(
+          R.id.tabSelected to {
+            createSelectedFragment(
               context = context,
-              id = R.id.tabHolds,
+              id = R.id.tabSelected,
               profilesController = profilesController,
               settingsConfiguration = settingsConfiguration,
               defaultProvider = accountProviders.defaultProvider
@@ -223,7 +223,7 @@ object BottomNavigators {
         searchTerms = null,
         selection = FeedBooksSelection.BOOKS_FEED_HOLDS,
         sortBy = FeedFacet.FeedFacetPseudo.Sorting.SortBy.SORT_BY_TITLE,
-        title = context.getString(R.string.tabHolds),
+        title = "Holds",
         updateHolds = true
       )
     )
@@ -232,7 +232,7 @@ object BottomNavigators {
   /**
    * Create a fragment for showing the loaned books.
    */
-  private fun createBooksFragment(
+  private fun createLoansFragment(
     context: Context,
     id: Int,
     profilesController: ProfilesControllerType,
@@ -300,7 +300,7 @@ object BottomNavigators {
         CatalogFeedOwnership.OwnedByAccount(filterAccountId)
       }
 
-    //Create the fragment hacing the selection be the selected
+    //Create the fragment having the selection be the selected
     return CatalogFeedFragment.create(
       CatalogFeedArguments.CatalogFeedArgumentsLocalBooks(
         filterAccount = filterAccountId,

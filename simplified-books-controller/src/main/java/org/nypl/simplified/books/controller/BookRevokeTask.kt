@@ -98,17 +98,25 @@ class BookRevokeTask(
     //Revoke request is sent to server, we set the revoke status again
     //and from the answer we form a new entry,
     //That we store to the db and register
+    //HERE
     this.revokeNotifyServer(account)
 
     //Get the registry entry
     val revokeBook = bookRegistry.books()[this.bookID]
 
-    //If there is a book and it is selected, just publish revoked status and then
-    //Update registry with the status created form the book
+    //If there is a book in the registry that is selected, just publish revoked status and then
+    //Update the database entry with the selected info
+    // And then update the registry from the database
     if (revokeBook != null && revokeBook.book.entry.selected is Some<DateTime>) {
       this.publishRevokedStatus()
+      //Update the database entry with the selected info
+      val updatedEntry = OPDSAcquisitionFeedEntry.newBuilderFrom(this.databaseEntry.book.entry)
+        .setSelectedOption(revokeBook.book.entry.selected)
+        .build()
+      //Write the entry to the datsabase
+      this.databaseEntry.writeOPDSEntry(updatedEntry)
+      //Update the book registry, based on the book that we just updated to database
       this.publishStatusFromDatabase()
-      this.bookRegistry.update(BookWithStatus(revokeBook.book, BookStatus.fromBook(revokeBook.book)))
     } else {
       //If not selected, we delete the book from database
       //And we clear the registry too

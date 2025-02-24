@@ -43,7 +43,7 @@ internal class ProfileFeedTask(
      */
 
     //Chose the tabs we want to show on the my books page
-    val doSelectFacets = request.feedSelection != FeedBooksSelection.BOOKS_FEED_HOLDS
+    val doSelectFacets = request.feedSelection != FeedBooksSelection.BOOKS_FEED_SELECTED
     val facetGroups = this.makeFacets(doSelectFacets)
     val facets = facetGroups.values.flatten()
 
@@ -159,10 +159,10 @@ internal class ProfileFeedTask(
           FilterBy.FILTER_BY_HOLDS -> FeedBooksSelection.BOOKS_FEED_HOLDS
           FilterBy.FILTER_BY_SELECTED -> FeedBooksSelection.BOOKS_FEED_SELECTED
         }
-      //Currently we don't want to show the button for holds feed
+      //Currently we don't want to show the selected feed in the books tab
       //So we don't add it to the facets
 
-      if (selectedFeed != FeedBooksSelection.BOOKS_FEED_HOLDS) {
+      if (selectedFeed != FeedBooksSelection.BOOKS_FEED_SELECTED) {
         facets.add(FilteringForFeed(title, active, selectedFeed, filterFacet))
       }
     }
@@ -339,7 +339,7 @@ internal class ProfileFeedTask(
     }
   }
 
-  private fun usableForBooksFeed(status: BookStatus): Boolean {
+  private fun usableForLoansFeed(status: BookStatus): Boolean {
     return when (status) {
       is BookStatus.Held,
       is BookStatus.Holdable,
@@ -347,18 +347,17 @@ internal class ProfileFeedTask(
       is BookStatus.ReachedLoanLimit,
       is BookStatus.Revoked ->
         false
-
       is BookStatus.Downloading,
       is BookStatus.DownloadWaitingForExternalAuthentication,
       is BookStatus.DownloadExternalAuthenticationInProgress,
       is BookStatus.FailedDownload,
       is BookStatus.FailedLoan,
       is BookStatus.FailedRevoke,
-      is BookStatus.Loaned,
+      is BookStatus.Loaned -> true
       is BookStatus.RequestingDownload,
       is BookStatus.RequestingLoan,
-      is BookStatus.Selected,
-      is BookStatus.Unselected,
+      is BookStatus.Selected -> false
+      is BookStatus.Unselected -> false
       is BookStatus.RequestingRevoke ->
         true
     }
@@ -368,7 +367,6 @@ internal class ProfileFeedTask(
     return when (status) {
       is BookStatus.Held ->
         true
-
       is BookStatus.Downloading,
       is BookStatus.DownloadWaitingForExternalAuthentication,
       is BookStatus.DownloadExternalAuthenticationInProgress,
@@ -382,8 +380,8 @@ internal class ProfileFeedTask(
       is BookStatus.RequestingDownload,
       is BookStatus.RequestingLoan,
       is BookStatus.RequestingRevoke,
-      is BookStatus.Selected,
-      is BookStatus.Unselected,
+      is BookStatus.Selected -> false
+      is BookStatus.Unselected -> false
       is BookStatus.Revoked ->
         false
     }
@@ -393,7 +391,7 @@ internal class ProfileFeedTask(
    * Return true if the book is usable for selected feed
    */
   private fun usableForSelectedFeed(status: BookStatus): Boolean {
-    //Allow the usage for any Bookstatus, expect a book when the book is just unselected
+    //Allow the usage for any BookStatus, except a book when the book is just unselected
     return when (status) {
       is BookStatus.Unselected -> false
       else -> true
@@ -436,7 +434,7 @@ internal class ProfileFeedTask(
     request: ProfileFeedRequest
   ): (BookStatus) -> Boolean {
     return when (request.feedSelection) {
-      FeedBooksSelection.BOOKS_FEED_LOANED -> ::usableForBooksFeed
+      FeedBooksSelection.BOOKS_FEED_LOANED -> ::usableForLoansFeed
       FeedBooksSelection.BOOKS_FEED_HOLDS -> ::usableForHoldsFeed
       FeedBooksSelection.BOOKS_FEED_SELECTED -> ::usableForSelectedFeed
     }

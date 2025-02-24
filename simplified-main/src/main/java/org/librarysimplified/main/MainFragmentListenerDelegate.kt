@@ -247,8 +247,12 @@ internal class MainFragmentListenerDelegate(
         state
       }
 
-      CatalogFeedEvent.GoUpwards -> {
+      is CatalogFeedEvent.GoUpwards -> {
         this.goUpwards()
+        state
+      }
+      is CatalogFeedEvent.RefreshViews -> {
+        this.navigator.popToRoot()
         state
       }
     }

@@ -197,7 +197,9 @@ class CatalogFeedViewModel(
           //We reload feed on login since in some login cases,
           //(in cases where there are books stored on the device)
           //the feed shows up empty despite there being loans due to not being updated on login
+          //Adding different types of feeds meant that there needs to be a backlog clear
           logger.debug("reloading feed due to successful login")
+          this.listener.post(CatalogFeedEvent.RefreshViews)
           this.reloadFeed()
         }
       }

@@ -468,7 +468,7 @@ class BookSyncTask(
           if (a is OPDSAvailabilityRevoked) {
             revoking.add(existingId)
           } else {
-            //Otherwide just deleting will do
+            //Otherwise just deleting will do
             this.logger.debug("[{}] deleting", existingId.brief())
             //Load the single entry and add the "neutral" version to the book
             this.updateRegistryForBook(account, dbEntry)
