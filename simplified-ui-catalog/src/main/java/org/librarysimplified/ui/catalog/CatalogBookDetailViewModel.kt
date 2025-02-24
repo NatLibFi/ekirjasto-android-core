@@ -315,10 +315,17 @@ class CatalogBookDetailViewModel(
   }
 
   override fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
-    booksController.bookRemoveFromSelected(
-      accountID = profilesController.profileCurrent().mostRecentAccount().id,
-      feedEntry = feedEntry
-    )
+    //Check if we are logged in, if not, show login
+    val account = this.profilesController.profileCurrent().mostRecentAccount()
+    if (account.loginState is AccountLoginState.AccountNotLoggedIn) {
+      openLoginDialog(account.id)
+    } else {
+      //Attempt to unselect
+      booksController.bookRemoveFromSelected(
+        accountID = profilesController.profileCurrent().mostRecentAccount().id,
+        feedEntry = feedEntry
+      )
+    }
   }
 
   override fun resetInitialBookStatus(feedEntry: FeedEntry.FeedEntryOPDS) {
