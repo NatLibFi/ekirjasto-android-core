@@ -223,7 +223,7 @@ object BottomNavigators {
         searchTerms = null,
         selection = FeedBooksSelection.BOOKS_FEED_HOLDS,
         sortBy = FeedFacet.FeedFacetPseudo.Sorting.SortBy.SORT_BY_TITLE,
-        title = "Holds",
+        title = context.getString(R.string.tabHolds),
         updateHolds = true
       )
     )
@@ -308,7 +308,7 @@ object BottomNavigators {
         searchTerms = null,
         selection = FeedBooksSelection.BOOKS_FEED_SELECTED,
         sortBy = FeedFacet.FeedFacetPseudo.Sorting.SortBy.SORT_BY_TITLE,
-        title = "Favorites",
+        title = context.getString(R.string.tabSelected),
         updateHolds = false
       )
     )
