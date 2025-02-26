@@ -51,10 +51,24 @@
                 android:layout_marginEnd="16dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/bookDetailSelect"
                 app:layout_constraintStart_toEndOf="@id/bookDetailCover"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="The Modern Prometheus" />
+
+            <ImageView
+                android:id="@+id/bookDetailSelect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:gravity="right"
+                android:src="@drawable/round_add_circle_outline_24"
+                app:layout_constraintStart_toEndOf="@id/bookDetailTitle"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="Add to your list" />
 
             <TextView
                 android:id="@+id/bookDetailAuthors"
