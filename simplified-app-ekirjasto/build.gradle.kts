@@ -196,13 +196,13 @@ android {
 
     // Product flavors: environments from least stable to most stable
     productFlavors {
-        create("ellibs") {
+        create("localhost") {
             versionCode = versionCodeBase + 4
             // Set as default flavor, otherwise alphabetically first will be the default
             isDefault = true
-            val circURL = "https://circulation-beta.ellibs.com"
+            val circURL = "http://1.2.3.4:6500" // remember to include port, if necessary
             buildConfigField("String", "CIRCULATION_API_URL", "\"$circURL\"")
-            val libProvider = "2fcb96c3-b639-4b12-ab50-4172a0410a07"
+            val libProvider = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" // format: 8-4-4-4-12
             buildConfigField("String", "LIBRARY_PROVIDER_ID", "\"$libProvider\"")
         }
         create("dev") {
