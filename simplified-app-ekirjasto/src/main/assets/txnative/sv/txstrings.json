@@ -198,6 +198,9 @@
       "account_faq" : {
          "string" : "Vanliga frågor"
       },
+      "account_instructions" : {
+         "string" : "Anvisningar"
+      },
       "account_leave_feedback" : {
          "string" : "Ge respons"
       },
@@ -649,13 +652,13 @@
          "string" : "Boken '%1$s' har returnerats"
       },
       "bookSessionExpiredButton" : {
-         "string" : ""
+         "string" : "Beräfta"
       },
       "bookSessionExpiredMessage" : {
-         "string" : ""
+         "string" : "Din session har gått ut, vänligen logga in igen."
       },
       "bookSessionExpiredTitle" : {
-         "string" : ""
+         "string" : "Din session har gått ut!"
       },
       "bookmarkEnd" : {
          "string" : "I slutet av kapitlet."
@@ -1270,13 +1273,13 @@
          "string" : "Tidskrifter"
       },
       "magazinesSessionExpiredButton" : {
-         "string" : ""
+         "string" : "Bekräfta"
       },
       "magazinesSessionExpiredMessage" : {
-         "string" : ""
+         "string" : "Din session har gått ut, vänligen logga in igen."
       },
       "magazinesSessionExpiredTitle" : {
-         "string" : ""
+         "string" : "Din session har gått ut!"
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : "Gå till inställningar för att logga in"

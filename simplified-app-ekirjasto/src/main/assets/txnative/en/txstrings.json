@@ -198,6 +198,9 @@
       "account_faq" : {
          "string" : "Frequently Asked Questions"
       },
+      "account_instructions" : {
+         "string" : "User instructions"
+      },
       "account_leave_feedback" : {
          "string" : "Leave feedback"
       },
