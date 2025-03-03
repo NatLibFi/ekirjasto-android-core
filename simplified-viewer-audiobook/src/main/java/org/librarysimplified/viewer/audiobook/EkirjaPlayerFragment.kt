@@ -367,7 +367,16 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   }
 
   private fun onMenuAddBookmarkSelected(): Boolean {
+    //If we just place a bookmark while on higher speeds
+    //the placing of it is incorrect
+    //Update player position first then make the bookmark
+    //Mark that we are updating the player position
+    updatePlayerPosition = true
+    //Update the player position, causes a minor stutter for user
+    this.onReleasedPlayerPositionBar(0)
+    //Make the bookmark since now it refers to the correct spot
     val playerBookmark = player.getCurrentPositionAsPlayerBookmark()
+    //Add the bookmark to the player's bookmarks
     this.listener.onPlayerShouldAddBookmark(playerBookmark)
     return true
   }
@@ -564,8 +573,10 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
         this.sleepTimer.setDuration(Duration.millis(duration))
       }
     } else {
-      // if the current duration is null it means the "end of chapter" option was selected
-      this.sleepTimer.setDuration(null)
+      //If the current duration is null it means the "end of chapter" option was selected
+      //Currently returns duration is null even if no sleep timer has been set
+      //So just don't start a timer if there is no time given, aka give duration 0
+      this.sleepTimer.setDuration(Duration.millis(0L))
     }
     this.sleepTimer.start()
 
@@ -614,6 +625,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
 
         //Since the player does a poor job of knowing when the chapter is over, we handle skipping to
         //the next chapter here
+        //Also pause if sleep timer is set to End of Chapter
         if (!fromUser) {
           /*
            The following conditions need to be met in order to skip:
@@ -622,10 +634,31 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
            - Last started is less than seek's max (otherwise would skip chapters when a new chapter has just started)
            - Play speed isn't normal (since in that case, player works fine and skips correctly)
           */
-          if (seek.max == progress && !updatePlayerPosition && lastStartedPlayerPosition < seek.max && currentPlaybackRate != PlayerPlaybackRate.NORMAL_TIME) {
-            //Set player position to be updatable, so that this call is not called multiple times until all is up to date
-            updatePlayerPosition = true
-            player.skipToNextChapter(0)
+          if (seek.max == progress && !updatePlayerPosition && lastStartedPlayerPosition < seek.max) {
+            //Check if we should stop because of the sleep timer being to the end of chapter
+            //If there is a running sleep timer and its duration is null, pause
+            if (sleepTimer.isRunning != null && sleepTimer.isRunning?.duration == null) {
+              player.pause()
+            }
+            //If we are on the last chapter, we should stop instead of trying to skip
+            val currentChapter = playerPositionCurrentSpine!!.index
+            val lastChapter = book.spine.last().index
+            //If play speed is normal, we don't want the skip behaviour as the player does it correctly,
+            //but we do want to pause on last chapter
+            if (currentPlaybackRate == PlayerPlaybackRate.NORMAL_TIME) {
+              if (currentChapter == lastChapter) {
+                player.pause()
+              }
+            }
+            //If the speed is higher and we are on the last chapter, pause
+            else if (currentChapter == lastChapter) {
+              player.pause()
+            } else {
+              //Skip to next chapter
+              //Set player position to be updatable, so that this call is not called multiple times, until all is up to date
+              updatePlayerPosition = true
+              player.skipToNextChapter(0)
+            }
           }
           if (progress == 0) {
             // If progress is 0, we want to update the player position, in order for the player to be in correct time
@@ -709,7 +742,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
         this.onPlayerEventPlaybackRateChanged(event)
       is PlayerEventError ->
         this.onPlayerEventError(event)
-      PlayerEventManifestUpdated ->
+      is PlayerEventManifestUpdated ->
         this.onPlayerEventManifestUpdated()
       is PlayerEventCreateBookmark ->
         this.onPlayerEventCreateBookmark(event)
@@ -806,8 +839,8 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     // Check if the speed was actually changed from the current one
     // As this is sometimes triggered without the speed actually changing
     if (currentPlaybackRate != event.rate) {
-      //Move the player back two seconds so user doesn't miss audio
-      onReleasedPlayerPositionBar(2)
+      //Move the player back one second so user doesn't miss audio
+      onReleasedPlayerPositionBar(1)
       updatePlayerPosition = true
     }
     this.uiThread.runOnUIThread(
@@ -997,6 +1030,15 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
             this.getString(R.string.audiobook_accessibility_pause)
           this.playerWaiting.text = ""
           this.playerWaiting.contentDescription = null
+          //Since we don't know if user has jumped to a bookmark
+          //From any special event, all possible signs of that are here
+          //If the difference between the position where this player fragment thinks we are
+          //aka "current offset" differs from the offset of the player itself
+          //by big enough margin, we know some action has been taken by the player to jump around
+          //So we mark the position to be updated
+          if (this.playerPositionCurrentOffset+1000 < event.offsetMilliseconds) {
+            updatePlayerPosition = true
+          }
           this.onEventUpdateTimeRelatedUI(event.spineElement, event.offsetMilliseconds)
         }
       }
@@ -1061,6 +1103,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     // Check if user is moving the pointer or not
     if (!this.playerPositionDragging) {
       // Adjust the position of our progress tap
+
       // The idea is: Consider time before latest position to have gone normal speed
       // Aka: This is the last moment the player is in sync with our visual seekbar
       // after which the pointer needs to move based on the speed the audio has
@@ -1099,7 +1142,10 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     this.playerTimeCurrent.contentDescription =
       this.playerTimeCurrentSpoken(offsetMilliseconds)
 
-    this.playerSpineElement.text = this.spineElementText(spineElement) + String.format(" (%s/%s)", spineElement.index + 1, this.book.spine.count().toString())
+    this.playerSpineElement.text = buildString {
+      append(spineElementText(spineElement))
+      append(String.format(" (%s/%s)", spineElement.index + 1, book.spine.count().toString()))
+    }
 
     // we just update the book chapter on the playerInfoModel if it's been initialized
     if (::playerInfoModel.isInitialized) {
