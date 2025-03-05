@@ -142,8 +142,12 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   private var playerSleepTimerEventSubscription: Subscription? = null
 
   //Variables used for keeping the visible player position in sync with the player
+  //Boolean for if we want to update the last started player position
   private var updatePlayerPosition = false
+  //States when was the las ttime visual player was in sync with the actual player
   private var lastStartedPlayerPosition = 0
+  //Boolean that tells if should pause at the start of a chapter due to "end of chapter" sleep timer
+  private var pauseOnStart = false
 
   private val log = LoggerFactory.getLogger(PlayerFragment::class.java)
 
@@ -567,18 +571,23 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
 
     this.player.playbackRate = this.parameters.currentRate ?: PlayerPlaybackRate.NORMAL_TIME
 
+    //If the currentSleepTimerDuration is not null, set the duration
     if (this.parameters.currentSleepTimerDuration != null) {
       val duration = this.parameters.currentSleepTimerDuration!!
+      //If there is time left in the book timer parameters, set it as remaining time
       if (duration > 0L) {
         this.sleepTimer.setDuration(Duration.millis(duration))
+        this.sleepTimer.start()
+      } else {
+        //We don't want to start a timer if duration is non-positive
+        this.sleepTimer.setDuration(Duration.millis(0L))
+        this.sleepTimer.cancel()
       }
     } else {
       //If the current duration is null it means the "end of chapter" option was selected
-      //Currently returns duration is null even if no sleep timer has been set
-      //So just don't start a timer if there is no time given, aka give duration 0
-      this.sleepTimer.setDuration(Duration.millis(0L))
+      this.sleepTimer.setDuration(null)
+      this.sleepTimer.start()
     }
-    this.sleepTimer.start()
 
     initializeService()
   }
@@ -636,9 +645,10 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
           */
           if (seek.max == progress && !updatePlayerPosition && lastStartedPlayerPosition < seek.max) {
             //Check if we should stop because of the sleep timer being to the end of chapter
-            //If there is a running sleep timer and its duration is null, pause
+            //If there is a running sleep timer and its duration is null
+            //Set to be paused at the beginning of next chapter
             if (sleepTimer.isRunning != null && sleepTimer.isRunning?.duration == null) {
-              player.pause()
+              pauseOnStart = true
             }
             //If we are on the last chapter, we should stop instead of trying to skip
             val currentChapter = playerPositionCurrentSpine!!.index
@@ -1065,6 +1075,16 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
         }
       }
     )
+    //If we have need to pause at end of chapter due to sleep timer, do it here
+    //When we are at the start of next chapter
+    if (event.offsetMilliseconds == 0L && this.pauseOnStart) {
+      //Run sleep timer finished behaviour
+      onPlayerSleepTimerEventFinished()
+      //Finish timer so it doesn't run again for the next chapter
+      this.sleepTimer.finish()
+      //Reset pause on start
+      this.pauseOnStart = false
+    }
   }
 
   private fun onPlayerEventManifestUpdated() {
