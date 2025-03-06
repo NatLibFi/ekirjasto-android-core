@@ -284,8 +284,18 @@ class CatalogFeedViewModel(
         is BookStatus.FailedDownload,
         is BookStatus.FailedLoan,
         is BookStatus.FailedRevoke,
-        is BookStatus.Holdable,
-        is BookStatus.Loanable,
+        is BookStatus.Holdable -> {
+          if (this.state.arguments.isLocallyGenerated) {
+            //Reload feed so dismissed failed holds are not shown in holds feed
+            this.reloadFeed()
+          }
+        }
+        is BookStatus.Loanable -> {
+          if (this.state.arguments.isLocallyGenerated) {
+            //Reload feed so no failed and dismissed loans show up
+            this.reloadFeed()
+          }
+        }
         is BookStatus.ReachedLoanLimit,
         is BookStatus.RequestingDownload,
         is BookStatus.RequestingLoan,
