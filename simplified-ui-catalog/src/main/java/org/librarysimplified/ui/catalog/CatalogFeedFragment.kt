@@ -494,6 +494,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       if (feedState.facetsByGroup != null) {
         // If there are some top level facets,configure them so they are shown on an empty view
         this.configureFacetTabs(FeedFacets.findEntryPointFacetGroup(feedState.facetsByGroup), feedContentTabs)
+        //Update catalog UI to have the texts be up to date
+        this.reconfigureCatalogUI()
         feedContentHeader.visibility = View.VISIBLE
       }
     }
