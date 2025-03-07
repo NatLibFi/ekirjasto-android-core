@@ -1137,16 +1137,21 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
             )).times(currentPlaybackRate.speed)).toInt()
     }
 
+    //Current time is accurate presentation of the time
+    //That current chapter has played
     val currTime = TimeUnit.SECONDS.toMillis(lastStartedPlayerPosition
       .plus(
         (TimeUnit.MILLISECONDS.toSeconds(
           offsetMilliseconds
         ).minus(lastStartedPlayerPosition
         )).times(currentPlaybackRate.speed)).toLong())
+
+    //Remaining book time
+    //How much book is left minus how much of current chapter has passed
     playerRemainingBookTime.text =
       PlayerTimeStrings.hourMinuteTextFromRemainingTime(
         requireContext(),
-        (getCurrentAudiobookRemainingDuration(spineElement) - currTime).div(currentPlaybackRate.speed).toLong()
+        (getCurrentAudiobookRemainingDuration(spineElement) - currTime)
       )
 
     // The visual presentation of how much of the chapter is left
