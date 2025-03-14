@@ -10,7 +10,7 @@
   <string name="audiobook_part_download_continue">Continue</string>
 
   <string name="audiobook_player_menu_playback_rate_title">Playback rate</string>
-  <string name="audiobook_player_menu_sleep_title">Set your sleep timer</string>
+  <string name="audiobook_player_menu_sleep_title">Sleep timer</string>
   <string name="audiobook_player_menu_add_bookmark_title">Add bookmark</string>
   <string name="audiobook_player_menu_toc_title">Table of contents</string>
   <string name="audiobook_player_menu_toc_title_bookmarks">Bookmarks</string>
