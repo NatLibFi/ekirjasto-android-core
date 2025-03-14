@@ -261,7 +261,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
   /*
    * Reconfigures the UI based on the log in status of the account.
-   * This effects the texts shown on my books and loans pages.
+   * This effects the texts shown on my books and favorites pages.
    * Triggered in onViewCreated and Start
    */
   private fun reconfigureCatalogUI() {
@@ -279,16 +279,23 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
   private fun showLoginText() {
     if (parameters is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks) {
       this.feedEmptyMessage.setText(
-        //Check if shown books are holds or not, set the message that is shown when
-        //viewing loans and holds. When not logged in, this text is always shown
+        //If selection is the selected books, show a suitable
+        //Text, otherwise show default (should never happen in current shape)
         if (
           (parameters as CatalogFeedArguments.CatalogFeedArgumentsLocalBooks).selection ==
-          FeedBooksSelection.BOOKS_FEED_HOLDS
+          FeedBooksSelection.BOOKS_FEED_SELECTED
         ) {
-          R.string.emptyHoldsNotLoggedIn
+          R.string.emptySelectedNotLoggedIn
         } else {
-          R.string.emptyLoansNotLoggedIn
+          R.string.emptyBooksNotLoggedIn
         }
+      )
+    }
+    //If user is viewing the multiple feed view, set the message to always be the same
+    //No matter the view
+    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks) {
+      this.feedEmptyMessage.setText(
+        R.string.emptyBooksNotLoggedIn
       )
     }
   }
@@ -298,16 +305,32 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
   private fun showInfoWhenLoggedIn() {
     if (parameters is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks) {
       this.feedEmptyMessage.setText(
-        //Check if shown books are holds or not, set the message that is shown when there are no
-        //books accordingly to loans and reserves when logged in
+        //Check if books shown are selected, and if the list is empty
+        //show an info of how to add books to selected
+        //Current layout should never show the default
         if (
           (parameters as CatalogFeedArguments.CatalogFeedArgumentsLocalBooks).selection ==
-          FeedBooksSelection.BOOKS_FEED_HOLDS
+          FeedBooksSelection.BOOKS_FEED_SELECTED
         ) {
-          R.string.feedWithGroupsEmptyHolds
+          R.string.feedWithGroupsEmptySelected
         } else {
           R.string.feedWithGroupsEmptyLoaned
         }
+      )
+    }
+    //Set the feed empty messages for a multifeed view
+    if (parameters is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks) {
+      this.feedEmptyMessage.setText(
+        //Add a special text to loans and holds
+        //Check the current selection from stateLive to show the correct message per view
+      if (
+        (viewModel.stateLive.value?.arguments as CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks).selection ==
+        FeedBooksSelection.BOOKS_FEED_LOANED
+      ) {
+        R.string.feedWithGroupsEmptyLoaned
+      } else {
+        R.string.feedWithGroupsEmptyHolds
+      }
       )
     }
   }
@@ -356,6 +379,9 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     val currentQuery = when (parameters) {
       is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks -> {
         (parameters as CatalogFeedArguments.CatalogFeedArgumentsLocalBooks).searchTerms.orEmpty()
+      }
+      is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks -> {
+        (parameters as CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks).searchTerms.orEmpty()
       }
       is CatalogFeedArguments.CatalogFeedArgumentsRemote -> {
         val uri =
@@ -462,6 +488,17 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     this.feedLoading.visibility = View.INVISIBLE
     this.feedNavigation.visibility = View.INVISIBLE
 
+    //If we are viewing multiple feed view, we want to show the top facets even if
+    //The feed is empty
+    if (feedState.arguments is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks) {
+      if (feedState.facetsByGroup != null) {
+        // If there are some top level facets,configure them so they are shown on an empty view
+        this.configureFacetTabs(FeedFacets.findEntryPointFacetGroup(feedState.facetsByGroup), feedContentTabs)
+        //Update catalog UI to have the texts be up to date
+        this.reconfigureCatalogUI()
+        feedContentHeader.visibility = View.VISIBLE
+      }
+    }
     this.configureLogoHeader(feedState)
     this.configureToolbar()
   }
@@ -721,9 +758,11 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     val remainingGroups = facetsByGroup
       .filter { entry ->
         /*
-         * SIMPLY-2923: Hide the 'Collection' Facet until approved by UX.
+         * Hide the 'Collection' Facet since we only have one library
          */
-        entry.key != "Collection"
+        entry.key != "Collection" &&
+        entry.key != "Kokoelma" &&
+        entry.key != "Samling"
       }
       .filter { entry ->
         !FeedFacets.facetGroupIsEntryPointTyped(entry.value)

@@ -66,6 +66,7 @@ class EkirjastoAccountFallback : AccountProviderFallbackType {
       isProduction = true,
       license = null,
       loansURI = null,
+      selectedURI = null,
       logo = null,
       mainColor = "orange",
       patronSettingsURI = null,

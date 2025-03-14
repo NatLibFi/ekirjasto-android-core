@@ -3,7 +3,7 @@
 <!--    Overrides to original Simplified / Palace drawable resources not exposed in theme variables -->
     <drawable name="tab_catalog">@drawable/ic_elibrary_catalog_active</drawable>
     <drawable name="tab_books">@drawable/ic_elibrary_mybooks_active</drawable>
-    <drawable name="tab_holds">@drawable/ic_elibrary_reservation_active</drawable>
+    <drawable name="tab_selected">@drawable/ic_elibrary_reservation_active</drawable>
     <drawable name="tab_settings">@drawable/ic_elibrary_settings_active</drawable>
     <drawable name="ic_baseline_arrow_back_24">@drawable/ic_caret_left</drawable>
     <drawable name="main_icon">@drawable/ekirjasto_logo_smaller</drawable>

@@ -513,6 +513,8 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
         JSONParserUtilities.getString(s, "distribution"));
       fb.setSummaryOption(
         JSONParserUtilities.getStringOptional(s, "summary"));
+      fb.setSelectedOption(
+        JSONParserUtilities.getTimestampOptional(s, "selected"));
       return fb.build();
     } catch (final JSONParseException e) {
       throw new OPDSParseException(e);
