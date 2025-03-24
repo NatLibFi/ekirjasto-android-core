@@ -79,6 +79,8 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <!--
+            Bookmark syncing is not currently supported in E-kirjasto
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/accountSyncBookmarks"
                 android:layout_width="match_parent"

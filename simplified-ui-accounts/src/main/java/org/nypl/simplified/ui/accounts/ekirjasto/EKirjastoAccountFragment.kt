@@ -6,10 +6,10 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
-import android.widget.ProgressBar
+//import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
-import androidx.constraintlayout.widget.ConstraintLayout
+//import androidx.appcompat.widget.SwitchCompat
+//import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -67,7 +67,13 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonRegisterPasskey: Button
   private lateinit var buttonDependents: Button
   private lateinit var eulaStatement: TextView
-//private lateinit var syncBookmarks: ConstraintLayout
+/*
+  Bookmark syncing is not currently supported in E-kirjasto
+  private lateinit var syncBookmarks: ConstraintLayout
+  private lateinit var bookmarkSyncProgress: ProgressBar
+  private lateinit var bookmarkSyncCheck: SwitchCompat
+  private lateinit var bookmarkStatement: TextView
+*/
   private lateinit var buttonFeedback: Button
   private lateinit var buttonPrivacyPolicy: Button
   private lateinit var buttonUserAgreement: Button
@@ -75,9 +81,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonLicenses: Button
   private lateinit var buttonInstructions: Button
   private lateinit var versionText: TextView
-//private lateinit var bookmarkSyncProgress: ProgressBar
-//private lateinit var bookmarkSyncCheck: SwitchCompat
-  private lateinit var bookmarkStatement: TextView
   private lateinit var buttonPreferences: Button
 
   //inherited elements
@@ -464,7 +467,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     return android.os.Build.VERSION.SDK_INT >= 28
   }
 
-  /*
+/*
+  Bookmark syncing is not currently supported in E-kirjasto
+
   private fun reconfigureBookmarkSyncingSwitch(status: BookmarkSyncEnableStatus) {
 
     // Remove the checked-change listener, because setting `isChecked` will trigger the listener.
@@ -506,6 +511,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       }
     }
   }
-  */
+*/
 
 }
