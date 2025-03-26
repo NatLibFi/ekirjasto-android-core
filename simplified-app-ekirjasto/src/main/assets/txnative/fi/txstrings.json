@@ -487,7 +487,7 @@
          "string" : "Toistonopeus"
       },
       "audiobook_player_menu_sleep_title" : {
-         "string" : "Aseta uniajastin"
+         "string" : "Uniajastin"
       },
       "audiobook_player_menu_toc_title" : {
          "string" : "Sisällysluettelo"
