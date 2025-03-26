@@ -1,3 +1,4 @@
-1.2.2
-- LCP update
+1.2.4
+- Listening audiobooks on higher speeds does not leave empty space at the end of chapter anymore
+- Fixed a bug in audiobooks which made the sleep timer not stop when set to end of chapter
 - UI fixes

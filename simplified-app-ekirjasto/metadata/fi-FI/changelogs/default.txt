@@ -1,3 +1,6 @@
-1.2.2
-- LCP-päivitys
+Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
+
+1.2.4
+- Äänikirjan kuunteleminen suuremmilla nopeuksilla ei enää jätä tyhjää tilaa kappaleen loppuun
+- Korjattin bugi, joka esti uniajastinta pysähtymästä kappaleen lopussa
 - UI korjauksia
