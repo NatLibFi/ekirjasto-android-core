@@ -6,10 +6,10 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
-import android.widget.ProgressBar
+//import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
-import androidx.constraintlayout.widget.ConstraintLayout
+//import androidx.appcompat.widget.SwitchCompat
+//import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,8 +26,8 @@ import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoggingInWaitin
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountLoginFailed
 import org.nypl.simplified.accounts.api.AccountLoginState.AccountNotLoggedIn
 import org.nypl.simplified.android.ktx.supportActionBar
-import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult
-import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableStatus
+//import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableResult
+//import org.nypl.simplified.bookmarks.api.BookmarkSyncEnableStatus
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
 import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
@@ -67,7 +67,13 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonRegisterPasskey: Button
   private lateinit var buttonDependents: Button
   private lateinit var eulaStatement: TextView
+/*
+  Bookmark syncing is not currently supported in E-kirjasto
   private lateinit var syncBookmarks: ConstraintLayout
+  private lateinit var bookmarkSyncProgress: ProgressBar
+  private lateinit var bookmarkSyncCheck: SwitchCompat
+  private lateinit var bookmarkStatement: TextView
+*/
   private lateinit var buttonFeedback: Button
   private lateinit var buttonPrivacyPolicy: Button
   private lateinit var buttonUserAgreement: Button
@@ -75,9 +81,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var buttonLicenses: Button
   private lateinit var buttonInstructions: Button
   private lateinit var versionText: TextView
-  private lateinit var bookmarkSyncProgress: ProgressBar
-  private lateinit var bookmarkSyncCheck: SwitchCompat
-  private lateinit var bookmarkStatement: TextView
   private lateinit var buttonPreferences: Button
 
   //inherited elements
@@ -109,30 +112,34 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonDependents = view.findViewById(R.id.buttonInviteDependents)
     this.eulaStatement = view.findViewById(R.id.eulaStatement)
     this.buttonAccessibilityStatement = view.findViewById(R.id.accessibilityStatement)
-    this.syncBookmarks = view.findViewById(R.id.accountSyncBookmarks)
-    this.bookmarkStatement = view.findViewById(R.id.accountSyncBookmarksStatement)
+//  this.syncBookmarks = view.findViewById(R.id.accountSyncBookmarks)
+//  this.bookmarkStatement = view.findViewById(R.id.accountSyncBookmarksStatement)
     this.buttonFeedback = view.findViewById(R.id.buttonFeedback)
     this.buttonPrivacyPolicy = view.findViewById(R.id.buttonPrivacyPolicy)
     this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
     this.buttonLicenses = view.findViewById(R.id.buttonLicenses)
     this.buttonInstructions = view.findViewById(R.id.buttonInstructions)
     this.versionText = view.findViewById(R.id.appVersion)
-    this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
+//  this.bookmarkSyncCheck = view.findViewById(R.id.accountSyncBookmarksCheck)
     this.buttonPreferences = view.findViewById(R.id.buttonPreferences)
 
 
     this.toolbar =
       view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
+/*
     this.bookmarkSyncProgress =
       view.findViewById(R.id.accountSyncProgress)
+*/
 
     this.viewModel.accountLive.observe(this.viewLifecycleOwner) {
       this.reconfigureAccountUI()
     }
 
+/*
     this.viewModel.accountSyncingSwitchStatus.observe(this.viewLifecycleOwner){ status ->
       this.reconfigureBookmarkSyncingSwitch(status)
     }
+*/
 
     this.reconfigureAccountUI()
   }
@@ -157,13 +164,13 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       onTryRegisterPasskey()
     }
 
-    /*
-     * Configure the bookmark syncing switch to enable/disable syncing permissions.
-     */
+/*
+    //Configure the bookmark syncing switch to enable/disable syncing permissions.
 
     this.bookmarkSyncCheck.setOnCheckedChangeListener { _, isChecked ->
       this.viewModel.enableBookmarkSyncing(isChecked)
     }
+*/
 
     /*
      * Hide the toolbar and back arrow if there is no page to return to (e.g. coming from a deep link).
@@ -294,8 +301,8 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       buttonLoginPasskey.visibility = VISIBLE
       buttonRegisterPasskey.visibility = GONE
     }
-    this.syncBookmarks.visibility = GONE
-    this.bookmarkStatement.visibility = GONE
+//  this.syncBookmarks.visibility = GONE
+//  this.bookmarkStatement.visibility = GONE
     this.eulaStatement.visibility = VISIBLE
   }
 
@@ -336,7 +343,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       buttonLoginPasskey.visibility = VISIBLE
       buttonRegisterPasskey.visibility = GONE
     }
-    this.syncBookmarks.visibility = GONE
+//  this.syncBookmarks.visibility = GONE
 
   }
 
@@ -348,9 +355,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       buttonLoginPasskey.visibility = GONE
       buttonRegisterPasskey.visibility = VISIBLE
     }
-    this.syncBookmarks.visibility = VISIBLE
-    this.bookmarkStatement.visibility = VISIBLE
-    this.bookmarkSyncProgress.visibility = INVISIBLE
+//  this.syncBookmarks.visibility = VISIBLE
+//  this.bookmarkStatement.visibility = VISIBLE
+//  this.bookmarkSyncProgress.visibility = INVISIBLE
     this.eulaStatement.visibility = GONE
   }
 
@@ -460,16 +467,16 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     return android.os.Build.VERSION.SDK_INT >= 28
   }
 
+/*
+  Bookmark syncing is not currently supported in E-kirjasto
+
   private fun reconfigureBookmarkSyncingSwitch(status: BookmarkSyncEnableStatus) {
-    /*
-     * Remove the checked-change listener, because setting `isChecked` will trigger the listener.
-     */
+
+    // Remove the checked-change listener, because setting `isChecked` will trigger the listener.
 
     this.bookmarkSyncCheck.setOnCheckedChangeListener(null)
 
-    /*
-     * Otherwise, the switch is doing something that interests us...
-     */
+    //Otherwise, the switch is doing something that interests us...
 
     val account = this.viewModel.account
     return when (status) {
@@ -504,5 +511,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
       }
     }
   }
+*/
 
 }
