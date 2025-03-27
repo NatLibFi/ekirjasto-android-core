@@ -487,7 +487,7 @@
          "string" : "Playback rate"
       },
       "audiobook_player_menu_sleep_title" : {
-         "string" : "Set your sleep timer"
+         "string" : "Sleep timer"
       },
       "audiobook_player_menu_toc_title" : {
          "string" : "Table of contents"
