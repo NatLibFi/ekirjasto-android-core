@@ -539,7 +539,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
     when (val status = book.status) {
       is BookStatus.Held -> {
-        this.onBookStatusHeld(status, bookPreviewStatus)
+        this.onBookStatusHeld(status, bookPreviewStatus, book.book)
       }
       is BookStatus.Loaned -> {
         this.onBookStatusLoaned(status, book.book)
@@ -821,7 +821,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
   private fun onBookStatusHeld(
     bookStatus: BookStatus.Held,
-    bookPreviewStatus: BookPreviewStatus
+    bookPreviewStatus: BookPreviewStatus,
+    book: Book
   ) {
     this.buttons.removeAllViews()
     
@@ -846,7 +847,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
           this.buttons.addView(
             this.buttonCreator.createRevokeHoldButton(
               onClick = {
-                this.viewModel.revokeMaybeAuthenticated()
+                this.revokeHoldPopup(book)
               }
             )
           )
@@ -892,7 +893,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
           this.buttons.addView(
             this.buttonCreator.createRevokeHoldButton(
               onClick = {
-                this.viewModel.revokeMaybeAuthenticated()
+                this.revokeHoldPopup(book)
               }
             )
           )
@@ -970,7 +971,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       this.buttons.addView(
         this.buttonCreator.createRevokeLoanButton(
           onClick = {
-            this.viewModel.revokeMaybeAuthenticated()
+            this.revokeLoanPopup(book)
           }
         )
       )
@@ -1137,6 +1138,57 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     val dialog: AlertDialog = builder.create()
     dialog.show()
 
+  }
+  /**
+   * Show user a popup requiring user to confirm a loan revoke
+   */
+  private fun revokeLoanPopup(book: Book) {
+    //Mark that a popup is currently shown
+    popUpShown = true
+    logger.debug("Showing loan revoke popup")
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    builder
+      .setTitle(getString(R.string.bookConfirmReturnTitle, book.entry.title))
+      .setMessage(R.string.bookConfirmReturnMessage)
+      .setPositiveButton(R.string.bookConfirmReturnConfirmButton) { dialog, which ->
+        //Set the popup as closed
+        //And start revoke
+        this.viewModel.revokeMaybeAuthenticated()
+        popUpShown = false
+      }
+      .setNeutralButton(R.string.bookConfirmReturnCancelButton) { dialog, which ->
+        //Do nothing, don't revoke the book
+        popUpShown = false
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+  }
+
+  /**
+   * Show user a popup requiring user to confirm a hold revoke
+   */
+  private fun revokeHoldPopup(book: Book) {
+    //Mark that a popup is currently shown
+    popUpShown = true
+    logger.debug("Showing revoke hold popup")
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    builder
+      .setTitle(getString(R.string.bookConfirmRevokeTitle, book.entry.title))
+      .setMessage(R.string.bookConfirmRevokeMessage)
+      .setPositiveButton(R.string.bookConfirmRevokeConfirmButton) { dialog, which ->
+        //Set the popup as closed
+        //And start revoke
+        this.viewModel.revokeMaybeAuthenticated()
+        popUpShown = false
+      }
+      .setNeutralButton(R.string.bookConfirmReturnCancelButton) { dialog, which ->
+        //Do nothing, don't revoke the book
+        popUpShown = false
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
   }
 
   private fun onBookStatusDownloadWaitingForExternalAuthentication() {
