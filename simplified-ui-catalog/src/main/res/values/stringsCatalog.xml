@@ -101,4 +101,11 @@
   <string name="bookNotEnoughSpaceTitle">Not enough space!</string>
   <string name="bookNotEnoughSpaceMessage">File is too big to store on device. Current free space on device: %1$s. \nFree at least %2$s of space to download the book.</string>
   <string name="bookNotEnoughSpaceButton">Close</string>
+  <string name="bookConfirmReturnTitle">Return \"%1$s\" ?</string>
+  <string name="bookConfirmReturnMessage">Returning this book removes it from your loans and from your device.</string>
+  <string name="bookConfirmReturnConfirmButton">Return</string>
+  <string name="bookConfirmReturnCancelButton">Cancel</string>
+  <string name="bookConfirmRevokeTitle">Revoke hold for \"%1$s\" ?</string>
+  <string name="bookConfirmRevokeMessage">If you revoke this hold you lose your place in the queue.</string>
+  <string name="bookConfirmRevokeConfirmButton">Revoke</string>
 </resources>
