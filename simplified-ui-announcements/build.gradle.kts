@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":simplified-profiles-controller-api"))
     implementation(project(":simplified-services-api"))
     implementation(project(":simplified-ui-thread-api"))
+    implementation(project(":simplified-ui-listeners-api"))
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)

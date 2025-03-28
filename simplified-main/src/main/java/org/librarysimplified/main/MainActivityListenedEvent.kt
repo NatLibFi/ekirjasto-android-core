@@ -20,6 +20,10 @@ sealed class MainActivityListenedEvent {
     val event: org.nypl.simplified.ui.accounts.ekirjasto.TextSizeEvent
   ) : MainActivityListenedEvent()
 
+  data class TipsEvent (
+    val event: org.nypl.simplified.ui.announcements.TipsEvent
+  ): MainActivityListenedEvent()
+
   data class LoginEvent(
     val event: MainLoginEvent
   ) : MainActivityListenedEvent()

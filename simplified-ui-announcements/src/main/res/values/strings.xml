@@ -3,4 +3,8 @@
 <resources>
   <string name="announcementTitle">%1$s (%2$d of %3$d)</string>
   <string name="ok">OK</string>
+  <string name="tipsTitle">Tip: Passkey</string>
+  <string name="tipsMessage">To make login in easier, create a passkey on the settings page. \n\nYou must have screen lock in use on your device to create and use passkey.</string>
+  <string name="tipsOk">Remind me later</string>
+  <string name="tipsDismiss">Don\'t show this again</string>
 </resources>

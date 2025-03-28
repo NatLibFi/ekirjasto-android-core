@@ -21,7 +21,9 @@ import org.librarysimplified.ui.catalog.saml20.CatalogSAML20FragmentParameters
 import org.librarysimplified.ui.navigation.tabs.TabbedNavigator
 import org.nypl.simplified.accounts.api.AccountEvent
 import org.nypl.simplified.accounts.api.AccountEventDeletion
+import org.nypl.simplified.accounts.api.AccountEventLoginStateChanged
 import org.nypl.simplified.accounts.api.AccountEventUpdated
+import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.books.api.BookID
 import org.nypl.simplified.books.book_registry.BookHoldsUpdateEvent
 import org.nypl.simplified.books.book_registry.BookStatus
@@ -35,13 +37,14 @@ import org.nypl.simplified.profiles.api.ProfileUpdated
 import org.nypl.simplified.ui.accounts.AccountListFragment
 import org.nypl.simplified.ui.accounts.AccountListFragmentParameters
 import org.nypl.simplified.ui.announcements.AnnouncementsDialog
+import org.nypl.simplified.ui.announcements.TipsDialog
 import org.slf4j.LoggerFactory
 import java.net.URI
 
 /**
  * The main application fragment.
  *
- * Currently, this displays a tabbed view and also displays dialogs on various application
+ * Currently, this displays a tabbed view and also displays tips and dialogs on various application
  * events.
  */
 
@@ -51,6 +54,9 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
 
     private val ANNOUNCEMENT_DIALOG_TAG =
       AnnouncementsDialog::class.java.simpleName
+
+    private val TIPS_DIALOG_TAG =
+      TipsDialog::class.java.simpleName
   }
 
   private val logger = LoggerFactory.getLogger(MainFragment::class.java)
@@ -192,6 +198,17 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
       is AccountEventUpdated -> {
         this.checkForAnnouncements()
       }
+      is AccountEventLoginStateChanged -> {
+        when (event.state) {
+          is AccountLoginState.AccountLoggedIn -> {
+            //Show tips after logging in
+            this.showTipsIfNotDismissed()
+          }
+          else -> {
+            //do nothing
+          }
+        }
+      }
 
       /*
        * We don't know which fragments on the backstack might refer to accounts that
@@ -332,6 +349,17 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
 
   private fun showAnnouncementsDialog() {
     AnnouncementsDialog().showNow(this.childFragmentManager, ANNOUNCEMENT_DIALOG_TAG)
+  }
+
+  private fun showTipsIfNotDismissed() {
+    val appCache = AppCache(this.requireContext())
+    if (!appCache.isTipsDismissed()) {
+      showTipsDialog()
+    }
+  }
+
+  private fun showTipsDialog() {
+    TipsDialog().showNow(this.childFragmentManager, TIPS_DIALOG_TAG)
   }
 
   private fun openBookDownloadLogin(
