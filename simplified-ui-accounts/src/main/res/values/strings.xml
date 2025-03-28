@@ -109,5 +109,8 @@
   <string name="emailNotValid">Enter a Valid Email Address.</string>
   <string name="errorFromServer">Something went wrong. Sign out and back in and try again.</string>
   <string name="errorInCreation">Could not finish request. Check internet connection and try again.</string>
-
+  <string name="logoutConfirmTitle">Sign out</string>
+  <string name="logoutConfirmMessage">If you sign out, your downloads and any saved bookmarks will be removed.</string>
+  <string name="logoutConfirmConfirm">Sign out</string>
+  <string name="logoutConfirmCancel">Cancel</string>
 </resources>
