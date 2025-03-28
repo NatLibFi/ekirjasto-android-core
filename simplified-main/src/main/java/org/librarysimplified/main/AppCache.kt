@@ -17,7 +17,7 @@ class AppCache internal constructor(private val sharedPreferences: SharedPrefere
      * SharedPreferences keys
      */
     private const val KEY_SEEN_TUTORIAL = "seen_tutorial"
-
+    private const val KEY_SEEN_TIPS = "seen_tips"
   }
 
   /**
@@ -33,4 +33,19 @@ class AppCache internal constructor(private val sharedPreferences: SharedPrefere
   fun isTutorialSeen(): Boolean {
     return sharedPreferences.getBoolean(KEY_SEEN_TUTORIAL, false)
   }
+
+  /**
+   * Set the tips as dismissed
+   */
+  fun setTipsDismissed(dismissed: Boolean) {
+    sharedPreferences.edit().putBoolean(KEY_SEEN_TIPS, dismissed).apply()
+  }
+
+  /**
+   * Checks if the tips are dismissed
+   */
+  fun isTipsDismissed(): Boolean {
+    return sharedPreferences.getBoolean(KEY_SEEN_TIPS, false)
+  }
+
 }

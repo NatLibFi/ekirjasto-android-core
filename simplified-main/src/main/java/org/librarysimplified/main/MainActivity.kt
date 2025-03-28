@@ -45,6 +45,7 @@ import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest.OA
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.ui.accounts.ekirjasto.TextSizeEvent
+import org.nypl.simplified.ui.announcements.TipsEvent
 import org.nypl.simplified.ui.branding.BrandingSplashServiceType
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -352,6 +353,10 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
       is MainActivityListenedEvent.TextSizeEvent ->
         this.setFontSize(event.event)
+
+      is MainActivityListenedEvent.TipsEvent -> {
+        this.handleTipsEvent(event.event)
+      }
     }
   }
 
@@ -381,6 +386,19 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
       TutorialEvent.TutorialCompleted ->
         this.onTutorialFinished()
     }
+  }
+
+  private fun handleTipsEvent(event: TipsEvent) {
+    return when (event) {
+      TipsEvent.DismissTips ->
+        this.dismissTips()
+    }
+  }
+
+  private fun dismissTips() {
+    logger.debug("Dissmiss tips")
+    val appCache = AppCache(this)
+    appCache.setTipsDismissed(true)
   }
 
   private fun onTutorialFinished() {

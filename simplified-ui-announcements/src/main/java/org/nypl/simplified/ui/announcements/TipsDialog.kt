@@ -6,8 +6,6 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.announcements.R
 import org.nypl.simplified.listeners.api.FragmentListenerType
 import org.nypl.simplified.listeners.api.fragmentListeners
@@ -41,10 +39,13 @@ class TipsDialog : DialogFragment(R.layout.tips_dialog) {
       WindowManager.LayoutParams.WRAP_CONTENT
     )
     this.okButton.setOnClickListener {
+      //Close dialog
       this.dismiss()
     }
 
-    this.dismissButton.setOnClickListener{
+    this.dismissButton.setOnClickListener {
+      //Close dialog and mark tips to not be shown again
+      this.dismiss()
       listener.post(TipsEvent.DismissTips)
     }
   }
