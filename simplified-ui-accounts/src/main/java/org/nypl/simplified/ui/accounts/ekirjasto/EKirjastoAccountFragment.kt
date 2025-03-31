@@ -8,6 +8,7 @@ import android.view.View.VISIBLE
 import android.widget.Button
 //import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 //import androidx.appcompat.widget.SwitchCompat
 //import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -147,9 +148,9 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   override fun onStart() {
     super.onStart()
     this.configureToolbar()
-    this.buttonLogout.setOnClickListener(){
+    this.buttonLogout.setOnClickListener {
       this.logger.debug("Logout clicked")
-      this.viewModel.tryLogout()
+      this.confirmLogout()
     }
     this.buttonLoginSuomiFi.setOnClickListener {
       this.logger.debug("Login with Suomi.Fi clicked")
@@ -461,6 +462,26 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.viewModel.account.setLoginState(this.viewModel.account.loginState)
 
     this.subscriptions.clear()
+  }
+
+  /**
+   * Show a popup that informs user of logout and asks confirmation.
+   */
+  private fun confirmLogout() {
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    builder
+      .setTitle(R.string.logoutConfirmTitle)
+      .setMessage(R.string.logoutConfirmMessage)
+      .setPositiveButton(R.string.logoutConfirmConfirm) { dialog, which ->
+        //Trigger logout
+        this.viewModel.tryLogout()
+      }
+      .setNeutralButton(R.string.logoutConfirmCancel) { dialog, which ->
+        //do nothing
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
   }
 
   private fun isPasskeySupported(): Boolean {
