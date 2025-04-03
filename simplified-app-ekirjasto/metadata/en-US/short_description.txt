@@ -1,1 +1,1 @@
-The E-library is a shared service for municipalities, from which you can borrow e-books, audiobooks and digital magazines in one app.
+E-library provides e-books, audiobooks and digital magazines as a shared municipal service via a single app.
