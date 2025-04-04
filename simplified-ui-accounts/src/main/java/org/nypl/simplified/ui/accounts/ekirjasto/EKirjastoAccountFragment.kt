@@ -44,7 +44,6 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private val subscriptions: CompositeDisposable =
     CompositeDisposable()
   private val listener: FragmentListenerType<AccountDetailEvent> by fragmentListeners()
-  private val triggerListener: FragmentListenerType<TextSizeEvent> by fragmentListeners()
   private val parameters: AccountFragmentParameters by lazy {
     this.requireArguments()[PARAMETERS_ID] as AccountFragmentParameters
   }
