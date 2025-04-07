@@ -1,7 +1,1 @@
-E-library is a free app for users to access thousands of e-books, audiobooks and digital magazines. You can borrow e-books and audiobooks for two weeks, after which they are automatically returned with no late fees. E-library contains resources in Finnish, Swedish and English as well as some material in other languages.
-
-On your first login, use strong authentication and set up a passkey for faster access next time.
-
-You can download and install E-library for your child. The selection includes reading and listening options suitable for children of all ages.
-
-E-library can be used by anyone whose municipality of residence has joined the service. The E-library service is provided by the National Library of Finland in cooperation with public libraries.
+E-books, audiobooks and digital journals in one app. The service is provided by the National Library of Finland in cooperation with public libraries.
