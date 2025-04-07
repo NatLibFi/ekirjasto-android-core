@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.simplified.books.book_registry.BookRegistryType
+import org.nypl.simplified.books.controller.api.BooksControllerType
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.feeds.api.FeedLoaderType
 import org.nypl.simplified.listeners.api.FragmentListenerType
@@ -31,6 +32,8 @@ class CatalogBookDetailViewModelFactory(
           services.requireService(ProfilesControllerType::class.java)
         val bookRegistry =
           services.requireService(BookRegistryType::class.java)
+        val booksController =
+          this.services.requireService(BooksControllerType::class.java)
         val configurationService =
           services.requireService(BuildConfigurationServiceType::class.java)
 
@@ -40,6 +43,7 @@ class CatalogBookDetailViewModelFactory(
           bookRegistry,
           configurationService,
           this.borrowViewModel,
+          booksController,
           parameters,
           listener
         ) as T

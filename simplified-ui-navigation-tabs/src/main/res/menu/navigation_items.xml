@@ -13,9 +13,9 @@
     android:title="@string/tabBooks" />
 
   <item
-    android:id="@+id/tabHolds"
-    android:icon="@drawable/tab_holds"
-    android:title="@string/tabHolds" />
+    android:id="@+id/tabSelected"
+    android:icon="@drawable/tab_selected"
+    android:title="@string/tabSelected" />
 
   <item
     android:id="@+id/tabMagazines"

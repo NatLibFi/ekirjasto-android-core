@@ -1,5 +1,7 @@
 package org.nypl.simplified.books.controller
 
+import com.io7m.jfunctional.None
+import com.io7m.jfunctional.OptionType
 import com.io7m.jfunctional.Some
 import com.io7m.junreachable.UnreachableCodeException
 import org.joda.time.DateTime
@@ -86,12 +88,41 @@ class BookRevokeTask(
 
     this.debug("revoke")
     this.taskRecorder.beginNewStep(this.revokeStrings.revokeStarted)
+    //Set the status in bookRegistry to Requesting revoke
     this.publishRequestingRevokeStatus()
+    //Setup the database, by looking up the current database entry for the book
+    //And publishing the revoke status again
     this.setupBookDatabaseEntry(account)
+    //Revoke the book based on its format
     this.revokeFormatHandle(account)
+    //Revoke request is sent to server, we set the revoke status again
+    //and from the answer we form a new entry,
+    //That we store to the db and register
+    //HERE
     this.revokeNotifyServer(account)
-    this.revokeNotifyServerDeleteBook()
-    this.bookRegistry.clearFor(this.bookID)
+
+    //Get the registry entry
+    val revokeBook = bookRegistry.books()[this.bookID]
+
+    //If there is a book in the registry that is selected, just publish revoked status and then
+    //Update the database entry with the selected info
+    // And then update the registry from the database
+    if (revokeBook != null && revokeBook.book.entry.selected is Some<DateTime>) {
+      this.publishRevokedStatus()
+      //Update the database entry with the selected info
+      val updatedEntry = OPDSAcquisitionFeedEntry.newBuilderFrom(this.databaseEntry.book.entry)
+        .setSelectedOption(revokeBook.book.entry.selected)
+        .build()
+      //Write the entry to the database
+      this.databaseEntry.writeOPDSEntry(updatedEntry)
+      //Update the book registry, based on the book that we just updated to database
+      this.publishStatusFromDatabase()
+    } else {
+      //If not selected, we delete the book from database
+      //And we clear the registry too
+      this.revokeNotifyServerDeleteBook()
+      this.bookRegistry.clearFor(this.bookID)
+    }
     return this.taskRecorder.finishSuccess(Unit)
   }
 

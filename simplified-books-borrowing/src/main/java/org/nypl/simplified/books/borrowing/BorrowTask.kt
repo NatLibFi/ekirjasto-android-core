@@ -311,10 +311,23 @@ class BorrowTask private constructor(
 
     try {
       val database = this.account.bookDatabase
-      val dbEntry = database.createOrUpdate(book.id, entry)
-      this.databaseEntry = dbEntry
+
+      //If the book is already in the database, it might be selected
+      //And just overwriting the existing entry with the new one would not carry that information over
+      if (database.books().contains(book.id)) {
+        //If book already in db, get the entry and insert the selected information already available
+        val dbEntry = database.entry(book.id)
+        //Build a new feed entry
+        val adjustedEntry = OPDSAcquisitionFeedEntry.newBuilderFrom(entry)
+          .setSelectedOption(dbEntry.book.entry.selected)
+          .build()
+        //Create the database entry
+        this.databaseEntry = database.createOrUpdate(book.id, adjustedEntry)
+      } else {
+        this.databaseEntry = database.createOrUpdate(book.id, entry)
+      }
       this.taskRecorder.currentStepSucceeded("Book database updated.")
-      return dbEntry.book
+      return this.databaseEntry!!.book
     } catch (e: Exception) {
       this.error("[{}]: failed to set up book database: ", book.id.brief(), e)
       this.taskRecorder.currentStepFailed(
