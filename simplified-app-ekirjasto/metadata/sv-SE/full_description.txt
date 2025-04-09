@@ -4,4 +4,4 @@ Logga in i appen första gången med hjälp av stark autentisering och skapa sed
 
 Du kan också ladda ner en egen E-biblioteksapp för ditt barn. Det finns någonting att läsa och lyssna på för barn i alla åldrar.
 
-E-biblioteket kan användas av dem vars hemkommun har anslutit sig till e-biblioteket. Tjänsten E-biblioteket produceras av Nationalbiblioteket i samarbete med de allmänna biblioteken.
+E-biblioteket kan användas av dem vars hemkommun har anslutit sig till e-biblioteket. Kommunernas gemensamma tjänsten E-biblioteket produceras av Nationalbiblioteket i samarbete med de allmänna biblioteken.

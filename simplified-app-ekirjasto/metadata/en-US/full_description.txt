@@ -4,4 +4,4 @@ On your first login, use strong authentication and set up a passkey for faster a
 
 You can download and install E-library for your child. The selection includes reading and listening options suitable for children of all ages.
 
-E-library can be used by anyone whose municipality of residence has joined the service. The E-library service is provided by the National Library of Finland in cooperation with public libraries.
+E-library can be used by anyone whose municipality of residence has joined the service. The E-library is a shared service for municipalities. It is provided by the National Library of Finland in cooperation with public libraries.

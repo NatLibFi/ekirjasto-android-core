@@ -4,4 +4,4 @@ Kirjaudu sovellukseen ensimmäisellä kerralla vahvalla tunnistautumisella ja lu
 
 Voit asentaa lapsellesi oman E-kirjaston. Valikoimasta löytyy luettavaa ja kuunneltavaa kaikenikäisille lapsille.
 
-E-kirjastoa voivat käyttää ne, joiden kotikunta on liittynyt E-kirjastoon. E-kirjasto-palvelun tuottaa Kansalliskirjasto yhteistyössä yleisten kirjastojen kanssa.
+E-kirjastoa voivat käyttää ne, joiden kotikunta on liittynyt E-kirjastoon. Kuntien yhteisen E-kirjasto-palvelun tuottaa Kansalliskirjasto yhteistyössä yleisten kirjastojen kanssa.
