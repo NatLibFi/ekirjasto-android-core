@@ -597,6 +597,12 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
    */
   private fun skipBack() {
     updatePlayerPosition = true
+    //Skipping back doesn't work correctly if the book hasn't been played for 30 seconds
+    //So in that special case, we skip to te beginning of the book
+    // If we jump from another chapter to the beginning, the player pauses
+    if(needsToSkipToBeginning()) {
+      return player.playAtBookStart()
+    }
     return player.skipBack()
   }
 
@@ -1139,7 +1145,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
 
     //Current time is accurate presentation of the time
     //That current chapter has played
-    val currTime = TimeUnit.SECONDS.toMillis(lastStartedPlayerPosition
+    val currentTime = TimeUnit.SECONDS.toMillis(lastStartedPlayerPosition
       .plus(
         (TimeUnit.MILLISECONDS.toSeconds(
           offsetMilliseconds
@@ -1151,19 +1157,19 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     playerRemainingBookTime.text =
       PlayerTimeStrings.hourMinuteTextFromRemainingTime(
         requireContext(),
-        (getCurrentAudiobookRemainingDuration(spineElement) - currTime)
+        (getCurrentAudiobookRemainingDuration(spineElement) - currentTime)
       )
 
     // The visual presentation of how much of the chapter is left
     this.playerTimeMaximum.text =
       PlayerTimeStrings.hourMinuteSecondTextFromDurationOptional(spineElement.duration
-        ?.minus(currTime))
+        ?.minus(currentTime))
     this.playerTimeMaximum.contentDescription =
       this.playerTimeRemainingSpokenOptional(offsetMilliseconds, spineElement.duration)
 
     // The visual presentation of how much of the chapter is done
     this.playerTimeCurrent.text =
-      PlayerTimeStrings.hourMinuteSecondTextFromMilliseconds(currTime)
+      PlayerTimeStrings.hourMinuteSecondTextFromMilliseconds(currentTime)
     this.playerTimeCurrent.contentDescription =
       this.playerTimeCurrentSpoken(offsetMilliseconds)
 
@@ -1338,5 +1344,29 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     )
 
     playerService.updatePlayerInfo(this.playerInfoModel)
+  }
+
+  /**
+   * Returns true if we have played the book for less than 30 seconds
+   */
+  private fun needsToSkipToBeginning() : Boolean {
+    //Length of whole book
+    val wholeBook = book.spine.sumOf { it.duration?.millis ?: 0L }
+    //How much of current chapter has passed
+    val currentChapterPassed = TimeUnit.SECONDS.toMillis(lastStartedPlayerPosition
+      .plus(
+        (TimeUnit.MILLISECONDS.toSeconds(
+          this.playerPositionCurrentOffset
+        ).minus(lastStartedPlayerPosition
+        ))))
+
+    //How much of book is remaining
+    val bookRemaining = getCurrentAudiobookRemainingDuration(this.playerPositionCurrentSpine!!).minus(currentChapterPassed)
+
+    // Return true if the difference is less than 30 seconds,
+    // which indicates the need to jump to the beginning of the book
+    // NOTE: On faster play rates, the jump to start of book happens also from a little further
+    // due to the increased speed
+    return wholeBook.minus(bookRemaining) < 30000
   }
 }
