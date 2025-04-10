@@ -1,1 +1,7 @@
-E-kirjoja, äänikirjoja ja digilehtiä yhdessä sovelluksessa. Palvelun tuottavat Kansalliskirjasto ja yleiset kirjastot yhteistyössä.
+E-kirjasto on käyttäjälle maksuton sovellus, joka tarjoaa tuhansia e- ja äänikirjoja sekä digitaalisia aikakauslehtiä. Voit lainata e- ja äänikirjan kahdeksi viikoksi, jonka jälkeen kirja palautuu automaattisesti - myöhästymismaksuja ei tule. E-kirjastossa on aineistoja suomeksi, ruotsiksi ja englanniksi sekä jonkin verran muilla kielillä.
+
+Kirjaudu sovellukseen ensimmäisellä kerralla vahvalla tunnistautumisella ja luo sen jälkeen pääsyavain, jolla kirjautuminen on nopeampaa.
+
+Voit asentaa lapsellesi oman E-kirjaston. Valikoimasta löytyy luettavaa ja kuunneltavaa kaikenikäisille lapsille.
+
+E-kirjastoa voivat käyttää ne, joiden kotikunta on liittynyt E-kirjastoon. Kuntien yhteisen E-kirjasto-palvelun tuottaa Kansalliskirjasto yhteistyössä yleisten kirjastojen kanssa.
