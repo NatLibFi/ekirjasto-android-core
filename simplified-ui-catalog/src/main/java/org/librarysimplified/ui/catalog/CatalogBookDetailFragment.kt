@@ -11,7 +11,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -29,6 +31,7 @@ import org.librarysimplified.services.api.Services
 import org.nypl.simplified.android.ktx.supportActionBar
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookFormat
+import org.nypl.simplified.books.api.BookID
 import org.nypl.simplified.books.book_database.api.BookFormats
 import org.nypl.simplified.books.book_registry.BookPreviewStatus
 import org.nypl.simplified.books.book_registry.BookStatus
@@ -135,6 +138,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var summary: TextView
   private lateinit var title: TextView
   private lateinit var type: TextView
+  private lateinit var selected: ImageView
   private lateinit var toolbar: PalaceToolbar
 
   private val dateYearFormatter =
@@ -217,6 +221,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       view.findViewById(R.id.feedLoading)
     this.report =
       view.findViewById(R.id.bookDetailReport)
+    this.selected =
+      view.findViewById(R.id.bookDetailSelect)
 
     this.debugStatus =
       view.findViewById(R.id.bookDetailDebugStatus)
@@ -537,6 +543,31 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private fun reconfigureUI(book: BookWithStatus, bookPreviewStatus: BookPreviewStatus) {
     this.debugStatus.text = book.javaClass.simpleName
 
+    //If there is a selected date, the book is selected
+    if (book.book.entry.selected is Some<DateTime>) {
+      //Set the drawable as the "checked" version
+      this.selected.setImageDrawable(
+        ContextCompat.getDrawable(this.requireContext(), R.drawable.baseline_check_circle_24)
+      )
+      //Add the audio description
+      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookUnselect)
+
+      this.selected.setOnClickListener {
+        //Set the button click to unselect the book
+        this.viewModel.unselectBook(this.parameters.feedEntry)
+    }
+    }else {
+      //Set the "unchecked" icon version
+      this.selected.setImageDrawable(
+        ContextCompat.getDrawable(this.requireContext(),R.drawable.round_add_circle_outline_24)
+      )
+      //Add audio description
+      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookSelect)
+      this.selected.setOnClickListener {
+        //Add book to selected
+        this.viewModel.selectBook(this.parameters.feedEntry)
+      }
+    }
     when (val status = book.status) {
       is BookStatus.Held -> {
         this.onBookStatusHeld(status, bookPreviewStatus, book.book)
@@ -582,6 +613,12 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       }
       is BookStatus.DownloadExternalAuthenticationInProgress -> {
         this.onBookStatusDownloadExternalAuthenticationInProgress()
+      }
+      is BookStatus.Selected -> {
+        this.onBookStatusBookSelected(book.book.id,book.book.entry.title, status)
+      }
+      is BookStatus.Unselected -> {
+        this.onBookStatusBookUnselected(book.book.id, book.book.entry.title,status)
       }
     }
   }
@@ -794,6 +831,23 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     viewModel.resetInitialBookStatus(this.parameters.feedEntry)
   }
 
+  /**
+   * Show a toast for successful select and trigger status reset
+   */
+  private fun onBookStatusBookSelected(bookID: BookID, title: String, status: BookStatus) {
+    Toast.makeText(this.requireContext(), getString(R.string.catalogBookSelect, title), Toast.LENGTH_SHORT).show()
+    viewModel.resetPreviousBookStatus(bookID, status, true)
+    logger.debug("BookStatusReset")
+  }
+
+  /**
+   * Show a toast for successful unselect and trigger status reset
+   */
+  private fun onBookStatusBookUnselected(bookID: BookID,  title: String, status: BookStatus) {
+    Toast.makeText(this.requireContext(), getString(R.string.catalogBookUnselect, title), Toast.LENGTH_SHORT).show()
+    viewModel.resetPreviousBookStatus(bookID, status, false)
+    logger.debug("BookStatusResetToPrevious")
+  }
   private fun onBookStatusHoldable(
     bookStatus: BookStatus.Holdable,
     bookPreviewStatus: BookPreviewStatus

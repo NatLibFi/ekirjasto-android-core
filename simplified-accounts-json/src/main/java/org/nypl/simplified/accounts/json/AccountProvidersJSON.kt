@@ -78,6 +78,7 @@ object AccountProvidersJSON {
     this.putConditionally(node, "eula", provider.eula)
     this.putConditionally(node, "license", provider.license)
     this.putConditionally(node, "loansURI", provider.loansURI)
+    this.putConditionally(node, "selectedURI", provider.selectedURI)
     this.putConditionally(node, "logo", provider.logo)
     this.putConditionally(node, "patronSettingsURI", provider.patronSettingsURI)
     this.putConditionally(node, "privacyPolicy", provider.privacyPolicy)
@@ -275,6 +276,8 @@ object AccountProvidersJSON {
         JSONParserUtilities.getURIOrNull(obj, "logo")
       val loansURI =
         JSONParserUtilities.getURIOrNull(obj, "loansURI")
+      val selectedURI =
+        JSONParserUtilities.getURIOrNull(obj, "selectedURI")
       val patronSettingsURI =
         JSONParserUtilities.getURIOrNull(obj, "patronSettingsURI")
       val privacyPolicy =
@@ -318,6 +321,7 @@ object AccountProvidersJSON {
         isProduction = isProduction,
         license = license,
         loansURI = loansURI,
+        selectedURI = selectedURI,
         location = location,
         logo = logo,
         mainColor = mainColor,

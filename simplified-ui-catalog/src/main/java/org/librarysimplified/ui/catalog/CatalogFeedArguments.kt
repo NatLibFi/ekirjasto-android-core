@@ -3,6 +3,7 @@ package org.librarysimplified.ui.catalog
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.feeds.api.FeedBooksSelection
 import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.Sorting.SortBy
+import org.nypl.simplified.feeds.api.FeedFacet.FeedFacetPseudo.FilteringForFeed.FilterBy
 import java.io.Serializable
 import java.net.URI
 
@@ -60,6 +61,23 @@ sealed class CatalogFeedArguments : Serializable {
     override val ownership: CatalogFeedOwnership,
     val sortBy: SortBy = SortBy.SORT_BY_TITLE,
     val searchTerms: String?,
+    val selection: FeedBooksSelection,
+    val filterAccount: AccountID?,
+    val updateHolds: Boolean
+  ) : CatalogFeedArguments() {
+    override val isSearchResults: Boolean = false
+    override val isLocallyGenerated: Boolean = true
+  }
+
+  /**
+   * Arguments that define a multiple feed view.
+   */
+  data class CatalogFeedArgumentsAllLocalBooks(
+    override val title: String,
+    override val ownership: CatalogFeedOwnership,
+    val sortBy: SortBy = SortBy.SORT_BY_TITLE,
+    val searchTerms: String?,
+    val filterBy: FilterBy = FilterBy.FILTER_BY_LOANS,
     val selection: FeedBooksSelection,
     val filterAccount: AccountID?,
     val updateHolds: Boolean
