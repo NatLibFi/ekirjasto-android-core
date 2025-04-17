@@ -183,9 +183,11 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
           JSONParserUtilities.getIntegerOptional(n, "position");
         final OptionType<DateTime> in_end_date =
           JSONParserUtilities.getTimestampOptional(n, "end_date");
+        final OptionType<Integer> in_copies =
+          JSONParserUtilities.getIntegerOptional(n, "total");
         final OptionType<URI> in_revoke =
           JSONParserUtilities.getURIOptional(n, "revoke");
-        return OPDSAvailabilityHeld.get(in_start_date, in_position, in_end_date, in_revoke);
+        return OPDSAvailabilityHeld.get(in_start_date, in_position, in_end_date, in_copies, in_revoke);
       }
 
       if (node.has("held_ready")) {
