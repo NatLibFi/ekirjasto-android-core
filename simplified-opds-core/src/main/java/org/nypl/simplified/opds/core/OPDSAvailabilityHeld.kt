@@ -13,6 +13,7 @@ import java.net.URI
 data class OPDSAvailabilityHeld private constructor(
   val startDate: OptionType<DateTime>,
   val position: OptionType<Int>,
+  val copies: OptionType<Int>,
   private val endDate: OptionType<DateTime>,
 
   /**
@@ -35,6 +36,9 @@ data class OPDSAvailabilityHeld private constructor(
   val positionOrNull: Int?
     get() = this.position.getOrNull()
 
+  val copiesOrNull: Int?
+    get() = this.copies.getOrNull()
+
   /**
    * @return The date that the hold will become unavailable
    */
@@ -54,6 +58,8 @@ data class OPDSAvailabilityHeld private constructor(
     val b = StringBuilder(256)
     b.append("[OPDSAvailabilityHeld position=")
     b.append(this.position)
+    b.append(" copies=")
+    b.append(this.copies)
     b.append(" start_date=")
     this.startDate.map { e: DateTime? ->
       b.append(fmt.print(e))
@@ -77,6 +83,7 @@ data class OPDSAvailabilityHeld private constructor(
      * @param startDate The start date (if known)
      * @param position The queue position
      * @param endDate The end date (if known)
+     * @param copies The number of copies for the book
      * @param revoke An optional revocation link for the hold
      * @return A value that states that a book is on hold
      */
@@ -86,12 +93,14 @@ data class OPDSAvailabilityHeld private constructor(
       startDate: OptionType<DateTime>,
       position: OptionType<Int>,
       endDate: OptionType<DateTime>,
+      copies: OptionType<Int>,
       revoke: OptionType<URI>
     ): OPDSAvailabilityHeld {
       return OPDSAvailabilityHeld(
         startDate = startDate,
         position = position,
         endDate = endDate,
+        copies = copies,
         revoke = revoke
       )
     }

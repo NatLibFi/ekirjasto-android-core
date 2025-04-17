@@ -224,6 +224,7 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
               queuePosition = a.positionOrNull,
               startDate = a.startDateOrNull,
               isRevocable = a.revoke.isSome,
+              copiesTotal = a.copiesOrNull,
               endDate = a.endDateOrNull
             )
           )

@@ -802,11 +802,16 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
         final OptionType<DateTime> start_date =
           OPDSXML.getAttributeRFC3339Optional(available, "since");
         OptionType<Integer> queue = Option.none();
+        OptionType<Integer> copies = Option.none();
         if (holds_opt.isSome()) {
           final Some<Element> holds_some = (Some<Element>) holds_opt;
           queue = OPDSXML.getAttributeIntegerOptional(holds_some.get(), "position");
         }
-        return OPDSAvailabilityHeld.get(start_date, queue, end_date, revoke);
+        if (copies_opt.isSome()) {
+          final Some<Element> copies_some = (Some<Element>) copies_opt;
+          copies = OPDSXML.getAttributeIntegerOptional(copies_some.get(), "total");
+        }
+          return OPDSAvailabilityHeld.get(start_date, queue, end_date, copies, revoke);
       }
 
       if ("available".equals(status)) {

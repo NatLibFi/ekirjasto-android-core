@@ -72,6 +72,12 @@ sealed class BookStatus {
 
       val startDate: DateTime?,
 
+      /**
+       * @return The number of copies for this book
+       */
+
+      val copiesTotal: Int?,
+
       override val isRevocable: Boolean,
       override val endDate: DateTime?
     ) : Held() {
@@ -480,6 +486,7 @@ sealed class BookStatus {
         queuePosition = this.someOrNull(a.position),
         startDate = this.someOrNull(a.startDate),
         endDate = this.someOrNull(a.endDate),
+        copiesTotal = this.someOrNull(a.copies),
         isRevocable = a.revoke.isSome
       )
     }
