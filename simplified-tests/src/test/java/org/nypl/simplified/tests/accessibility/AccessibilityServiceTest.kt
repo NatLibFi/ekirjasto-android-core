@@ -261,7 +261,7 @@ class AccessibilityServiceTest {
     this.bookRegistry.update(
       BookWithStatus(
         book = this.book0,
-        status = BookStatus.Held.HeldInQueue(this.book0.id, null, null, false, null)
+        status = BookStatus.Held.HeldInQueue(this.book0.id, null, null, null,false, null)
       )
     )
 
