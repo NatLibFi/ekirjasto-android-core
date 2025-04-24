@@ -4,18 +4,23 @@ import android.Manifest
 import android.app.ActionBar
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.transifex.txnative.TxNative
@@ -113,7 +118,8 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
       }
     }
 
-    askForNotificationsPermission()
+    askNotificationPermission()
+    logger.debug("SHOW NOTIFICATION PERMISSION")
   }
 
   /**
@@ -247,13 +253,48 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     }
   }
 
-  private fun askForNotificationsPermission() {
+  private val requestPermissionLauncher = registerForActivityResult(
+    ActivityResultContracts.RequestPermission(),
+  ) { isGranted: Boolean ->
+    if (isGranted) {
+      // FCM SDK (and your app) can post notifications.
+      Toast.makeText(this, getString(R.string.bootPermissionsGiven),Toast.LENGTH_SHORT)
+        .show();
+    } else {
+      // Inform user of the notifications are off and where to turn them on
+      Toast.makeText(this, getString(R.string.bootPermissionsNotGiven),
+        Toast.LENGTH_LONG).show();
+    }
+  }
+
+  private fun askNotificationPermission() {
+    // This is only necessary for API level >= 33 (TIRAMISU)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      ActivityCompat.requestPermissions(
-        this,
-        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-        100
-      )
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+        PackageManager.PERMISSION_GRANTED
+      ) {
+        // FCM SDK (and your app) can post notifications.
+      } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+        //display an educational UI explaining to the user the features that will be enabled
+        //by them granting the POST_NOTIFICATION permission. This UI should provide the user
+        //"OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+        //If the user selects "No thanks," allow the user to continue without notifications.
+        MaterialAlertDialogBuilder(this)
+          .setTitle(R.string.bootPermissionsTitle)
+          .setMessage(R.string.bootPermissionsMessage)
+          .setNeutralButton(R.string.bootPermissionsNeutralButton) {_,_ ->
+            //do nothing, permissions are not granted
+          }
+          .setPositiveButton(R.string.bootPermissionsPositiveButton) {_,_ ->
+            //Show the permission request
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+          }
+          .create()
+          .show()
+      } else {
+        // Directly ask for the permission
+        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+      }
     }
   }
 

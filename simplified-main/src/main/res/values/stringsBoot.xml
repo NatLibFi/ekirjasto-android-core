@@ -3,4 +3,10 @@
 <resources>
   <string name="bootFailedGeneric">We found a problem. Please check your connection or close and reopen the app to retry.</string>
   <string name="bootAdobeDRMFailed">Something went wrong with the Adobe DRM system: Some books will be unavailable in this version of the application. Please try updating to the latest version of the application.</string>
+  <string name="bootPermissionsTitle">Keep track of your books with notifications</string>
+  <string name="bootPermissionsMessage">To get notified when a book you\'re queuing for has become available or when one of your loans is about to expire, E-kirjasto needs a permission to send notifications.\n\nYou can always change your choices in your device settings.</string>
+  <string name="bootPermissionsNeutralButton">No thanks</string>
+  <string name="bootPermissionsPositiveButton">OK</string>
+  <string name="bootPermissionsGiven">Notifications permission granted</string>
+  <string name="bootPermissionsNotGiven">Notifications are off. They can be turned back on from the device settings.</string>
 </resources>
