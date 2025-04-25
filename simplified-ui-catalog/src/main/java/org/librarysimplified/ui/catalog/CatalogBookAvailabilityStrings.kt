@@ -7,6 +7,7 @@ import com.io7m.jfunctional.Some
 import org.joda.time.DateTime
 import org.joda.time.Hours
 import org.nypl.simplified.books.book_registry.BookStatus
+import org.nypl.simplified.opds.core.getOrNull
 import java.util.concurrent.TimeUnit
 
 /**
@@ -30,7 +31,7 @@ object CatalogBookAvailabilityStrings {
   ): String {
     return when (status) {
       is BookStatus.Held.HeldInQueue ->
-        onHeld(resources, Option.of(status.endDate), Option.of(status.queuePosition))
+        onHeld(resources, Option.of(status.copiesTotal), Option.of(status.queuePosition))
       is BookStatus.Held.HeldReady ->
         onLoanable(resources)
       is BookStatus.Holdable ->
@@ -84,23 +85,10 @@ object CatalogBookAvailabilityStrings {
     status: BookStatus.Held.HeldInQueue
   ): String {
     val queuePositionOpt : OptionType<Int> = Option.of(status.queuePosition)
-    val endDateOpt : OptionType<DateTime> = Option.of(status.endDate)
-    /*
-     * If there is an availability date, show this in preference to
-     * anything else.
-     */
-    if (endDateOpt is Some<DateTime>) {
-      val endDate = endDateOpt.get()
-      val now = DateTime.now()
-      return resources.getString(
-        R.string.catalogBookAvailabilityHeldTimedShort,
-        this.intervalStringHoldDuration(resources, now, endDate)
-      )
-    }
 
-    /*
-     * If there is a queue position, attempt to show this instead.
-     */
+    /**
+   * If there is a queue position, attempt to show it.
+   */
 
     if (queuePositionOpt is Some<Int>) {
       return resources.getString(R.string.catalogBookAvailabilityHeldQueueShort, queuePositionOpt.get())
@@ -173,28 +161,18 @@ object CatalogBookAvailabilityStrings {
 
   private fun onHeld(
     resources: Resources,
-    endDateOpt: OptionType<DateTime>,
+    copiesTotalOpt: OptionType<Int>,
     queuePositionOpt: OptionType<Int>
   ): String {
-    /*
-     * If there is an availability date, show this in preference to
-     * anything else.
-     */
 
-    if (endDateOpt is Some<DateTime>) {
-      val endDate = endDateOpt.get()
-      val now = DateTime.now()
-      return resources.getString(
-        R.string.catalogBookAvailabilityHeldTimed,
-        this.intervalString(resources, now, endDate)
-      )
-    }
-
-    /*
-     * If there is a queue position, attempt to show this instead.
+    /**
+     * If there is a queue position, attempt to show it.
      */
 
     if (queuePositionOpt is Some<Int>) {
+      if (copiesTotalOpt is Some<Int>) {
+        return resources.getString(R.string.catalogBookAvailabilityHeldQueueWithCopies, queuePositionOpt.get(), copiesTotalOpt.getOrNull())
+      }
       return resources.getString(R.string.catalogBookAvailabilityHeldQueue, queuePositionOpt.get())
     }
 

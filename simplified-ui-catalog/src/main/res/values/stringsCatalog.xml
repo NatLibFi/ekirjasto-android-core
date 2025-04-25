@@ -23,6 +23,7 @@
   <string name="catalogAccounts">Choose another library catalog…</string>
   <string name="catalogBookAvailabilityHeldIndefinite">You have this book on hold.</string>
   <string name="catalogBookAvailabilityHeldQueue">You are at position %1$d in the queue for this book.</string>
+  <string name="catalogBookAvailabilityHeldQueueWithCopies">You are at position %1$d in the queue for %2$d copies of this book.</string>
   <string name="catalogBookAvailabilityHeldTimed">You will be able to borrow this book in %1$s.</string>
   <string name="catalogBookAvailabilityHeldIndefiniteShort">On hold</string>
   <string name="catalogBookAvailabilityHeldQueueShort">At position: %1$d</string>
