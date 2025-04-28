@@ -1,4 +1,6 @@
-1.2.4
-- Listening audiobooks on higher speeds does not leave empty space at the end of chapter anymore
-- Fixed a bug in audiobooks which made the sleep timer not stop when set to end of chapter
-- UI fixes
+We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
+
+1.2.6
+- Fixed a bug in audiobooks which made skip back button not work when the book was near the beginning
+- Added a confirmation message to returning a book and logging out
+- Bug fixes
