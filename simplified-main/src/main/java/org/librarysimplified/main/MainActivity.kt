@@ -8,10 +8,15 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.ViewGroup
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
@@ -92,12 +97,30 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
     this.logger.debug("onCreate (recreating {})", savedInstanceState != null)
     super.onCreate(savedInstanceState)
     this.logger.debug("onCreate (super completed)")
 
     interceptDeepLink()
     val toolbar: Toolbar = this.findViewById(R.id.mainToolbar)
+
+    ViewCompat.setOnApplyWindowInsetsListener(toolbar) { view, insets ->
+      val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      // Apply the insets as a margin to the view. This solution sets
+      // only the bottom, left, and right dimensions, but you can apply whichever
+      // insets are appropriate to your layout. You can also update the view padding
+      // if that's more appropriate.
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = insets.top
+        leftMargin = insets.left
+        rightMargin = insets.right
+      }
+
+      // Return CONSUMED if you don't want the window insets to keep passing
+      // down to descendant views.
+      WindowInsetsCompat.CONSUMED
+    }
     this.setSupportActionBar(toolbar)
     this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     this.supportActionBar?.setDisplayShowHomeEnabled(true)
