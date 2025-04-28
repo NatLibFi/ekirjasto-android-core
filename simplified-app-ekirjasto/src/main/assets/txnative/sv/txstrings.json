@@ -195,9 +195,6 @@
       "account_eula" : {
          "string" : "Användaravtal"
       },
-      "account_faq" : {
-         "string" : "Vanliga frågor"
-      },
       "account_instructions" : {
          "string" : "Anvisningar"
       },
@@ -209,9 +206,6 @@
       },
       "account_login_passkey" : {
          "string" : "Logga in med nyckelkod"
-      },
-      "account_login_suomifi" : {
-         "string" : "Logga in med Suomi.fi"
       },
       "account_login_with_suomifi" : {
          "string" : "Logga in med Suomi.fi"
@@ -251,9 +245,6 @@
       },
       "announcementTitle" : {
          "string" : "%1$s (%2$d av %3$d)"
-      },
-      "app_name" : {
-         "string" : "E-biblioteket"
       },
       "app_version_string" : {
          "string" : "E-biblioteket version %1$s"
@@ -555,6 +546,27 @@
       "audiobook_player_waiting" : {
          "string" : "Filen %1$d måste laddas ner för att uppspelningen ska fortsätta."
       },
+      "bookConfirmReturnCancelButton" : {
+         "string" : "Annullera"
+      },
+      "bookConfirmReturnConfirmButton" : {
+         "string" : "Återlämna"
+      },
+      "bookConfirmReturnMessage" : {
+         "string" : "Då du returnerar denna bok tas den bort från dina lån och från din enhet."
+      },
+      "bookConfirmReturnTitle" : {
+         "string" : "Återlämna \"%1$s\" ?"
+      },
+      "bookConfirmRevokeConfirmButton" : {
+         "string" : "Avboka"
+      },
+      "bookConfirmRevokeMessage" : {
+         "string" : "Om du avbokar reserveringen förlorar du din plats i kön."
+      },
+      "bookConfirmRevokeTitle" : {
+         "string" : "Avboka reserveringen för \"%1$s\""
+      },
       "bookFailedLoan" : {
          "string" : "Boken '%1$s' kunde inte laddas ner"
       },
@@ -761,6 +773,9 @@
       },
       "catalogBookAvailabilityHeldQueueShort" : {
          "string" : "Din plats i kön: %1$d"
+      },
+      "catalogBookAvailabilityHeldQueueWithCopies" : {
+         "string" : "Du är på plats %1$d i kön. Bokoen har %2$d samtidiga läsrättigheter."
       },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "Du kommer att kunna låna denna bok om %1$s."
@@ -984,18 +999,6 @@
       "contentDescriptionLogo" : {
          "string" : "Gå tillbaka för att bläddra i böcker"
       },
-      "contentDescriptionPage1" : {
-         "string" : "Välkommen till E-biblioteket! Denna tjänst erbjuds till dig av din hemkommuns biblioteket."
-      },
-      "contentDescriptionPage2" : {
-         "string" : "Du kan bläddra bland e- och ljudböcker enligt genre, bok eller författare eller undersöka bibliotekspersonalens listor med verk de vill."
-      },
-      "contentDescriptionPage3" : {
-         "string" : "Bläddra i urvalet, låna och läs eller lyssna! Om boken är utlånad, tryck på reservera för att få den när den blir tillgänglig."
-      },
-      "contentDescriptionPage4" : {
-         "string" : "Eller vill du ha något att lyssna på? Samlingen innehåller också ett oräkneligt antal ljudböcker! Klicka på låna för att lyssna på ljudboken."
-      },
       "contentDescriptionSkipButton" : {
          "string" : "Hoppa över-knapp"
       },
@@ -1209,9 +1212,6 @@
       "login_passkey" : {
          "string" : "Logga in med nyckelkod"
       },
-      "login_suomifi" : {
-         "string" : "Logga in med Suomi.fi"
-      },
       "login_with_suomifi" : {
          "string" : "Logga in med Suomi.fi"
       },
@@ -1220,6 +1220,18 @@
       },
       "logoutClearingBookDatabaseFailed" : {
          "string" : "Det gick inte att rensa bokdatabasen!"
+      },
+      "logoutConfirmCancel" : {
+         "string" : "Annullera"
+      },
+      "logoutConfirmConfirm" : {
+         "string" : "Logga ut"
+      },
+      "logoutConfirmMessage" : {
+         "string" : "Om du loggar ut, kommer dina nedladdningar och sparade bokmärken att tas bort."
+      },
+      "logoutConfirmTitle" : {
+         "string" : "Logga ut"
       },
       "logoutDeactivatingDeviceAdobe" : {
          "string" : "Avaktiverar enhet..."
@@ -1946,6 +1958,18 @@
       },
       "thanks" : {
          "string" : "Ditt minderåriga barn bör få en inbjudan snart. Råd dem att öppna länken i e-postmeddelandet på sin enhet och skapa en nyckelkod. Denna nyckelkod kan användas för att logga in."
+      },
+      "tipsDismiss" : {
+         "string" : "Visa inte det här igen"
+      },
+      "tipsMessage" : {
+         "string" : "För att göra det lättare att logga in, skapa en nyckelkod på sidan för inställningar.\n\nDu måste använda skärmlås på din enhet då du skapar eller använder nyckelkoden."
+      },
+      "tipsOk" : {
+         "string" : "Påminn mig senare"
+      },
+      "tipsTitle" : {
+         "string" : "Nyckelkod"
       },
       "tocAccessBookmarkDelete" : {
          "string" : "Radera ett bokmärke"
