@@ -105,19 +105,17 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     interceptDeepLink()
     val toolbar: Toolbar = this.findViewById(R.id.mainToolbar)
 
+    //Add insets so we don't have overlap with system bars
     ViewCompat.setOnApplyWindowInsetsListener(toolbar) { view, insets ->
       val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-      // Apply the insets as a margin to the view. This solution sets
-      // only the bottom, left, and right dimensions, but you can apply whichever
-      // insets are appropriate to your layout. You can also update the view padding
-      // if that's more appropriate.
+      // Apply the insets as a margin to the view
       view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         topMargin = insets.top
         leftMargin = insets.left
         rightMargin = insets.right
       }
 
-      // Return CONSUMED if you don't want the window insets to keep passing
+      // Return CONSUMED since we don't want the window insets to keep passing
       // down to descendant views.
       WindowInsetsCompat.CONSUMED
     }
