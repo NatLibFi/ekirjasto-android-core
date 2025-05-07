@@ -100,19 +100,17 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
     this.bottomView =
       view.findViewById(R.id.bottomNavigator)
 
+    //Add inset to bottom bar so it is shown correctly
     ViewCompat.setOnApplyWindowInsetsListener(bottomView) {view, insets ->
       val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-      // Apply the insets as a margin to the view. This solution sets
-      // only the bottom, left, and right dimensions, but you can apply whichever
-      // insets are appropriate to your layout. You can also update the view padding
-      // if that's more appropriate.
+      // Apply the insets as a margin to the view.
       view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         leftMargin = insets.left
         bottomMargin = insets.bottom
         rightMargin = insets.right
       }
 
-      // Return CONSUMED if you don't want the window insets to keep passing
+      // Return CONSUMED as we don't want the window insets to keep passing
       // down to descendant views.
       WindowInsetsCompat.CONSUMED
     }
