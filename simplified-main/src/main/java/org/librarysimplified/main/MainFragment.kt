@@ -7,8 +7,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -96,6 +99,21 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
 
     this.bottomView =
       view.findViewById(R.id.bottomNavigator)
+
+    //Add inset to bottom bar so it is shown correctly
+    ViewCompat.setOnApplyWindowInsetsListener(bottomView) {view, insets ->
+      val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      // Apply the insets as a margin to the view.
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        leftMargin = insets.left
+        bottomMargin = insets.bottom
+        rightMargin = insets.right
+      }
+
+      // Return CONSUMED as we don't want the window insets to keep passing
+      // down to descendant views.
+      WindowInsetsCompat.CONSUMED
+    }
 
     /*
      * Hide various tabs based on build configuration and other settings.

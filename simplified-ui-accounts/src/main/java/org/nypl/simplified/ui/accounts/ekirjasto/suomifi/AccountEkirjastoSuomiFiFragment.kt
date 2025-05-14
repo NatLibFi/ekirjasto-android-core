@@ -4,10 +4,14 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.View.INVISIBLE
+import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.reactivex.disposables.CompositeDisposable
@@ -72,6 +76,23 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
     super.onViewCreated(view, savedInstanceState)
     this.progress = view.findViewById(R.id.suomifiprogressBar)
     this.webView = view.findViewById(R.id.suomifiWebView)
+
+    //Add insets so we don't have overlap with system bars
+    ViewCompat.setOnApplyWindowInsetsListener(webView) { view, insets ->
+      val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      // Apply the insets as a margin to the view
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = insets.top
+        leftMargin = insets.left
+        rightMargin = insets.right
+        bottomMargin = insets.bottom
+      }
+
+      // Return CONSUMED as we don't want the window insets to keep passing
+      // down to descendant views.
+      WindowInsetsCompat.CONSUMED
+    }
+
     WebViewUtilities.setForcedDark(this.webView.settings, resources.configuration)
 
     if (this.viewModel.isWebViewClientReady) {

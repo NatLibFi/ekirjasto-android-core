@@ -17,6 +17,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import fi.ekirjasto.magazines.R
@@ -133,6 +136,21 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
     signInPromptLayout = view.findViewById(R.id.magazinesSignInPromptLayout)
     browsingLayout = view.findViewById(R.id.magazinesBrowsingLayout)
     browsingWebView = browsingLayout.findViewById(R.id.magazinesBrowsingWebView)
+
+    //Set insetlistener to ensure overlapping with systembars
+    ViewCompat.setOnApplyWindowInsetsListener(browsingWebView) { view, insets ->
+      val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      // Apply the insets as a margin to the view
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = insets.top
+        leftMargin = insets.left
+        rightMargin = insets.right
+      }
+
+      // Return CONSUMED as we don't want the window insets to keep passing
+      // down to descendant views.
+      WindowInsetsCompat.CONSUMED
+    }
     configureBrowsingWebView()
 
     // UI state changes will call reconfigureUI
@@ -169,11 +187,6 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
     window.attributes.windowAnimations = android.R.style.Animation_Dialog
     //val wic = WindowInsetsControllerCompat(window, window.decorView)
     //wic.isAppearanceLightStatusBars = true
-    // Set status bar color
-    window.statusBarColor = ContextCompat.getColor(
-      requireContext(),
-      org.thepalaceproject.theme.core.R.color.PalaceStatusBarColor
-    )
     val paramsWebView = RelativeLayout.LayoutParams(
       RelativeLayout.LayoutParams.MATCH_PARENT,
       ViewGroup.LayoutParams.MATCH_PARENT
