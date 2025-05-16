@@ -1,1 +1,7 @@
-E-böcker, ljudböcker och digitala tidskrifter i en enda app. Tjänsten produceras av Nationalbiblioteket i samarbete med de allmänna biblioteken.
+E-biblioteket är en kostnadsfri app som innehåller tusentals e-böcker, ljudböcker och digitala tidskrifter. Du kan låna e-böcker och ljudböcker i två veckor. Efter det returneras boken automatiskt – det blir inga förseningsavgifter. E-biblioteket har material på finska, svenska och engelska samt i viss mån på andra språk.
+
+Logga in i appen första gången med hjälp av stark autentisering och skapa sedan en nyckelkod som gör inloggningen snabbare.
+
+Du kan också ladda ner en egen E-biblioteksapp för ditt barn. Det finns någonting att läsa och lyssna på för barn i alla åldrar.
+
+E-biblioteket kan användas av dem vars hemkommun har anslutit sig till e-biblioteket. Kommunernas gemensamma tjänsten E-biblioteket produceras av Nationalbiblioteket i samarbete med de allmänna biblioteken.

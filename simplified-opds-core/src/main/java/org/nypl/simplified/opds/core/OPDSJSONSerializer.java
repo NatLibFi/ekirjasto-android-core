@@ -163,6 +163,10 @@ public final class OPDSJSONSerializer implements OPDSJSONSerializerType {
             oh.put("position", x);
             return Unit.unit();
           });
+          a.getCopies().map(x -> {
+            oh.put("total", x);
+            return Unit.unit();
+          });
           a.getRevoke().map(uri -> {
             oh.put("revoke", uri.toString());
             return Unit.unit();

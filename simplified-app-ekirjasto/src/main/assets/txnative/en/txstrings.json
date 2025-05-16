@@ -195,9 +195,6 @@
       "account_eula" : {
          "string" : "User Agreement"
       },
-      "account_faq" : {
-         "string" : "Frequently Asked Questions"
-      },
       "account_instructions" : {
          "string" : "User instructions"
       },
@@ -209,9 +206,6 @@
       },
       "account_login_passkey" : {
          "string" : "Sign in with a passkey"
-      },
-      "account_login_suomifi" : {
-         "string" : "Sign in with Suomi.fi"
       },
       "account_login_with_suomifi" : {
          "string" : "Sign in with Suomi.fi"
@@ -251,9 +245,6 @@
       },
       "announcementTitle" : {
          "string" : "%1$s (%2$d of %3$d)"
-      },
-      "app_name" : {
-         "string" : "E-kirjasto"
       },
       "app_version_string" : {
          "string" : "E-kirjasto version %1$s"
@@ -555,6 +546,27 @@
       "audiobook_player_waiting" : {
          "string" : "File %1$d must be downloaded to continue playback."
       },
+      "bookConfirmReturnCancelButton" : {
+         "string" : "Cancel"
+      },
+      "bookConfirmReturnConfirmButton" : {
+         "string" : "Return"
+      },
+      "bookConfirmReturnMessage" : {
+         "string" : "Returning this book removes it from your loans and from your device."
+      },
+      "bookConfirmReturnTitle" : {
+         "string" : "Return \"%1$s\" ?"
+      },
+      "bookConfirmRevokeConfirmButton" : {
+         "string" : "Revoke"
+      },
+      "bookConfirmRevokeMessage" : {
+         "string" : "If you revoke this hold you lose your place in the queue."
+      },
+      "bookConfirmRevokeTitle" : {
+         "string" : "Revoke hold for \"%1$s\" ?"
+      },
       "bookFailedLoan" : {
          "string" : "The book '%1$s' could not be downloaded"
       },
@@ -761,6 +773,9 @@
       },
       "catalogBookAvailabilityHeldQueueShort" : {
          "string" : "At position: %1$d"
+      },
+      "catalogBookAvailabilityHeldQueueWithCopies" : {
+         "string" : "You are at position %1$d in the queue for %2$d copies of this book."
       },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "You will be able to borrow this book in %1$s."
@@ -984,18 +999,6 @@
       "contentDescriptionLogo" : {
          "string" : "Return to browse books"
       },
-      "contentDescriptionPage1" : {
-         "string" : "Welcome to E-library! This service is provided by your local library."
-      },
-      "contentDescriptionPage2" : {
-         "string" : "You can browse e-books and audiobooks by genre, book or author, or browse recommendation lists made by librarians."
-      },
-      "contentDescriptionPage3" : {
-         "string" : "Browse the selection, borrow and read or listen! If a book is on loan, press reserve to get it when it becomes available."
-      },
-      "contentDescriptionPage4" : {
-         "string" : "Or do you want something to listen to? The collection also includes an untold number of audiobooks! Click borrow to listen to the audiobook."
-      },
       "contentDescriptionSkipButton" : {
          "string" : "Skip button"
       },
@@ -1209,9 +1212,6 @@
       "login_passkey" : {
          "string" : "Sign in with a passkey"
       },
-      "login_suomifi" : {
-         "string" : "Sign in with Suomi.fi"
-      },
       "login_with_suomifi" : {
          "string" : "Sign in with Suomi.fi"
       },
@@ -1220,6 +1220,18 @@
       },
       "logoutClearingBookDatabaseFailed" : {
          "string" : "Clearing the book database failed!"
+      },
+      "logoutConfirmCancel" : {
+         "string" : "Cancel"
+      },
+      "logoutConfirmConfirm" : {
+         "string" : "Sign out"
+      },
+      "logoutConfirmMessage" : {
+         "string" : "If you sign out, your downloads and any saved bookmarks will be removed."
+      },
+      "logoutConfirmTitle" : {
+         "string" : "Sign out"
       },
       "logoutDeactivatingDeviceAdobe" : {
          "string" : "Deactivating device…"
@@ -1946,6 +1958,18 @@
       },
       "thanks" : {
          "string" : "Thank you! Your dependent should receive the invitation shortly if the email was entered correctly.\n\nThe link should be opened on their personal device. The link leads to website where they can register a passkey. This passkey can be used to enter e-kirjasto."
+      },
+      "tipsDismiss" : {
+         "string" : "Don't show this again"
+      },
+      "tipsMessage" : {
+         "string" : "To make login in easier, create a passkey on the settings page. \n\nYou must have screen lock in use on your device to create and use passkey."
+      },
+      "tipsOk" : {
+         "string" : "Remind me later"
+      },
+      "tipsTitle" : {
+         "string" : "Tip: Passkey"
       },
       "tocAccessBookmarkDelete" : {
          "string" : "Delete a bookmark"

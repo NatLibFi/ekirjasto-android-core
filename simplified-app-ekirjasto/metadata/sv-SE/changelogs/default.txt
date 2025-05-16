@@ -1,4 +1,6 @@
-1.2.4
-- Att lyssna på ljudböcker med högre hastighet lämnar inte längre tomt utrymme i slutet av kapitlet
-- En bugg som hindrade sovtimern från att stanna i slutet av kapitlet har åtgärdats
-- UI fixar
+Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
+
+1.2.6
+- En bugg i ljudböcker har korrigerats som hindrade bakåtknappen från att fungera i början av boken
+- En bekräftelsemeddelande har lagts till för att återlämna en bok och logga ut
+- Bugfixar

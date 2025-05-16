@@ -1,6 +1,6 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.2.4
-- Äänikirjan kuunteleminen suuremmilla nopeuksilla ei enää jätä tyhjää tilaa kappaleen loppuun
-- Korjattin bugi, joka esti uniajastinta pysähtymästä kappaleen lopussa
-- UI korjauksia
+1.2.6
+- Korjattin äänikirja bugi, joka esti taaksepäinhyppyä toimimasta kirjan alussa
+- Lisättiin varmistus lainan palauttamiseen sekä uloskirjautumiseen
+- Bugi korjauksia
