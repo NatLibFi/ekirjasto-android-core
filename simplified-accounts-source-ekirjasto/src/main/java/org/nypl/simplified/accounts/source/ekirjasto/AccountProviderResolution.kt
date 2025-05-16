@@ -125,6 +125,7 @@ class AccountProviderResolution(
           isProduction = this.description.isProduction,
           license = authDocument?.licenseURI,
           loansURI = authDocument?.loansURI,
+          selectedURI = authDocument?.selectedURI,
           logo = authDocument?.logoURI ?: this.description.logoURI?.hrefURI,
           mainColor = authDocument?.mainColor ?: "red",
           patronSettingsURI = authDocument?.patronSettingsURI,

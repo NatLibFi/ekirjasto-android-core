@@ -68,6 +68,10 @@ object CatalogBookAvailabilityStrings {
         ""
       is BookStatus.ReachedLoanLimit ->
         ""
+      is BookStatus.Selected ->
+        ""
+      is BookStatus.Unselected ->
+        ""
     }
   }
 

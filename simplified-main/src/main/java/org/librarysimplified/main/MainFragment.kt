@@ -129,7 +129,7 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
       when (it.itemId) {
         org.librarysimplified.ui.tabs.R.id.tabCatalog   -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabCatalog)
         org.librarysimplified.ui.tabs.R.id.tabBooks     -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabBooks)
-        org.librarysimplified.ui.tabs.R.id.tabHolds     -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabHolds)
+        org.librarysimplified.ui.tabs.R.id.tabSelected  -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabSelected)
         org.librarysimplified.ui.tabs.R.id.tabMagazines -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabMagazines)
         org.librarysimplified.ui.tabs.R.id.tabSettings  -> it.title = getString(org.librarysimplified.ui.tabs.R.string.tabSettings)
       }
@@ -260,7 +260,7 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
     this.logger.debug("DBGHOLDS viewModel.showHoldsTab=$showHolds")
     val provider = viewModel.profilesController.profileCurrent().mostRecentAccount().provider
     this.logger.debug("DBGHOLDS accountProvider id=${provider.id}, displayName=${provider.displayName}, supportReservation=${provider.supportsReservations}")
-    val holdsItem = this.bottomView.menu.findItem(org.librarysimplified.ui.tabs.R.id.tabHolds)
+    val holdsItem = this.bottomView.menu.findItem(org.librarysimplified.ui.tabs.R.id.tabBooks)
     holdsItem.isVisible = showHolds
     holdsItem.isEnabled = showHolds
   }
@@ -301,6 +301,8 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
       is BookStatus.RequestingDownload,
       is BookStatus.RequestingLoan,
       is BookStatus.RequestingRevoke,
+      is BookStatus.Selected,
+      is BookStatus.Unselected,
       is BookStatus.Revoked,
       null -> {
         // do nothing
@@ -325,26 +327,35 @@ class MainFragment : Fragment(R.layout.main_tabbed_host) {
   }
 
   private fun onBookHoldsUpdateEvent(event: BookHoldsUpdateEvent) {
+    //Claimable holds
     val numberOfHolds = event.numberOfHolds
+    //If we have holds that are claimable, we show a red dot on the bottom tab to indicate it
     if (viewModel.showHoldsTab) {
+      //Get the item in the bottom nav we want to show the dot in
       val bottomNavigationItem =
-        this.bottomView.findViewById<BottomNavigationItemView>(org.librarysimplified.ui.tabs.R.id.tabHolds)
+        this.bottomView.findViewById<BottomNavigationItemView>(org.librarysimplified.ui.tabs.R.id.tabBooks)
+      //Get the red dot badge
       var badgeView =
         bottomNavigationItem.findViewById<View>(org.librarysimplified.ui.tabs.R.id.badgeView)
 
+      //If there are showable holds and a badge to show
       if (numberOfHolds > 0) {
         if (badgeView == null) {
+          //Combine the dot and the item in the bottom tab into one view
           badgeView = LayoutInflater.from(requireContext()).inflate(
             org.librarysimplified.ui.tabs.R.layout.layout_menu_item_badge, bottomNavigationItem, false
           )
+          //Add the new view to the spot of the original
           bottomNavigationItem.addView(badgeView)
         }
 
+        //Add the number in the dot that says how many are claimable
         val badgeNumber = (badgeView as? ViewGroup)?.findViewById<TextView>(
           org.librarysimplified.ui.tabs.R.id.badgeNumber)
         badgeNumber?.text = numberOfHolds.toString()
       }
 
+      //Show the badge only if there are claimable holds
       badgeView?.isVisible = numberOfHolds > 0
     }
   }

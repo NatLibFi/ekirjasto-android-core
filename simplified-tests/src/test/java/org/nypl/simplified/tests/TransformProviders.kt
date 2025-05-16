@@ -82,6 +82,7 @@ class TransformProviders {
             updated = DateTime.parse(entry.updated),
             location = null,
             alternateURI = null,
+            selectedURI = null
           )
         providers.add(provider)
       }
