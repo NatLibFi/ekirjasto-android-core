@@ -775,7 +775,7 @@
          "string" : "Din plats i kön: %1$d"
       },
       "catalogBookAvailabilityHeldQueueWithCopies" : {
-         "string" : "Du är på plats %1$d i kön. Bokoen har %2$d samtidiga läsrättigheter."
+         "string" : "Du är på plats %1$d i kön. Boken har %2$d samtidiga läsrättigheter."
       },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "Du kommer att kunna låna denna bok om %1$s."
