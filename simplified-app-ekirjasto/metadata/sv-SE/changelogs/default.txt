@@ -1,6 +1,5 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.2.6
-- En bugg i ljudböcker har korrigerats som hindrade bakåtknappen från att fungera i början av boken
-- En bekräftelsemeddelande har lagts till för att återlämna en bok och logga ut
+1.3.0
+- Lade till funktion för att lägga till en bok i favoriter
 - Bugfixar
