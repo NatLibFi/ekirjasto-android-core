@@ -31,4 +31,10 @@ sealed class CatalogFeedEvent {
     val book: Book,
     val format: BookFormat
   ) : CatalogFeedEvent()
+
+  /**
+   * Removes views not currently visible, so they are recreated with
+   * up to date information after login.
+   */
+  data object RefreshViews :CatalogFeedEvent()
 }

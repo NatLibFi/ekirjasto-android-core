@@ -249,6 +249,7 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
     entry_builder.setPublisherOption(findPublisher(element));
     entry_builder.setDistribution(findDistribution(element));
     entry_builder.setPublishedOption(OPDSAtom.findPublished(element));
+    entry_builder.setSelectedOption(OPDSAtom.findSelected(element));
     entry_builder.setSummaryOption(
       OPDSXML.getFirstChildElementTextWithNameOptional(element, ATOM_URI, "summary"));
     entry_builder.setLanguageOption(findLanguage(element));

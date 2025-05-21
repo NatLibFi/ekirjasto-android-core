@@ -31,7 +31,9 @@ import org.nypl.simplified.accounts.database.api.AccountsDatabaseNonexistentExce
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryEvent
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryType
 import org.nypl.simplified.analytics.api.AnalyticsType
+import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookID
+import org.nypl.simplified.books.api.BookIDs
 import org.nypl.simplified.books.book_registry.BookPreviewRegistryType
 import org.nypl.simplified.books.book_registry.BookRegistryType
 import org.nypl.simplified.books.book_registry.BookStatus
@@ -41,6 +43,7 @@ import org.nypl.simplified.books.borrowing.BorrowRequirements
 import org.nypl.simplified.books.borrowing.BorrowTask
 import org.nypl.simplified.books.borrowing.BorrowTaskType
 import org.nypl.simplified.books.borrowing.SAMLDownloadContext
+import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes
 import org.nypl.simplified.books.controller.api.BookRevokeStringResourcesType
 import org.nypl.simplified.books.controller.api.BooksControllerType
 import org.nypl.simplified.books.controller.api.BooksPreviewControllerType
@@ -761,19 +764,57 @@ class Controller private constructor(
     accountID: AccountID
   ): FluentFuture<TaskResult<Unit>> {
     return this.submitTask(
-      BookSyncTask(
-        accountID = accountID,
-        profileID = this.profileCurrent().id,
-        profiles = this.profiles,
-        accountRegistry = this.accountProviders,
-        bookRegistry = this.bookRegistry,
-        booksController = this,
-        feedParser = this.feedParser,
-        feedLoader = this.feedLoader,
-        patronParsers = this.patronUserProfileParsers,
-        http = this.lsHttp
-      )
-    )
+      Callable<TaskResult<Unit>> {
+        val syncTask = BookSyncTask(
+          accountID = accountID,
+          profileID = this.profileCurrent().id,
+          profiles = this.profiles,
+          accountRegistry = this.accountProviders,
+          bookRegistry = this.bookRegistry,
+          booksController = this,
+          feedParser = this.feedParser,
+          feedLoader = this.feedLoader,
+          patronParsers = this.patronUserProfileParsers,
+          http = this.lsHttp
+        )
+        syncTask.call()
+      }
+    ).transformAsync(AsyncFunction { taskResult ->
+      //Check if the result was a need to refresh the accessToken
+      //BookSyncTask does special error handling, and if the result is 401, it throws
+      //A special error, which can be caught with the error code of "accessTokenExpired"
+      if (taskResult is TaskResult.Failure<Unit>) {
+        logger.debug("SYNC ERROR : {}", taskResult.lastErrorCode)
+      }
+      if (taskResult is TaskResult.Failure<Unit> && taskResult.lastErrorCode == "accessTokenExpired" ) {
+        //In order to make the user not have to do anything
+        //Try to sync again if the accessToken refresh is successful
+        executeProfileAccountAccessTokenRefresh(accountID).transformAsync(AsyncFunction { tokenResult ->
+          if (tokenResult is TaskResult.Success) {
+            logger.debug("Attempt to execute bookSync again")
+            val syncTask = BookSyncTask(
+              accountID = accountID,
+              profileID = this.profileCurrent().id,
+              profiles = this.profiles,
+              accountRegistry = this.accountProviders,
+              bookRegistry = this.bookRegistry,
+              booksController = this,
+              feedParser = this.feedParser,
+              feedLoader = this.feedLoader,
+              patronParsers = this.patronUserProfileParsers,
+              http = this.lsHttp
+            )
+            submitTask(Callable { syncTask.call() })
+          } else {
+            //If accessToken refresh fails, return the result that should popup the login
+            Futures.immediateFuture(tokenResult)
+          }
+        }, MoreExecutors.directExecutor())
+      } else {
+        //In other errors return the normal bookSync answer
+        Futures.immediateFuture(taskResult)
+      }
+    }, MoreExecutors.directExecutor())
   }
 
   override fun bookRevoke(
@@ -799,11 +840,9 @@ class Controller private constructor(
       }
     ).transformAsync(AsyncFunction { taskResult ->
       //Check if the result was a need to refresh the accessToken
-      //BookRevokeTask does special error handling, and if the result is 401, it throws
-      //A special error, which can be caught with the error code of "accessTokenExpired"
+      //This can be caught with the error code of "accessTokenExpired"
       if (taskResult is TaskResult.Failure<Unit> && taskResult.lastErrorCode == "accessTokenExpired" ) {
-        //In order to make the user not have to do anything
-        //Try to return the book again if the accessToken refresh is successful
+        //Try to run revoke again if the accessToken refresh is successful
         executeProfileAccountAccessTokenRefresh(accountID).transformAsync(AsyncFunction { tokenResult ->
           if (tokenResult is TaskResult.Success) {
             logger.debug("Attempt to execute return again")
@@ -893,6 +932,103 @@ class Controller private constructor(
         bookPreviewTask.execute()
       }
     )
+  }
+
+  override fun bookAddToSelected(
+    accountID: AccountID,
+    feedEntry: FeedEntry.FeedEntryOPDS
+
+  ) : FluentFuture<TaskResult<*>> {
+    val profile = this.profileCurrent()
+
+    return this.submitTask(
+      Callable<TaskResult<Unit>> {
+        val bookSelectTask = BookSelectTask(
+          accountID= accountID,
+          profileID = profile.id,
+          profiles = profiles,
+          HTTPClient = this.lsHttp,
+          feedEntry = feedEntry.feedEntry,
+          bookRegistry = bookRegistry
+        )
+        bookSelectTask.call()
+      }
+    ).transformAsync(AsyncFunction { taskResult ->
+      //Check if the result was a need to refresh the accessToken
+      //Can be caught with the error code of "accessTokenExpired"
+      if (taskResult is TaskResult.Failure<Unit> && taskResult.lastErrorCode == "accessTokenExpired" ) {
+        //In order to make the user not have to do anything
+        //Try to return select the book again if the accessToken refresh is successful
+        executeProfileAccountAccessTokenRefresh(accountID).transformAsync(AsyncFunction { tokenResult ->
+          if (tokenResult is TaskResult.Success) {
+            logger.debug("Attempt to execute bookSelect again")
+            val bookSelectTask = BookSelectTask(
+              accountID= accountID,
+              profileID = profile.id,
+              profiles = profiles,
+              HTTPClient = this.lsHttp,
+              feedEntry = feedEntry.feedEntry,
+              bookRegistry = bookRegistry
+            )
+            submitTask(Callable { bookSelectTask.call() })
+          } else {
+            //If accessToken refresh fails, return the result that should popup the login
+            Futures.immediateFuture(tokenResult)
+          }
+        }, MoreExecutors.directExecutor())
+      } else {
+        //In other errors return the normal bookSync answer
+        Futures.immediateFuture(taskResult)
+      }
+    }, MoreExecutors.directExecutor())
+  }
+
+  override fun bookRemoveFromSelected(
+    accountID: AccountID,
+    feedEntry: FeedEntry.FeedEntryOPDS
+  ): FluentFuture<TaskResult<*>> {
+    val profile = this.profileCurrent()
+
+    return this.submitTask(
+      Callable<TaskResult<Unit>> {
+        val bookUnselectTask = BookUnselectTask(
+          accountID= accountID,
+          profileID = profile.id,
+          profiles = profiles,
+          HTTPClient = this.lsHttp,
+          feedEntry = feedEntry.feedEntry,
+          bookRegistry = bookRegistry
+        )
+        bookUnselectTask.call()
+      }
+    ).transformAsync(AsyncFunction { taskResult ->
+      //Check if the result was a need to refresh the accessToken
+      //Can be caught with the error code of "accessTokenExpired"
+      if (taskResult is TaskResult.Failure<Unit> && taskResult.lastErrorCode == "accessTokenExpired" ) {
+        //In order to make the user not have to do anything
+        //Try to unselect the book again if the accessToken refresh is successful
+        executeProfileAccountAccessTokenRefresh(accountID).transformAsync(AsyncFunction { tokenResult ->
+          if (tokenResult is TaskResult.Success) {
+            logger.debug("Attempt to execute bookUnselect again")
+            val bookUnselectTask = BookUnselectTask(
+              accountID= accountID,
+              profileID = profile.id,
+              profiles = profiles,
+              HTTPClient = this.lsHttp,
+              feedEntry = feedEntry.feedEntry,
+              bookRegistry = bookRegistry
+            )
+            submitTask(Callable { bookUnselectTask.call() })
+          } else {
+            //If accessToken refresh fails, return the result that should popup the login
+            Futures.immediateFuture(tokenResult)
+          }
+        }, MoreExecutors.directExecutor())
+      } else {
+        //In other errors return the normal bookSync answer
+        Futures.immediateFuture(taskResult)
+      }
+    }, MoreExecutors.directExecutor())
   }
 
   override fun profileAnyIsCurrent(): Boolean =

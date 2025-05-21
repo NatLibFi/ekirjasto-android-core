@@ -4,6 +4,7 @@
   <string name="tabBooks">My Books</string>
   <string name="tabCatalog">Browse Books</string>
   <string name="tabHolds">Reservations</string>
+  <string name="tabSelected">Favorites</string>
   <string name="tabMagazines">Magazines</string>
   <string name="tabProfile">Profile</string>
   <string name="tabSettings">Settings</string>

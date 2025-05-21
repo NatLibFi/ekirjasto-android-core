@@ -33,4 +33,10 @@ class AccessibilityStrings(
 
   override fun bookLoanLimitReached(): String =
     this.resources.getString(R.string.reachedLoanLimit)
+
+  override fun bookSelected(title: String): String =
+    this.resources.getString(R.string.bookSelected, title)
+
+  override fun bookUnselected(title: String): String =
+    this.resources.getString(R.string.bookUnselected, title)
 }

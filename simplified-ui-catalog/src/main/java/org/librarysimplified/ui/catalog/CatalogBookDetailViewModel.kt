@@ -11,6 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import net.jcip.annotations.GuardedBy
 import org.nypl.simplified.accounts.api.AccountID
+import org.nypl.simplified.accounts.api.AccountLoginState
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.Book
@@ -21,6 +22,7 @@ import org.nypl.simplified.books.book_registry.BookRegistryType
 import org.nypl.simplified.books.book_registry.BookStatus
 import org.nypl.simplified.books.book_registry.BookStatusEvent
 import org.nypl.simplified.books.book_registry.BookWithStatus
+import org.nypl.simplified.books.controller.api.BooksControllerType
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
 import org.nypl.simplified.feeds.api.Feed
 import org.nypl.simplified.feeds.api.FeedEntry
@@ -37,6 +39,7 @@ import org.nypl.simplified.opds.core.OPDSAvailabilityMatcherType
 import org.nypl.simplified.opds.core.OPDSAvailabilityOpenAccess
 import org.nypl.simplified.opds.core.OPDSAvailabilityRevoked
 import org.nypl.simplified.profiles.api.ProfilePreferences
+import org.nypl.simplified.profiles.api.ProfileReadableType
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.nypl.simplified.ui.errorpage.ErrorPageParameters
@@ -50,6 +53,7 @@ class CatalogBookDetailViewModel(
   private val bookRegistry: BookRegistryType,
   private val buildConfiguration: BuildConfigurationServiceType,
   private val borrowViewModel: CatalogBorrowViewModel,
+  private val booksController: BooksControllerType,
   private val parameters: CatalogBookDetailFragmentParameters,
   private val listener: FragmentListenerType<CatalogBookDetailEvent>
 ) : ViewModel(), CatalogPagedViewListener {
@@ -295,10 +299,63 @@ class CatalogBookDetailViewModel(
   override fun cancelDownload(feedEntry: FeedEntry.FeedEntryOPDS) {
     this.borrowViewModel.tryCancelDownload(feedEntry.accountID, feedEntry.bookID)
   }
+
+  override fun selectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
+    //Check if we are logged in, if not, show login
+    val account = this.profilesController.profileCurrent().mostRecentAccount()
+    if (account.loginState is AccountLoginState.AccountNotLoggedIn) {
+      openLoginDialog(account.id)
+    } else {
+      //If logged in, try adding book to selected
+      booksController.bookAddToSelected(
+        accountID = profilesController.profileCurrent().mostRecentAccount().id,
+        feedEntry = feedEntry
+      )
+    }
+  }
+
+  override fun unselectBook(feedEntry: FeedEntry.FeedEntryOPDS) {
+    //Check if we are logged in, if not, show login
+    val account = this.profilesController.profileCurrent().mostRecentAccount()
+    if (account.loginState is AccountLoginState.AccountNotLoggedIn) {
+      openLoginDialog(account.id)
+    } else {
+      //Attempt to unselect
+      booksController.bookRemoveFromSelected(
+        accountID = profilesController.profileCurrent().mostRecentAccount().id,
+        feedEntry = feedEntry
+      )
+    }
+  }
+
   override fun resetInitialBookStatus(feedEntry: FeedEntry.FeedEntryOPDS) {
     val initialBookStatus = synthesizeBookWithStatus(feedEntry)
     this.bookRegistry.update(initialBookStatus)
     this.bookWithStatusMutable.value = Pair(initialBookStatus, BookPreviewStatus.None)
+  }
+
+  /**
+   * Reset to the previous status provided in the current status, if not provided, generate it from the book.
+   */
+  override fun resetPreviousBookStatus(bookID: BookID, status: BookStatus, selected: Boolean) {
+    //Cast tho the correct status depending if select is true or not
+    val previousStatus: BookStatus? = if (selected) {
+      val currentStatus = status as BookStatus.Selected
+      currentStatus.previousStatus
+    } else {
+      val currentStatus = status as BookStatus.Unselected
+      currentStatus.previousStatus
+    }
+    // If there is a previous status, set that as the new status in book registry
+    if (previousStatus != null) {
+      val bookWithStatus = this.bookRegistry.bookOrNull(bookID)
+      this.bookRegistry.update(BookWithStatus(bookWithStatus!!.book, previousStatus))
+    } else {
+      // The book for certain has been added to the bookRegistry so if no status provided, create
+      //one from the bookRegistry entry
+      val bookWithStatus = this.bookRegistry.bookOrNull(bookID)
+      this.bookRegistry.update(BookWithStatus(bookWithStatus!!.book, BookStatus.fromBook(bookWithStatus.book)))
+    }
   }
 
   override fun borrowMaybeAuthenticated(book: Book) {
@@ -549,6 +606,15 @@ class CatalogBookDetailViewModel(
         )
 
       is CatalogFeedArguments.CatalogFeedArgumentsLocalBooks -> {
+        CatalogFeedArguments.CatalogFeedArgumentsRemote(
+          feedURI = uri,
+          isSearchResults = false,
+          ownership = CatalogFeedOwnership.OwnedByAccount(accountID),
+          title = ""
+        )
+      }
+
+      is CatalogFeedArguments.CatalogFeedArgumentsAllLocalBooks -> {
         CatalogFeedArguments.CatalogFeedArgumentsRemote(
           feedURI = uri,
           isSearchResults = false,

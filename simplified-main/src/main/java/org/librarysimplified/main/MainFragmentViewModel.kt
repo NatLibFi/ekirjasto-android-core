@@ -224,5 +224,13 @@ class MainFragmentViewModel(
       get() = this.resources.getString(R.string.feedShowAll)
     override val showOnLoan: String
       get() = this.resources.getString(R.string.feedShowOnLoan)
+    override val showTabSelected: String
+      get() = this.resources.getString(R.string.feedFacetSelected)
+
+    override val showTabLoans: String
+      get() = this.resources.getString(R.string.feedFacetLoans)
+
+    override val showTabHolds: String
+      get() = this.resources.getString(R.string.feedFacetHolds)
   }
 }

@@ -113,6 +113,7 @@ sealed class CatalogFeedState {
 
     data class CatalogFeedEmpty(
       override val arguments: CatalogFeedArguments,
+      val facetsByGroup: Map<String, List<FeedFacet>>? = null,
       override val search: FeedSearch?,
       override val title: String
     ) : CatalogFeedLoaded()

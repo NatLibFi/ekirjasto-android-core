@@ -37,6 +37,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
   private final OptionType<URI> issues;
   private final OptionType<URI> related;
   private final OptionType<DateTime> published;
+  private final OptionType<DateTime> selected;
   private final OptionType<String> publisher;
   private final OptionType<String> language;
   private final String distribution;
@@ -71,6 +72,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     final String in_summary,
     final List<String> in_narrators,
     final OptionType<DateTime> in_published,
+    final OptionType<DateTime> in_selected,
     final OptionType<String> in_publisher,
     final String in_distribution,
     final List<OPDSCategory> in_categories,
@@ -95,6 +97,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     this.title = NullCheck.notNull(in_title);
     this.thumbnail = NullCheck.notNull(in_thumbnail);
     this.timeTrackingUri = NullCheck.notNull(in_time_tracking_uri);
+    this.selected = NullCheck.notNull(in_selected);
     this.updated = NullCheck.notNull(in_updated);
     this.summary = NullCheck.notNull(in_summary);
     this.narrators = NullCheck.notNull(in_narrators);
@@ -175,6 +178,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     b.setAlternateOption(e.getAlternate());
     b.setAnalyticsOption(e.getAnalytics());
     b.setLicensorOption(e.getLicensor());
+    b.setSelectedOption(e.getSelected());
 
     {
       final String summary = e.getSummary();
@@ -225,6 +229,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
       && this.published.equals(other.published)
       && this.publisher.equals(other.publisher)
       && this.licensor.equals(other.licensor)
+      && this.selected.equals(other.selected)
       && this.distribution.equals(other.distribution);
   }
 
@@ -415,6 +420,13 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
   }
 
   /**
+   * @return Selected
+   */
+  public OptionType<DateTime> getSelected() {
+    return this.selected;
+  }
+
+  /**
    * @return The title
    */
 
@@ -480,6 +492,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     result = (prime * result) + this.published.hashCode();
     result = (prime * result) + this.publisher.hashCode();
     result = (prime * result) + this.distribution.hashCode();
+    result = (prime * result) + this.selected.hashCode();
     result = (prime * result) + this.licensor.hashCode();
     return result;
   }
@@ -531,6 +544,8 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     b.append(this.updated);
     b.append(", licensor=");
     b.append(this.licensor);
+    b.append(", selected=");
+    b.append(this.selected);
     b.append("]");
     return NullCheck.notNull(b.toString());
   }
@@ -564,6 +579,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     private OptionType<URI> thumbnail;
     private OptionType<URI> timeTrackingUri;
     private OptionType<DRMLicensor> licensor;
+    private OptionType<DateTime> selected;
     private OptionType<Double> duration;
 
     private Builder(
@@ -578,6 +594,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
       this.title = NullCheck.notNull(in_title);
       this.updated = NullCheck.notNull(in_updated);
       this.availability = NullCheck.notNull(in_availability);
+      this.selected = Option.none();
       this.summary = "";
       this.narrators = new ArrayList<String>();
       this.copyright = Option.none();
@@ -659,6 +676,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
         this.summary,
         this.narrators,
         this.published,
+        this.selected,
         this.publisher,
         this.distribution,
         this.categories,
@@ -807,6 +825,13 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     public OPDSAcquisitionFeedEntryBuilderType setLicensorOption(
       final OptionType<DRMLicensor> lic) {
       this.licensor = NullCheck.notNull(lic);
+      return this;
+    }
+
+    @Override
+    public OPDSAcquisitionFeedEntryBuilderType setSelectedOption(
+      final OptionType<DateTime> sel) {
+      this.selected = NullCheck.notNull(sel);
       return this;
     }
 

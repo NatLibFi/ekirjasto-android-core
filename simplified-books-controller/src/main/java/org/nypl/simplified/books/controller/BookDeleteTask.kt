@@ -1,11 +1,15 @@
 package org.nypl.simplified.books.controller
 
+import com.io7m.jfunctional.Some
+import org.joda.time.DateTime
 import org.librarysimplified.mdc.MDCKeys
 import org.nypl.simplified.accounts.api.AccountID
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.BookID
 import org.nypl.simplified.books.book_database.api.BookDatabaseException
 import org.nypl.simplified.books.book_registry.BookRegistryType
+import org.nypl.simplified.books.book_registry.BookStatus
+import org.nypl.simplified.books.book_registry.BookWithStatus
 import org.nypl.simplified.profiles.api.ProfileID
 import org.nypl.simplified.profiles.api.ProfilesDatabaseType
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
@@ -44,8 +48,16 @@ class BookDeleteTask(
       MDC.put(MDCKeys.BOOK_TITLE, entry.book.entry.title)
       MDCKeys.put(MDCKeys.BOOK_PUBLISHER, entry.book.entry.publisher)
 
-      entry.delete()
-      this.bookRegistry.clearFor(entry.book.id)
+      //If the book is still selected, don't delete the book, just update
+      if (entry.book.entry.selected is Some<DateTime>) {
+        logger.debug("Book is selected, don't delete, just update")
+        this.bookRegistry.update(BookWithStatus(entry.book, BookStatus.fromBook(entry.book)))
+      } else {
+        //Otherwise delete the db and registry entries
+        logger.debug("Book not selected delete from database and register")
+        entry.delete()
+        this.bookRegistry.clearFor(entry.book.id)
+      }
       this.taskRecorder.finishSuccess(Unit)
     } catch (e: Exception) {
       this.taskRecorder.currentStepFailed(

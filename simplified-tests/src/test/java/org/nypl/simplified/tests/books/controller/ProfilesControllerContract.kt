@@ -471,6 +471,12 @@ abstract class ProfilesControllerContract {
               get() = "All"
             override val showOnLoan: String
               get() = "On Loan"
+            override val showTabSelected: String
+              get() = "Selected"
+            override val showTabLoans: String
+              get() = "Loans"
+            override val showTabHolds: String
+              get() = "Holds"
           }
         )
       ).get()

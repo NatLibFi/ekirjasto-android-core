@@ -84,7 +84,9 @@ class AccessibilityService private constructor(
       is BookStatus.Loanable -> {
         val notHoldable = this.previousStatusIsNot(event, BookStatus.Holdable::class.java)
         val notLoanable = this.previousStatusIsNot(event, BookStatus.Loanable::class.java)
-        if (notHoldable && notLoanable) {
+        val notUnselected = this.previousStatusIsNot(event, BookStatus.Unselected::class.java)
+        val notSelected = this.previousStatusIsNot(event, BookStatus.Selected::class.java)
+        if (notHoldable && notLoanable && notUnselected && notSelected) {
           this.speak(this.strings.bookReturned(book.entry.title))
         } else {
           // Nothing to do
@@ -126,6 +128,20 @@ class AccessibilityService private constructor(
       is BookStatus.RequestingDownload,
       is BookStatus.DownloadWaitingForExternalAuthentication,
       is BookStatus.DownloadExternalAuthenticationInProgress,
+      is BookStatus.Selected -> {
+        if (this.previousStatusIsNot(event, BookStatus.Selected::class.java)) {
+          this.speak(this.strings.bookSelected(book.entry.title))
+        } else {
+          // Nothing to do
+        }
+      }
+      is BookStatus.Unselected -> {
+        if (this.previousStatusIsNot(event, BookStatus.Unselected::class.java)) {
+          this.speak(this.strings.bookUnselected(book.entry.title))
+        } else {
+          // Nothing to do
+        }
+      }
       is BookStatus.Revoked -> {
       }
       null -> {

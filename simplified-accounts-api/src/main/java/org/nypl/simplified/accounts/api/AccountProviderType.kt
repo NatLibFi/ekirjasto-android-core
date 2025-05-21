@@ -84,6 +84,12 @@ interface AccountProviderType : Comparable<AccountProviderType> {
   val loansURI: URI?
 
   /**
+   * @return The URI of the user selected feed, if supported
+   */
+
+  val selectedURI: URI?
+
+  /**
    * @return The URI to reset the user's password, if any
    */
 

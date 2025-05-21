@@ -433,7 +433,8 @@ class AccountProviderSourceNYPLRegistryDescriptionTest {
       supportsReservations = true,
       updated = DateTime.parse("1970-01-01T00:00:00.000Z"),
       location = null,
-      alternateURI = URI.create("https://www.example.com/alternate")
+      alternateURI = URI.create("https://www.example.com/alternate"),
+      selectedURI = null
     )
 
     Assertions.assertEquals(provider, result.result)
@@ -596,7 +597,8 @@ class AccountProviderSourceNYPLRegistryDescriptionTest {
       supportsReservations = true,
       updated = DateTime.parse("1970-01-01T00:00:00.000Z"),
       location = null,
-      alternateURI = URI.create("https://www.example.com/alternate")
+      alternateURI = URI.create("https://www.example.com/alternate"),
+      selectedURI = null
     )
 
     Assertions.assertEquals(provider, result.result)
@@ -739,7 +741,8 @@ class AccountProviderSourceNYPLRegistryDescriptionTest {
       supportsReservations = true,
       updated = DateTime.parse("1970-01-01T00:00:00.000Z"),
       location = null,
-      alternateURI = URI.create("https://www.example.com/alternate")
+      alternateURI = URI.create("https://www.example.com/alternate"),
+      selectedURI = null
     )
 
     Assertions.assertEquals(provider, result.result)

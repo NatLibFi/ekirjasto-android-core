@@ -69,6 +69,8 @@ object FeedFacets {
   }
 
   /**
+   * Checks if a facet is an entry point. Returns true for opdsFacets with the
+   * correct group type, and for pseudofacets that are the kind of FilteringForFeed
    * @return `true` if the given facet is "entry point" typed
    */
 
@@ -78,7 +80,14 @@ object FeedFacets {
       is FeedFacet.FeedFacetOPDS ->
         facet.opdsFacet.groupType == Option.some(ENTRYPOINT_FACET_GROUP_TYPE)
       is FeedFacet.FeedFacetPseudo ->
-        false
+        when (facet) {
+          is FeedFacet.FeedFacetPseudo.FilteringForFeed -> {
+            true
+          }
+          else -> {
+          false
+        }
+        }
     }
   }
 }

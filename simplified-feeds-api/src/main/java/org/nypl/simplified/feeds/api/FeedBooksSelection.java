@@ -18,5 +18,10 @@ public enum FeedBooksSelection implements Serializable
    * Generate a feed of books that are currently on hold.
    */
 
-  BOOKS_FEED_HOLDS
+  BOOKS_FEED_HOLDS,
+
+  /**
+   * Generate a feed of books that are currently selected.
+   */
+  BOOKS_FEED_SELECTED
 }

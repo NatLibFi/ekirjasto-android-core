@@ -28,6 +28,16 @@ public enum BookStatusPriorityOrdering
   BOOK_STATUS_DOWNLOAD_FAILED(90),
 
   /**
+   * {@link BookStatus.Selected}
+   */
+  BOOK_STATUS_SELECTED(90),
+
+
+  /**
+   * {@link BookStatus.Unselected}
+   */
+  BOOK_STATUS_UNSELECTED(90),
+  /**
    * {@link BookStatus.Loaned.Downloading.Downloading.DownloadExternalAuthenticationInProgress}
    */
 
