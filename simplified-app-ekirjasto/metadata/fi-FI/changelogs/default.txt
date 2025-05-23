@@ -1,6 +1,5 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.2.6
-- Korjattin äänikirja bugi, joka esti taaksepäinhyppyä toimimasta kirjan alussa
-- Lisättiin varmistus lainan palauttamiseen sekä uloskirjautumiseen
+1.3.0
+- Lisätty toiminnallisuus kirjan lisäämiseksi suosikiksi
 - Bugi korjauksia

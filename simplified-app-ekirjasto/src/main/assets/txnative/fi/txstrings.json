@@ -663,6 +663,9 @@
       "bookReturned" : {
          "string" : "Kirja %1$s on palautettu onnistuneesti"
       },
+      "bookSelected" : {
+         "string" : "Kirja '%1$s' on lisätty suosikkeihisi."
+      },
       "bookSessionExpiredButton" : {
          "string" : "Vahvista"
       },
@@ -671,6 +674,9 @@
       },
       "bookSessionExpiredTitle" : {
          "string" : "Istunto on vanhentunut!"
+      },
+      "bookUnselected" : {
+         "string" : "Kirja '%1$s' on poistettu suosikeistasi."
       },
       "bookmarkEnd" : {
          "string" : "Luvun lopussa."
@@ -744,8 +750,14 @@
       "catalogAccessibilityBookRevokeLoan" : {
          "string" : "Palauta nyt"
       },
+      "catalogAccessibilityBookSelect" : {
+         "string" : "Lisää tämä kirja suosikkeihisi"
+      },
       "catalogAccessibilityBookSync" : {
          "string" : "Synkronoi"
+      },
+      "catalogAccessibilityBookUnselect" : {
+         "string" : "Poista tämä kirja suosikeistasi"
       },
       "catalogAccessibilityCoverAudiobook" : {
          "string" : "%1$s, äänikirja, tekijä %2$s"
@@ -848,6 +860,12 @@
       },
       "catalogBookPreviewBook" : {
          "string" : "Lue näyte"
+      },
+      "catalogBookSelect" : {
+         "string" : "%1$s lisätty suosikkeihin"
+      },
+      "catalogBookUnselect" : {
+         "string" : "%1$s poistettu suosikeista"
       },
       "catalogCancel" : {
          "string" : "Peruuta"
@@ -1038,11 +1056,17 @@
       "emptyBookmarksMessage" : {
          "string" : "Tässä kirjassa ei ole kirjanmerkkejä"
       },
+      "emptyBooksNotLoggedIn" : {
+         "string" : "Kirjaudu sisään nähdäksesi lainasi."
+      },
       "emptyHoldsNotLoggedIn" : {
          "string" : "Kirjaudu sisään nähdäksesi varauksesi."
       },
       "emptyLoansNotLoggedIn" : {
          "string" : "Kirjaudu sisään nähdäksesi kirjasi."
+      },
+      "emptySelectedNotLoggedIn" : {
+         "string" : "Kirjaudu sisään nähdäksesi suosikkisi."
       },
       "errorDetailsTitle" : {
          "string" : "Virheen tiedot"
@@ -1098,6 +1122,15 @@
       "feedEmpty" : {
          "string" : "Ei hakutuloksia"
       },
+      "feedFacetHolds" : {
+         "string" : "Varaukset"
+      },
+      "feedFacetLoans" : {
+         "string" : "Lainat"
+      },
+      "feedFacetSelected" : {
+         "string" : "Suosikit"
+      },
       "feedLoadingError" : {
          "string" : "Luettelon lataamisessa tapahtui virhe."
       },
@@ -1130,6 +1163,9 @@
       },
       "feedWithGroupsEmptyLoaned" : {
          "string" : "Lainauksesi näytetään täällä.\nLainauksia voi olla enintään 5 kappaletta.\nVarmista riittävä internetyhteys ladatessasi kirjoja sekä tarkista onko puhelimessasi riittävästi tilaa."
+      },
+      "feedWithGroupsEmptySelected" : {
+         "string" : "Sinulla ei ole vielä suosikkeja. Voit lisätä suosikkeja, kun selaat kirjoja. Lisää kirja suosikiksi napauttamalla kirjan nimen vieressä olevaa kuvaketta."
       },
       "fontSize" : {
          "string" : "Fonttikoko"
@@ -1919,6 +1955,9 @@
       },
       "tabProfile" : {
          "string" : "Profiili"
+      },
+      "tabSelected" : {
+         "string" : "Suosikit"
       },
       "tabSettings" : {
          "string" : "Asetukset"

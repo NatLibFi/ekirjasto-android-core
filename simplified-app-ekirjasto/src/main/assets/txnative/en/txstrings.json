@@ -663,6 +663,9 @@
       "bookReturned" : {
          "string" : "The book '%1$s' has been successfully returned"
       },
+      "bookSelected" : {
+         "string" : "The book '%1$s' has been added to favorites"
+      },
       "bookSessionExpiredButton" : {
          "string" : "Confirm"
       },
@@ -671,6 +674,9 @@
       },
       "bookSessionExpiredTitle" : {
          "string" : "Session expired!"
+      },
+      "bookUnselected" : {
+         "string" : "The book '%1$s' has been removed from favorites"
       },
       "bookmarkEnd" : {
          "string" : "At the end of the chapter."
@@ -744,8 +750,14 @@
       "catalogAccessibilityBookRevokeLoan" : {
          "string" : "Return loan"
       },
+      "catalogAccessibilityBookSelect" : {
+         "string" : "Add this book to your favorites"
+      },
       "catalogAccessibilityBookSync" : {
          "string" : "Sync"
+      },
+      "catalogAccessibilityBookUnselect" : {
+         "string" : "Remove this book from your favorites"
       },
       "catalogAccessibilityCoverAudiobook" : {
          "string" : "%1$s, audiobook, by %2$s"
@@ -848,6 +860,12 @@
       },
       "catalogBookPreviewBook" : {
          "string" : "Read Sample"
+      },
+      "catalogBookSelect" : {
+         "string" : "%1$s added to favorites"
+      },
+      "catalogBookUnselect" : {
+         "string" : "%1$s removed from favorites"
       },
       "catalogCancel" : {
          "string" : "Cancel"
@@ -1038,11 +1056,17 @@
       "emptyBookmarksMessage" : {
          "string" : "There are no bookmarks for this book"
       },
+      "emptyBooksNotLoggedIn" : {
+         "string" : "Sign in to see your books."
+      },
       "emptyHoldsNotLoggedIn" : {
          "string" : "Sign in to see your reservations."
       },
       "emptyLoansNotLoggedIn" : {
          "string" : "Sign in to see your books."
+      },
+      "emptySelectedNotLoggedIn" : {
+         "string" : "Sign in to see your favorites."
       },
       "errorDetailsTitle" : {
          "string" : "Error Details"
@@ -1098,6 +1122,15 @@
       "feedEmpty" : {
          "string" : "No results found."
       },
+      "feedFacetHolds" : {
+         "string" : "Holds"
+      },
+      "feedFacetLoans" : {
+         "string" : "Loans"
+      },
+      "feedFacetSelected" : {
+         "string" : "Favorites"
+      },
       "feedLoadingError" : {
          "string" : "An error occurred while loading the catalog."
       },
@@ -1130,6 +1163,9 @@
       },
       "feedWithGroupsEmptyLoaned" : {
          "string" : "Visit the Catalog to add books to My Books.\n Number of loans is limited to 5.\n Ensure good internet connection when downloading a book and make sure there is enough space on your device."
+      },
+      "feedWithGroupsEmptySelected" : {
+         "string" : "Visit the Catalog to add books to Favorites. Add a book by clicking the plus icon next to the book's name."
       },
       "fontSize" : {
          "string" : "Font size"
@@ -1919,6 +1955,9 @@
       },
       "tabProfile" : {
          "string" : "Profile"
+      },
+      "tabSelected" : {
+         "string" : "Favorites"
       },
       "tabSettings" : {
          "string" : "Settings"

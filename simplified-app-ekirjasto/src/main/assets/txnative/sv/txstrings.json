@@ -663,6 +663,9 @@
       "bookReturned" : {
          "string" : "Boken '%1$s' har returnerats"
       },
+      "bookSelected" : {
+         "string" : "Den här boken '%1$s' har blivt tillagd i favoriter"
+      },
       "bookSessionExpiredButton" : {
          "string" : "Beräfta"
       },
@@ -671,6 +674,9 @@
       },
       "bookSessionExpiredTitle" : {
          "string" : "Din session har gått ut!"
+      },
+      "bookUnselected" : {
+         "string" : "Den här boken '%1$s' har blivit borttagen från favoriter"
       },
       "bookmarkEnd" : {
          "string" : "I slutet av kapitlet."
@@ -744,8 +750,14 @@
       "catalogAccessibilityBookRevokeLoan" : {
          "string" : "Returnera nu"
       },
+      "catalogAccessibilityBookSelect" : {
+         "string" : "Lägg till den här boken till dina favoriter"
+      },
       "catalogAccessibilityBookSync" : {
          "string" : "Synkronisera"
+      },
+      "catalogAccessibilityBookUnselect" : {
+         "string" : "Ta bort den här boken från dina favoriter"
       },
       "catalogAccessibilityCoverAudiobook" : {
          "string" : "%1$s, ljudbok, av %2$s"
@@ -848,6 +860,12 @@
       },
       "catalogBookPreviewBook" : {
          "string" : "Läs utdrag"
+      },
+      "catalogBookSelect" : {
+         "string" : "%1$s blev tillagd i favoriter"
+      },
+      "catalogBookUnselect" : {
+         "string" : "%1$s blev borttagen från favoriter"
       },
       "catalogCancel" : {
          "string" : "Ångra"
@@ -1038,11 +1056,17 @@
       "emptyBookmarksMessage" : {
          "string" : "Det finns inga bokmärken för denna bok"
       },
+      "emptyBooksNotLoggedIn" : {
+         "string" : "Logga in för att se dina böcker."
+      },
       "emptyHoldsNotLoggedIn" : {
          "string" : "Logga in för att se dina bokningar."
       },
       "emptyLoansNotLoggedIn" : {
          "string" : "Skriv in dig för att se dina böcker."
+      },
+      "emptySelectedNotLoggedIn" : {
+         "string" : "Logga in för att se dina favoriter."
       },
       "errorDetailsTitle" : {
          "string" : "Felinformation"
@@ -1098,6 +1122,15 @@
       "feedEmpty" : {
          "string" : "Inga resultat hittades."
       },
+      "feedFacetHolds" : {
+         "string" : "Reserveringar"
+      },
+      "feedFacetLoans" : {
+         "string" : "Lån"
+      },
+      "feedFacetSelected" : {
+         "string" : "Favoriter"
+      },
       "feedLoadingError" : {
          "string" : "Det inträffade ett fel när katalogen laddades."
       },
@@ -1130,6 +1163,9 @@
       },
       "feedWithGroupsEmptyLoaned" : {
          "string" : "Besök katalogen för att lägga till böcker i Mina lån."
+      },
+      "feedWithGroupsEmptySelected" : {
+         "string" : "Gå till Katalogen för att lägga till böcker i Favoriter. Lägg till en bok genom att klicka på plus ikonen bredvid bokens namn."
       },
       "fontSize" : {
          "string" : "Teckenstorlek"
@@ -1919,6 +1955,9 @@
       },
       "tabProfile" : {
          "string" : "Profil"
+      },
+      "tabSelected" : {
+         "string" : "Favoriter"
       },
       "tabSettings" : {
          "string" : "Inställningar"
