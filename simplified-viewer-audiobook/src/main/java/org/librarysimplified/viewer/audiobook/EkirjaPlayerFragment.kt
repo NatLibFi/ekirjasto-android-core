@@ -1360,8 +1360,13 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
         ).minus(lastStartedPlayerPosition
         ))))
 
-    //How much of book is remaining
-    val bookRemaining = getCurrentAudiobookRemainingDuration(this.playerPositionCurrentSpine!!).minus(currentChapterPassed)
+    //How much of book is remaining, if no current player position, return false
+    var bookRemaining = 0L
+    if (this.playerPositionCurrentSpine != null){
+      bookRemaining = getCurrentAudiobookRemainingDuration(this.playerPositionCurrentSpine!!).minus(currentChapterPassed)
+    } else {
+      return false
+    }
 
     // Return true if the difference is less than 30 seconds,
     // which indicates the need to jump to the beginning of the book
