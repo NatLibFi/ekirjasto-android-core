@@ -151,7 +151,14 @@ class MagazinesViewModel(
           logger.debug("Try refreshing accessToken")
           val account = profilesController.profileCurrent().mostRecentAccount()
           val authenticationDescription = account.provider.authentication as AccountProviderAuthenticationDescription.Ekirjasto
-          val credentials = account.loginState.credentials as AccountAuthenticationCredentials.Ekirjasto
+          val credentials = account.loginState.credentials as AccountAuthenticationCredentials.Ekirjasto?
+          //if we are not logged in or are in any other state that comes with null credentials
+          //Mark request as failed and return
+          if (credentials == null) {
+            logger.debug("No credentials, cancel refresh")
+            onTokenResult(null)
+            return
+          }
           val accessToken = credentials.accessToken
 
           //Launch accessToken refresh
