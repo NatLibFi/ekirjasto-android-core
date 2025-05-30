@@ -730,7 +730,10 @@ class ProfileAccountLoginTask(
       }
 
       is AccountAuthenticationCredentials.Ekirjasto -> {
-        currentCredentials.copy(annotationsURI = patronProfile.annotationsURI)
+        currentCredentials.copy(
+          annotationsURI = patronProfile.annotationsURI,
+          deviceRegistrationURI = patronProfile.deviceRegistrationURI
+        )
       }
     }
   }
