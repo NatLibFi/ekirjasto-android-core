@@ -1,5 +1,4 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.3.0
-- Lade till funktion för att lägga till en bok i favoriter
+1.3.2
 - Bugfixar
