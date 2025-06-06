@@ -1153,7 +1153,7 @@
          "string" : "Böcker"
       },
       "feedTitleCatalog" : {
-         "string" : "Bläddra bland böcker"
+         "string" : "Bläddra böcker"
       },
       "feedTitleHolds" : {
          "string" : "Reservationer"
@@ -1942,10 +1942,10 @@
          "string" : "Fortsätt utan att logga in"
       },
       "tabBooks" : {
-         "string" : "Mina lån"
+         "string" : "Mina Böcker"
       },
       "tabCatalog" : {
-         "string" : "Bläddra bland böcker"
+         "string" : "Bläddra böcker"
       },
       "tabHolds" : {
          "string" : "Reservationer"
