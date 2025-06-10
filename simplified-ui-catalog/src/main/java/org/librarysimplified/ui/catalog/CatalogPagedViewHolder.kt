@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.RecyclerView
@@ -66,6 +67,8 @@ class CatalogPagedViewHolder(
   private val progress =
     this.parent.findViewById<ViewGroup>(R.id.bookCellInProgress)!!
 
+  private val idleWindow =
+    this.parent.findViewById<ConstraintLayout>(R.id.IdleBookWindow)!!
   private val idleCover =
     this.parent.findViewById<ImageView>(R.id.bookCellIdleCover)!!
   private val idleProgress =
@@ -156,6 +159,8 @@ class CatalogPagedViewHolder(
         context.getString(R.string.catalogBookFormatPDF)
       null -> ""
     }
+    //Add audio description
+    this.idleWindow.contentDescription = CatalogBookAccessibilityStrings.coverDescription(idleWindow.resources, item)
     //If there is a selected date, the book is selected
     if (book.entry.selected is Some<DateTime>) {
       //Set the drawable as the "checked" version
