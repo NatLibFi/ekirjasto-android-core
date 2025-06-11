@@ -41,7 +41,10 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
     )
 
   override val licenses: DocumentConfiguration? =
-    null
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("file:///android_asset/software-licenses.html")
+    )
 
   override val instructionsFI: DocumentConfiguration? =
     DocumentConfiguration(
