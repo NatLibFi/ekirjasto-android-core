@@ -516,12 +516,14 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       this.metadata.addView(row)
     }
 
+    /* Hide updated info for now, as it does not show what we want it to show
     this.run {
       val (row, rowKey, rowVal) = this.bookInfoViewOf()
       rowKey.text = this.getString(R.string.catalogMetaUpdatedDate)
       rowVal.text = this.dateTimeFormatter.print(entry.updated)
       this.metadata.addView(row)
     }
+     */
 
     val duration = entry.duration
     if (duration.isSome) {
@@ -529,6 +531,48 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       val (row, rowKey, rowVal) = this.bookInfoViewOf()
       rowKey.text = this.getString(R.string.catalogMetaDuration)
       rowVal.text = formatDuration(durationValue)
+      this.metadata.addView(row)
+    }
+
+    val accessibilityFeatures = null //later entry.accessibilityFeatures
+    if (accessibilityFeatures != null) {
+      val accessibilityFeaturesValue = (accessibilityFeatures as Some<String>).get()
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaAccessibilityFeatures)
+      rowVal.text = "Value"
+      this.metadata.addView(row)
+    } else {
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaAccessibilityFeatures)
+      rowVal.text = this.getString(R.string.catalogMetaAccessibilityNotAvailable)
+      this.metadata.addView(row)
+    }
+
+    val accessMode = null //later entry.accessMode
+    if (accessMode != null) {
+      val accessModeValue = (accessMode as Some<String>).get()
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaAccessMode)
+      rowVal.text = "Value"
+      this.metadata.addView(row)
+    } else {
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaAccessMode)
+      rowVal.text = this.getString(R.string.catalogMetaAccessibilityNotAvailable)
+      this.metadata.addView(row)
+    }
+
+    val accessibilitySummary = null //later entry.accessibilitySummary
+    if (accessibilitySummary != null) {
+      val accessibilitySummaryValue = (accessibilitySummary as Some<String>).get()
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaAccessibilitySummary)
+      rowVal.text = "Value"
+      this.metadata.addView(row)
+    } else {
+      val (row, rowKey, rowVal) = this.bookInfoViewOf()
+      rowKey.text = this.getString(R.string.catalogMetaAccessibilitySummary)
+      rowVal.text = this.getString(R.string.catalogMetaAccessibilityNotAvailable)
       this.metadata.addView(row)
     }
   }
