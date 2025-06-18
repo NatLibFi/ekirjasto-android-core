@@ -903,13 +903,15 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     group: List<FeedFacet>
   ) {
     val choices = group.sortedBy { it.title }
-    val names = choices.map { it.title }.toTypedArray()
     val checkedItem = choices.indexOfFirst { it.isActive }
 
     // Build the dialog
     val alertBuilder = MaterialAlertDialogBuilder(this.requireContext())
     alertBuilder.setTitle(groupName)
-    alertBuilder.setSingleChoiceItems(names, checkedItem) { dialog, checked ->
+
+    //Get adaptor to add the contentDescriptions to the choices
+    val adapter = CatalogFacetAdapter(this.requireContext(), groupName, choices)
+    alertBuilder.setSingleChoiceItems(adapter, checkedItem) { dialog, checked ->
       val selected = choices[checked]
       this.logger.debug("selected facet: {}", selected)
       this.viewModel.openFacet(selected)
