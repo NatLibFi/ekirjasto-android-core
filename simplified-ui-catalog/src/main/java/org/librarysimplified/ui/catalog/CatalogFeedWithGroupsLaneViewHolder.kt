@@ -23,6 +23,8 @@ class CatalogFeedWithGroupsLaneViewHolder(
     this.parent.findViewById<View>(R.id.feedLaneTitleContainer)
   private val title =
     this.parent.findViewById<TextView>(R.id.feedLaneTitle)
+  private val more =
+    this.parent.findViewById<TextView>(R.id.feedLaneMore)
   private val scrollView =
     this.parent.findViewById<RecyclerView>(R.id.feedLaneCoversScroll)
 
@@ -42,10 +44,14 @@ class CatalogFeedWithGroupsLaneViewHolder(
 
   fun bindTo(group: FeedGroup) {
     this.title.text = group.groupTitle
-    this.titleContainer.setOnClickListener {
+    this.title.contentDescription = parent.context.getString(R.string.catalogAccessibilityLaneName, group.groupTitle)
+    this.title.setOnClickListener {
       this.onFeedSelected.invoke(group.groupTitle, group.groupURI)
     }
-
+    this.more.contentDescription = parent.context.getString(R.string.catalogAccessibilityLaneMore, group.groupTitle)
+    this.more.setOnClickListener{
+      this.onFeedSelected.invoke(group.groupTitle, group.groupURI)
+    }
     /*
      * If the group is empty, there isn't much we can do.
      */

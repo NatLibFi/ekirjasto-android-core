@@ -33,6 +33,7 @@
 
     <TextView
         style="@style/MoreTextStyle"
+        android:id="@+id/feedLaneMore"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginEnd="0dp"
