@@ -690,6 +690,24 @@
       "bootFailedGeneric" : {
          "string" : "Havaitsimme ongelman. Tarkista internetyhteys tai yritä uudelleen sulkemalla sovellus ja avaamalla se uudelleen."
       },
+      "bootPermissionsGiven" : {
+         "string" : "Ilmoitukset sallittu"
+      },
+      "bootPermissionsMessage" : {
+         "string" : "E-kirjastosovellus tarvitsee luvan lähettää sinulle ilmoituksia erääntyvistä lainoista ja saapuneista varauksista. \n\nSalli ilmoitukset laitteen asetuksissa. Voit muuttaa valintaasi myöhemmin."
+      },
+      "bootPermissionsNeutralButton" : {
+         "string" : "Ei kiitos"
+      },
+      "bootPermissionsNotGiven" : {
+         "string" : "Ilmoituksia ei ole sallittu. Voit sallia ilmoitukset laitteen asetuksissa."
+      },
+      "bootPermissionsPositiveButton" : {
+         "string" : "OK"
+      },
+      "bootPermissionsTitle" : {
+         "string" : "Pysy ajan tasalla lainoistasi ja varauksistasi ilmoitusten avulla"
+      },
       "buttonFontSize" : {
          "string" : "Fonttikoko"
       },
@@ -924,6 +942,18 @@
       "catalogLoginRequired" : {
          "string" : "Jatka kirjautumalla sisään."
       },
+      "catalogMetaAccessMode" : {
+         "string" : "Saavutettavuus"
+      },
+      "catalogMetaAccessibilityFeatures" : {
+         "string" : "Saavutettavuusominaisuudet"
+      },
+      "catalogMetaAccessibilityNotAvailable" : {
+         "string" : " Ei vielä saatavilla"
+      },
+      "catalogMetaAccessibilitySummary" : {
+         "string" : "Saavutettavuusyhteenveto"
+      },
       "catalogMetaCategories" : {
          "string" : "Luokat"
       },
@@ -1016,6 +1046,9 @@
       },
       "contentDescriptionLogo" : {
          "string" : "Palaa näkymään Selaa"
+      },
+      "contentDescriptionSearch" : {
+         "string" : ""
       },
       "contentDescriptionSkipButton" : {
          "string" : "Ohita-painike"
@@ -1162,7 +1195,7 @@
          "string" : "Jos sinulla on varauksia, ne näytetään täällä. Tarkista ajoittain onko varauksesi ladattavissa.\nVarauksia saa olla enintään 5."
       },
       "feedWithGroupsEmptyLoaned" : {
-         "string" : "Lainauksesi näytetään täällä.\nLainauksia voi olla enintään 5 kappaletta.\nVarmista riittävä internetyhteys ladatessasi kirjoja sekä tarkista onko puhelimessasi riittävästi tilaa."
+         "string" : "Sinulla ei ole lainoja. \nLainoja voi olla enintään 5.\nVarmista riittävä internetyhteys, kun lataat kirjaa. Varmista myös, että laitteella on riittävästi muistitilaa."
       },
       "feedWithGroupsEmptySelected" : {
          "string" : "Sinulla ei ole vielä suosikkeja. Voit lisätä suosikkeja, kun selaat kirjoja. Lisää kirja suosikiksi napauttamalla kirjan nimen vieressä olevaa kuvaketta."

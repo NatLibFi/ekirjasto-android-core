@@ -690,6 +690,24 @@
       "bootFailedGeneric" : {
          "string" : "Vi upptäckte ett problem. Kontrollera din anslutning eller stäng och starta appen och försök på nytt."
       },
+      "bootPermissionsGiven" : {
+         "string" : "Tillstånd för aviseringar beviljad"
+      },
+      "bootPermissionsMessage" : {
+         "string" : "För att få aviseringar när en bok du väntar på blir tillgänglig eller när lånetiden för ett av dina lån går ut, E-biblioteket behöver tillåtelse för att skicka aviseringar.\n\nDu kan alltid ändra på din preferenser på din enhets inställningar."
+      },
+      "bootPermissionsNeutralButton" : {
+         "string" : "Nej tack"
+      },
+      "bootPermissionsNotGiven" : {
+         "string" : "Aviseringarna är avstängda. De kan slås på igen på enhetens inställningar."
+      },
+      "bootPermissionsPositiveButton" : {
+         "string" : "Ok"
+      },
+      "bootPermissionsTitle" : {
+         "string" : "Håll koll på dina böcker med aviseringar"
+      },
       "buttonFontSize" : {
          "string" : "Teckenstorlek"
       },
@@ -924,6 +942,18 @@
       "catalogLoginRequired" : {
          "string" : "Logga in för att fortsätta."
       },
+      "catalogMetaAccessMode" : {
+         "string" : " Tillgänglighet"
+      },
+      "catalogMetaAccessibilityFeatures" : {
+         "string" : " Tillgänglighetsfunktioner"
+      },
+      "catalogMetaAccessibilityNotAvailable" : {
+         "string" : "Inte tillgänglig ännu"
+      },
+      "catalogMetaAccessibilitySummary" : {
+         "string" : " Tillgänglighetssammanfattning"
+      },
       "catalogMetaCategories" : {
          "string" : "Kategorier"
       },
@@ -1016,6 +1046,9 @@
       },
       "contentDescriptionLogo" : {
          "string" : "Gå tillbaka för att bläddra i böcker"
+      },
+      "contentDescriptionSearch" : {
+         "string" : ""
       },
       "contentDescriptionSkipButton" : {
          "string" : "Hoppa över-knapp"

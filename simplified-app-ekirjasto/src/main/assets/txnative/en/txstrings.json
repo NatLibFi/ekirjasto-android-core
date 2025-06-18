@@ -690,6 +690,24 @@
       "bootFailedGeneric" : {
          "string" : "We found a problem. Please check your connection or close and reopen the app to retry."
       },
+      "bootPermissionsGiven" : {
+         "string" : "Permission for notifications granted"
+      },
+      "bootPermissionsMessage" : {
+         "string" : "To receive notifications when a book you're waiting for becomes available or when one of your loans is about to expire, E-kirjasto needs permission to send notifications.\n\nYou can always change your preferences in your device settings."
+      },
+      "bootPermissionsNeutralButton" : {
+         "string" : "No thanks"
+      },
+      "bootPermissionsNotGiven" : {
+         "string" : "Notifications are turned off. They can be turned back on in the device settings."
+      },
+      "bootPermissionsPositiveButton" : {
+         "string" : "OK"
+      },
+      "bootPermissionsTitle" : {
+         "string" : "Keep track of your books with notifications"
+      },
       "buttonFontSize" : {
          "string" : "Font size"
       },
@@ -924,6 +942,18 @@
       "catalogLoginRequired" : {
          "string" : "Please sign in to continue."
       },
+      "catalogMetaAccessMode" : {
+         "string" : "Access mode"
+      },
+      "catalogMetaAccessibilityFeatures" : {
+         "string" : "Accessibility features"
+      },
+      "catalogMetaAccessibilityNotAvailable" : {
+         "string" : "Not yet available"
+      },
+      "catalogMetaAccessibilitySummary" : {
+         "string" : "Accessibility summary"
+      },
       "catalogMetaCategories" : {
          "string" : "Categories"
       },
@@ -1012,10 +1042,13 @@
          "string" : "Back"
       },
       "contentDescriptionClose" : {
-         "string" : "Close search"
+         "string" : "Clear and close search"
       },
       "contentDescriptionLogo" : {
          "string" : "Return to browse books"
+      },
+      "contentDescriptionSearch" : {
+         "string" : "Open search"
       },
       "contentDescriptionSkipButton" : {
          "string" : "Skip button"
