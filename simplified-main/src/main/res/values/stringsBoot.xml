@@ -8,5 +8,5 @@
   <string name="bootPermissionsNeutralButton">No thanks</string>
   <string name="bootPermissionsPositiveButton">OK</string>
   <string name="bootPermissionsGiven">Permission for notifications granted</string>
-  <string name="bootPermissionsNotGiven">Notifications are turned off. They can be turned back on in the device settings.</string>
+  <string name="bootPermissionsNotGiven">Notifications are turned off. Turn them back on in the device settings.</string>
 </resources>

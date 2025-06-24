@@ -594,7 +594,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         ContextCompat.getDrawable(this.requireContext(), R.drawable.baseline_check_circle_24)
       )
       //Add the audio description
-      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookUnselect)
+      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookUnselect, this.parameters.feedEntry.feedEntry.title)
 
       this.selected.setOnClickListener {
         //Set the button click to unselect the book
@@ -606,7 +606,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         ContextCompat.getDrawable(this.requireContext(),R.drawable.round_add_circle_outline_24)
       )
       //Add audio description
-      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookSelect)
+      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookSelect, this.parameters.feedEntry.feedEntry.title)
       this.selected.setOnClickListener {
         //Add book to selected
         this.viewModel.selectBook(this.parameters.feedEntry)

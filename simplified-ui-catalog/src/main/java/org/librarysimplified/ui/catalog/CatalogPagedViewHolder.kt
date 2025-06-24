@@ -168,7 +168,7 @@ class CatalogPagedViewHolder(
         ContextCompat.getDrawable(context,R.drawable.baseline_check_circle_24)
       )
       //Set audio description to the button
-      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookUnselect)
+      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookUnselect, item.feedEntry.title)
       this.idleSelectedButton.setOnClickListener{
         //Remove book from selected
         this.listener.unselectBook(item)
@@ -179,7 +179,7 @@ class CatalogPagedViewHolder(
         ContextCompat.getDrawable(context,R.drawable.round_add_circle_outline_24)
       )
       //Add audio description
-      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookSelect)
+      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookSelect, item.feedEntry.title)
       this.idleSelectedButton.setOnClickListener {
         //Add book to selected
         this.listener.selectBook(item)

@@ -4,8 +4,8 @@
   <string name="catalogAccessibilityBookBorrow">Get</string>
   <string name="catalogAccessibilityBookDelete">Delete</string>
   <string name="catalogAccessibilityBookDownload">Download</string>
-  <string name="catalogAccessibilityBookSelect">Add this book to your favorites</string>
-  <string name="catalogAccessibilityBookUnselect">Remove this book from your favorites</string>
+  <string name="catalogAccessibilityBookSelect">Add %1$s to favorites</string>
+  <string name="catalogAccessibilityBookUnselect">Remove %1$s from favorites</string>
   <string name="catalogAccessibilityBookDownloadCancel">Cancel download</string>
   <string name="catalogAccessibilityBookErrorDetails">Details</string>
   <string name="catalogAccessibilityBookErrorDismiss">Dismiss</string>
