@@ -99,6 +99,7 @@
   <string name="catalogAccessibilityLane">%1$s lane</string>
   <string name="catalogAccessibilityLaneMore">Show more of category %1$s.</string>
   <string name="catalogAccessibilityFacet">Activate to choose %1$s as %2$s</string>
+  <string name="catalogDetailsAccessibilityMore">Activate to show more of book description</string>
   <string name="catalogDurationFormat">%1$s hours, %2$s minutes</string>
   <string name="catalogDetailsMore">Read more</string>
   <string name="catalogBookSelect">%1$s added to favorites</string>

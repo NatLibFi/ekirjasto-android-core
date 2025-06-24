@@ -202,6 +202,7 @@
             android:layout_gravity="end"
             android:gravity="center_vertical|right"
             android:layout_marginEnd="16dp"
+            android:contentDescription="@string/catalogDetailsAccessibilityMore"
             android:text="@string/catalogDetailsMore" />
 
         <View
