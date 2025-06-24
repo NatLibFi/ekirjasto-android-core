@@ -95,9 +95,9 @@
   <string name="catalogReserve">Reserve</string>
   <string name="catalogRetry">Retry</string>
   <string name="catalogReturn">Return</string>
-  <string name="catalogSearch">Search</string>
-  <string name="catalogAccessibilityLaneName">%1$s. Activate to show more books in category.</string>
-  <string name="catalogAccessibilityLaneMore">Show more books in category %1$s.</string>
+  <string name="catalogSearch">Search for book or author</string>
+  <string name="catalogAccessibilityLane">%1$s lane</string>
+  <string name="catalogAccessibilityLaneMore">Show more of category %1$s.</string>
   <string name="catalogAccessibilityFacet">Activate to choose %1$s as %2$s</string>
   <string name="catalogDurationFormat">%1$s hours, %2$s minutes</string>
   <string name="catalogDetailsMore">Read more</string>
