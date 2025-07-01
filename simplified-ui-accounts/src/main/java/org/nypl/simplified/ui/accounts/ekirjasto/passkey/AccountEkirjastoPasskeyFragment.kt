@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.credentials.CredentialManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
 import org.nypl.simplified.buildconfig.api.BuildConfigurationServiceType
@@ -120,7 +121,7 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
   private fun postPasskeyFailed(result: TaskResult.Failure<PasskeyAuth>) {
     val msg = if(this.viewModel.isRegistering) {R.string.errorPasskeyRegisterFailed} else {R.string.errorPasskeyLoginFailed}
     val newDialog =
-      AlertDialog.Builder(this.requireActivity())
+      MaterialAlertDialogBuilder(this.requireContext())
         .setTitle(R.string.errorLoginFailed)
         .setMessage(msg)
         .setPositiveButton(R.string.accountsDetails) { dialog, _ ->

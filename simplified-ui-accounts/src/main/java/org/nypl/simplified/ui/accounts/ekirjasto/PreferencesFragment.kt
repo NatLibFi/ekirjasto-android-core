@@ -115,7 +115,7 @@ class PreferencesFragment : Fragment(R.layout.account_resources) {
   // Show a popup asking if user wants to set chosen language
   private fun popUp (language: String) {
     logger.debug("Changing language to {}", language)
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    val builder = MaterialAlertDialogBuilder(this.requireContext())
     builder
       .setMessage(R.string.restartPopupMessage)
       .setTitle(R.string.restartPopupTitle)

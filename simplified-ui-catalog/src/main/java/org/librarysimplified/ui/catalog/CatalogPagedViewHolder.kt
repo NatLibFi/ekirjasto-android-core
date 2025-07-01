@@ -342,7 +342,7 @@ class CatalogPagedViewHolder(
     logger.debug("Showing 'Please login' popup")
     //Ensure only one popup is shown at a time
     popUpShown = true
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    val builder = MaterialAlertDialogBuilder(this.context)
     builder
       .setMessage(R.string.bookSessionExpiredMessage)
       .setTitle(R.string.bookSessionExpiredTitle)
@@ -603,7 +603,7 @@ class CatalogPagedViewHolder(
     //Mark that a popup is currently shown
     popUpShown = true
     logger.debug("Showing book return popup")
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    val builder = MaterialAlertDialogBuilder(this.context)
     builder
       .setTitle(context.getString(R.string.bookConfirmReturnTitle, book.entry.title))
       .setMessage(R.string.bookConfirmReturnMessage)
@@ -629,7 +629,7 @@ class CatalogPagedViewHolder(
     //Mark that a popup is currently shown
     popUpShown = true
     logger.debug("Showing revoke hold popup")
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    val builder = MaterialAlertDialogBuilder(this.context)
     builder
       .setTitle(context.getString(R.string.bookConfirmRevokeTitle, book.entry.title))
       .setMessage(R.string.bookConfirmRevokeMessage)
@@ -784,7 +784,7 @@ class CatalogPagedViewHolder(
     popUpShown = true
     logger.debug("Showing size info")
     //Show a popup with the device space and needed space
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    val builder = MaterialAlertDialogBuilder(this.context)
     builder
       .setMessage(this.context.getString(
         R.string.bookNotEnoughSpaceMessage,

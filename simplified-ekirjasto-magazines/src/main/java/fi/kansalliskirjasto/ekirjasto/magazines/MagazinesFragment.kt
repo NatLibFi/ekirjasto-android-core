@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fi.ekirjasto.magazines.R
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import org.librarysimplified.http.api.LSHTTPClientType
@@ -341,7 +342,7 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
    */
   private fun onLogInNeeded() {
     logger.debug("Showing 'Please login' popup")
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    val builder = MaterialAlertDialogBuilder(this.requireContext())
     builder
       .setMessage(R.string.magazinesSessionExpiredMessage)
       .setTitle(R.string.magazinesSessionExpiredTitle)
