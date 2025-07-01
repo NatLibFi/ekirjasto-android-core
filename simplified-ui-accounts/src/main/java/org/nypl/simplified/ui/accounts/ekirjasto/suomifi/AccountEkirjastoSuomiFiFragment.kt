@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.webkit.WebView
+import androidx.appcompat.app.AlertDialog
 import android.widget.ProgressBar
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -158,7 +159,7 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
   }
 
   private fun onSuomiFiEventFailed(event: AccountEkirjastoSuomiFiInternalEvent.Failed) {
-    val newDialog =
+    val newDialog : AlertDialog =
       MaterialAlertDialogBuilder(this.requireContext())
         .setTitle(R.string.errorLoginFailed)
         .setMessage(R.string.errorSuomiFiLoginFailed)
