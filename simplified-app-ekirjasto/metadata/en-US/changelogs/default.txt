@@ -1,4 +1,5 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
-1.3.2
+1.3.4
+- UI updates
 - Bug fixes
