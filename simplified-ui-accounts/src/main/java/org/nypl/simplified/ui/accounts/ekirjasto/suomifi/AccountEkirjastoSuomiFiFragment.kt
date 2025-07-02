@@ -160,7 +160,7 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
 
   private fun onSuomiFiEventFailed(event: AccountEkirjastoSuomiFiInternalEvent.Failed) {
     val newDialog : AlertDialog =
-      MaterialAlertDialogBuilder(this.requireContext())
+      MaterialAlertDialogBuilder(this.requireActivity())
         .setTitle(R.string.errorLoginFailed)
         .setMessage(R.string.errorSuomiFiLoginFailed)
         .setPositiveButton(R.string.accountsDetails) { dialog, _ ->
