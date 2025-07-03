@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.RecyclerView
@@ -66,6 +67,8 @@ class CatalogPagedViewHolder(
   private val progress =
     this.parent.findViewById<ViewGroup>(R.id.bookCellInProgress)!!
 
+  private val idleWindow =
+    this.parent.findViewById<ConstraintLayout>(R.id.IdleBookWindow)!!
   private val idleCover =
     this.parent.findViewById<ImageView>(R.id.bookCellIdleCover)!!
   private val idleProgress =
@@ -156,6 +159,8 @@ class CatalogPagedViewHolder(
         context.getString(R.string.catalogBookFormatPDF)
       null -> ""
     }
+    //Add audio description
+    this.idleWindow.contentDescription = CatalogBookAccessibilityStrings.coverDescription(idleWindow.resources, item)
     //If there is a selected date, the book is selected
     if (book.entry.selected is Some<DateTime>) {
       //Set the drawable as the "checked" version
@@ -163,7 +168,7 @@ class CatalogPagedViewHolder(
         ContextCompat.getDrawable(context,R.drawable.baseline_check_circle_24)
       )
       //Set audio description to the button
-      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookUnselect)
+      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookUnselect, item.feedEntry.title)
       this.idleSelectedButton.setOnClickListener{
         //Remove book from selected
         this.listener.unselectBook(item)
@@ -174,7 +179,7 @@ class CatalogPagedViewHolder(
         ContextCompat.getDrawable(context,R.drawable.round_add_circle_outline_24)
       )
       //Add audio description
-      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookSelect)
+      this.idleSelectedButton.contentDescription = context.getString(R.string.catalogAccessibilityBookSelect, item.feedEntry.title)
       this.idleSelectedButton.setOnClickListener {
         //Add book to selected
         this.listener.selectBook(item)
@@ -337,7 +342,7 @@ class CatalogPagedViewHolder(
     logger.debug("Showing 'Please login' popup")
     //Ensure only one popup is shown at a time
     popUpShown = true
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    val builder = MaterialAlertDialogBuilder(this.context)
     builder
       .setMessage(R.string.bookSessionExpiredMessage)
       .setTitle(R.string.bookSessionExpiredTitle)
@@ -598,7 +603,7 @@ class CatalogPagedViewHolder(
     //Mark that a popup is currently shown
     popUpShown = true
     logger.debug("Showing book return popup")
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    val builder = MaterialAlertDialogBuilder(this.context)
     builder
       .setTitle(context.getString(R.string.bookConfirmReturnTitle, book.entry.title))
       .setMessage(R.string.bookConfirmReturnMessage)
@@ -624,7 +629,7 @@ class CatalogPagedViewHolder(
     //Mark that a popup is currently shown
     popUpShown = true
     logger.debug("Showing revoke hold popup")
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    val builder = MaterialAlertDialogBuilder(this.context)
     builder
       .setTitle(context.getString(R.string.bookConfirmRevokeTitle, book.entry.title))
       .setMessage(R.string.bookConfirmRevokeMessage)
@@ -779,7 +784,7 @@ class CatalogPagedViewHolder(
     popUpShown = true
     logger.debug("Showing size info")
     //Show a popup with the device space and needed space
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+    val builder = MaterialAlertDialogBuilder(this.context)
     builder
       .setMessage(this.context.getString(
         R.string.bookNotEnoughSpaceMessage,

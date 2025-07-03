@@ -594,7 +594,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         ContextCompat.getDrawable(this.requireContext(), R.drawable.baseline_check_circle_24)
       )
       //Add the audio description
-      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookUnselect)
+      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookUnselect, this.parameters.feedEntry.feedEntry.title)
 
       this.selected.setOnClickListener {
         //Set the button click to unselect the book
@@ -606,7 +606,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         ContextCompat.getDrawable(this.requireContext(),R.drawable.round_add_circle_outline_24)
       )
       //Add audio description
-      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookSelect)
+      this.selected.contentDescription = getString(R.string.catalogAccessibilityBookSelect, this.parameters.feedEntry.feedEntry.title)
       this.selected.setOnClickListener {
         //Add book to selected
         this.viewModel.selectBook(this.parameters.feedEntry)
@@ -772,7 +772,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     logger.debug("Showing 'Please login' popup")
     //Ensure only one popup is shown at a time
     popUpShown = true
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    val builder = MaterialAlertDialogBuilder(this.requireContext())
     builder
       .setMessage(R.string.bookSessionExpiredMessage)
       .setTitle(R.string.bookSessionExpiredTitle)
@@ -1221,7 +1221,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     //Mark that a popup is currently shown
     popUpShown = true
     logger.debug("Showing 'Not enough space' popup")
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    val builder = MaterialAlertDialogBuilder(this.requireContext())
     builder
       .setMessage(getString(
         R.string.bookNotEnoughSpaceMessage,
@@ -1244,7 +1244,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     //Mark that a popup is currently shown
     popUpShown = true
     logger.debug("Showing loan revoke popup")
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    val builder = MaterialAlertDialogBuilder(this.requireContext())
     builder
       .setTitle(getString(R.string.bookConfirmReturnTitle, book.entry.title))
       .setMessage(R.string.bookConfirmReturnMessage)
@@ -1270,7 +1270,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     //Mark that a popup is currently shown
     popUpShown = true
     logger.debug("Showing revoke hold popup")
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    val builder = MaterialAlertDialogBuilder(this.requireContext())
     builder
       .setTitle(getString(R.string.bookConfirmRevokeTitle, book.entry.title))
       .setMessage(R.string.bookConfirmRevokeMessage)

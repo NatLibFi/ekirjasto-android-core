@@ -19,10 +19,14 @@ class CatalogFeedWithGroupsLaneViewHolder(
   private val onBookSelected: (FeedEntry.FeedEntryOPDS) -> Unit
 ) : RecyclerView.ViewHolder(parent) {
 
+  private val feedLaneContainer =
+    this.parent.findViewById<View>(R.id.feedLaneContainer)
   private val titleContainer =
     this.parent.findViewById<View>(R.id.feedLaneTitleContainer)
   private val title =
     this.parent.findViewById<TextView>(R.id.feedLaneTitle)
+  private val more =
+    this.parent.findViewById<TextView>(R.id.feedLaneMore)
   private val scrollView =
     this.parent.findViewById<RecyclerView>(R.id.feedLaneCoversScroll)
 
@@ -41,11 +45,15 @@ class CatalogFeedWithGroupsLaneViewHolder(
   }
 
   fun bindTo(group: FeedGroup) {
+    //Add audio description for the whole lane, title and books
+    this.feedLaneContainer.contentDescription = parent.context.getString(R.string.catalogAccessibilityLane, group.groupTitle)
     this.title.text = group.groupTitle
-    this.titleContainer.setOnClickListener {
+
+    //Add audio description for the more button
+    this.more.contentDescription = parent.context.getString(R.string.catalogAccessibilityLaneMore, group.groupTitle)
+    this.more.setOnClickListener{
       this.onFeedSelected.invoke(group.groupTitle, group.groupURI)
     }
-
     /*
      * If the group is empty, there isn't much we can do.
      */
@@ -54,6 +62,9 @@ class CatalogFeedWithGroupsLaneViewHolder(
       this.scrollView.adapter = null
       return
     }
+
+    //Set the group description for the lane as the group title
+    this.scrollView.contentDescription = group.groupTitle
 
     /*
      * Populate our feed with our book covers

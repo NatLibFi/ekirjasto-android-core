@@ -6,14 +6,15 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
+import android.widget.ProgressBar
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.disposables.CompositeDisposable
 import org.librarysimplified.ui.accounts.R
 import org.nypl.simplified.accounts.database.api.AccountType
@@ -158,8 +159,8 @@ class AccountEkirjastoSuomiFiFragment : Fragment(R.layout.account_ekirjastosuomi
   }
 
   private fun onSuomiFiEventFailed(event: AccountEkirjastoSuomiFiInternalEvent.Failed) {
-    val newDialog =
-      AlertDialog.Builder(this.requireActivity())
+    val newDialog : AlertDialog =
+      MaterialAlertDialogBuilder(this.requireActivity())
         .setTitle(R.string.errorLoginFailed)
         .setMessage(R.string.errorSuomiFiLoginFailed)
         .setPositiveButton(R.string.accountsDetails) { dialog, _ ->

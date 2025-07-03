@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import io.reactivex.disposables.CompositeDisposable
 import org.librarysimplified.documents.DocumentType
@@ -467,7 +468,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
    * Show a popup that informs user of logout and asks confirmation.
    */
   private fun confirmLogout() {
-    val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    val builder = MaterialAlertDialogBuilder(this.requireContext())
     builder
       .setTitle(R.string.logoutConfirmTitle)
       .setMessage(R.string.logoutConfirmMessage)
