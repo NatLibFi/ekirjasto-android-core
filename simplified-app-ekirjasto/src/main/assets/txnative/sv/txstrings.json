@@ -769,25 +769,25 @@
          "string" : "Returnera nu"
       },
       "catalogAccessibilityBookSelect" : {
-         "string" : "Lägg till den här boken till dina favoriter"
+         "string" : "Lägg %1$s till dina favoriter"
       },
       "catalogAccessibilityBookSync" : {
          "string" : "Synkronisera"
       },
       "catalogAccessibilityBookUnselect" : {
-         "string" : "Ta bort den här boken från dina favoriter"
+         "string" : "Ta bort %1$s från dina favoriter"
       },
       "catalogAccessibilityCoverAudiobook" : {
-         "string" : "%1$s, ljudbok, av %2$s"
+         "string" : "%1$s, ljudbok, av %2$s Aktivera för att visa boksidans detaljer"
       },
       "catalogAccessibilityCoverEpub" : {
-         "string" : "%1$s, e-bok, av %2$s"
+         "string" : "%1$s, e-bok, av %2$s Aktivera för att visa boksidans detaljer"
       },
       "catalogAccessibilityCoverPdf" : {
-         "string" : "%1$s, PDF, av %2$s"
+         "string" : "%1$s, PDF, av %2$s Aktivera för att visa boksidans detaljer"
       },
       "catalogAccessibilityCoverUnknownFormat" : {
-         "string" : "%1$s, av %2$s"
+         "string" : "%1$s, av %2$s Aktivera för att visa boksidans detaljer"
       },
       "catalogAccessibilityFacet" : {
          "string" : "Välj %1$s som val %2$s"
@@ -1033,7 +1033,7 @@
          "string" : "Returnera"
       },
       "catalogSearch" : {
-         "string" : "Sök"
+         "string" : "Sök efter bok eller författare"
       },
       "close_tutorial" : {
          "string" : "Stäng handledningen"
@@ -1054,7 +1054,7 @@
          "string" : "Tillbaka"
       },
       "contentDescriptionClose" : {
-         "string" : "Stäng sökning"
+         "string" : "Rensa sökning, om sökningen är rensad, stäng sökningen"
       },
       "contentDescriptionLogo" : {
          "string" : "Gå tillbaka för att bläddra i böcker"

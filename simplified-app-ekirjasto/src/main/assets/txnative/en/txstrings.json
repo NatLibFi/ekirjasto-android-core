@@ -1054,7 +1054,7 @@
          "string" : "Back"
       },
       "contentDescriptionClose" : {
-         "string" : "&gt;Clear search, if search is clear, close search"
+         "string" : "Clear search, if search is clear, close search"
       },
       "contentDescriptionLogo" : {
          "string" : "Return to browse books"
