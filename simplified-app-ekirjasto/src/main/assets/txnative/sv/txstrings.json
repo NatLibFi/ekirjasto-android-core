@@ -789,6 +789,15 @@
       "catalogAccessibilityCoverUnknownFormat" : {
          "string" : "%1$s, av %2$s"
       },
+      "catalogAccessibilityFacet" : {
+         "string" : "Välj %1$s som val %2$s"
+      },
+      "catalogAccessibilityLane" : {
+         "string" : "%1$s kategori"
+      },
+      "catalogAccessibilityLaneMore" : {
+         "string" : "Visa mer från kategorin %1$s."
+      },
       "catalogAccounts" : {
          "string" : "Välj en annan bibliotekskatalog..."
       },
@@ -902,6 +911,9 @@
       },
       "catalogDetails" : {
          "string" : "Information"
+      },
+      "catalogDetailsAccessibilityMore" : {
+         "string" : "Öppna bokens mer omfattande beskrivning"
       },
       "catalogDetailsMore" : {
          "string" : "Läs mer"
@@ -1048,7 +1060,7 @@
          "string" : "Gå tillbaka för att bläddra i böcker"
       },
       "contentDescriptionSearch" : {
-         "string" : ""
+         "string" : "Öppna sökning"
       },
       "contentDescriptionSkipButton" : {
          "string" : "Hoppa över-knapp"

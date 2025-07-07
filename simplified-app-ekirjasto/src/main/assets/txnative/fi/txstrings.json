@@ -789,6 +789,15 @@
       "catalogAccessibilityCoverUnknownFormat" : {
          "string" : "%1$s, tekijä %2$s"
       },
+      "catalogAccessibilityFacet" : {
+         "string" : "Valitse %1$s valinnaksi %2$s"
+      },
+      "catalogAccessibilityLane" : {
+         "string" : "%1$s kategoria"
+      },
+      "catalogAccessibilityLaneMore" : {
+         "string" : "Näytä lisää kategoriasta %1$s."
+      },
       "catalogAccounts" : {
          "string" : "Valitse toinen kirjaston luettelo…"
       },
@@ -902,6 +911,9 @@
       },
       "catalogDetails" : {
          "string" : "Tiedot"
+      },
+      "catalogDetailsAccessibilityMore" : {
+         "string" : "Avaa kirjan laajemmat kuvaustiedot"
       },
       "catalogDetailsMore" : {
          "string" : "Lue lisää"
@@ -1048,7 +1060,7 @@
          "string" : "Palaa näkymään Selaa"
       },
       "contentDescriptionSearch" : {
-         "string" : ""
+         "string" : "Avaa haku"
       },
       "contentDescriptionSkipButton" : {
          "string" : "Ohita-painike"
