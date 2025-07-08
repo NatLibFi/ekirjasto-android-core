@@ -700,7 +700,7 @@
          "string" : "No thanks"
       },
       "bootPermissionsNotGiven" : {
-         "string" : "Notifications are turned off. They can be turned back on in the device settings."
+         "string" : "Notifications are turned off. Turn them back on in the device settings."
       },
       "bootPermissionsPositiveButton" : {
          "string" : "OK"
@@ -769,25 +769,34 @@
          "string" : "Return loan"
       },
       "catalogAccessibilityBookSelect" : {
-         "string" : "Add this book to your favorites"
+         "string" : "Add %1$s to favorites"
       },
       "catalogAccessibilityBookSync" : {
          "string" : "Sync"
       },
       "catalogAccessibilityBookUnselect" : {
-         "string" : "Remove this book from your favorites"
+         "string" : "Remove %1$s from favorites"
       },
       "catalogAccessibilityCoverAudiobook" : {
-         "string" : "%1$s, audiobook, by %2$s"
+         "string" : "%1$s, audiobook, by %2$s. Activate to show book detail page."
       },
       "catalogAccessibilityCoverEpub" : {
-         "string" : "%1$s, ebook, by %2$s"
+         "string" : "%1$s, ebook, by %2$s. Activate to show book detail page."
       },
       "catalogAccessibilityCoverPdf" : {
-         "string" : "%1$s, pdf, by %2$s"
+         "string" : "%1$s, pdf, by %2$s. Activate to show book detail page."
       },
       "catalogAccessibilityCoverUnknownFormat" : {
-         "string" : "%1$s, by %2$s"
+         "string" : "%1$s, by %2$s. Activate to show book detail page."
+      },
+      "catalogAccessibilityFacet" : {
+         "string" : "Activate to choose %1$s as %2$s"
+      },
+      "catalogAccessibilityLane" : {
+         "string" : "%1$s lane"
+      },
+      "catalogAccessibilityLaneMore" : {
+         "string" : "Show more of category %1$s."
       },
       "catalogAccounts" : {
          "string" : "Choose another library catalog…"
@@ -902,6 +911,9 @@
       },
       "catalogDetails" : {
          "string" : "Details"
+      },
+      "catalogDetailsAccessibilityMore" : {
+         "string" : "Activate to show more of book description"
       },
       "catalogDetailsMore" : {
          "string" : "Read more"
@@ -1021,7 +1033,7 @@
          "string" : "Return"
       },
       "catalogSearch" : {
-         "string" : "Search"
+         "string" : "Search for book or author"
       },
       "close_tutorial" : {
          "string" : "Close tutorial"
@@ -1042,7 +1054,7 @@
          "string" : "Back"
       },
       "contentDescriptionClose" : {
-         "string" : "Clear and close search"
+         "string" : "Clear search, if search is clear, close search"
       },
       "contentDescriptionLogo" : {
          "string" : "Return to browse books"

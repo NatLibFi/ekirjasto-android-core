@@ -769,25 +769,34 @@
          "string" : "Palauta nyt"
       },
       "catalogAccessibilityBookSelect" : {
-         "string" : "Lisää tämä kirja suosikkeihisi"
+         "string" : "Lisää %1$s suosikkeihisi"
       },
       "catalogAccessibilityBookSync" : {
          "string" : "Synkronoi"
       },
       "catalogAccessibilityBookUnselect" : {
-         "string" : "Poista tämä kirja suosikeistasi"
+         "string" : "Poista %1$s suosikeistasi"
       },
       "catalogAccessibilityCoverAudiobook" : {
-         "string" : "%1$s, äänikirja, tekijä %2$s"
+         "string" : "%1$s, äänikirja, tekijä %2$s Avaa kirjan tiedot"
       },
       "catalogAccessibilityCoverEpub" : {
-         "string" : "%1$s, e-kirja, tekijä %2$s"
+         "string" : "%1$s, e-kirja, tekijä %2$s Avaa kirjan tiedot"
       },
       "catalogAccessibilityCoverPdf" : {
-         "string" : "%1$s, pdf, tekijä %2$s"
+         "string" : "%1$s, pdf, tekijä %2$s Avaa kirjan tiedot"
       },
       "catalogAccessibilityCoverUnknownFormat" : {
-         "string" : "%1$s, tekijä %2$s"
+         "string" : "%1$s, tekijä %2$s Avaa kirjan tiedot"
+      },
+      "catalogAccessibilityFacet" : {
+         "string" : "Valitse %1$s valinnaksi %2$s"
+      },
+      "catalogAccessibilityLane" : {
+         "string" : "%1$s kategoria"
+      },
+      "catalogAccessibilityLaneMore" : {
+         "string" : "Näytä lisää kategoriasta %1$s."
       },
       "catalogAccounts" : {
          "string" : "Valitse toinen kirjaston luettelo…"
@@ -902,6 +911,9 @@
       },
       "catalogDetails" : {
          "string" : "Tiedot"
+      },
+      "catalogDetailsAccessibilityMore" : {
+         "string" : "Avaa kirjan laajemmat kuvaustiedot"
       },
       "catalogDetailsMore" : {
          "string" : "Lue lisää"
@@ -1021,7 +1033,7 @@
          "string" : "Palauta"
       },
       "catalogSearch" : {
-         "string" : "Hae"
+         "string" : "Hae kirjan tai kirjailijan nimellä"
       },
       "close_tutorial" : {
          "string" : "Sulje ohjesivut"
@@ -1042,13 +1054,13 @@
          "string" : "Takaisin"
       },
       "contentDescriptionClose" : {
-         "string" : "Sulje haku"
+         "string" : "Tyhjennä haku, jos hakukenttä on tyhjä, sulje haku"
       },
       "contentDescriptionLogo" : {
          "string" : "Palaa näkymään Selaa"
       },
       "contentDescriptionSearch" : {
-         "string" : ""
+         "string" : "Avaa haku"
       },
       "contentDescriptionSkipButton" : {
          "string" : "Ohita-painike"

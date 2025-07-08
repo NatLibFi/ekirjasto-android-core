@@ -1,5 +1,5 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.3.4
+1.3.6
 - UI-uppdateringar
 - Bugfixar
