@@ -4,12 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.transifex.txnative.TxNative
@@ -122,6 +127,7 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
 
   private lateinit var account: AccountType
   private lateinit var parameters: Reader2ActivityParameters
+  private lateinit var fragmentHostView: View
   private lateinit var readerFragment: Fragment
   private lateinit var readerModel: SR2ReaderViewModel
   private lateinit var searchFragment: Fragment
@@ -181,6 +187,21 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
       SR2ReaderFragmentFactory(readerParameters)
 
     super.onCreate(savedInstanceState)
+
+    // Find the fragment host view
+    this.fragmentHostView = findViewById(R.id.reader2FragmentHost)
+
+    // Apply window insets to the fragment host view
+    ViewCompat.setOnApplyWindowInsetsListener(fragmentHostView) { view, insets ->
+      val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = systemBarsInsets.top
+        leftMargin = systemBarsInsets.left
+        rightMargin = systemBarsInsets.right
+        bottomMargin = systemBarsInsets.bottom
+      }
+      WindowInsetsCompat.CONSUMED
+    }
 
     this.readerModel =
       ViewModelProvider(this, SR2ReaderViewModelFactory(readerParameters))

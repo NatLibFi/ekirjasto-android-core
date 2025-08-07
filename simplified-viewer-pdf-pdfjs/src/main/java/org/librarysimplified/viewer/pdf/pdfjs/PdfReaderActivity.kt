@@ -7,11 +7,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.common.util.concurrent.MoreExecutors
 import kotlinx.coroutines.Dispatchers
@@ -75,6 +79,7 @@ class PdfReaderActivity : AppCompatActivity() {
     services.requireService(ProfilesControllerType::class.java)
 
   private lateinit var uiThread: UIThreadServiceType
+  private lateinit var pdfReaderHostView: View
   private lateinit var pdfReaderContainer: FrameLayout
   private lateinit var accountId: AccountID
   private lateinit var bookID: BookID
@@ -93,6 +98,21 @@ class PdfReaderActivity : AppCompatActivity() {
 
     setContentView(R.layout.pdfjs_reader)
     createToolbar(params.documentTitle)
+
+    // Get the reader host
+    this.pdfReaderHostView = findViewById(R.id.pdf_reader)
+
+    // Apply window insets to the reader host
+    ViewCompat.setOnApplyWindowInsetsListener(pdfReaderHostView) { view, insets ->
+      val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = insets.top
+        leftMargin = insets.left
+        rightMargin = insets.right
+        bottomMargin = insets.bottom
+      }
+      WindowInsetsCompat.CONSUMED
+    }
 
     this.loadingBar = findViewById(R.id.pdf_loading_progress)
     this.accountId = params.accountId

@@ -28,6 +28,9 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.joda.time.Duration
@@ -122,6 +125,7 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   private lateinit var playerWaiting: TextView
   private lateinit var sleepTimer: PlayerSleepTimerType
   private lateinit var timeStrings: PlayerTimeStrings.SpokenTranslations
+  private lateinit var playerView: View
   private lateinit var toolbar: Toolbar
   private lateinit var bottomToolbar: BottomNavigationView
 
@@ -428,6 +432,8 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
     backbutton.setOnClickListener{
       requireActivity().finish()
     }
+    val backbuttonText:TextView = this.toolbar.findViewById(org.librarysimplified.viewer.audiobook.R.id.backText)
+    backbuttonText.text = this.resources.getString(R.string.audiobook_accessibility_navigation_back)
     this.menuPlaybackRate = this.bottomToolbar.menu.findItem(R.id.player_menu_playback_rate)
 
     /*
@@ -521,6 +527,23 @@ class EkirjaPlayerFragment : Fragment(), AudioManager.OnAudioFocusChangeListener
   override fun onViewCreated(view: View, state: Bundle?) {
     this.log.debug("onViewCreated")
     super.onViewCreated(view, state)
+
+    this.playerView = view.findViewById(R.id.player_view)
+    //Add insets so we don't have overlap with system bars
+    ViewCompat.setOnApplyWindowInsetsListener(playerView) { view, insets ->
+      val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      // Apply the insets as a margin to the view
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = insets.top
+        leftMargin = insets.left
+        rightMargin = insets.right
+        bottomMargin = insets.bottom
+      }
+
+      // Return CONSUMED since we don't want the window insets to keep passing
+      // down to descendant views.
+      WindowInsetsCompat.CONSUMED
+    }
 
     requireActivity().registerReceiver(playerMediaReceiver,
       IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
