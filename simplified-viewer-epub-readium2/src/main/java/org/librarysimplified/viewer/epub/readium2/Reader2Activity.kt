@@ -193,12 +193,12 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
 
     // Apply window insets to the fragment host view
     ViewCompat.setOnApplyWindowInsetsListener(fragmentHostView) { view, insets ->
-      val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      val insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
       view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        topMargin = systemBarsInsets.top
-        leftMargin = systemBarsInsets.left
-        rightMargin = systemBarsInsets.right
-        bottomMargin = systemBarsInsets.bottom
+        topMargin = insets.top
+        leftMargin = insets.left
+        rightMargin = insets.right
+        bottomMargin = insets.bottom
       }
       WindowInsetsCompat.CONSUMED
     }
