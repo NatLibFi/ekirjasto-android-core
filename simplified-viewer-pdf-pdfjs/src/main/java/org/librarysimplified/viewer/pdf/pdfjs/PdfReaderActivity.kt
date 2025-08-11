@@ -12,6 +12,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -92,6 +93,7 @@ class PdfReaderActivity : AppCompatActivity() {
   private var documentPageIndex: Int = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
     val params = intent?.getSerializableExtra(PARAMS_ID) as PdfReaderParameters

@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -175,6 +176,7 @@ class AudioBookPlayerActivity :
   private var destroying: Boolean = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
     this.log.debug("onCreate")
     super.onCreate(null)
 

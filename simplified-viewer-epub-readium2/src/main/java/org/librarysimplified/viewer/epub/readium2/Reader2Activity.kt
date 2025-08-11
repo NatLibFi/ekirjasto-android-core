@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AppCompatActivity
@@ -146,6 +147,7 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
     this.logger.debug(
       "loaded {} content protection providers",
       this.contentProtectionProviders.size
