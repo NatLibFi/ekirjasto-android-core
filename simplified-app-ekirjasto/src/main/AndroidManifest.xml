@@ -96,6 +96,7 @@
       android:screenOrientation="fullUser"
       android:exported="false"
       android:configChanges="orientation|screenSize"
+      android:launchMode="singleTop"
       android:theme="@style/PalaceTheme.WithoutActionBar" />
 
 <!--    <activity-->
