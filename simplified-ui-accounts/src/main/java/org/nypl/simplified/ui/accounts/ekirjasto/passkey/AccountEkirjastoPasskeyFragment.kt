@@ -3,6 +3,7 @@ package org.nypl.simplified.ui.accounts.ekirjasto.passkey
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.credentials.CredentialManager
@@ -90,6 +91,8 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
     viewModel.passkeyResult.observe(viewLifecycleOwner){
       when (it) {
         is TaskResult.Success<PasskeyAuth> -> if (this.viewModel.isRegistering){
+          //Make a toast and inform user that passkey creation was successful
+          Toast.makeText(this.requireContext(), R.string.passkeyRegisterSuccessful, Toast.LENGTH_SHORT).show()
           listener.post(AccountEkirjastoSuomiFiEvent.PasskeySuccessful)
         } else {
           postPasskeySuccessful(it.result)
@@ -119,6 +122,17 @@ class AccountEkirjastoPasskeyFragment : Fragment(R.layout.account_ekirjastopassk
   }
 
   private fun postPasskeyFailed(result: TaskResult.Failure<PasskeyAuth>) {
+    //If error in registering, handle special case of it being user cancelled
+    if (this.viewModel.isRegistering){
+      //Check if request was cancelled by the user
+      //If yes, don't show error message, and just toast informing of cancel
+      if (result.steps.last().message == "User cancelled request") {
+        Toast.makeText(this.requireContext(), R.string.errorPasskeyRegisterCancelled, Toast.LENGTH_SHORT).show()
+        //Post to return back to settings view
+        this.listener.post(AccountEkirjastoSuomiFiEvent.Cancel)
+        return
+      }
+    }
     val msg = if(this.viewModel.isRegistering) {R.string.errorPasskeyRegisterFailed} else {R.string.errorPasskeyLoginFailed}
     val newDialog =
       MaterialAlertDialogBuilder(this.requireActivity())
