@@ -28,7 +28,7 @@ class BookCoverBadgePainter(
     }
 
     val workingBitmap = Bitmap.createBitmap(source)
-    val result = workingBitmap.copy(source.config, true)
+    val result = workingBitmap.copy(source.config!!, true)
     val canvas = Canvas(result)
 
     val left = source.width - badge.width + badgeOffset.x*badge.offsetSize

@@ -7,7 +7,7 @@
         android:id="@+id/player_menu_toc"
         android:icon="@drawable/toolbar_toc"
         android:title="@string/audiobook_player_menu_toc_title"
-        app:iconTint="@color/PalaceTextInvertedColor"
+        app:iconTint="@color/PalaceTextColor"
         app:showAsAction="always" />
 
 </menu>
