@@ -84,12 +84,20 @@ class AccountEkirjastoPasskeyViewModel (
         // Handle the passkey DOM errors thrown according to the
         // WebAuthn spec.
         logger.error("CreatePublicKeyCredentialDomException")
-        steps.currentStepFailed(e.message?:"Credential Manager Error", e.domError.type)
-        //handlePasskeyError(e.domError)
+        // If user intentionally canceled the operation and chose not
+        // to register the credential, don't show error page
+        // Handles Google Passwords cancelling
+        if (e.message?.contains("Cancelled by user") == true) {
+          steps.currentStepSucceeded("User cancelled request")
+        } else {
+          steps.currentStepFailed(e.message ?: "Credential Manager Error", e.domError.type)
+          //handlePasskeyError(e.domError)
+        }
       }
       is CreateCredentialCancellationException -> {
         // The user intentionally canceled the operation and chose not
-        // to register the credential.
+        // to register the credential
+        // Handles Samsung Pass cancelling
         logger.error("CreateCredentialCancellationException")
         steps.currentStepSucceeded("User cancelled request")
       }
