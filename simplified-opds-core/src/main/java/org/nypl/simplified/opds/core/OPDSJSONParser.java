@@ -158,10 +158,22 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
     throws OPDSParseException {
     try {
       if (node.has("loanable")) {
-        return OPDSAvailabilityLoanable.get();
+        final ObjectNode n = JSONParserUtilities.getObject(node, "loanable");
+        final OptionType<Integer> in_copies_available =
+          JSONParserUtilities.getIntegerOptional(n, "copies_available");
+        final OptionType<Integer> in_copies =
+          JSONParserUtilities.getIntegerOptional(n, "copies");
+        return OPDSAvailabilityLoanable.get(in_copies_available, in_copies);
       }
       if (node.has("holdable")) {
-        return OPDSAvailabilityHoldable.get();
+        final ObjectNode n = JSONParserUtilities.getObject(node, "holdable");
+        final OptionType<Integer> in_queue =
+          JSONParserUtilities.getIntegerOptional(n, "holds");
+        final OptionType<Integer> in_copies_available =
+          JSONParserUtilities.getIntegerOptional(n, "copies_available");
+        final OptionType<Integer> in_copies =
+          JSONParserUtilities.getIntegerOptional(n, "copies");
+        return OPDSAvailabilityHoldable.get(in_queue, in_copies_available, in_copies);
       }
 
       if (node.has("loaned")) {
@@ -179,15 +191,19 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
         final ObjectNode n = JSONParserUtilities.getObject(node, "held");
         final OptionType<DateTime> in_start_date =
           JSONParserUtilities.getTimestampOptional(n, "start_date");
-        final OptionType<Integer> in_position =
-          JSONParserUtilities.getIntegerOptional(n, "position");
         final OptionType<DateTime> in_end_date =
           JSONParserUtilities.getTimestampOptional(n, "end_date");
+        final OptionType<Integer> in_position =
+          JSONParserUtilities.getIntegerOptional(n, "position");
+        final OptionType<Integer> in_queue =
+          JSONParserUtilities.getIntegerOptional(n, "holds");
+        final OptionType<Integer> in_copies_available =
+          JSONParserUtilities.getIntegerOptional(n, "copies_available");
         final OptionType<Integer> in_copies =
-          JSONParserUtilities.getIntegerOptional(n, "total");
+          JSONParserUtilities.getIntegerOptional(n, "copies");
         final OptionType<URI> in_revoke =
           JSONParserUtilities.getURIOptional(n, "revoke");
-        return OPDSAvailabilityHeld.get(in_start_date, in_position, in_end_date, in_copies, in_revoke);
+        return OPDSAvailabilityHeld.get(in_start_date, in_end_date,in_position, in_queue,in_copies_available, in_copies, in_revoke);
       }
 
       if (node.has("held_ready")) {

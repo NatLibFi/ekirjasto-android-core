@@ -16,7 +16,6 @@
       android:layout_marginEnd="16dp"
       android:ellipsize="end"
       android:gravity="center"
-      android:maxLines="2"
       android:textAlignment="center"
       android:textColor="@color/EkirjastoBlack"
       tools:text="Placeholder" />

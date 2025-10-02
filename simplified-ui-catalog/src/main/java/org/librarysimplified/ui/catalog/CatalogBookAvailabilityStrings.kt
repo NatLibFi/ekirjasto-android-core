@@ -1,5 +1,6 @@
 package org.librarysimplified.ui.catalog
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import com.io7m.jfunctional.Option
 import com.io7m.jfunctional.OptionType
@@ -8,6 +9,8 @@ import org.joda.time.DateTime
 import org.joda.time.Hours
 import org.nypl.simplified.books.book_registry.BookStatus
 import org.nypl.simplified.opds.core.getOrNull
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
 /**
@@ -31,16 +34,16 @@ object CatalogBookAvailabilityStrings {
   ): String {
     return when (status) {
       is BookStatus.Held.HeldInQueue ->
-        onHeld(resources, Option.of(status.copiesTotal), Option.of(status.queuePosition))
+        onHeld(resources,Option.of(status.queuePosition),Option.of(status.queueLength), Option.of(status.copiesAvailable), Option.of(status.copiesTotal))
       is BookStatus.Held.HeldReady ->
-        onLoanable(resources)
+        onHeldReady(resources, Option.of(status.endDate))
       is BookStatus.Holdable ->
-        onHoldable(resources)
+        onHoldable(resources, Option.of(status.queueLength), Option.of(status.copiesAvailable), Option.of(status.copiesTotal))
       is BookStatus.Loanable ->
-        onLoanable(resources)
+        onLoanable(resources,Option.of(status.copiesAvailable), Option.of(status.copiesTotal))
       is BookStatus.Loaned.LoanedNotDownloaded ->
         if (status.isOpenAccess) {
-          onLoanable(resources)
+          onLoanableOpenAccess(resources)
         } else {
           onLoaned(resources, Option.of(status.loanExpiryDate))
         }
@@ -108,11 +111,44 @@ object CatalogBookAvailabilityStrings {
     return resources.getString(R.string.catalogBookAvailabilityOpenAccess)
   }
 
-  private fun onLoanable(resources: Resources): String {
+  private fun onLoanable(
+    resources: Resources,
+    copiesAvailableOpt: OptionType<Int>,
+    copiesTotalOpt: OptionType<Int>
+  ): String {
+
+    // If there is data for number of copies and available copies, show them to user
+    if (copiesAvailableOpt is Some<Int> && copiesTotalOpt is Some<Int>) {
+      val copiesAvailable = copiesAvailableOpt.get()
+      val copiesTotal = copiesTotalOpt.get()
+      return resources.getString(R.string.catalogBookAvailabilityLoanableFull, copiesAvailable, copiesTotal)
+    }
+    //Otherwise show a generic message
     return resources.getString(R.string.catalogBookAvailabilityLoanable)
   }
 
-  private fun onHoldable(resources: Resources): String {
+  private fun onLoanableOpenAccess(
+    resources: Resources
+  ): String {
+    //Show a generic message
+    return resources.getString(R.string.catalogBookAvailabilityLoanable)
+  }
+
+  @SuppressLint("StringFormatMatches")
+  private fun onHoldable(
+    resources: Resources,
+    queueLengthOpt: OptionType<Int>,
+    copiesAvailableOpt: OptionType<Int>,
+    copiesTotalOpt: OptionType<Int>
+    ): String {
+    //If all optional values are present, show them to the user
+    if (copiesTotalOpt is Some<Int> && queueLengthOpt is Some<Int> && copiesAvailableOpt is Some<Int>) {
+      val queue = queueLengthOpt.get()
+      val copiesAvailable = copiesAvailableOpt.get()
+      val copiesTotal = copiesTotalOpt.get()
+      return resources.getString(R.string.catalogBookAvailabilityHoldableFull, queue, copiesAvailable, copiesTotal)
+    }
+    //Otherwise show a generic message
     return resources.getString(R.string.catalogBookAvailabilityHoldable)
   }
 
@@ -139,7 +175,7 @@ object CatalogBookAvailabilityStrings {
     return resources.getString(R.string.catalogBookAvailabilityLoanedIndefinite)
   }
 
-  private fun onReserved(
+  private fun onHeldReady(
     resources: Resources,
     expiryOpt: OptionType<DateTime>
   ): String {
@@ -151,7 +187,7 @@ object CatalogBookAvailabilityStrings {
       val expiry = expiryOpt.get()
       val now = DateTime.now()
       return resources.getString(
-        R.string.catalogBookAvailabilityReservedTimed,
+        R.string.catalogBookAvailabilityHeldReady,
         this.intervalString(resources, now, expiry)
       )
     }
@@ -160,13 +196,21 @@ object CatalogBookAvailabilityStrings {
      * Otherwise, show an indefinite reservation.
      */
 
-    return resources.getString(R.string.catalogBookAvailabilityReservedIndefinite)
+    return resources.getString(R.string.catalogBookAvailabilityHeldReadyIndefinite)
+  }
+
+  fun onHeldReadyShort(
+  resources: Resources
+  ): String {
+    return resources.getString(R.string.catalogBookAvailabilityHeldReadyShort)
   }
 
   private fun onHeld(
     resources: Resources,
-    copiesTotalOpt: OptionType<Int>,
-    queuePositionOpt: OptionType<Int>
+    queuePositionOpt: OptionType<Int>,
+    queueLengthOpt: OptionType<Int>,
+    copiesAvailableOpt: OptionType<Int>,
+    copiesTotalOpt: OptionType<Int>
   ): String {
 
     /**
@@ -174,10 +218,17 @@ object CatalogBookAvailabilityStrings {
      */
 
     if (queuePositionOpt is Some<Int>) {
-      if (copiesTotalOpt is Some<Int>) {
-        return resources.getString(R.string.catalogBookAvailabilityHeldQueueWithCopies, queuePositionOpt.get(), copiesTotalOpt.getOrNull())
+      val queuePosition = queuePositionOpt.get()
+      //If all other optional data is available, show it
+      if (queueLengthOpt is  Some<Int> && copiesAvailableOpt is Some<Int> && copiesTotalOpt is Some<Int>) {
+        val queueLength = queueLengthOpt.get()
+        val copiesAvailable = copiesAvailableOpt.get()
+        val copiesTotal = copiesTotalOpt.get()
+
+        return resources.getString(R.string.catalogBookAvailabilityHeldQueueWithFullInfo, queuePosition, queueLength, copiesAvailable, copiesTotal)
       }
-      return resources.getString(R.string.catalogBookAvailabilityHeldQueue, queuePositionOpt.get())
+      //If some other information missing, show just queue position
+      return resources.getString(R.string.catalogBookAvailabilityHeldQueue, queuePosition)
     }
 
     /**

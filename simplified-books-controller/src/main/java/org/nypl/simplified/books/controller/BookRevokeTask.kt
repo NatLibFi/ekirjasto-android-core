@@ -222,7 +222,7 @@ class BookRevokeTask(
         } else {
           this.debug("no revoke URI, nothing to do")
           this.taskRecorder.currentStepSucceeded(this.revokeStrings.revokeServerNotifyNoURI)
-          this.feedEntryWithAvailability(accountID, feedEntry, OPDSAvailabilityHoldable.get())
+          this.feedEntryWithAvailability(accountID, feedEntry, OPDSAvailabilityHoldable.get(availability.queue, availability.copiesAvailable, availability.copies))
         }
       }
 

@@ -371,7 +371,7 @@ class CatalogPagedViewHolder(
 
     val loanDuration = getLoanDuration(book)
 
-    this.idleLoanTime.text = context.getString(R.string.catalogLoanTime, loanDuration)
+    this.idleLoanTime.text = context.getString(R.string.catalogBookAvailabilityLoanedShort, loanDuration)
 
     this.idleButtons.addView(
       when {
@@ -472,7 +472,11 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.error, View.GONE)
     this.setVisibilityIfNecessary(this.idle, View.VISIBLE)
     this.setVisibilityIfNecessary(this.progress, View.GONE)
-    this.setVisibilityIfNecessary(this.idleLoanTime, View.INVISIBLE)
+    this.setVisibilityIfNecessary(this.idleLoanTime, View.VISIBLE)
+
+    //Show a text that shows book's ready to borrow
+    this.idleLoanTime.text =
+      CatalogBookAvailabilityStrings.onHeldReadyShort(this.context.resources)
 
 
     this.idleButtons.removeAllViews()
@@ -544,7 +548,7 @@ class CatalogPagedViewHolder(
     val loanDuration = getLoanDuration(book)
 
     //Show how long the book is on loan for
-    this.idleLoanTime.text = context.getString(R.string.catalogLoanTime, loanDuration)
+    this.idleLoanTime.text = context.getString(R.string.catalogBookAvailabilityLoanedShort, loanDuration)
 
     this.idleButtons.removeAllViews()
 
@@ -886,7 +890,7 @@ class CatalogPagedViewHolder(
       if (
         endDate != null
       ) {
-        CatalogBookAvailabilityStrings.intervalStringLoanDuration(
+        CatalogBookAvailabilityStrings.intervalString(
           this.context.resources,
           DateTime.now(),
           endDate

@@ -802,17 +802,27 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
           OPDSXML.getAttributeRFC3339Optional(available, "until");
         final OptionType<DateTime> start_date =
           OPDSXML.getAttributeRFC3339Optional(available, "since");
+        OptionType<Integer> position = Option.none();
         OptionType<Integer> queue = Option.none();
+        OptionType<Integer> copiesAvailable = Option.none();
         OptionType<Integer> copies = Option.none();
+
+        //If there is holds information
         if (holds_opt.isSome()) {
           final Some<Element> holds_some = (Some<Element>) holds_opt;
-          queue = OPDSXML.getAttributeIntegerOptional(holds_some.get(), "position");
+          //Get queue position and queue length
+          position = OPDSXML.getAttributeIntegerOptional(holds_some.get(), "position");
+          queue = OPDSXML.getAttributeIntegerOptional(holds_some.get(), "total");
         }
+        //If copies information is available
         if (copies_opt.isSome()) {
           final Some<Element> copies_some = (Some<Element>) copies_opt;
+
+          //Get number of copies and available copies
+          copiesAvailable =  OPDSXML.getAttributeIntegerOptional(copies_some.get(), "available");
           copies = OPDSXML.getAttributeIntegerOptional(copies_some.get(), "total");
         }
-          return OPDSAvailabilityHeld.get(start_date, queue, end_date, copies, revoke);
+          return OPDSAvailabilityHeld.get(start_date, end_date,position, queue, copiesAvailable, copies, revoke);
       }
 
       if ("available".equals(status)) {
@@ -822,6 +832,21 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
           OPDSXML.getAttributeRFC3339Optional(available, "since");
         final String rel = Objects.requireNonNull(element.getAttribute("rel"));
         if (Relation.ACQUISITION_BORROW.getUri().toString().equals(rel)) {
+
+          //If there is copies data
+          if (copies_opt.isSome()) {
+            final Some<Element> copies_some = (Some<Element>) copies_opt;
+
+            //Get the available copies and total copies for the book
+            OptionType<Integer> copiesAvailable =
+              OPDSXML.getAttributeIntegerOptional(copies_some.get(), "available");
+            OptionType<Integer> copies =
+              OPDSXML.getAttributeIntegerOptional(copies_some.get(), "total");
+
+            //Return loanable with extra information
+            return OPDSAvailabilityLoanable.get(copiesAvailable, copies);
+          }
+          //Return loanable with no extra information
           return OPDSAvailabilityLoanable.get();
         } else if (Relation.ACQUISITION_GENERIC.getUri().toString().equals(rel)) {
           return OPDSAvailabilityLoaned.get(start_date, end_date, revoke);
@@ -835,17 +860,45 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
      * borrow link, so it must be holdable.
      */
 
+    OptionType<Integer> queue = Option.none();
+    OptionType<Integer> copiesAvailable = Option.none();
+    OptionType<Integer> copies = Option.none();
+
+    //If there are available copies for the book, the book is loanable
     if (copies_opt.isSome()) {
       final Some<Element> copies_some = (Some<Element>) copies_opt;
       final int copies_available =
         OPDSXML.getAttributeInteger(copies_some.get(), "available");
 
       if (copies_available > 0) {
-        return OPDSAvailabilityLoanable.get();
+        //Get available copies and number of copies
+        copiesAvailable =
+          OPDSXML.getAttributeIntegerOptional(copies_some.get(), "available");
+        copies =
+          OPDSXML.getAttributeIntegerOptional(copies_some.get(), "total");
+        return OPDSAvailabilityLoanable.get(copiesAvailable, copies);
       }
     }
 
-    return OPDSAvailabilityHoldable.get();
+    //If no available copies, book is holdable
+
+    //If there is hold information
+    if (holds_opt.isSome()) {
+      final Some<Element> holds_some = (Some<Element>) holds_opt;
+      //Get length of queue
+      queue =
+        OPDSXML.getAttributeIntegerOptional(holds_some.get(), "total");
+    }
+    //If there is copy information
+    if(copies_opt.isSome()) {
+      final Some<Element> copies_some = (Some<Element>) copies_opt;
+      //Get number of available and all copies
+      copiesAvailable =
+        OPDSXML.getAttributeIntegerOptional(copies_some.get(), "available");
+      copies =
+        OPDSXML.getAttributeIntegerOptional(copies_some.get(), "total");
+    }
+    return OPDSAvailabilityHoldable.get(queue, copiesAvailable, copies);
   }
 
   @Override
