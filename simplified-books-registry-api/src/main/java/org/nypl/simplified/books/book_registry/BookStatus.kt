@@ -67,7 +67,7 @@ sealed class BookStatus {
       val queuePosition: Int?,
 
       /**
-       * The length of the queue
+       * @return The length of the queue for this book
        */
 
       val queueLength: Int?,
@@ -251,7 +251,7 @@ sealed class BookStatus {
     override val id: BookID,
 
     /**
-     * @return The queue for this book
+     * @return The length of the queue for this book
      */
 
     val queueLength: Int?,

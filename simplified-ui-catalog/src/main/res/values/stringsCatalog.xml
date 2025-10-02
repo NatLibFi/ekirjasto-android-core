@@ -24,7 +24,7 @@
   <string name="catalogAccessibilityCoverUnknownFormat">%1$s, by %2$s. Activate to show book detail page.</string>
   <string name="catalogAccounts">Choose another library catalog…</string>
   <string name="catalogBookAvailabilityHeldIndefinite">You have this book on hold.</string>
-  <string name="catalogBookAvailabilityHeldQueue">You have this book on hold. \nHold position: %1$d/Y.</string>
+  <string name="catalogBookAvailabilityHeldQueue">You have this book on hold. \nHold position: %1$d</string>
   <string name="catalogBookAvailabilityHeldQueueWithFullInfo">You have this book on hold. \nHold position: %1$d/%2$d, available: %3$d/%4$d</string>
   <string name="catalogBookAvailabilityHeldTimed">You will be able to borrow this book in %1$s.</string>
   <string name="catalogBookAvailabilityHeldIndefiniteShort">On hold</string>
