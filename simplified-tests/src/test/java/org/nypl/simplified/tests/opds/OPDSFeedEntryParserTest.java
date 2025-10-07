@@ -63,7 +63,11 @@ public final class OPDSFeedEntryParserTest {
         "entry-availability-loanable.xml"));
 
     final OPDSAvailabilityType availability = e.getAvailability();
-    final OPDSAvailabilityLoanable expected = OPDSAvailabilityLoanable.get();
+
+    final OptionType<Integer> expected_copies_available = Option.some(1);
+    final OptionType<Integer> expected_copies_total = Option.some(1);
+
+    final OPDSAvailabilityLoanable expected = OPDSAvailabilityLoanable.get(expected_copies_available, expected_copies_total);
     Assertions.assertEquals(expected, availability);
 
     Assertions.assertEquals(1, e.getAcquisitions().size());
@@ -138,7 +142,12 @@ public final class OPDSFeedEntryParserTest {
         "entry-availability-holdable.xml"));
 
     final OPDSAvailabilityType availability = e.getAvailability();
-    final OPDSAvailabilityHoldable expected = OPDSAvailabilityHoldable.get();
+
+    final OptionType<Integer> expected_queue = Option.some(0);
+    final OptionType<Integer> expected_copies_available = Option.some(0);
+    final OptionType<Integer> expected_copies_total = Option.some(1);
+
+    final OPDSAvailabilityHoldable expected = OPDSAvailabilityHoldable.get(expected_queue, expected_copies_available, expected_copies_total);
 
     Assertions.assertEquals(expected, availability);
     Assertions.assertEquals(1, e.getAcquisitions().size());
@@ -164,12 +173,14 @@ public final class OPDSFeedEntryParserTest {
     final OptionType<DateTime> expected_start_date = Option.some(
       OPDSDateParsers.dateTimeParser().parseDateTime("2000-01-01T00:00:00Z"));
     final OptionType<Integer> queue_position = Option.none();
+    final OptionType<Integer> queue_length = Option.some(0);
+    final OptionType<Integer> copies_available = Option.some(0);
     final OptionType<Integer> copies_total = Option.some(1);
     final OptionType<DateTime> expected_end_date = Option.none();
     final OptionType<URI> expected_revoke =
       Option.some(new URI("http://example.com/revoke"));
     final OPDSAvailabilityHeld expected = OPDSAvailabilityHeld.get(
-      expected_start_date, queue_position, expected_end_date, copies_total,expected_revoke);
+      expected_start_date, expected_end_date, queue_position, queue_length, copies_available, copies_total, expected_revoke);
 
     Assertions.assertEquals(expected, availability);
     Assertions.assertEquals(1, e.getAcquisitions().size());
@@ -196,12 +207,14 @@ public final class OPDSFeedEntryParserTest {
       OPDSDateParsers.dateTimeParser().parseDateTime("2000-01-01T00:00:00Z"));
     final OptionType<DateTime> expected_end_date = Option.some(
       OPDSDateParsers.dateTimeParser().parseDateTime("2010-01-01T00:00:00Z"));
+    final OptionType<Integer> queue_length = Option.some(0);
+    final OptionType<Integer> copies_available = Option.some(0);
     final OptionType<Integer> queue_position = Option.none();
     final OptionType<Integer> copies_total = Option.some(1);
     final OptionType<URI> expected_revoke =
       Option.some(new URI("http://example.com/revoke"));
     final OPDSAvailabilityHeld expected = OPDSAvailabilityHeld.get(
-      expected_start_date, queue_position, expected_end_date, copies_total, expected_revoke);
+      expected_start_date, expected_end_date, queue_position, queue_length, copies_available, copies_total, expected_revoke);
 
     Assertions.assertEquals(expected, availability);
     Assertions.assertEquals(1, e.getAcquisitions().size());
@@ -227,12 +240,14 @@ public final class OPDSFeedEntryParserTest {
     final OptionType<DateTime> expected_start_date = Option.some(
       OPDSDateParsers.dateTimeParser().parseDateTime("2000-01-01T00:00:00Z"));
     final OptionType<Integer> queue_position = Option.some(3);
+    final OptionType<Integer> queue_length = Option.some(0);
+    final OptionType<Integer> copies_available = Option.some(0);
     final OptionType<Integer> copies_total = Option.some(1);
     final OptionType<DateTime> expected_end_date = Option.none();
     final OptionType<URI> expected_revoke =
       Option.some(new URI("http://example.com/revoke"));
     final OPDSAvailabilityHeld expected = OPDSAvailabilityHeld.get(
-      expected_start_date, queue_position, expected_end_date,copies_total, expected_revoke);
+      expected_start_date, expected_end_date, queue_position, queue_length, copies_available, copies_total, expected_revoke);
 
     Assertions.assertEquals(expected, availability);
     Assertions.assertEquals(1, e.getAcquisitions().size());
@@ -260,11 +275,13 @@ public final class OPDSFeedEntryParserTest {
     final OptionType<DateTime> expected_end_date = Option.some(
       OPDSDateParsers.dateTimeParser().parseDateTime("2010-01-01T00:00:00Z"));
     final OptionType<Integer> queue_position = Option.some(3);
+    final OptionType<Integer> queue_length = Option.some(0);
+    final OptionType<Integer> copies_available = Option.some(0);
     final OptionType<Integer> copies_total = Option.some(1);
     final OptionType<URI> expected_revoke =
       Option.some(new URI("http://example.com/revoke"));
     final OPDSAvailabilityHeld expected = OPDSAvailabilityHeld.get(
-      expected_start_date, queue_position, expected_end_date, copies_total, expected_revoke);
+      expected_start_date, expected_end_date, queue_position, queue_length, copies_available, copies_total, expected_revoke);
 
     Assertions.assertEquals(expected, availability);
     Assertions.assertEquals(1, e.getAcquisitions().size());

@@ -961,6 +961,8 @@ class BookRevokeTaskTest {
           Option.none(),
           Option.none(),
           Option.none(),
+          Option.none(),
+          Option.none(),
           Option.some(this.server.url("revoke").toUri())
         )
       )
@@ -1091,6 +1093,8 @@ class BookRevokeTaskTest {
         "Title",
         DateTime.now(),
         OPDSAvailabilityHeld.get(
+          Option.none(),
+          Option.none(),
           Option.none(),
           Option.none(),
           Option.none(),
@@ -2155,7 +2159,7 @@ class BookRevokeTaskTest {
         "a",
         "Title",
         DateTime.now(),
-        OPDSAvailabilityHoldable.get()
+        OPDSAvailabilityHoldable.get(Option.none(),Option.none(),Option.none())
       )
     opdsEntryBuilder.addAcquisition(acquisition)
 

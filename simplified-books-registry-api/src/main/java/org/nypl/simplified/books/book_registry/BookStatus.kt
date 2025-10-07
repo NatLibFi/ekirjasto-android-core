@@ -67,16 +67,28 @@ sealed class BookStatus {
       val queuePosition: Int?,
 
       /**
-       * @return The current position of the user in the queue
+       * @return The length of the queue for this book
        */
 
-      val startDate: DateTime?,
+      val queueLength: Int?,
+
+      /**
+       * @return The number of copies available for this book
+       */
+
+      val copiesAvailable: Int?,
 
       /**
        * @return The number of copies for this book
        */
 
       val copiesTotal: Int?,
+
+      /**
+       * @return The start date for the hold
+       */
+
+      val startDate: DateTime?,
 
       override val isRevocable: Boolean,
       override val endDate: DateTime?
@@ -236,8 +248,26 @@ sealed class BookStatus {
    */
 
   data class Holdable(
-    override val id: BookID
-  ) : BookStatus() {
+    override val id: BookID,
+
+    /**
+     * @return The length of the queue for this book
+     */
+
+    val queueLength: Int?,
+
+    /**
+     * @return The number of copies available for this book
+     */
+
+    val copiesAvailable: Int?,
+
+    /**
+     * @return The total number of copies for this book
+     */
+
+    val copiesTotal: Int?
+    ) : BookStatus() {
 
     override val priority: BookStatusPriorityOrdering
       get() = BookStatusPriorityOrdering.BOOK_STATUS_HOLDABLE
@@ -248,7 +278,19 @@ sealed class BookStatus {
    */
 
   data class Loanable(
-    override val id: BookID
+    override val id: BookID,
+
+    /**
+     * @return The number of copies available for this book
+     */
+
+    val copiesAvailable: Int?,
+
+    /**
+     * @return The total number of copies for this book
+     */
+
+    val copiesTotal: Int?
   ) : BookStatus() {
 
     override val priority: BookStatusPriorityOrdering
@@ -423,7 +465,7 @@ sealed class BookStatus {
           }
 
           override fun onHoldable(a: OPDSAvailabilityHoldable): BookStatus {
-            return this@Companion.onIsHoldable(book)
+            return this@Companion.onIsHoldable(a, book)
           }
 
           override fun onLoaned(a: OPDSAvailabilityLoaned): BookStatus {
@@ -431,7 +473,7 @@ sealed class BookStatus {
           }
 
           override fun onLoanable(a: OPDSAvailabilityLoanable): BookStatus {
-            return this@Companion.onIsLoanable(book)
+            return this@Companion.onIsLoanable(a, book)
           }
 
           override fun onOpenAccess(a: OPDSAvailabilityOpenAccess): BookStatus {
@@ -471,8 +513,15 @@ sealed class BookStatus {
       }
     }
 
-    private fun onIsLoanable(book: Book): BookStatus {
-      return Loanable(book.id)
+    private fun onIsLoanable(
+      a: OPDSAvailabilityLoanable,
+      book: Book
+    ): BookStatus {
+      return Loanable(
+        book.id,
+        copiesAvailable = this.someOrNull(a.copiesAvailable),
+        copiesTotal = this.someOrNull(a.copies)
+      )
     }
 
     private fun onIsLoaned(
@@ -499,8 +548,16 @@ sealed class BookStatus {
       }
     }
 
-    private fun onIsHoldable(book: Book): BookStatus {
-      return Holdable(book.id)
+    private fun onIsHoldable(
+      a: OPDSAvailabilityHoldable,
+      book: Book
+    ): BookStatus {
+      return Holdable(
+        id = book.id,
+        queueLength = this.someOrNull(a.queue),
+        copiesAvailable = this.someOrNull(a.copiesAvailable),
+        copiesTotal = this.someOrNull(a.copies)
+      )
     }
 
     private fun onIsHeldNotReady(
@@ -510,9 +567,11 @@ sealed class BookStatus {
       return Held.HeldInQueue(
         id = book.id,
         queuePosition = this.someOrNull(a.position),
+        queueLength = this.someOrNull(a.queue),
+        copiesAvailable = this.someOrNull(a.copiesAvailable),
+        copiesTotal = this.someOrNull(a.copies),
         startDate = this.someOrNull(a.startDate),
         endDate = this.someOrNull(a.endDate),
-        copiesTotal = this.someOrNull(a.copies),
         isRevocable = a.revoke.isSome
       )
     }

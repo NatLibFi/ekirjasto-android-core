@@ -12,9 +12,11 @@ import java.net.URI
 
 data class OPDSAvailabilityHeld private constructor(
   val startDate: OptionType<DateTime>,
-  val position: OptionType<Int>,
-  val copies: OptionType<Int>,
   private val endDate: OptionType<DateTime>,
+  val position: OptionType<Int>,
+  val queue: OptionType<Int>,
+  val copiesAvailable: OptionType<Int>,
+  val copies: OptionType<Int>,
 
   /**
    * @return A URI for revoking the hold, if any
@@ -35,6 +37,12 @@ data class OPDSAvailabilityHeld private constructor(
 
   val positionOrNull: Int?
     get() = this.position.getOrNull()
+
+  val queueOrNull: Int?
+    get() = this.queue.getOrNull()
+
+  val copiesAvailableOrNull: Int?
+    get() = this.copiesAvailable.getOrNull()
 
   val copiesOrNull: Int?
     get() = this.copies.getOrNull()
@@ -58,6 +66,10 @@ data class OPDSAvailabilityHeld private constructor(
     val b = StringBuilder(256)
     b.append("[OPDSAvailabilityHeld position=")
     b.append(this.position)
+    b.append(" queue=")
+    b.append(this.queue)
+    b.append(" copiesAvailable=")
+    b.append(this.copiesAvailable)
     b.append(" copies=")
     b.append(this.copies)
     b.append(" start_date=")
@@ -81,8 +93,10 @@ data class OPDSAvailabilityHeld private constructor(
 
     /**
      * @param startDate The start date (if known)
-     * @param position The queue position
      * @param endDate The end date (if known)
+     * @param position The queue position
+     * @param queue The length of the queue for the book
+     * @param copiesAvailable The number of available copies for the book
      * @param copies The number of copies for the book
      * @param revoke An optional revocation link for the hold
      * @return A value that states that a book is on hold
@@ -91,15 +105,19 @@ data class OPDSAvailabilityHeld private constructor(
     @JvmStatic
     operator fun get(
       startDate: OptionType<DateTime>,
-      position: OptionType<Int>,
       endDate: OptionType<DateTime>,
+      position: OptionType<Int>,
+      queue: OptionType<Int>,
+      copiesAvailable: OptionType<Int>,
       copies: OptionType<Int>,
       revoke: OptionType<URI>
     ): OPDSAvailabilityHeld {
       return OPDSAvailabilityHeld(
         startDate = startDate,
-        position = position,
         endDate = endDate,
+        position = position,
+        queue = queue,
+        copiesAvailable = copiesAvailable,
         copies = copies,
         revoke = revoke
       )

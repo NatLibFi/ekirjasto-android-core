@@ -24,19 +24,23 @@
   <string name="catalogAccessibilityCoverUnknownFormat">%1$s, by %2$s. Activate to show book detail page.</string>
   <string name="catalogAccounts">Choose another library catalog…</string>
   <string name="catalogBookAvailabilityHeldIndefinite">You have this book on hold.</string>
-  <string name="catalogBookAvailabilityHeldQueue">You are at position %1$d in the queue for this book.</string>
-  <string name="catalogBookAvailabilityHeldQueueWithCopies">You are at position %1$d in the queue for %2$d copies of this book.</string>
+  <string name="catalogBookAvailabilityHeldQueue">You have this book on hold. \nHold position: %1$d</string>
+  <string name="catalogBookAvailabilityHeldQueueWithFullInfo">You have this book on hold. \nHold position: %1$d/%2$d, available: %3$d/%4$d</string>
   <string name="catalogBookAvailabilityHeldTimed">You will be able to borrow this book in %1$s.</string>
   <string name="catalogBookAvailabilityHeldIndefiniteShort">On hold</string>
-  <string name="catalogBookAvailabilityHeldQueueShort">At position: %1$d</string>
+  <string name="catalogBookAvailabilityHeldQueueShort">Your hold position: %1$d</string>
   <string name="catalogBookAvailabilityHeldTimedShort">Available in: %1$s</string>
-  <string name="catalogBookAvailabilityHoldable">All copies of this book are currently on loan.</string>
+  <string name="catalogBookAvailabilityHeldReady">This book is available to borrow. \nYour reservation will expire in %1$s.</string>
+  <string name="catalogBookAvailabilityHeldReadyShort">Ready to borrow!</string>
+  <string name="catalogBookAvailabilityHeldReadyIndefinite">This book is available to borrow.</string>
+  <string name="catalogBookAvailabilityHoldable">This book is available to place on hold.</string>
+  <string name="catalogBookAvailabilityHoldableFull">This book is available to place on hold. \nHold queue: %1$d, available: %2$d/%3$d</string>
   <string name="catalogBookAvailabilityLoanable">This book is available to borrow.</string>
+  <string name="catalogBookAvailabilityLoanableFull">This book is available to borrow. \nAvailable: %1$d/%2$d</string>
   <string name="catalogBookAvailabilityLoanedIndefinite">You have this book on loan.</string>
   <string name="catalogBookAvailabilityLoanedTimed">You have this book on loan for %1$s.</string>
+  <string name="catalogBookAvailabilityLoanedShort">Remaining loan time: %1$s</string>
   <string name="catalogBookAvailabilityOpenAccess">This book is yours to keep.</string>
-  <string name="catalogBookAvailabilityReservedIndefinite">You have this book reserved.</string>
-  <string name="catalogBookAvailabilityReservedTimed">Your reservation expires in %1$s.</string>
   <string name="catalogBookAvailabilityRevoked">This book is waiting to be returned.</string>
   <string name="catalogBookCoverDescription">Book cover image</string>
 
@@ -65,7 +69,6 @@
   <string name="catalogLoginRequired">Please sign in to continue.</string>
   <string name="catalogGet">Get</string>
   <string name="catalogHoldCannotCancel">This reservation cannot be cancelled.</string>
-  <string name="catalogLoanTime">On loan for: %1$s</string>
   <string name="catalogInformation">Information</string>
   <string name="catalogListen">Listen</string>
   <string name="catalogMetaCategories">Categories</string>

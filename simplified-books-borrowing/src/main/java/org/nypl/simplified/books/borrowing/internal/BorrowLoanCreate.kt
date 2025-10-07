@@ -221,11 +221,13 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
           context.bookPublishStatus(
             HeldInQueue(
               id = context.bookCurrent.id,
-              queuePosition = a.positionOrNull,
-              startDate = a.startDateOrNull,
               isRevocable = a.revoke.isSome,
-              copiesTotal = a.copiesOrNull,
-              endDate = a.endDateOrNull
+              startDate = a.startDateOrNull,
+              endDate = a.endDateOrNull,
+              queuePosition = a.positionOrNull,
+              queueLength = a.queueOrNull,
+              copiesAvailable = a.copiesAvailableOrNull,
+              copiesTotal = a.copiesOrNull
             )
           )
           throw BorrowSubtaskHaltedEarly()

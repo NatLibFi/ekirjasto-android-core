@@ -163,8 +163,16 @@ public final class OPDSJSONSerializer implements OPDSJSONSerializerType {
             oh.put("position", x);
             return Unit.unit();
           });
+          a.getQueue().map(x -> {
+            oh.put("queue", x);
+            return Unit.unit();
+          });
+          a.getCopiesAvailable().map(x -> {
+            oh.put("copies_available", x);
+            return Unit.unit();
+          });
           a.getCopies().map(x -> {
-            oh.put("total", x);
+            oh.put("copies", x);
             return Unit.unit();
           });
           a.getRevoke().map(uri -> {
@@ -180,6 +188,18 @@ public final class OPDSJSONSerializer implements OPDSJSONSerializerType {
         public ObjectNode onHoldable(final OPDSAvailabilityHoldable a) {
           final ObjectNode o = jom.createObjectNode();
           final ObjectNode oh = jom.createObjectNode();
+          a.getQueue().map(x -> {
+            oh.put("queue", x);
+            return Unit.unit();
+          });
+          a.getCopiesAvailable().map(x -> {
+            oh.put("copies_available", x);
+            return Unit.unit();
+          });
+          a.getCopies().map(x -> {
+            oh.put("copies", x);
+            return Unit.unit();
+          });
           o.set("holdable", oh);
           return o;
         }
@@ -188,6 +208,14 @@ public final class OPDSJSONSerializer implements OPDSJSONSerializerType {
         public ObjectNode onLoanable(final OPDSAvailabilityLoanable a) {
           final ObjectNode o = jom.createObjectNode();
           final ObjectNode oh = jom.createObjectNode();
+          a.getCopiesAvailable().map(x -> {
+            oh.put("copies_available", x);
+            return Unit.unit();
+          });
+          a.getCopies().map(x -> {
+            oh.put("copies", x);
+            return Unit.unit();
+          });
           o.set("loanable", oh);
           return o;
         }
