@@ -455,12 +455,11 @@ class CatalogFeedViewModel(
           }
         }
         if (arguments.updateHolds) {
-          bookRegistry.updateHolds(
-            numberOfHolds = feed.entriesInOrder.filter { feedEntry ->
-              feedEntry is FeedEntry.FeedEntryOPDS &&
-                feedEntry.feedEntry.availability is OPDSAvailabilityHeldReady
-            }.size
-          )
+          if (feed.booksHeldReady != null){
+            bookRegistry.updateHolds(
+              numberOfHolds = feed.booksHeldReady!!
+            )
+          }
         }
         FeedLoaderResult.FeedLoaderSuccess(
           feed = feed,

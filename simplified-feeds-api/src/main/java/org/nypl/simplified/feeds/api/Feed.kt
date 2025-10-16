@@ -105,7 +105,8 @@ sealed class Feed {
     val feedNext: URI?,
 
     private val facetsByGroupData: MutableMap<String, MutableList<FeedFacet>>,
-    private val facetsOrderData: MutableList<FeedFacet>
+    private val facetsOrderData: MutableList<FeedFacet>,
+    var booksHeldReady: Int?
   ) : Feed() {
 
     private val entriesData: MutableMap<BookID, FeedEntry> = mutableMapOf()
@@ -270,7 +271,8 @@ sealed class Feed {
         feedLicenses = null,
         feedNext = null,
         facetsOrderData = feedFacets.toMutableList(),
-        facetsByGroupData = mutableGroups
+        facetsByGroupData = mutableGroups,
+        booksHeldReady = null
       )
     }
 
@@ -335,7 +337,8 @@ sealed class Feed {
           feedPrivacyPolicy = this.mapNull(feed.feedPrivacyPolicy),
           feedAbout = this.mapNull(feed.feedAbout),
           facetsByGroupData = facetsByGroup,
-          facetsOrderData = facetsOrder
+          facetsOrderData = facetsOrder,
+          booksHeldReady = null
         )
 
       val entries = feed.feedEntries

@@ -62,6 +62,10 @@ internal class ProfileFeedTask(
       val books = this.collectAllBooks(this.bookRegistry)
       this.logger.debug("collected {} candidate books", books.size)
 
+      // Count how many heldAvailable books are in registry
+      // and mark into feed
+      feed.booksHeldReady = countHeldReady(books)
+
       //Get the correct filter based on the bookStatus of the books in the registry
       val filter = this.selectFeedFilter(this.request)
       //Filter the books based on their bookStatus
@@ -224,6 +228,15 @@ internal class ProfileFeedTask(
   }
 
   /**
+   * Count how many of the books in the registry have status HeldReady
+   */
+  private fun countHeldReady(
+    books: ArrayList<BookWithStatus>
+  ) : Int {
+    return books.count { bookHeldReady(it.status) }
+  }
+
+  /**
    * Split the given search string into a list of uppercase search terms.
    */
 
@@ -336,6 +349,13 @@ internal class ProfileFeedTask(
       }
     } catch (e: Exception) {
       false
+    }
+  }
+
+  private fun bookHeldReady(status: BookStatus): Boolean {
+    return when (status) {
+      is BookStatus.Held.HeldReady -> true
+      else -> false
     }
   }
 
