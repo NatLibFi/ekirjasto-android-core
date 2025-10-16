@@ -373,6 +373,13 @@ class CatalogFeedViewModel(
   }
 
   /**
+   * Synchronize books for the most recent account
+   */
+  fun syncBooks() {
+    this.booksController.booksSync(account.id)
+  }
+
+  /**
    * Sync the books in the book register, based on possible accountID.
    */
   private fun syncAccounts(filterAccountID: AccountID?) {

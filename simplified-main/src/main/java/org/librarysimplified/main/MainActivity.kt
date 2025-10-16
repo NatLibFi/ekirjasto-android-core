@@ -9,14 +9,13 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,6 +32,7 @@ import fi.kansalliskirjasto.ekirjasto.testing.ui.TestLoginFragment
 import fi.kansalliskirjasto.ekirjasto.util.FontSizeUtil
 import fi.kansalliskirjasto.ekirjasto.util.LocaleHelper
 import org.librarysimplified.services.api.Services
+import org.librarysimplified.ui.catalog.CatalogRefreshViewModel
 import org.librarysimplified.ui.login.LoginMainFragment
 import org.librarysimplified.ui.onboarding.OnboardingEvent
 import org.librarysimplified.ui.onboarding.OnboardingFragment
@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
 
   private val logger = LoggerFactory.getLogger(MainActivity::class.java)
   private val listenerRepo: ListenerRepository<MainActivityListenedEvent, Unit> by listenerRepositories()
+  private lateinit var refreshViewModel: CatalogRefreshViewModel
   private lateinit var fontSizeManager: FontSizeUtil
 
   private val defaultViewModelFactory: ViewModelProvider.Factory by lazy {
@@ -106,6 +107,10 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     this.logger.debug("onCreate (recreating {})", savedInstanceState != null)
     super.onCreate(savedInstanceState)
     this.logger.debug("onCreate (super completed)")
+
+    // Get the viewModel that is used to communicate that we want to refresh our loan
+    // and hold views
+    refreshViewModel = ViewModelProvider(this).get(CatalogRefreshViewModel::class.java)
 
     interceptDeepLink()
     val toolbar: Toolbar = this.findViewById(R.id.mainToolbar)
@@ -385,6 +390,12 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
       )
     )
     return true
+  }
+
+  override fun onRestart() {
+    super.onRestart()
+    //When MainActivity is restarted, ask catalog to reload the holds, loans and favorites
+    refreshViewModel.setRefreshMessage("reload")
   }
 
   override fun onStart() {

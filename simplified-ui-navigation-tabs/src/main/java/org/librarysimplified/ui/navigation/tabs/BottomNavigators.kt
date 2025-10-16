@@ -351,7 +351,7 @@ object BottomNavigators {
         filterBy = FeedFacet.FeedFacetPseudo.FilteringForFeed.FilterBy.FILTER_BY_LOANS,
         selection = FeedBooksSelection.BOOKS_FEED_LOANED,
         title = context.getString(R.string.tabBooks),
-        updateHolds = false
+        updateHolds = true
       )
     )
   }
