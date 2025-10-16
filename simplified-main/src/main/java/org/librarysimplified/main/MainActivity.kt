@@ -392,12 +392,6 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     return true
   }
 
-  override fun onRestart() {
-    super.onRestart()
-    //When MainActivity is restarted, ask catalog to reload the holds, loans and favorites
-    refreshViewModel.setRefreshMessage("reload")
-  }
-
   override fun onStart() {
     super.onStart()
     this.listenerRepo.registerHandler(this::handleEvent)
@@ -407,6 +401,12 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
   override fun onStop() {
     super.onStop()
     this.listenerRepo.unregisterHandler()
+  }
+  
+  override fun onRestart() {
+    super.onRestart()
+    //When MainActivity is restarted, ask catalog to reload the holds, loans and favorites
+    refreshViewModel.setRefreshMessage("reload")
   }
 
   @Suppress("UNUSED_PARAMETER")
