@@ -26,6 +26,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -99,6 +100,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
   private val listener: FragmentListenerType<CatalogFeedEvent> by fragmentListeners()
 
+  private lateinit var refreshViewModel: CatalogRefreshViewModel
+
   private val borrowViewModel: CatalogBorrowViewModel by viewModels(
     factoryProducer = {
       CatalogBorrowViewModelFactory(services)
@@ -166,6 +169,14 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    // Initialize the notificationViewModel
+    refreshViewModel = ViewModelProvider(requireActivity()).get(CatalogRefreshViewModel::class.java)
+
+    // Observe the LiveData
+    refreshViewModel.refreshMessage.observe(viewLifecycleOwner) { message ->
+      syncBooks(message)
+    }
 
     this.toolbar =
       view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
@@ -420,6 +431,19 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
     // Necessary to reconfigure the Toolbar here due to the "Switch Account" action.
     this.configureToolbar()
+  }
+
+  private fun syncBooks(message: String) {
+    // If we have returned to the application from another app,
+    // reload the loan feed so that user is shown fresh information
+    if (message == "reload") {
+      //Sync books for the current account
+      this.viewModel.syncBooks()
+
+      //Set the message as something else, so we avoid constant reloading
+      //And reload only if the message is from MainActivity
+      refreshViewModel.setRefreshMessage("null")
+    }
   }
 
   private fun refresh() {

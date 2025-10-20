@@ -373,6 +373,13 @@ class CatalogFeedViewModel(
   }
 
   /**
+   * Synchronize books for the most recent account
+   */
+  fun syncBooks() {
+    this.booksController.booksSync(account.id)
+  }
+
+  /**
    * Sync the books in the book register, based on possible accountID.
    */
   private fun syncAccounts(filterAccountID: AccountID?) {
@@ -448,12 +455,11 @@ class CatalogFeedViewModel(
           }
         }
         if (arguments.updateHolds) {
-          bookRegistry.updateHolds(
-            numberOfHolds = feed.entriesInOrder.filter { feedEntry ->
-              feedEntry is FeedEntry.FeedEntryOPDS &&
-                feedEntry.feedEntry.availability is OPDSAvailabilityHeldReady
-            }.size
-          )
+          if (feed.booksHeldReady != null){
+            bookRegistry.updateHolds(
+              numberOfHolds = feed.booksHeldReady!!
+            )
+          }
         }
         FeedLoaderResult.FeedLoaderSuccess(
           feed = feed,
