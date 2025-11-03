@@ -411,16 +411,20 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
       }
 
       {
-        final ArrayNode a = JSONParserUtilities.getArray(s, "illustrators");
-        for (int index = 0; index < a.size(); ++index) {
-          fb.addIllustrator(a.get(index).asText());
+        if (s.has("illustrators")) {
+          final ArrayNode a = JSONParserUtilities.getArray(s, "illustrators");
+          for (int index = 0; index < a.size(); ++index) {
+            fb.addIllustrator(a.get(index).asText());
+          }
         }
       }
 
       {
-        final ArrayNode a = JSONParserUtilities.getArray(s, "translators");
-        for (int index = 0; index < a.size(); ++index) {
-          fb.addTranslator(a.get(index).asText());
+        if (s.has("translators")) {
+          final ArrayNode a = JSONParserUtilities.getArray(s, "translators");
+          for (int index = 0; index < a.size(); ++index) {
+            fb.addTranslator(a.get(index).asText());
+          }
         }
       }
 
@@ -448,8 +452,10 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
       }
 
       {
-        final JsonNode a = JSONParserUtilities.getNode(s, "accessibility");
-        fb.setAccessibility(OPDSJSONParser.parseAccessibility(a));
+        if (s.has("accessibility")) {
+          final JsonNode a = JSONParserUtilities.getNode(s, "accessibility");
+          fb.setAccessibility(OPDSJSONParser.parseAccessibility(a));
+        }
       }
 
       {
