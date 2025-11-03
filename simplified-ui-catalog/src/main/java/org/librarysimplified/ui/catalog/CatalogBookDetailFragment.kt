@@ -121,7 +121,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var feedWithGroupsAdapter: CatalogFeedWithGroupsAdapter
   private lateinit var feedWithoutGroupsAdapter: CatalogPagedAdapter
   private lateinit var metadata: LinearLayout
-  private lateinit var accessibilityTable: LinearLayout
+  private lateinit var accessibility: LinearLayout
   private lateinit var relatedBooksContainer: FrameLayout
   private lateinit var relatedBooksList: RecyclerView
   private lateinit var relatedBooksLoading: ViewGroup
@@ -212,7 +212,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       view.findViewById(R.id.bookDetailDescriptionText)
     this.metadata =
       view.findViewById(R.id.bookDetailMetadataTable)
-    this.accessibilityTable =
+    this.accessibility =
       view.findViewById(R.id.bookDetailAccessibilityTable)
     this.buttons =
       view.findViewById(R.id.bookDetailButtons)
@@ -556,13 +556,13 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         //Add the header first
         val (row0, rowKey) = this.bookAccessibilityHeaderViewOf()
         rowKey.text = this.getString(R.string.catalogMetaAccessibilityWaysOfReading)
-        this.accessibilityTable.addView(row0)
+        this.accessibility.addView(row0)
 
         //Add the values under the header
         for (wor in entry.accessibility.waysOfReading!!) {
           val (row, rowVal) = this.bookAccessibilityItemViewOf()
           rowVal.text = wor
-          this.accessibilityTable.addView(row)
+          this.accessibility.addView(row)
         }
       }
 
@@ -570,31 +570,31 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         //Add the header first
         val (row0, rowKey) = this.bookAccessibilityHeaderViewOf()
         rowKey.text = this.getString(R.string.catalogMetaAccessibilityConformsTo)
-        this.accessibilityTable.addView(row0)
+        this.accessibility.addView(row0)
 
         //Add the values under the header
         for (ct in entry.accessibility.conformsTo!!) {
           val (row, rowVal) = this.bookAccessibilityItemViewOf()
           rowVal.text = ct
-          this.accessibilityTable.addView(row)
+          this.accessibility.addView(row)
         }
       }
     } else {
       //If we have no accessibility information, show that we have no information
       val (row0, rowKey) = this.bookAccessibilityHeaderViewOf()
       rowKey.text = this.getString(R.string.catalogMetaAccessibilityNotAvailable)
-      this.accessibilityTable.addView(row0)
+      this.accessibility.addView(row0)
     }
   }
 
   private fun bookAccessibilityItemViewOf(): Pair<View, TextView> {
-    val row = this.layoutInflater.inflate(R.layout.book_detail_accessibility_item, this.accessibilityTable, false)
+    val row = this.layoutInflater.inflate(R.layout.book_detail_accessibility_item, this.accessibility, false)
     val rowVal = row.findViewById<TextView>(R.id.value)
     return Pair(row, rowVal)
   }
 
   private fun bookAccessibilityHeaderViewOf(): Pair<View, TextView> {
-    val row = this.layoutInflater.inflate(R.layout.book_detail_accessibility_header, this.accessibilityTable, false)
+    val row = this.layoutInflater.inflate(R.layout.book_detail_accessibility_header, this.accessibility, false)
     val rowKey = row.findViewById<TextView>(R.id.key)
     return Pair(row, rowKey)
   }

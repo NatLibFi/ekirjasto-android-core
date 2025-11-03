@@ -590,13 +590,13 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     private final List<OPDSAcquisition> acquisitions;
     private final List<String> authors;
     private final List<OPDSCategory> categories;
-    private OPDSAccessibility accessibility;
     private final Set<Pair<String, URI>> groups;
     private final String id;
     private final String title;
     private final DateTime updated;
     private final ArrayList<ParseError> errors;
     private OPDSAvailabilityType availability;
+    private OPDSAccessibility accessibility;
     private OptionType<URI> cover;
     private List<OPDSPreviewAcquisition> previews;
     private OptionType<URI> alternate;

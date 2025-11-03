@@ -52,11 +52,11 @@ public interface OPDSAcquisitionFeedEntryBuilderType {
   /**
    * Set accessibility information.
    *
-   * @param f The accessibility information
+   * @param a The accessibility information
    */
 
   OPDSAcquisitionFeedEntryBuilderType setAccessibility(
-    final OPDSAccessibility f);
+    final OPDSAccessibility a);
 
   /**
    * Add a group.
