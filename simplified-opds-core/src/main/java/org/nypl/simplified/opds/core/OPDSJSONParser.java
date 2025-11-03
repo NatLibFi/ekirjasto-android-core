@@ -252,6 +252,38 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
     }
   }
 
+  private static OPDSAccessibility parseAccessibility(
+    final JsonNode jn)
+    throws OPDSParseException {
+    NullCheck.notNull(jn);
+    try {
+      final ObjectNode o = JSONParserUtilities.checkObject(null, jn);
+
+      List<String> waysOfReading = null;
+      List<String> conformsTo = null;
+
+      if (o.has("waysOfReading")) {
+        final ArrayNode n = JSONParserUtilities.getArray(o, "waysOfReading");
+        waysOfReading = new ArrayList<>(n.size());
+        for (int index = 0; index < n.size(); ++index) {
+          waysOfReading.add(n.get(index).asText());
+        }
+      }
+
+      if (o.has("conformsTo")) {
+        final ArrayNode n = JSONParserUtilities.getArray(o, "conformsTo");
+        conformsTo = new ArrayList<>(n.size());
+        for (int index = 0; index < n.size(); ++index) {
+          conformsTo.add(n.get(index).asText());
+        }
+      }
+
+      return new OPDSAccessibility(waysOfReading, conformsTo);
+    } catch (final JSONParseException e) {
+      throw new OPDSParseException(e);
+    }
+  }
+
   private static DRMLicensor parseLicensor(
     final JsonNode jn)
     throws OPDSParseException {
@@ -379,6 +411,20 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
       }
 
       {
+        final ArrayNode a = JSONParserUtilities.getArray(s, "illustrators");
+        for (int index = 0; index < a.size(); ++index) {
+          fb.addIllustrator(a.get(index).asText());
+        }
+      }
+
+      {
+        final ArrayNode a = JSONParserUtilities.getArray(s, "translators");
+        for (int index = 0; index < a.size(); ++index) {
+          fb.addTranslator(a.get(index).asText());
+        }
+      }
+
+      {
         final ArrayNode a = JSONParserUtilities.getArray(s, "acquisitions");
         for (int index = 0; index < a.size(); ++index) {
           fb.addAcquisition(
@@ -399,6 +445,11 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
         for (int index = 0; index < a.size(); ++index) {
           fb.addCategory(OPDSJSONParser.parseCategory(a.get(index)));
         }
+      }
+
+      {
+        final JsonNode a = JSONParserUtilities.getNode(s, "accessibility");
+        fb.setAccessibility(OPDSJSONParser.parseAccessibility(a));
       }
 
       {
@@ -529,6 +580,8 @@ public final class OPDSJSONParser implements OPDSJSONParserType {
         JSONParserUtilities.getStringOptional(s, "publisher"));
       fb.setDistribution(
         JSONParserUtilities.getString(s, "distribution"));
+      fb.setLanguageOption(
+        JSONParserUtilities.getStringOptional(s,"language"));
       fb.setSummaryOption(
         JSONParserUtilities.getStringOptional(s, "summary"));
       fb.setSelectedOption(

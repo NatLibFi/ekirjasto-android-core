@@ -241,6 +241,7 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
     }
 
     parseCategories(element, entry_builder);
+    parseAccessibility(element, entry_builder);
     findAcquisitionAuthors(element, entry_builder);
     findNarrators(element, entry_builder);
     findIllustrators(element,entry_builder);
@@ -422,6 +423,49 @@ public final class OPDSAcquisitionFeedEntryParser implements OPDSAcquisitionFeed
       }
 
       entry_builder.addCategory(new OPDSCategory(term, scheme, label));
+    }
+  }
+
+  private void parseAccessibility(
+    final Element element,
+    final OPDSAcquisitionFeedEntryBuilderType entry_builder) {
+
+    //Get accessibility from the feed
+    final OptionType<Element> e_accessibilityElement =
+      OPDSXML.getFirstChildElementWithNameOptional(element, ATOM_URI, "accessibility");
+    //If there is accessibility value, get the wanted values from inside
+    if (e_accessibilityElement.isSome()) {
+      final Some<Element> accessibility_some = (Some<Element>) e_accessibilityElement;
+      final Element accessibility = accessibility_some.get();
+      final OptionType<Element> e_waysOfReading =
+        OPDSXML.getFirstChildElementWithNameOptional(accessibility, ATOM_URI, "waysOfReading");
+
+      // Start with empty lists we can replace with lists from the feed
+      List<String> waysOfReading= null;
+      List<String> conformsTo= null;
+
+      //If there are waysOfReading elements, replace the empty list with them
+      if (e_waysOfReading.isSome()) {
+        final Some<Element> waysofreading_some = (Some<Element>) e_waysOfReading;
+        final Element waysofreading_element = waysofreading_some.get();
+        waysOfReading =
+          OPDSXML.getChildElementsTextWithName(waysofreading_element, ATOM_URI, "feature");
+      }
+      final OptionType<Element> e_conformance =
+        OPDSXML.getFirstChildElementWithNameOptional(accessibility, ATOM_URI, "conformance");
+
+      //If there are conformsTo elements, replace the empty list with them
+      if (e_conformance.isSome()) {
+        final Some<Element> conformance_some = (Some<Element>) e_conformance;
+        final Element conformance_element = conformance_some.get();
+        conformsTo =
+          OPDSXML.getChildElementsTextWithName(conformance_element, ATOM_URI, "conformsTo");
+      }
+      //Set the accessibility, with one or both values being not-null
+      entry_builder.setAccessibility(new OPDSAccessibility(waysOfReading, conformsTo));
+    } else {
+      //Set accessibility with both lists being null
+      entry_builder.setAccessibility(new OPDSAccessibility(null, null));
     }
   }
 

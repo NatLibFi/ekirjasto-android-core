@@ -237,7 +237,36 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:orientation="vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:focusable="true">
+            <TextView
+                android:id="@+id/bookDetailAccessibilityText"
+                android:background="@drawable/description_heading_background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/catalogMetaAccessibility"
+                android:textSize="@dimen/catalogBookDetailDescriptionFontSize"
+                />
+
+            <LinearLayout
+                android:id="@+id/bookDetailAccessibilityTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical" />
         </LinearLayout>
 
         <View

@@ -83,10 +83,10 @@
   <string name="catalogMetaTranslators">Translators</string>
   <string name="catalogMetaIllustrators">Illustrators</string>
   <string name="catalogMetaId">ISBN</string>
-  <string name="catalogMetaAccessibilityFeatures">Accessibility features</string>
-  <string name="catalogMetaAccessMode">Access mode</string>
-  <string name="catalogMetaAccessibilitySummary">Accessibility summary</string>
-  <string name="catalogMetaAccessibilityNotAvailable">Not yet available</string>
+  <string name="catalogMetaAccessibility">Accessibility</string>
+  <string name="catalogMetaAccessibilityWaysOfReading">Ways Of Reading</string>
+  <string name="catalogMetaAccessibilityConformsTo">Conforms To</string>
+  <string name="catalogMetaAccessibilityNotAvailable">No information is available</string>
   <string name="catalogMore">More</string>
   <string name="catalogOperationFailed">The operation could not be completed.</string>
   <string name="catalogRead">Read</string>
