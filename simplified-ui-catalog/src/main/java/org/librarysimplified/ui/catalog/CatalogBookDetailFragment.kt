@@ -552,6 +552,19 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   ) {
     //If we have either accessibility value, handle them accordingly
     if (entry.accessibility.waysOfReading != null || entry.accessibility.conformsTo != null) {
+      if (entry.accessibility.conformsTo != null) {
+        //Add the header first
+        val (row0, rowKey) = this.bookAccessibilityHeaderViewOf()
+        rowKey.text = this.getString(R.string.catalogMetaAccessibilityConformance)
+        this.accessibility.addView(row0)
+
+        //Add the values under the header
+        for (ct in entry.accessibility.conformsTo!!) {
+          val (row, rowVal) = this.bookAccessibilityItemViewOf()
+          rowVal.text = ct
+          this.accessibility.addView(row)
+        }
+      }
       if (entry.accessibility.waysOfReading != null) {
         //Add the header first
         val (row0, rowKey) = this.bookAccessibilityHeaderViewOf()
@@ -562,20 +575,6 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
         for (wor in entry.accessibility.waysOfReading!!) {
           val (row, rowVal) = this.bookAccessibilityItemViewOf()
           rowVal.text = wor
-          this.accessibility.addView(row)
-        }
-      }
-
-      if (entry.accessibility.conformsTo != null) {
-        //Add the header first
-        val (row0, rowKey) = this.bookAccessibilityHeaderViewOf()
-        rowKey.text = this.getString(R.string.catalogMetaAccessibilityConformsTo)
-        this.accessibility.addView(row0)
-
-        //Add the values under the header
-        for (ct in entry.accessibility.conformsTo!!) {
-          val (row, rowVal) = this.bookAccessibilityItemViewOf()
-          rowVal.text = ct
           this.accessibility.addView(row)
         }
       }

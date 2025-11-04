@@ -85,7 +85,7 @@
   <string name="catalogMetaId">ISBN</string>
   <string name="catalogMetaAccessibility">Accessibility</string>
   <string name="catalogMetaAccessibilityWaysOfReading">Ways Of Reading</string>
-  <string name="catalogMetaAccessibilityConformsTo">Conforms To</string>
+  <string name="catalogMetaAccessibilityConformance">Conformance</string>
   <string name="catalogMetaAccessibilityNotAvailable">No information is available</string>
   <string name="catalogMore">More</string>
   <string name="catalogOperationFailed">The operation could not be completed.</string>
