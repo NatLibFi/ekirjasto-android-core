@@ -1,7 +1,8 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.3.8
-- Korjattiin bugi joka aiheutti äänikirjasoittimen monistumista
-- Päivitettiin sovelluksen kohde Android SDK versioon 35
+1.3.10
+- Lisättiin varattaviin kirjoihin tieto varausjonon pituudesta
+- Lisättiin kirjoille saavutettavuustiedot
+- Laina- ja varaustiedot päivittyvät useammin
 - UI päivityksiä
 - Bugi korjauksia

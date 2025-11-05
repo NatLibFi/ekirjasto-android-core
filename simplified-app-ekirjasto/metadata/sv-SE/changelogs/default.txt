@@ -1,7 +1,8 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.3.8
-- Fixade en bugg som orsakade att ljudboksspelare duplicerades
-- Uppdaterad Android SDK målversion till version 35
+1.3.10
+- Böcker som går att reservera visar nu längden på sin reservationskö
+- Lagt till tillgänglighetsinformation för böcker
+- Låne- och reservations information uppdateras oftare
 - UI-uppdateringar
 - Bugfixar
