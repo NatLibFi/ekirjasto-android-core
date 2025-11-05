@@ -38,6 +38,16 @@ public interface OPDSJSONSerializerType {
     throws OPDSSerializationException;
 
   /**
+   * Serialize the given accessibility to JSON.
+   *
+   * @param a The accessibility
+   * @return JSON
+   */
+
+  ObjectNode serializeAccessibility(
+    OPDSAccessibility a);
+
+  /**
    * Serialize the given availability type to JSON.
    *
    * @param a The availability type

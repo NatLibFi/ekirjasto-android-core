@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import one.irradia.mime.api.MIMEType;
@@ -125,6 +126,34 @@ public final class OPDSJSONSerializer implements OPDSJSONSerializerType {
     node.put("properties", serializeProperties(indirect.getProperties()));
     return node;
   }
+
+  @Override
+  public ObjectNode serializeAccessibility(
+    final OPDSAccessibility accessibility)
+  {
+    NullCheck.notNull(accessibility, "Accessibility");
+
+    final ObjectMapper jom = new ObjectMapper();
+    final ObjectNode node = jom.createObjectNode();
+
+    final ArrayNode wor = jom.createArrayNode();
+    if (accessibility.getWaysOfReading() != null){
+      for (final String a : accessibility.getWaysOfReading()) {
+        wor.add(a);
+      }
+    }
+    final ArrayNode c = jom.createArrayNode();
+    if (accessibility.getConformsTo() != null) {
+      for (final String a : Objects.requireNonNull(accessibility.getConformsTo())) {
+        c.add(a);
+      }
+    }
+
+    node.set("waysOfReading", wor);
+    node.set("conformsTo", c);
+    return node;
+  }
+
 
   @Override
   public ObjectNode serializeAvailability(
@@ -356,6 +385,10 @@ public final class OPDSJSONSerializer implements OPDSJSONSerializerType {
     });
 
     {
+      je.set("accessibility", this.serializeAccessibility(e.getAccessibility()));
+    }
+
+    {
       final Set<Pair<String, URI>> eg = e.getGroups();
       final ArrayNode a = jom.createArrayNode();
       for (final Pair<String, URI> p : eg) {
@@ -378,6 +411,26 @@ public final class OPDSJSONSerializer implements OPDSJSONSerializerType {
       je.put("publisher", s);
       return Unit.unit();
     });
+
+    e.getLanguage().map(s -> {
+      je.put("language", s);
+      return Unit.unit();
+    });
+
+    {
+      final ArrayNode ja = jom.createArrayNode();
+      for (final String a : e.getIllustrators()) {
+        ja.add(a);
+      }
+      je.set("illustrators", ja);
+    }
+    {
+      final ArrayNode ja = jom.createArrayNode();
+      for (final String a : e.getTranslators()) {
+        ja.add(a);
+      }
+      je.set("translators", ja);
+    }
 
     je.put("distribution", e.getDistribution());
     je.put("summary", e.getSummary());

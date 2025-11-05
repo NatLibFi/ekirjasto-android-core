@@ -77,6 +77,43 @@ public final class OPDSXML
   }
 
   /**
+   * Return all child elements as text of {@code node} that have name {@code name} in
+   * namespace {@code namespace}.
+   *
+   * @param node      The parent node
+   * @param namespace The namespace
+   * @param name      The element name
+   *
+   * @return A list of strings
+   */
+  public static List<String> getChildElementsTextWithName(
+    final Element node,
+    final URI namespace,
+    final String name)
+  {
+    NullCheck.notNull(node);
+    NullCheck.notNull(namespace);
+    NullCheck.notNull(name);
+
+    final String namespace_text = namespace.toString();
+    final NodeList children = node.getChildNodes();
+    final List<String> xs = new ArrayList<>(children.getLength());
+    for (int index = 0; index < children.getLength(); ++index) {
+      final Node child = children.item(index);
+      if (child instanceof Element) {
+        final Element child_element = (Element) child;
+        final String child_namespace = child_element.getNamespaceURI();
+        final String child_name = child_element.getLocalName();
+        if (child_namespace.equals(namespace_text) && child_name.equals(name)) {
+          xs.add(child_element.getTextContent().trim());
+        }
+      }
+    }
+
+    return xs;
+  }
+
+  /**
    * Return all child elements of {@code node} that have name {@code name} in
    * namespace {@code namespace}.
    *

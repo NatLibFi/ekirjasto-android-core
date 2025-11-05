@@ -29,6 +29,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
   private final List<String> authors;
   private final OPDSAvailabilityType availability;
   private final List<OPDSCategory> categories;
+  private final OPDSAccessibility accessibility;
   private final OptionType<URI> cover;
   private final List<OPDSPreviewAcquisition> previews;
   private final OptionType<URI> annotations;
@@ -76,6 +77,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     final OptionType<String> in_publisher,
     final String in_distribution,
     final List<OPDSCategory> in_categories,
+    final OPDSAccessibility in_accessibility,
     final OptionType<URI> in_alternate,
     final OptionType<URI> in_analytics,
     final OptionType<DRMLicensor> in_licensor,
@@ -105,6 +107,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     this.publisher = NullCheck.notNull(in_publisher);
     this.distribution = NullCheck.notNull(in_distribution);
     this.categories = NullCheck.notNull(in_categories);
+    this.accessibility = NullCheck.notNull(in_accessibility);
     this.alternate = NullCheck.notNull(in_alternate);
     this.analytics = NullCheck.notNull(in_analytics);
     this.licensor = NullCheck.notNull(in_licensor);
@@ -158,6 +161,14 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
       b.addAuthor(a);
     }
 
+    for (final String i : e.getIllustrators()) {
+      b.addIllustrator(i);
+    }
+
+    for (final String t : e.getTranslators()) {
+      b.addTranslator(t);
+    }
+
     b.setAvailability(e.getAvailability());
 
     for (final OPDSCategory c : e.getCategories()) {
@@ -167,7 +178,8 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     for (final OPDSPreviewAcquisition p : e.getPreviewAcquisitions()) {
       b.addPreviewAcquisition(p);
     }
-
+    b.setAccessibility(e.getAccessibility());
+    b.setLanguageOption(e.getLanguage());
     b.setCoverOption(e.getCover());
     b.setIssuesOption(e.getIssues());
     b.setAnnotationsOption(e.getAnnotations());
@@ -214,6 +226,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
       && this.authors.equals(other.authors)
       && this.groups.equals(other.groups)
       && this.categories.equals(other.categories)
+      && this.accessibility.equals(other.accessibility)
       && this.cover.equals(other.cover)
       && this.previews.equals(other.previews)
       && this.alternate.equals(other.alternate)
@@ -228,6 +241,9 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
       && this.updated.equals(other.updated)
       && this.published.equals(other.published)
       && this.publisher.equals(other.publisher)
+      && this.language.equals(other.language)
+      && this.translators.equals(other.translators)
+      && this.illustrators.equals(other.illustrators)
       && this.licensor.equals(other.licensor)
       && this.selected.equals(other.selected)
       && this.distribution.equals(other.distribution);
@@ -263,6 +279,14 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
 
   public List<OPDSCategory> getCategories() {
     return this.categories;
+  }
+
+  /**
+   * @return The list of accessibility fields
+   */
+
+  public OPDSAccessibility getAccessibility() {
+    return this.accessibility;
   }
 
   /**
@@ -482,6 +506,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     result = (prime * result) + this.analytics.hashCode();
     result = (prime * result) + this.annotations.hashCode();
     result = (prime * result) + this.categories.hashCode();
+    result = (prime * result) + this.accessibility.hashCode();
     result = (prime * result) + this.id.hashCode();
     result = (prime * result) + this.issues.hashCode();
     result = (prime * result) + this.related.hashCode();
@@ -492,6 +517,9 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     result = (prime * result) + this.published.hashCode();
     result = (prime * result) + this.publisher.hashCode();
     result = (prime * result) + this.distribution.hashCode();
+    result = (prime * result) + this.illustrators.hashCode();
+    result = (prime * result) + this.translators.hashCode();
+    result = (prime * result) + this.language.hashCode();
     result = (prime * result) + this.selected.hashCode();
     result = (prime * result) + this.licensor.hashCode();
     return result;
@@ -534,8 +562,16 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     b.append(this.distribution);
     b.append(", summary=");
     b.append(this.summary);
+    b.append(", accessibility=");
+    b.append(this.accessibility);
     b.append(", narrator=");
     b.append(this.narrators);
+    b.append(", illustrator=");
+    b.append(this.illustrators);
+    b.append(", translator=");
+    b.append(this.translators);
+    b.append(", language=");
+    b.append(this.language);
     b.append(", thumbnail=");
     b.append(this.thumbnail);
     b.append(", title=");
@@ -560,6 +596,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     private final DateTime updated;
     private final ArrayList<ParseError> errors;
     private OPDSAvailabilityType availability;
+    private OPDSAccessibility accessibility;
     private OptionType<URI> cover;
     private List<OPDSPreviewAcquisition> previews;
     private OptionType<URI> alternate;
@@ -611,6 +648,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
       this.publisher = Option.none();
       this.distribution = "";
       this.categories = new ArrayList<OPDSCategory>(8);
+      this.accessibility = new OPDSAccessibility(null,null);
       this.groups = new HashSet<Pair<String, URI>>(8);
       this.licensor = Option.none();
       this.duration = Option.none();
@@ -680,6 +718,7 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
         this.publisher,
         this.distribution,
         this.categories,
+        this.accessibility,
         this.alternate,
         this.analytics,
         this.licensor,
@@ -699,6 +738,13 @@ public final class OPDSAcquisitionFeedEntry implements Serializable {
     public OPDSAcquisitionFeedEntryBuilderType setAvailability(
       final OPDSAvailabilityType a) {
       this.availability = NullCheck.notNull(a);
+      return this;
+    }
+
+    @Override
+    public OPDSAcquisitionFeedEntryBuilderType setAccessibility(
+      final OPDSAccessibility a) {
+      this.accessibility = NullCheck.notNull(a);
       return this;
     }
 

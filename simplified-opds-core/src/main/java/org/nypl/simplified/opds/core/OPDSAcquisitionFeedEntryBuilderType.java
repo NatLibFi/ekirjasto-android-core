@@ -50,6 +50,15 @@ public interface OPDSAcquisitionFeedEntryBuilderType {
     final OPDSCategory c);
 
   /**
+   * Set accessibility information.
+   *
+   * @param a The accessibility information
+   */
+
+  OPDSAcquisitionFeedEntryBuilderType setAccessibility(
+    final OPDSAccessibility a);
+
+  /**
    * Add a group.
    *
    * @param uri The group URI
