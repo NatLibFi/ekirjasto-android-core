@@ -808,13 +808,25 @@
          "string" : "On hold"
       },
       "catalogBookAvailabilityHeldQueue" : {
-         "string" : "You are at position %1$d in the queue for this book."
+         "string" : "You have this book on hold. \nHold position: %1$d"
       },
       "catalogBookAvailabilityHeldQueueShort" : {
-         "string" : "At position: %1$d"
+         "string" : "Your hold position: %1$d"
       },
       "catalogBookAvailabilityHeldQueueWithCopies" : {
          "string" : "You are at position %1$d in the queue for %2$d copies of this book."
+      },
+      "catalogBookAvailabilityHeldQueueWithFullInfo" : {
+         "string" : "You have this book on hold. \nHold position: %1$d/%2$d, available: %3$d/%4$d"
+      },
+      "catalogBookAvailabilityHeldReady" : {
+         "string" : "This book is available to borrow. \nYour reservation will expire in %1$s."
+      },
+      "catalogBookAvailabilityHeldReadyIndefinite" : {
+         "string" : "This book is available to borrow."
+      },
+      "catalogBookAvailabilityHeldReadyShort" : {
+         "string" : "Ready to borrow!"
       },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "You will be able to borrow this book in %1$s."
@@ -823,13 +835,22 @@
          "string" : "Available in: %1$s"
       },
       "catalogBookAvailabilityHoldable" : {
-         "string" : "All copies of this book are currently on loan."
+         "string" : "This book is available to place on hold."
+      },
+      "catalogBookAvailabilityHoldableFull" : {
+         "string" : "This book is available to place on hold. \nHold queue: %1$d, available: %2$d/%3$d"
       },
       "catalogBookAvailabilityLoanable" : {
          "string" : "This book is available to borrow."
       },
+      "catalogBookAvailabilityLoanableFull" : {
+         "string" : "This book is available to borrow. \nAvailable: %1$d/%2$d"
+      },
       "catalogBookAvailabilityLoanedIndefinite" : {
          "string" : "You have this book on loan."
+      },
+      "catalogBookAvailabilityLoanedShort" : {
+         "string" : "Remaining loan time: %1$s"
       },
       "catalogBookAvailabilityLoanedTimed" : {
          "string" : "You have this book on loan for %1$s."
@@ -957,14 +978,23 @@
       "catalogMetaAccessMode" : {
          "string" : "Access mode"
       },
+      "catalogMetaAccessibility" : {
+         "string" : "Accessibility"
+      },
+      "catalogMetaAccessibilityConformance" : {
+         "string" : "Conformance"
+      },
       "catalogMetaAccessibilityFeatures" : {
          "string" : "Accessibility features"
       },
       "catalogMetaAccessibilityNotAvailable" : {
-         "string" : "Not yet available"
+         "string" : "No information is available"
       },
       "catalogMetaAccessibilitySummary" : {
          "string" : "Accessibility summary"
+      },
+      "catalogMetaAccessibilityWaysOfReading" : {
+         "string" : "Ways Of Reading"
       },
       "catalogMetaCategories" : {
          "string" : "Categories"
@@ -1127,6 +1157,9 @@
       },
       "errorPasskeyLoginFailed" : {
          "string" : "Could not sign in with Passkey"
+      },
+      "errorPasskeyRegisterCancelled" : {
+         "string" : "Passkey registering cancelled"
       },
       "errorPasskeyRegisterFailed" : {
          "string" : "Error registering a Passkey"
@@ -1424,6 +1457,9 @@
       },
       "ok" : {
          "string" : "OK"
+      },
+      "passkeyRegisterSuccessful" : {
+         "string" : "Passkey registered successfully"
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Creating an account provider description…"

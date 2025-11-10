@@ -1,7 +1,8 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
-1.3.8
-- Fixed a bug that caused multiple audio players to be created
-- Updated application to target android SDK version 35
+1.3.10
+- Books that are holdable now show the length of their hold queue
+- Added accessibility information for books
+- Loans and holds views are updated more often
 - UI updates
 - Bug fixes

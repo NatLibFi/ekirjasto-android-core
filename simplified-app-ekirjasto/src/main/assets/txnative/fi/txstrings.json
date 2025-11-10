@@ -808,13 +808,25 @@
          "string" : "Varattu"
       },
       "catalogBookAvailabilityHeldQueue" : {
-         "string" : "Olet tämän kirjan jonossa sijalla %1$d."
+         "string" : "Olet varannut tämän kirjan. \nVaraussijasi: %1$d"
       },
       "catalogBookAvailabilityHeldQueueShort" : {
-         "string" : "Sijalla: %1$d"
+         "string" : "Varaussijasi: %1$d"
       },
       "catalogBookAvailabilityHeldQueueWithCopies" : {
          "string" : "Olet jonossa sijalla %1$d . Kirjaan on %2$d yhtäaikaista lukuoikeutta."
+      },
+      "catalogBookAvailabilityHeldQueueWithFullInfo" : {
+         "string" : "Olet varannut tämän kirjan.\nVaraussijasi: %1$d/%2$d, saatavissa: %3$d/%4$d"
+      },
+      "catalogBookAvailabilityHeldReady" : {
+         "string" : "Voit lainata tämän kirjan. \nVarauksesi on voimassa %1$s."
+      },
+      "catalogBookAvailabilityHeldReadyIndefinite" : {
+         "string" : "Voit lainata tämän kirjan."
+      },
+      "catalogBookAvailabilityHeldReadyShort" : {
+         "string" : "Varauksesi on lainattavissa!"
       },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "Voit lainata tämän kirjan seuraavan ajan kuluttua: %1$s."
@@ -823,13 +835,22 @@
          "string" : "Saatavilla: %1$s kuluttua"
       },
       "catalogBookAvailabilityHoldable" : {
-         "string" : "Kaikki tämän kirjan kappaleet ovat tällä hetkellä lainassa."
+         "string" : "Voit varata tämän kirjan."
+      },
+      "catalogBookAvailabilityHoldableFull" : {
+         "string" : "Voit varata tämän kirjan .\nVarauksia: %1$d, saatavissa: %2$d/%3$d"
       },
       "catalogBookAvailabilityLoanable" : {
          "string" : "Tämän kirjan voi lainata."
       },
+      "catalogBookAvailabilityLoanableFull" : {
+         "string" : "Voit lainata tämän kirjan. \nSaatavissa: %1$d/%2$d"
+      },
       "catalogBookAvailabilityLoanedIndefinite" : {
          "string" : "Sinulla on tämä kirja lainassa."
+      },
+      "catalogBookAvailabilityLoanedShort" : {
+         "string" : "Laina-aikaa jäljellä: %1$s"
       },
       "catalogBookAvailabilityLoanedTimed" : {
          "string" : "Sinulla on tämä kirja lainassa %1$s."
@@ -957,14 +978,23 @@
       "catalogMetaAccessMode" : {
          "string" : "Saavutettavuus"
       },
+      "catalogMetaAccessibility" : {
+         "string" : "Saavutettavuus"
+      },
+      "catalogMetaAccessibilityConformance" : {
+         "string" : "Saavutettavuusstandardien noudattaminen"
+      },
       "catalogMetaAccessibilityFeatures" : {
          "string" : "Saavutettavuusominaisuudet"
       },
       "catalogMetaAccessibilityNotAvailable" : {
-         "string" : " Ei vielä saatavilla"
+         "string" : "Tietoa ei ole saatavilla"
       },
       "catalogMetaAccessibilitySummary" : {
          "string" : "Saavutettavuusyhteenveto"
+      },
+      "catalogMetaAccessibilityWaysOfReading" : {
+         "string" : "Lukemisen keinot"
       },
       "catalogMetaCategories" : {
          "string" : "Luokat"
@@ -1127,6 +1157,9 @@
       },
       "errorPasskeyLoginFailed" : {
          "string" : "Sisäänkirjautuminen pääsyavaimella epäonnistui"
+      },
+      "errorPasskeyRegisterCancelled" : {
+         "string" : "Pääsyavaimen rekisteröinti peruttu"
       },
       "errorPasskeyRegisterFailed" : {
          "string" : "Virhe pääsyavaimen rekisteröinnissä"
@@ -1424,6 +1457,9 @@
       },
       "ok" : {
          "string" : "OK"
+      },
+      "passkeyRegisterSuccessful" : {
+         "string" : "Pääsyavaimen rekisteröinti onnistui"
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Luodaan tilintarjoajan kuvausta..."

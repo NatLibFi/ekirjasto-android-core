@@ -808,13 +808,25 @@
          "string" : "Reserverad"
       },
       "catalogBookAvailabilityHeldQueue" : {
-         "string" : "Du är på plats %1$d i kön till denna bok."
+         "string" : "Du har reserverat den här boken. \n Din plats i kön: %1$d"
       },
       "catalogBookAvailabilityHeldQueueShort" : {
          "string" : "Din plats i kön: %1$d"
       },
       "catalogBookAvailabilityHeldQueueWithCopies" : {
          "string" : "Du är på plats %1$d i kön. Boken har %2$d samtidiga läsrättigheter."
+      },
+      "catalogBookAvailabilityHeldQueueWithFullInfo" : {
+         "string" : "Du har reserverat den här boken. \nDin plats i kön: %1$d/%2$d,  tillgänglig: %3$d/%4$d"
+      },
+      "catalogBookAvailabilityHeldReady" : {
+         "string" : "Du kan låna den här boken. \nDin reservering är i kraft %1$s."
+      },
+      "catalogBookAvailabilityHeldReadyIndefinite" : {
+         "string" : "Du kan låna den här boken."
+      },
+      "catalogBookAvailabilityHeldReadyShort" : {
+         "string" : "Din reservering kan nu lånas!"
       },
       "catalogBookAvailabilityHeldTimed" : {
          "string" : "Du kommer att kunna låna denna bok om %1$s."
@@ -823,13 +835,22 @@
          "string" : "Tillgänglig om: %1$s"
       },
       "catalogBookAvailabilityHoldable" : {
-         "string" : "Alla kopior av denna bok är för närvarande utlånade."
+         "string" : "Du kan reservera den här boken."
+      },
+      "catalogBookAvailabilityHoldableFull" : {
+         "string" : "Du kan reservera den här boken. \nReserveringar: %1$d, tillgänglig: %2$d/%3$d"
       },
       "catalogBookAvailabilityLoanable" : {
          "string" : "Denna bok kan lånas."
       },
+      "catalogBookAvailabilityLoanableFull" : {
+         "string" : "Du kan låna den här boken. \nTillgänglig: %1$d/%2$d"
+      },
       "catalogBookAvailabilityLoanedIndefinite" : {
          "string" : "Du har redan lånat denna bok."
+      },
+      "catalogBookAvailabilityLoanedShort" : {
+         "string" : " Återstående lånetid: %1$s"
       },
       "catalogBookAvailabilityLoanedTimed" : {
          "string" : "Denna bok är lånad åt dig i %1$s."
@@ -957,14 +978,23 @@
       "catalogMetaAccessMode" : {
          "string" : " Tillgänglighet"
       },
+      "catalogMetaAccessibility" : {
+         "string" : "Tillgänglighet"
+      },
+      "catalogMetaAccessibilityConformance" : {
+         "string" : "Tillgänglighetskrav"
+      },
       "catalogMetaAccessibilityFeatures" : {
          "string" : " Tillgänglighetsfunktioner"
       },
       "catalogMetaAccessibilityNotAvailable" : {
-         "string" : "Inte tillgänglig ännu"
+         "string" : "Information saknas"
       },
       "catalogMetaAccessibilitySummary" : {
          "string" : " Tillgänglighetssammanfattning"
+      },
+      "catalogMetaAccessibilityWaysOfReading" : {
+         "string" : "Olika sätt att läsa"
       },
       "catalogMetaCategories" : {
          "string" : "Kategorier"
@@ -1127,6 +1157,9 @@
       },
       "errorPasskeyLoginFailed" : {
          "string" : "Kunde inte logga in med nyckelkod"
+      },
+      "errorPasskeyRegisterCancelled" : {
+         "string" : "Registrering av nyckelkoden avbröts"
       },
       "errorPasskeyRegisterFailed" : {
          "string" : "Fel vid registrering av nyckelkod"
@@ -1424,6 +1457,9 @@
       },
       "ok" : {
          "string" : "Ok"
+      },
+      "passkeyRegisterSuccessful" : {
+         "string" : "Registrering av nyckelkoden lyckades"
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Skapar en beskrivning för kontoleverantör..."
