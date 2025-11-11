@@ -1,6 +1,6 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.3.10
+1.3.12
 - Böcker som går att reservera visar nu längden på sin reservationskö
 - Lagt till tillgänglighetsinformation för böcker
 - Låne- och reservations information uppdateras oftare
