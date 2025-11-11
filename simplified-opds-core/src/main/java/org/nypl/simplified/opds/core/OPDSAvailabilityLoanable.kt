@@ -26,7 +26,7 @@ data class OPDSAvailabilityLoanable private constructor(
    * @return end_date
    */
   override fun getEndDate(): OptionType<DateTime> {
-    return this.endDate
+    return Option.none()
   }
 
   override fun <A, E : Exception?> matchAvailability(

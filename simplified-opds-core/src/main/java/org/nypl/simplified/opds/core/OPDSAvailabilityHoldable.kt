@@ -1,5 +1,6 @@
 package org.nypl.simplified.opds.core
 
+import com.io7m.jfunctional.Option
 import com.io7m.jfunctional.OptionType
 import com.io7m.jfunctional.Unit
 import org.joda.time.DateTime
@@ -29,7 +30,7 @@ data class OPDSAvailabilityHoldable private constructor(
  * @return end_date
  */
   override fun getEndDate(): OptionType<DateTime> {
-    return this.endDate
+    return Option.none()
   }
 
   override fun <A, E : Exception?> matchAvailability(
