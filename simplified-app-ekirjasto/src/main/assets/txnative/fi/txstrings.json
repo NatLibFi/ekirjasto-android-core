@@ -838,7 +838,7 @@
          "string" : "Voit varata tämän kirjan."
       },
       "catalogBookAvailabilityHoldableFull" : {
-         "string" : "Voit varata tämän kirjan .\nVarauksia: %1$d, saatavissa: %2$d/%3$d"
+         "string" : "Voit varata tämän kirjan. \nVarauksia: %1$d, saatavissa: %2$d/%3$d"
       },
       "catalogBookAvailabilityLoanable" : {
          "string" : "Tämän kirjan voi lainata."
