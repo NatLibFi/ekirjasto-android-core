@@ -710,6 +710,7 @@ class CatalogPagedViewHolder(
         }
       )
     )
+    this.progressButtons.addView(this.buttonCreator.createButtonSpace())
     this.progressButtons.addView(this.buttonCreator.createButtonSizedSpace())
 
     //Check file size, and show popup if file is too big
