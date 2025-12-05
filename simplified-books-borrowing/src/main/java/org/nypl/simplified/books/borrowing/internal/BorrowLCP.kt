@@ -335,6 +335,9 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
     } catch (e: BorrowSubtaskFailed) {
       context.bookDownloadFailed()
       throw e
+    }  catch (e: BorrowSubtaskCancelled) {
+      context.bookDownloadCancelled()
+      throw e
     } catch (e: Exception) {
       context.taskRecorder.currentStepFailed(
         message = "LCP fulfillment error: ${e.message}",

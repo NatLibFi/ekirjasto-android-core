@@ -48,10 +48,10 @@ interface BooksControllerType {
    * @param bookID The ID of the book
    */
 
-  fun bookCancelDownloadAndDelete(
+  fun bookCancelDownload(
     accountID: AccountID,
     bookID: BookID
-  ): FluentFuture<TaskResult<Unit>>
+  )
 
   /**
    * Submit a problem report for a book

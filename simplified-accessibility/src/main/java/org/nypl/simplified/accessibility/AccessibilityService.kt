@@ -80,7 +80,9 @@ class AccessibilityService private constructor(
           // Nothing to do
         }
 
-      is BookStatus.Holdable,
+      is BookStatus.Holdable -> {
+        // Nothing to do
+      }
       is BookStatus.Loanable -> {
         val notHoldable = this.previousStatusIsNot(event, BookStatus.Holdable::class.java)
         val notLoanable = this.previousStatusIsNot(event, BookStatus.Loanable::class.java)
@@ -121,13 +123,27 @@ class AccessibilityService private constructor(
           // Nothing to do
         }
 
-      is BookStatus.Held.HeldReady,
-      is BookStatus.Loaned.LoanedNotDownloaded,
-      is BookStatus.RequestingRevoke,
-      is BookStatus.RequestingLoan,
-      is BookStatus.RequestingDownload,
-      is BookStatus.DownloadWaitingForExternalAuthentication,
-      is BookStatus.DownloadExternalAuthenticationInProgress,
+      is BookStatus.Held.HeldReady -> {
+        // Nothing to do
+      }
+      is BookStatus.Loaned.LoanedNotDownloaded -> {
+        // Nothing to do
+      }
+      is BookStatus.RequestingRevoke -> {
+        // Nothing to do
+      }
+      is BookStatus.RequestingLoan -> {
+        // Nothing to do
+      }
+      is BookStatus.RequestingDownload -> {
+        // Nothing to do
+      }
+      is BookStatus.DownloadWaitingForExternalAuthentication -> {
+        // Nothing to do
+      }
+      is BookStatus.DownloadExternalAuthenticationInProgress -> {
+        // Nothing to do
+      }
       is BookStatus.Selected -> {
         if (this.previousStatusIsNot(event, BookStatus.Selected::class.java)) {
           this.speak(this.strings.bookSelected(book.entry.title))
@@ -143,6 +159,7 @@ class AccessibilityService private constructor(
         }
       }
       is BookStatus.Revoked -> {
+        // Nothing to do
       }
       null -> {
       }

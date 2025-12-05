@@ -516,6 +516,10 @@ class BorrowTask private constructor(
       )
     }
 
+    override fun bookDownloadCancelled() {
+      this.bookPublishStatus(BookStatus.fromBook(this.bookDatabaseEntry.book))
+    }
+
     override fun bookReachedLoanLimit() {
       this.bookPublishStatus(
         BookStatus.ReachedLoanLimit(

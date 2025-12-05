@@ -744,12 +744,11 @@ class Controller private constructor(
     )
   }
 
-  override fun bookCancelDownloadAndDelete(
+  override fun bookCancelDownload(
     accountID: AccountID,
     bookID: BookID
-  ): FluentFuture<TaskResult<Unit>> {
+  ){
     this.borrows[bookID]?.cancel()
-    return this.bookDelete(accountID, bookID)
   }
 
   override fun bookReport(

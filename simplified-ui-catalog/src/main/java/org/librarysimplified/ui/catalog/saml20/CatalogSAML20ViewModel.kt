@@ -288,7 +288,7 @@ class CatalogSAML20ViewModel(
 
       if (bookWithStatus != null) {
         val book = bookWithStatus.book
-        this.booksController.bookCancelDownloadAndDelete(book.account, this.parameters.bookID)
+        this.booksController.bookCancelDownload(book.account, this.parameters.bookID)
         this.bookRegistry.update(BookWithStatus(book, BookStatus.fromBook(book)))
       }
     }

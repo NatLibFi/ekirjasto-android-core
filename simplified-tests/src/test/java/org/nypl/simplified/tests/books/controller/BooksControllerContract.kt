@@ -899,7 +899,7 @@ abstract class BooksControllerContract {
 
   /**
    * Cancelling a book download works.
-   *
+   * NOTE: Should not go through since the implementation of book delete was changed
    * @throws Exception On errors
    */
 
@@ -963,7 +963,7 @@ abstract class BooksControllerContract {
         .build()
 
     controller.bookBorrow(account.id, bookId, bookEntry).get()
-    controller.bookCancelDownloadAndDelete(account.id, bookId).get()
+    controller.bookCancelDownload(account.id, bookId)
 
     assertThrows<NoSuchElementException> { this.bookRegistry.bookOrException(bookId).status }
   }

@@ -207,6 +207,13 @@ interface BorrowContextType {
   fun bookDownloadSucceeded()
 
   /**
+   * Indicate that downloading the current book is cancelled. Implementations should base the
+   * actual resulting book status on the current status of the loan in the book database.
+   */
+
+  fun bookDownloadCancelled()
+
+  /**
    * Indicate a request is being made to loan the current book. Implementations should base the
    * actual resulting book status on the current status of the loan in the book database.
    */

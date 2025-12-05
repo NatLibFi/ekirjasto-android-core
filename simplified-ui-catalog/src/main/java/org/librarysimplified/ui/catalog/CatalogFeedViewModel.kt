@@ -103,12 +103,21 @@ class CatalogFeedViewModel(
   private val stateMutable: MutableLiveData<CatalogFeedState> =
     MutableLiveData(CatalogFeedState.CatalogFeedLoading(this.feedArguments))
 
+  val stateLive: LiveData<CatalogFeedState>
+    get() = stateMutable
+
+  private val state: CatalogFeedState
+    get() = this.stateLive.value!!
+
   init {
     loadFeed(this.feedArguments)
   }
 
-  private val state: CatalogFeedState
-    get() = this.stateLive.value!!
+  private fun updateState(newState : CatalogFeedState){
+    if (stateMutable.value != newState) {
+      stateMutable.value = newState
+    }
+  }
 
   private class BookModel(
     val feedEntry: FeedEntry.FeedEntryOPDS,
@@ -261,6 +270,7 @@ class CatalogFeedViewModel(
   }
 
   private fun onBookStatusEvent(event: BookStatusEvent) {
+    logger.debug("onBookStatusEvent")
     this.bookModels[event.bookId]?.let { model ->
       model.onBookChanged.forEach { callback ->
         this.notifyBookStatus(model.feedEntry, callback)
@@ -271,19 +281,43 @@ class CatalogFeedViewModel(
       this.reloadFeed()
     } else {
       when (val status = event.statusNow) {
-        is BookStatus.Held,
-        is BookStatus.Loaned,
+        is BookStatus.Held -> {
+          if (this.state.arguments.isLocallyGenerated) {
+            //Reload the feed when a new book is put on hold
+            //So the loans feed is up to date
+            this.reloadFeed()
+          }
+        }
+        is BookStatus.Loaned -> {
+          if (this.state.arguments.isLocallyGenerated) {
+            //Reload the feed when a new book is loaned
+            //So the loans feed is up to date
+            this.reloadFeed()
+          }
+        }
         is BookStatus.Revoked -> {
           if (this.state.arguments.isLocallyGenerated) {
             this.reloadFeed()
           }
         }
-        is BookStatus.DownloadExternalAuthenticationInProgress,
-        is BookStatus.DownloadWaitingForExternalAuthentication,
-        is BookStatus.Downloading,
-        is BookStatus.FailedDownload,
-        is BookStatus.FailedLoan,
-        is BookStatus.FailedRevoke,
+        is BookStatus.DownloadExternalAuthenticationInProgress -> {
+          //do nothing
+        }
+        is BookStatus.DownloadWaitingForExternalAuthentication -> {
+          //do nothing
+        }
+        is BookStatus.Downloading -> {
+          //do nothing
+        }
+        is BookStatus.FailedDownload -> {
+          //do nothing
+        }
+        is BookStatus.FailedLoan -> {
+          //do nothing
+        }
+        is BookStatus.FailedRevoke -> {
+          //do nothing
+        }
         is BookStatus.Holdable -> {
           if (this.state.arguments.isLocallyGenerated) {
             //Reload feed so dismissed failed holds are not shown in holds feed
@@ -296,14 +330,22 @@ class CatalogFeedViewModel(
             this.reloadFeed()
           }
         }
-        is BookStatus.ReachedLoanLimit,
-        is BookStatus.RequestingDownload,
-        is BookStatus.RequestingLoan,
-        is BookStatus.RequestingRevoke,
+        is BookStatus.ReachedLoanLimit -> {
+          //do nothing
+        }
+        is BookStatus.RequestingDownload -> {
+          //do nothing
+        }
+        is BookStatus.RequestingLoan -> {
+          //do nothing
+        }
+        is BookStatus.RequestingRevoke -> {
+          //do nothing
+        }
         is BookStatus.Selected -> {
           //No clue why this needs the status check, but it does, as otherwise it keeps
           //triggering this reload every chance it gets
-          if (this.state.arguments.isLocallyGenerated && status is BookStatus.Selected) {
+          if (this.state.arguments.isLocallyGenerated) {
             //Reload the feeds when book selected or unselected so
             //What the user sees in the favorites feed is up to date
             this.reloadFeed()
@@ -356,9 +398,6 @@ class CatalogFeedViewModel(
     this.subscriptions.clear()
     this.uiExecutor.dispose()
   }
-
-  val stateLive: LiveData<CatalogFeedState>
-    get() = stateMutable
 
   fun syncAccounts() {
     when (val arguments = state.arguments) {
@@ -561,7 +600,7 @@ class CatalogFeedViewModel(
     if (shouldDisplayAgeGate(account.provider.authentication, profile.preferences())) {
       this.logger.debug("[{}]: showing age gate", this.instanceId)
       val newState = CatalogFeedState.CatalogFeedAgeGate(arguments)
-      this.stateMutable.value = newState
+      updateState(newState)
       return
     }
 
@@ -604,7 +643,7 @@ class CatalogFeedViewModel(
     val newState =
       CatalogFeedState.CatalogFeedLoading(arguments)
 
-    this.stateMutable.value = newState
+    updateState(newState)
 
     /*
      * Register a callback that updates the feed status when the future completes.
@@ -639,7 +678,7 @@ class CatalogFeedViewModel(
   ) {
     this.logger.debug("[{}]: feed status updated: {}", this.instanceId, result.javaClass)
 
-    this.stateMutable.value = this.feedLoaderResultToFeedState(arguments, result)
+    updateState(this.feedLoaderResultToFeedState(arguments, result))
   }
 
   private fun feedLoaderResultToFeedState(
@@ -1068,7 +1107,7 @@ class CatalogFeedViewModel(
   fun openFacet(facet: FeedFacet) {
     val feedArguments = this.resolveFacet(facet)
     val newState = CatalogFeedState.CatalogFeedLoading(feedArguments)
-    this.stateMutable.value = newState
+    updateState(newState)
     reloadFeed()
   }
 
@@ -1325,9 +1364,6 @@ class CatalogFeedViewModel(
    */
   override fun cancelDownload(feedEntry: FeedEntry.FeedEntryOPDS) {
     this.borrowViewModel.tryCancelDownload(feedEntry.accountID, feedEntry.bookID)
-    //Since canceling download deletes the book from local database, we need to sync with
-    //the circulation so that the loan is shown correctly
-    this.syncAccounts()
   }
 
   override fun borrowMaybeAuthenticated(book: Book) {
