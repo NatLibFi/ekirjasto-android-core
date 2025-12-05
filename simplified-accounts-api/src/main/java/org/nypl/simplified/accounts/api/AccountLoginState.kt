@@ -100,7 +100,8 @@ sealed class AccountLoginState {
    */
 
   data class AccountLoggedIn(
-    override val credentials: AccountAuthenticationCredentials
+    override val credentials: AccountAuthenticationCredentials,
+    val refresh: Boolean = false
   ) : AccountLoginState()
 
   /**

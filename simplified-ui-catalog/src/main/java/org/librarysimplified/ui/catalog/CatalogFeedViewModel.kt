@@ -203,13 +203,20 @@ class CatalogFeedViewModel(
           this.reloadFeed()
         }
         if (accountState is AccountLoginState.AccountLoggedIn) {
-          //We reload feed on login since in some login cases,
-          //(in cases where there are books stored on the device)
-          //the feed shows up empty despite there being loans due to not being updated on login
-          //Adding different types of feeds meant that there needs to be a backlog clear
-          logger.debug("reloading feed due to successful login")
-          this.listener.post(CatalogFeedEvent.RefreshViews)
-          this.reloadFeed()
+          //If the change from out and back in was due to successful token refresh
+          //We do not want to reload the feeds, as they are already in correct state
+          //And we want the token refresh to be invisible for users
+          if (accountState.refresh) {
+            logger.debug("Logged in from refresh, no need to reload feeds")
+          } else {
+            //We reload feed on login since in some login cases,
+            //(in cases where there are books stored on the device)
+            //the feed shows up empty despite there being loans due to not being updated on login
+            //Adding different types of feeds meant that there needs to be a backlog clear
+            logger.debug("reloading feed due to successful login")
+            this.listener.post(CatalogFeedEvent.RefreshViews)
+            this.reloadFeed()
+          }
         }
       }
       CatalogFeedOwnership.CollectedFromAccounts -> {
@@ -464,7 +471,7 @@ class CatalogFeedViewModel(
   private fun doLoadLocalCombinationFeed(
     arguments: CatalogFeedArgumentsAllLocalBooks
   ) {
-    this.logger.debug("[{}]: loading local feed {}", this.instanceId, arguments.filterBy.name)
+    this.logger.debug("[{}]: loading local combination feed {}", this.instanceId, arguments.filterBy.name)
 
     MDC.remove(MDCKeys.FEED_URI)
     MDC.remove(MDCKeys.ACCOUNT_INTERNAL_ID)
