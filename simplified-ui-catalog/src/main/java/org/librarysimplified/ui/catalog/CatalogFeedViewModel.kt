@@ -73,7 +73,6 @@ import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import java.net.URI
 import java.util.UUID
-import kotlin.concurrent.thread
 
 /**
  * A view model for the catalog feed fragment.
