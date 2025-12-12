@@ -73,6 +73,7 @@ import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import java.net.URI
 import java.util.UUID
+import kotlin.concurrent.thread
 
 /**
  * A view model for the catalog feed fragment.
@@ -295,12 +296,16 @@ class CatalogFeedViewModel(
             this.reloadFeed()
           }
         }
-        is BookStatus.Loaned -> {
+        is BookStatus.Loaned.LoanedNotDownloaded -> {
           if (this.state.arguments.isLocallyGenerated) {
             //Reload the feed when a new book is loaned
             //So the loans feed is up to date
             this.reloadFeed()
           }
+        }
+        is BookStatus.Loaned.LoanedDownloaded -> {
+          // Don't reload, since at this point, the book is already in
+          // Loans, so the view does not need updating
         }
         is BookStatus.Revoked -> {
           if (this.state.arguments.isLocallyGenerated) {

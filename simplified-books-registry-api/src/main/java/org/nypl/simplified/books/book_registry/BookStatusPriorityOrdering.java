@@ -96,7 +96,7 @@ public enum BookStatusPriorityOrdering
    * {@link BookStatus.RequestingLoan}
    */
 
-  BOOK_STATUS_LOAN_IN_PROGRESS(20),
+  BOOK_STATUS_LOAN_IN_PROGRESS(35),
 
   /**
    * {@link BookStatus.Loaned}
