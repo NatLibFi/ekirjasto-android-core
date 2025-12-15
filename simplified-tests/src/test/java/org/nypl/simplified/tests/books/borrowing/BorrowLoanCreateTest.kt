@@ -392,10 +392,15 @@ class BorrowLoanCreateTest {
 
     this.webServer.enqueue(response)
 
-    task.execute(this.context)
-
-    assertEquals(this.webServer.url("/next").toUri(), this.context.receivedURIs[0])
-    assertEquals(1, this.context.receivedURIs.size)
+    try {
+      task.execute(this.context)
+      Assertions.fail()
+    } catch (e: BorrowSubtaskHaltedEarly) {
+      this.logger.debug("halted early: ", e)
+    } catch (e: Exception) {
+      this.logger.debug("error: ", e)
+      throw IllegalStateException(e)
+    }
 
     this.verifyBookRegistryHasStatus(LoanedNotDownloaded::class.java)
 
@@ -462,7 +467,15 @@ class BorrowLoanCreateTest {
     this.webServer.enqueue(response0)
     this.webServer.enqueue(response1)
 
-    task.execute(this.context)
+    try {
+      task.execute(this.context)
+      Assertions.fail()
+    } catch (e: BorrowSubtaskHaltedEarly) {
+      this.logger.debug("halted early: ", e)
+    } catch (e: Exception) {
+      this.logger.debug("error: ", e)
+      throw IllegalStateException(e)
+    }
 
     val sent0 = this.webServer.takeRequest()
     assertEquals("Basic c29tZW9uZTpub3QgYSBwYXNzd29yZA==", sent0.getHeader("Authorization"))
