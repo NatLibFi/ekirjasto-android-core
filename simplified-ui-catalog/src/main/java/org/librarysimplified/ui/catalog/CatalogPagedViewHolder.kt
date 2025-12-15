@@ -254,6 +254,11 @@ class CatalogPagedViewHolder(
         this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
 
         this.progressTitle.text = book.book.entry.title
+
+        val onClick: (View) -> Unit = {
+          logger.debug("Open book detail view")
+          this.listener.openBookDetail(this.feedEntry as FeedEntryOPDS)
+        }
         this.progressProgress.isIndeterminate = true
       }
       is BookStatus.RequestingLoan -> {
@@ -263,6 +268,14 @@ class CatalogPagedViewHolder(
         this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
 
         this.progressTitle.text = book.book.entry.title
+        //Add an onClick listener to the book cell
+        //that links to the book's detail view
+        val onClick: (View) -> Unit = {
+          logger.debug("Open book detail view")
+          this.listener.openBookDetail(this.feedEntry as FeedEntryOPDS)
+        }
+        //Set the clickable area as the whole cell
+        this.progress.setOnClickListener(onClick)
         this.progressProgress.isIndeterminate = true
       }
       is BookStatus.RequestingDownload -> {
