@@ -7,6 +7,7 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.joda.time.Instant
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -57,6 +58,7 @@ import org.nypl.simplified.books.borrowing.BorrowSubtasks
 import org.nypl.simplified.books.borrowing.BorrowTask
 import org.nypl.simplified.books.borrowing.BorrowTaskType
 import org.nypl.simplified.books.borrowing.internal.BorrowErrorCodes
+import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskHaltedEarly
 import org.nypl.simplified.books.bundled.api.BundledContentResolverType
 import org.nypl.simplified.books.formats.api.StandardFormatNames.adobeACSMFiles
 import org.nypl.simplified.books.formats.api.StandardFormatNames.genericAudioBooks
@@ -575,20 +577,10 @@ class BorrowTaskTest {
 
     val result = this.executeAssumingSuccess(task)
 
-    this.verifyBookRegistryHasStatus(LoanedDownloaded::class.java)
+    this.verifyBookRegistryHasStatus(LoanedNotDownloaded::class.java)
     assertEquals(RequestingLoan::class.java, this.bookStates.removeAt(0).javaClass)
     assertEquals(LoanedNotDownloaded::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(LoanedDownloaded::class.java, this.bookStates.removeAt(0).javaClass)
     assertEquals(0, this.bookStates.size)
-
-    val entry = this.bookDatabase.entry(this.bookID)
-    val handle =
-      entry.findFormatHandle(BookDatabaseEntryFormatHandleEPUB::class.java)!!
-
-    assertEquals("A cold star looked down on his creations", handle.format.file!!.readText())
   }
 
   /**
@@ -660,26 +652,10 @@ class BorrowTaskTest {
 
     val result = this.executeAssumingSuccess(task)
 
-    this.verifyBookRegistryHasStatus(LoanedDownloaded::class.java)
+    this.verifyBookRegistryHasStatus(LoanedNotDownloaded::class.java)
     assertEquals(RequestingLoan::class.java, this.bookStates.removeAt(0).javaClass)
     assertEquals(LoanedNotDownloaded::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(LoanedDownloaded::class.java, this.bookStates.removeAt(0).javaClass)
     assertEquals(0, this.bookStates.size)
-
-    val entry =
-      this.bookDatabase.entry(this.bookID)
-    val handle =
-      entry.findFormatHandle(BookDatabaseEntryFormatHandleEPUB::class.java)!!
-    val drm =
-      handle.drmInformationHandle as BookDRMInformationHandleACS
-
-    assertEquals("A cold star looked down on his creations", handle.format.file!!.readText())
-    assertEquals(adobeLoanID, drm.info.rights!!.second.id)
-    assertNotNull(drm.info.acsmFile)
   }
 
   /**
@@ -746,20 +722,10 @@ class BorrowTaskTest {
 
     val result = this.executeAssumingSuccess(task)
 
-    this.verifyBookRegistryHasStatus(LoanedDownloaded::class.java)
+    this.verifyBookRegistryHasStatus(LoanedNotDownloaded::class.java)
     assertEquals(RequestingLoan::class.java, this.bookStates.removeAt(0).javaClass)
     assertEquals(LoanedNotDownloaded::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(LoanedDownloaded::class.java, this.bookStates.removeAt(0).javaClass)
     assertEquals(0, this.bookStates.size)
-
-    val entry = this.bookDatabase.entry(this.bookID)
-    val handle =
-      entry.findFormatHandle(BookDatabaseEntryFormatHandleAudioBook::class.java)!!
-
-    val manifest = handle.format.manifest!!
-    assertEquals(this.webServer.url("/audio-book").toUri(), manifest.manifestURI)
-    assertArrayEquals(playerManifest.originalBytes, manifest.manifestFile.readBytes())
   }
 
   /**

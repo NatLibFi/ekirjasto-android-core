@@ -45,6 +45,7 @@ import org.nypl.simplified.books.borrowing.internal.BorrowDirectDownload
 import org.nypl.simplified.books.borrowing.internal.BorrowLCP
 import org.nypl.simplified.books.borrowing.internal.BorrowLoanCreate
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException
+import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskHaltedEarly
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskType
 import org.nypl.simplified.books.formats.api.BookFormatSupportType
 import org.nypl.simplified.books.formats.api.StandardFormatNames
@@ -585,7 +586,15 @@ class BorrowBookRefreshTokenTest {
 
     this.webServer.enqueue(response)
 
-    BorrowLoanCreate.createSubtask().execute(this.context)
+    try {
+      BorrowLoanCreate.createSubtask().execute(this.context)
+      Assertions.fail()
+    } catch (e: BorrowSubtaskHaltedEarly) {
+      this.logger.debug("halted early: ", e)
+    } catch (e: Exception) {
+      this.logger.debug("error: ", e)
+      throw IllegalStateException(e)
+    }
 
     Assertions.assertEquals(
       "ghij",

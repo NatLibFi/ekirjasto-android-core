@@ -259,6 +259,11 @@ class BorrowLoanCreate private constructor() : BorrowSubtaskType {
               isOpenAccess = false
             )
           )
+          // We want to separate loaning and downloading the book, so
+          // halt the task when we have the book loaned
+          // This will not cause an error to be raised
+          // and the loan is considered successful
+          throw BorrowSubtaskHaltedEarly()
         }
 
         /**
