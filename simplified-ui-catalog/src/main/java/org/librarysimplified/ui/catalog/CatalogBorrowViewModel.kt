@@ -282,18 +282,16 @@ class CatalogBorrowViewModel(
   }
 
   /**
-   * Try cancelling the current download. Cancelling deletes the book from the database,
-   * so after that is done, we sync current books with backend, so a new entry for the
-   * cancelled book is added to database.
+   * Try cancelling the current download. Cancelling the download returns
+   * the book to its previous state that is available in database, which
+   * is LoanedNotDownloaded.
    */
   fun tryCancelDownload(
     accountID: AccountID,
     bookID: BookID
   ) {
     this.logger.debug("cancelling download: {}", bookID)
-    this.booksController.bookCancelDownloadAndDelete(accountID, bookID)
-    //In order for the loan view to show books correctly, sync with the backend
-    this.booksController.booksSync(accountID)
+    this.booksController.bookCancelDownload(accountID, bookID)
   }
 
   fun tryDelete(

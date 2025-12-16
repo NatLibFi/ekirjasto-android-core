@@ -78,6 +78,13 @@ class MockBorrowContext(
     this.bookPublishStatus(status)
   }
 
+  override fun bookDownloadCancelled() {
+    val book = this.bookDatabaseEntry.book
+    check((!book.isDownloaded))
+    val status = BookStatus.fromBook(book)
+    this.bookPublishStatus(status)
+  }
+
   override fun bookDownloadIsRunning(
     message: String,
     receivedSize: Long?,

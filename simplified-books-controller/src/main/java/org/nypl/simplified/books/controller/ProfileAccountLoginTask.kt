@@ -390,7 +390,7 @@ class ProfileAccountLoginTask(
           this.runDeviceActivation()
           this.steps.currentStepSucceeded("Device Activation complete")
           this.steps.beginNewStep("Update LoginState to Logged in")
-          this.account.setLoginState(AccountLoggedIn(this.credentials))
+          this.account.setLoginState(AccountLoggedIn(this.credentials, true))
           this.steps.currentStepSucceeded("Login State updated")
           notificationTokenHttpCalls.registerFCMTokenForProfileAccount(
             account = account,

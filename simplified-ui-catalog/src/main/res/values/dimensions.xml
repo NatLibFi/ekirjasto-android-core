@@ -9,7 +9,7 @@
   <dimen name="catalogBookDetailStatusMargin">16dp</dimen>
   <dimen name="catalogFeedCoversSpace">8dp</dimen>
   <dimen name="catalogFeedCellImageWidth">80dp</dimen>
-  <dimen name="catalogFeedCellHeight">128dp</dimen>
+  <dimen name="catalogFeedCellHeight">205dp</dimen>
   <dimen name="catalogFeedCellButtonsHeight">48dp</dimen>
   <dimen name="catalogFacetTabStroke">4dp</dimen>
   <dimen name="catalogFacetTabCornerRadius">8dp</dimen>

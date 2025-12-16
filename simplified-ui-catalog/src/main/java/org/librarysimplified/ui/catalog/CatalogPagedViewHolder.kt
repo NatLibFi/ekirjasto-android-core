@@ -88,8 +88,12 @@ class CatalogPagedViewHolder(
 
   private val progressProgress =
     this.parent.findViewById<ProgressBar>(R.id.bookCellInProgressBar)!!
-  private val progressText =
+  private val progressTitle =
     this.parent.findViewById<TextView>(R.id.bookCellInProgressTitle)!!
+  private val progressText =
+  this.parent.findViewById<TextView>(R.id.bookCellInProgressText)!!
+  private val progressButtons =
+    this.parent.findViewById<ViewGroup>(R.id.bookCellInProgressButtons)!!
 
   private val errorTitle =
     this.error.findViewById<TextView>(R.id.bookCellErrorTitle)
@@ -243,16 +247,44 @@ class CatalogPagedViewHolder(
         this.onBookStatusFailedDownload(status, book.book)
       is BookStatus.FailedLoan ->
         this.onBookStatusFailedLoan(status, book.book)
+      is BookStatus.RequestingRevoke -> {
+        this.setVisibilityIfNecessary(this.corrupt, View.GONE)
+        this.setVisibilityIfNecessary(this.error, View.GONE)
+        this.setVisibilityIfNecessary(this.idle, View.GONE)
+        this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
 
-      is BookStatus.RequestingRevoke,
-      is BookStatus.RequestingLoan,
+        this.progressTitle.text = book.book.entry.title
+
+        val onClick: (View) -> Unit = {
+          logger.debug("Open book detail view")
+          this.listener.openBookDetail(this.feedEntry as FeedEntryOPDS)
+        }
+        this.progressProgress.isIndeterminate = true
+      }
+      is BookStatus.RequestingLoan -> {
+        this.setVisibilityIfNecessary(this.corrupt, View.GONE)
+        this.setVisibilityIfNecessary(this.error, View.GONE)
+        this.setVisibilityIfNecessary(this.idle, View.GONE)
+        this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
+
+        this.progressTitle.text = book.book.entry.title
+        //Add an onClick listener to the book cell
+        //that links to the book's detail view
+        val onClick: (View) -> Unit = {
+          logger.debug("Open book detail view")
+          this.listener.openBookDetail(this.feedEntry as FeedEntryOPDS)
+        }
+        //Set the clickable area as the whole cell
+        this.progress.setOnClickListener(onClick)
+        this.progressProgress.isIndeterminate = true
+      }
       is BookStatus.RequestingDownload -> {
         this.setVisibilityIfNecessary(this.corrupt, View.GONE)
         this.setVisibilityIfNecessary(this.error, View.GONE)
         this.setVisibilityIfNecessary(this.idle, View.GONE)
         this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
 
-        this.progressText.text = book.book.entry.title
+        this.progressTitle.text = book.book.entry.title
         this.progressProgress.isIndeterminate = true
       }
 
@@ -672,7 +704,7 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.idle, View.GONE)
     this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
 
-    this.progressText.text = book.book.entry.title
+    this.progressTitle.text = book.book.entry.title
     //Add an onClick listener to the book cell
     //that links to the book's detail view
     val onClick: (View) -> Unit = {
@@ -682,6 +714,17 @@ class CatalogPagedViewHolder(
     //Set the clickable area as the whole cell
     this.progress.setOnClickListener(onClick)
 
+    //Add the cancel button
+    this.progressButtons.removeAllViews()
+    this.progressButtons.addView(
+      this.buttonCreator.createCancelDownloadButton(
+        onClick = {
+          this.listener.cancelDownload(this.feedEntry as FeedEntryOPDS)
+        }
+      )
+    )
+    this.progressButtons.addView(this.buttonCreator.createButtonSpace())
+    this.progressButtons.addView(this.buttonCreator.createButtonSizedSpace())
 
     //Check file size, and show popup if file is too big
     //Check is done only once for each book download
@@ -726,6 +769,7 @@ class CatalogPagedViewHolder(
     if (progressPercent != null) {
       this.progressProgress.isIndeterminate = false
       this.progressProgress.progress = progressPercent
+      this.progressText.text = "$progressPercent%"
     } else {
       this.progressProgress.isIndeterminate = true
     }
@@ -812,7 +856,7 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.idle, View.GONE)
     this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
 
-    this.progressText.text = book.entry.title
+    this.progressTitle.text = book.entry.title
     this.progressProgress.isIndeterminate = true
   }
 
@@ -824,7 +868,7 @@ class CatalogPagedViewHolder(
     this.setVisibilityIfNecessary(this.idle, View.GONE)
     this.setVisibilityIfNecessary(this.progress, View.VISIBLE)
 
-    this.progressText.text = book.entry.title
+    this.progressTitle.text = book.entry.title
     this.progressProgress.isIndeterminate = true
   }
 
@@ -870,7 +914,9 @@ class CatalogPagedViewHolder(
     this.idleTitle.setOnClickListener(null)
     this.idleTitle.text = null
     this.progress.setOnClickListener(null)
-    this.progressText.setOnClickListener(null)
+    this.progressTitle.setOnClickListener(null)
+    this.progressButtons.removeAllViews()
+    this.progressText.text = null
     this.idleLoanTime.text = null
 
     this.thumbnailLoading = this.thumbnailLoading?.let { loading ->
