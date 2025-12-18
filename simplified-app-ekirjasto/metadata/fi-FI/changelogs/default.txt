@@ -1,8 +1,6 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.3.12
-- Lisättiin varattaviin kirjoihin tieto varausjonon pituudesta
-- Lisättiin kirjoille saavutettavuustiedot
-- Laina- ja varaustiedot päivittyvät useammin
+1.3.14
+- Kirjan lainaus ei enää aloita kirjan latausta automaattisesti
 - UI päivityksiä
 - Bugi korjauksia
