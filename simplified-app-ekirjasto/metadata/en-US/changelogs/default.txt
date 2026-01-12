@@ -1,8 +1,6 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
-1.3.12
-- Books that are holdable now show the length of their hold queue
-- Added accessibility information for books
-- Loans and holds views are updated more often
+1.3.16
+- Borrowing a book no longer automatically starts download of the book
 - UI updates
 - Bug fixes
