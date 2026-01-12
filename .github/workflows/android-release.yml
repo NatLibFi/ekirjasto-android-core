@@ -51,7 +51,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: scripts/run-tests.sh
       - name: Upload test report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
           name: junit-test-report
