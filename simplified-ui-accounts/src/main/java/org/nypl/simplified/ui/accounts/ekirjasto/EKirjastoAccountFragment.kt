@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import io.reactivex.disposables.CompositeDisposable
+import org.joda.time.LocalDate
 import org.librarysimplified.documents.DocumentType
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
@@ -75,6 +76,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
   private lateinit var bookmarkSyncCheck: SwitchCompat
   private lateinit var bookmarkStatement: TextView
 */
+  private lateinit var buttonSurveys: Button
   private lateinit var buttonFeedback: Button
   private lateinit var buttonPrivacyPolicy: Button
   private lateinit var buttonUserAgreement: Button
@@ -115,6 +117,7 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     this.buttonAccessibilityStatement = view.findViewById(R.id.accessibilityStatement)
 //  this.syncBookmarks = view.findViewById(R.id.accountSyncBookmarks)
 //  this.bookmarkStatement = view.findViewById(R.id.accountSyncBookmarksStatement)
+    this.buttonSurveys = view.findViewById(R.id.buttonSurveys)
     this.buttonFeedback = view.findViewById(R.id.buttonFeedback)
     this.buttonPrivacyPolicy = view.findViewById(R.id.buttonPrivacyPolicy)
     this.buttonUserAgreement = view.findViewById(R.id.buttonUserAgreement)
@@ -262,16 +265,21 @@ class EKirjastoAccountFragment : Fragment(R.layout.account_ekirjasto){
     configureDocViewButton(buttonPrivacyPolicy, this.viewModel.documents.privacyPolicy)
     configureDocViewButton(buttonUserAgreement, this.viewModel.documents.eula)
     configureDocViewButton(buttonLicenses, this.viewModel.documents.licenses)
+
+    configureDocViewButton(buttonSurveys, this.viewModel.documents.eula)
     //Configure the doc buttons to the correct language version
     when (LanguageUtil.getUserLanguage(this.requireContext())) {
       "fi" -> {
-      configureDocViewButton(buttonInstructions, this.viewModel.documents.instructionsFI)
+        configureDocViewButton(buttonInstructions, this.viewModel.documents.instructionsFI)
+        configureDocViewButton(buttonSurveys, this.viewModel.documents.surveysFI)
       }
       "sv" -> {
-      configureDocViewButton(buttonInstructions, this.viewModel.documents.instructionsSV)
+        configureDocViewButton(buttonInstructions, this.viewModel.documents.instructionsSV)
+        configureDocViewButton(buttonSurveys, this.viewModel.documents.surveysSV)
       }
       else -> {
         configureDocViewButton(buttonInstructions, this.viewModel.documents.instructionsEN)
+        configureDocViewButton(buttonSurveys, this.viewModel.documents.surveysEN)
       }
     }
 

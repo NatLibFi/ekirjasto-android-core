@@ -170,6 +170,13 @@
                 android:text="@string/account_instructions" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSurveys"
+                style="@style/Palace.Button.Outlined.Settings.Arrowed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/account_surveys" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonFeedback"
                 style="@style/Palace.Button.Outlined.Settings.Arrowed"
                 android:layout_width="match_parent"

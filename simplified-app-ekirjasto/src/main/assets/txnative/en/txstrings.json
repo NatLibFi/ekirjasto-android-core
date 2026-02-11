@@ -213,6 +213,9 @@
       "account_register_passkey" : {
          "string" : "Register a passkey"
       },
+      "account_surveys" : {
+         "string" : "User surveys"
+      },
       "account_sync_bookmarks_statement" : {
          "string" : "Save your reading position and bookmarks to all your other devices"
       },
@@ -813,9 +816,6 @@
       "catalogBookAvailabilityHeldQueueShort" : {
          "string" : "Your hold position: %1$d"
       },
-      "catalogBookAvailabilityHeldQueueWithCopies" : {
-         "string" : "You are at position %1$d in the queue for %2$d copies of this book."
-      },
       "catalogBookAvailabilityHeldQueueWithFullInfo" : {
          "string" : "You have this book on hold. \nHold position: %1$d/%2$d, available: %3$d/%4$d"
       },
@@ -857,12 +857,6 @@
       },
       "catalogBookAvailabilityOpenAccess" : {
          "string" : "This book is yours to keep."
-      },
-      "catalogBookAvailabilityReservedIndefinite" : {
-         "string" : "You have this book reserved."
-      },
-      "catalogBookAvailabilityReservedTimed" : {
-         "string" : "Your reservation expires in %1$s."
       },
       "catalogBookAvailabilityRevoked" : {
          "string" : "This book is waiting to be returned."
@@ -969,14 +963,8 @@
       "catalogListen" : {
          "string" : "Listen"
       },
-      "catalogLoanTime" : {
-         "string" : "On loan for: %1$s"
-      },
       "catalogLoginRequired" : {
          "string" : "Please sign in to continue."
-      },
-      "catalogMetaAccessMode" : {
-         "string" : "Access mode"
       },
       "catalogMetaAccessibility" : {
          "string" : "Accessibility"
@@ -984,14 +972,8 @@
       "catalogMetaAccessibilityConformance" : {
          "string" : "Conformance"
       },
-      "catalogMetaAccessibilityFeatures" : {
-         "string" : "Accessibility features"
-      },
       "catalogMetaAccessibilityNotAvailable" : {
          "string" : "No information is available"
-      },
-      "catalogMetaAccessibilitySummary" : {
-         "string" : "Accessibility summary"
       },
       "catalogMetaAccessibilityWaysOfReading" : {
          "string" : "Ways Of Reading"
@@ -1132,12 +1114,6 @@
          "string" : "There are no bookmarks for this book"
       },
       "emptyBooksNotLoggedIn" : {
-         "string" : "Sign in to see your books."
-      },
-      "emptyHoldsNotLoggedIn" : {
-         "string" : "Sign in to see your reservations."
-      },
-      "emptyLoansNotLoggedIn" : {
          "string" : "Sign in to see your books."
       },
       "emptySelectedNotLoggedIn" : {

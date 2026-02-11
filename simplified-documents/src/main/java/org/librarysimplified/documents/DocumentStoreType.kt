@@ -63,6 +63,21 @@ interface DocumentStoreType {
   val instructionsEN: DocumentType?
 
   /**
+   * @return The surveys in finnish, if any.
+   */
+  val surveysFI: DocumentType?
+
+  /**
+   * @return The surveys in swedish, if any.
+   */
+  val surveysSV: DocumentType?
+
+  /**
+   * @return The surveys in english, if any.
+   */
+  val surveysEN: DocumentType?
+
+  /**
    * @return The application FAQ, if any.
    */
 

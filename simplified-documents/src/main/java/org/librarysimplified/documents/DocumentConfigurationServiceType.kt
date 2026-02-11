@@ -65,6 +65,21 @@ interface DocumentConfigurationServiceType {
   val instructionsEN: DocumentConfiguration?
 
   /**
+   * @return The surveys in finnish, if any.
+   */
+  val surveysFI: DocumentConfiguration?
+
+  /**
+   * @return The surveys in swedish, if any.
+   */
+  val surveysSV: DocumentConfiguration?
+
+  /**
+   * @return The surveys in english, if any.
+   */
+  val surveysEN: DocumentConfiguration?
+
+  /**
    * @return The application FAQ, if any.
    */
   val faq: DocumentConfiguration?

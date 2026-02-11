@@ -213,6 +213,9 @@
       "account_register_passkey" : {
          "string" : "Rekisteröi pääsyavain"
       },
+      "account_surveys" : {
+         "string" : "Käyttäjäkyselyt"
+      },
       "account_sync_bookmarks_statement" : {
          "string" : "Tallenna lukukohtasi ja kirjanmerkkisi kaikkiin muihin laitteisiisi"
       },
@@ -813,9 +816,6 @@
       "catalogBookAvailabilityHeldQueueShort" : {
          "string" : "Varaussijasi: %1$d"
       },
-      "catalogBookAvailabilityHeldQueueWithCopies" : {
-         "string" : "Olet jonossa sijalla %1$d . Kirjaan on %2$d yhtäaikaista lukuoikeutta."
-      },
       "catalogBookAvailabilityHeldQueueWithFullInfo" : {
          "string" : "Olet varannut tämän kirjan.\nVaraussijasi: %1$d/%2$d, saatavissa: %3$d/%4$d"
       },
@@ -857,12 +857,6 @@
       },
       "catalogBookAvailabilityOpenAccess" : {
          "string" : "Voit pitää tämän kirjan."
-      },
-      "catalogBookAvailabilityReservedIndefinite" : {
-         "string" : "Olet varannut tämän kirjan."
-      },
-      "catalogBookAvailabilityReservedTimed" : {
-         "string" : "Varauksesi vanhenee seuraavan ajan kuluttua: %1$s."
       },
       "catalogBookAvailabilityRevoked" : {
          "string" : "Tämä kirja odottaa palauttamista."
@@ -969,14 +963,8 @@
       "catalogListen" : {
          "string" : "Kuuntele"
       },
-      "catalogLoanTime" : {
-         "string" : "Laina-aikaa jäljellä: %1$s"
-      },
       "catalogLoginRequired" : {
          "string" : "Jatka kirjautumalla sisään."
-      },
-      "catalogMetaAccessMode" : {
-         "string" : "Saavutettavuus"
       },
       "catalogMetaAccessibility" : {
          "string" : "Saavutettavuus"
@@ -984,14 +972,8 @@
       "catalogMetaAccessibilityConformance" : {
          "string" : "Saavutettavuusstandardien noudattaminen"
       },
-      "catalogMetaAccessibilityFeatures" : {
-         "string" : "Saavutettavuusominaisuudet"
-      },
       "catalogMetaAccessibilityNotAvailable" : {
          "string" : "Tietoa ei ole saatavilla"
-      },
-      "catalogMetaAccessibilitySummary" : {
-         "string" : "Saavutettavuusyhteenveto"
       },
       "catalogMetaAccessibilityWaysOfReading" : {
          "string" : "Lukemisen keinot"
@@ -1133,12 +1115,6 @@
       },
       "emptyBooksNotLoggedIn" : {
          "string" : "Kirjaudu sisään nähdäksesi lainasi."
-      },
-      "emptyHoldsNotLoggedIn" : {
-         "string" : "Kirjaudu sisään nähdäksesi varauksesi."
-      },
-      "emptyLoansNotLoggedIn" : {
-         "string" : "Kirjaudu sisään nähdäksesi kirjasi."
       },
       "emptySelectedNotLoggedIn" : {
          "string" : "Kirjaudu sisään nähdäksesi suosikkisi."
