@@ -161,7 +161,7 @@ internal class DocumentStore private constructor(
         instructionsSV = instructionsSV,
         surveysEN = surveysEN,
         surveysFI = surveysFI,
-        surveysSV =surveysSV,
+        surveysSV = surveysSV,
         faq = faq
       )
     }

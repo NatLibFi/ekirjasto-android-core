@@ -17,7 +17,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fi.kansalliskirjasto.ekirjasto.util.LanguageUtil
 import io.reactivex.disposables.CompositeDisposable
-import org.joda.time.LocalDate
 import org.librarysimplified.documents.DocumentType
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.accounts.R
