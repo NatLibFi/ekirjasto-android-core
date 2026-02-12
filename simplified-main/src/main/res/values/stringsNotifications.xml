@@ -10,4 +10,8 @@
   <string name="notification_channel_description_loans">Notifications related to your loans.</string>
   <string name="notification_channel_id_loans">channel_id_loans</string>
   <string name="notification_channel_name_loans">Loans</string>
+
+  <string name="notification_channel_description_other">Other notifications related to the application.</string>
+  <string name="notification_channel_id_other">channel_id_other</string>
+  <string name="notification_channel_name_other">Other</string>
 </resources>

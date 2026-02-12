@@ -17,6 +17,7 @@ class MainNotificationsMessagingService : FirebaseMessagingService() {
     private const val EVENT_TYPE_ACTIVITY_SYNC = "ActivitySync"
     private const val EVENT_TYPE_HOLD_AVAILABLE = "HoldAvailable"
     private const val EVENT_TYPE_LOAN_EXPIRY = "LoanExpiry"
+    private const val EVENT_TYPE_USER_SURVEY = "UserSurvey"
   }
 
   private val logger = LoggerFactory.getLogger(MainNotificationsMessagingService::class.java)
@@ -51,6 +52,10 @@ class MainNotificationsMessagingService : FirebaseMessagingService() {
 
       EVENT_TYPE_LOAN_EXPIRY -> {
         getString(R.string.notification_channel_id_loans)
+      }
+
+      EVENT_TYPE_USER_SURVEY -> {
+        getString(R.string.notification_channel_id_other)
       }
 
       EVENT_TYPE_ACTIVITY_SYNC -> {
