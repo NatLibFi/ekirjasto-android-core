@@ -213,6 +213,9 @@
       "account_register_passkey" : {
          "string" : "Registrera nyckelkod"
       },
+      "account_surveys" : {
+         "string" : "Användarenkäter"
+      },
       "account_sync_bookmarks_statement" : {
          "string" : "Spara ditt läsläge och dina bokmärken på alla dina enheter"
       },
@@ -813,9 +816,6 @@
       "catalogBookAvailabilityHeldQueueShort" : {
          "string" : "Din plats i kön: %1$d"
       },
-      "catalogBookAvailabilityHeldQueueWithCopies" : {
-         "string" : "Du är på plats %1$d i kön. Boken har %2$d samtidiga läsrättigheter."
-      },
       "catalogBookAvailabilityHeldQueueWithFullInfo" : {
          "string" : "Du har reserverat den här boken. \nDin plats i kön: %1$d/%2$d,  tillgänglig: %3$d/%4$d"
       },
@@ -857,12 +857,6 @@
       },
       "catalogBookAvailabilityOpenAccess" : {
          "string" : "Du kan behålla denna bok."
-      },
-      "catalogBookAvailabilityReservedIndefinite" : {
-         "string" : "Du har reserverat denna bok."
-      },
-      "catalogBookAvailabilityReservedTimed" : {
-         "string" : "Din reservation löper ut om %1$s."
       },
       "catalogBookAvailabilityRevoked" : {
          "string" : "Denna bok väntar på att returneras."
@@ -969,14 +963,8 @@
       "catalogListen" : {
          "string" : "Lyssna"
       },
-      "catalogLoanTime" : {
-         "string" : "Denna bok är lånad åt dig i %1$s."
-      },
       "catalogLoginRequired" : {
          "string" : "Logga in för att fortsätta."
-      },
-      "catalogMetaAccessMode" : {
-         "string" : " Tillgänglighet"
       },
       "catalogMetaAccessibility" : {
          "string" : "Tillgänglighet"
@@ -984,14 +972,8 @@
       "catalogMetaAccessibilityConformance" : {
          "string" : "Tillgänglighetskrav"
       },
-      "catalogMetaAccessibilityFeatures" : {
-         "string" : " Tillgänglighetsfunktioner"
-      },
       "catalogMetaAccessibilityNotAvailable" : {
          "string" : "Information saknas"
-      },
-      "catalogMetaAccessibilitySummary" : {
-         "string" : " Tillgänglighetssammanfattning"
       },
       "catalogMetaAccessibilityWaysOfReading" : {
          "string" : "Olika sätt att läsa"
@@ -1133,12 +1115,6 @@
       },
       "emptyBooksNotLoggedIn" : {
          "string" : "Logga in för att se dina böcker."
-      },
-      "emptyHoldsNotLoggedIn" : {
-         "string" : "Logga in för att se dina bokningar."
-      },
-      "emptyLoansNotLoggedIn" : {
-         "string" : "Skriv in dig för att se dina böcker."
       },
       "emptySelectedNotLoggedIn" : {
          "string" : "Logga in för att se dina favoriter."

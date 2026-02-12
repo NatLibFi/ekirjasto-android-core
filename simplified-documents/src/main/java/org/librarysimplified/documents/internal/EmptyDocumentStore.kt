@@ -28,6 +28,12 @@ internal object EmptyDocumentStore : DocumentStoreType {
     null
   override val instructionsEN: DocumentType? =
     null
+  override val surveysFI: DocumentType? =
+    null
+  override val surveysSV: DocumentType? =
+    null
+  override val surveysEN: DocumentType? =
+    null
   override val faq: DocumentType? =
     null
 

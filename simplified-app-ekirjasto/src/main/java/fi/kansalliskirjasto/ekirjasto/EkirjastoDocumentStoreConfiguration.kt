@@ -62,6 +62,22 @@ class EkirjastoDocumentStoreConfiguration : DocumentConfigurationServiceType {
       remoteURI = URI.create("https://www.kansalliskirjasto.fi/en/e-library/e-library-instructions")
     )
 
+  override val surveysFI: DocumentConfiguration? =
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/fi/e-kirjaston-kayttajakyselyt")
+    )
+  override val surveysSV: DocumentConfiguration? =
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/sv/e-bibliotekets-anvandarenkater")
+    )
+  override val surveysEN: DocumentConfiguration? =
+    DocumentConfiguration(
+      name = null,
+      remoteURI = URI.create("https://www.kansalliskirjasto.fi/en/e-library-user-surveys")
+    )
+
   override val faq: DocumentConfiguration? =
     DocumentConfiguration(
       name = null,
