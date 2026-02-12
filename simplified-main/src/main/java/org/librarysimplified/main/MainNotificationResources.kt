@@ -23,6 +23,11 @@ class MainNotificationResources(
         id = context.getString(R.string.notification_channel_id_loans),
         name = context.getString(R.string.notification_channel_name_loans),
         description = context.getString(R.string.notification_channel_description_loans)
+      ),
+        NotificationChannelInfo(
+        id = context.getString(R.string.notification_channel_id_other),
+      name = context.getString(R.string.notification_channel_name_other),
+      description = context.getString(R.string.notification_channel_description_other)
       )
     )
 
