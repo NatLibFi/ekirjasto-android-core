@@ -1,6 +1,6 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
-1.3.16
-- Borrowing a book no longer automatically starts download of the book
+1.3.18
+- Added a user survey link to settings page
 - UI updates
 - Bug fixes
