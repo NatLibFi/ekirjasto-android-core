@@ -1413,11 +1413,17 @@
       "notification_channel_description_loans" : {
          "string" : "Notifications related to your loans."
       },
+      "notification_channel_description_other" : {
+         "string" : "Other notifications related to the application."
+      },
       "notification_channel_description_reservations" : {
          "string" : "Notifications related to your reservations."
       },
       "notification_channel_id_loans" : {
          "string" : "channel_id_loans"
+      },
+      "notification_channel_id_other" : {
+         "string" : "channel_id_other"
       },
       "notification_channel_id_reservations" : {
          "string" : "channel_id_reservations"
@@ -1427,6 +1433,9 @@
       },
       "notification_channel_name_old" : {
          "string" : "Item Available"
+      },
+      "notification_channel_name_other" : {
+         "string" : "Other"
       },
       "notification_channel_name_reservations" : {
          "string" : "Reservations"
