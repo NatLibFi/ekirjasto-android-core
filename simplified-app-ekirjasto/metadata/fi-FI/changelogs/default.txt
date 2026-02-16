@@ -1,6 +1,6 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.3.16
-- Kirjan lainaus ei enää aloita kirjan latausta automaattisesti
+1.3.18
+- Lisättiin linkki käyttäjäkyselyihin asetussivulle
 - UI päivityksiä
 - Bugi korjauksia

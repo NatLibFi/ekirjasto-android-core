@@ -1,6 +1,6 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.3.16
-- Att låna en bok startar inte längre automatiskt nedladdningen av boken
+1.3.18
+- Lade till en länk till användarenkäter på inställningssidan
 - UI-uppdateringar
 - Bugfixar
