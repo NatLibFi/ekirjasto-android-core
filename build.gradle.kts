@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Verify
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
-val gradleVersionRequired = "8.2.1"
+val gradleVersionRequired = "8.7"
 val gradleVersionReceived = gradle.gradleVersion
 
 if (gradleVersionRequired != gradleVersionReceived) {
