@@ -17,3 +17,5 @@
 **Did someone actually run this code to verify it works?**
 
 **Does this require updates to old Transifex strings? Have the translators been informed?**
+
+**AI was used during the process and I have described above how.**
