@@ -742,11 +742,11 @@ dependencies {
     val libLcpRepositoryLayout = overrideProperty("ekirjasto.liblcp.repositorylayout")
     if (libLcpRepositoryLayout.contains("test")) {
         println("Using test liblcp AAR")
-        implementation("readium:liblcp:1.0.0@aar")
+        implementation("readium:liblcp:4.3.0@aar")
     }
     else {
         println("Using production liblcp AAR")
-        implementation("readium:liblcp:4.1.0@aar")
+        implementation("readium:liblcp:4.3.0@aar")
     }
 
     /** For missing passkey libraries **/
