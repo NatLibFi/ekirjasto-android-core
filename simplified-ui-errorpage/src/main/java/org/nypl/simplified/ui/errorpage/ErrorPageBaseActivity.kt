@@ -1,7 +1,11 @@
 package org.nypl.simplified.ui.errorpage
 
 import android.os.Bundle
+import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import org.librarysimplified.ui.errorpage.R
 
 /**
@@ -19,7 +23,15 @@ abstract class ErrorPageBaseActivity : AppCompatActivity(R.layout.error_host) {
   private lateinit var errorFragment: ErrorPageFragment
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
     super.onCreate(savedInstanceState)
+
+    val root = findViewById<View>(R.id.errorRoot)
+    ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
+      val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+      WindowInsetsCompat.CONSUMED
+    }
 
     val currentIntent =
       this.intent

@@ -3,13 +3,18 @@ package org.librarysimplified.viewer.preview
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.ViewModelProvider
 import com.transifex.txnative.TxNative
 import io.reactivex.disposables.Disposable
@@ -90,10 +95,22 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
   private var viewSubscription: Disposable? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
     loadingProgress = findViewById(R.id.loading_progress)
     previewContainer = findViewById(R.id.preview_container)
+
+    ViewCompat.setOnApplyWindowInsetsListener(previewContainer) { view, insets ->
+      val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = bars.top
+        leftMargin = bars.left
+        rightMargin = bars.right
+        bottomMargin = bars.bottom
+      }
+      WindowInsetsCompat.CONSUMED
+    }
 
     this.feedEntry = intent.getSerializableExtra(EXTRA_ENTRY) as FeedEntry.FeedEntryOPDS
 
