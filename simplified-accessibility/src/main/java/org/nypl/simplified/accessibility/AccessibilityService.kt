@@ -84,11 +84,17 @@ class AccessibilityService private constructor(
         // Nothing to do
       }
       is BookStatus.Loanable -> {
-        val notHoldable = this.previousStatusIsNot(event, BookStatus.Holdable::class.java)
-        val notLoanable = this.previousStatusIsNot(event, BookStatus.Loanable::class.java)
-        val notUnselected = this.previousStatusIsNot(event, BookStatus.Unselected::class.java)
-        val notSelected = this.previousStatusIsNot(event, BookStatus.Selected::class.java)
-        if (notHoldable && notLoanable && notUnselected && notSelected) {
+        // Only announce "returned" when the transition was triggered by a user-initiated
+        // return (Loaned -> Loanable, possibly via RequestingRevoke). Background catalog
+        // syncs that flip a book to Loanable for any other reason (first observation,
+        // server-side state correction, etc.) must not speak — otherwise users hear a
+        // spurious "successfully returned" right after unrelated actions like a failed
+        // borrow on a different book.
+        val previous = event.statusPrevious
+        val cameFromUserReturn =
+          previous is BookStatus.Loaned ||
+            previous is BookStatus.RequestingRevoke
+        if (cameFromUserReturn) {
           this.speak(this.strings.bookReturned(book.entry.title))
         } else {
           // Nothing to do
