@@ -98,6 +98,11 @@ class PdfServer private constructor(
     addRoute("/assets/(.*)", AssetHandler::class.java, context)
     addRoute("/book.pdf", PdfHandler::class.java, pdfResource)
 
+    // pdf.js occasionally requests paths that don't match either route
+    // (favicon, range-only retries, etc). Without a not-found handler set,
+    // RouterNanoHTTPD's UriRouter NPEs on the unmatched request.
+    setNotFoundHandler(NotFoundHandler::class.java)
+
     this.pdfResource = pdfResource
   }
 
@@ -109,6 +114,15 @@ class PdfServer private constructor(
     }
 
     this.publication.close()
+  }
+
+  class NotFoundHandler : BaseHandler() {
+    override fun handle(
+      resource: UriResource,
+      uri: Uri,
+      parameters: Map<String, String>?,
+      session: IHTTPSession
+    ): Response = notFoundResponse
   }
 
   class AssetHandler : BaseHandler() {

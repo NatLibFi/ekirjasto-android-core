@@ -275,6 +275,14 @@ android {
                 abiFilters.add("armeabi-v7a")
             }
             versionNameSuffix = "-debug"
+
+            // Production liblcp 4.3.0 aborts at load time when the app is
+            // debuggable (anti-debug tamper detection; trustScore=-999).
+            // Set `ekirjasto.debug.debuggable=false` in local.properties when
+            // you need to test LCP functionality from a debug build. Leaves
+            // the default as `debuggable=true` so interactive debugging keeps
+            // working for day-to-day development.
+            isDebuggable = overridePropertyDefault("ekirjasto.debug.debuggable", "true").toBoolean()
         }
         release {
             ndk {
@@ -742,11 +750,11 @@ dependencies {
     val libLcpRepositoryLayout = overrideProperty("ekirjasto.liblcp.repositorylayout")
     if (libLcpRepositoryLayout.contains("test")) {
         println("Using test liblcp AAR")
-        implementation("readium:liblcp:1.0.0@aar")
+        implementation("readium:liblcp:4.3.0@aar")
     }
     else {
         println("Using production liblcp AAR")
-        implementation("readium:liblcp:4.1.0@aar")
+        implementation("readium:liblcp:4.3.0@aar")
     }
 
     /** For missing passkey libraries **/
