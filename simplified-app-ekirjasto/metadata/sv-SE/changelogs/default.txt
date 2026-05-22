@@ -1,6 +1,6 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.3.18
-- Lade till en länk till användarenkäter på inställningssidan
-- UI-uppdateringar
+1.4.0
+- Lade till full Edge-to-Edge-stöd
+- Lade till 16KB sidstorlekskompatibilitet
 - Bugfixar
