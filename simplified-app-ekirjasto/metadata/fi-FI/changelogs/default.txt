@@ -1,6 +1,6 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.3.18
-- Lisättiin linkki käyttäjäkyselyihin asetussivulle
-- UI päivityksiä
+1.4.0
+- Lisättiin täysi Edge-to-Edge-tuki
+- Lisättiin 16KB sivukokovaatimusten mukaisuus
 - Bugi korjauksia
