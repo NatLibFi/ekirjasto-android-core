@@ -1,9 +1,9 @@
 package org.nypl.simplified.books.api
 
-import android.content.Context
+import android.app.Activity
 import org.nypl.drm.core.ContentProtectionProvider
 import org.nypl.simplified.lcp.LCPContentProtectionProvider
-import org.readium.r2.shared.publication.ContentProtection
+import org.readium.r2.shared.publication.protection.ContentProtection
 import org.slf4j.LoggerFactory
 
 object BookContentProtections {
@@ -15,7 +15,7 @@ object BookContentProtections {
    */
 
   fun create(
-    context: Context,
+    context: Activity,
     contentProtectionProviders: List<ContentProtectionProvider>,
     drmInfo: BookDRMInformation,
     isManualPassphraseEnabled: Boolean = false,
