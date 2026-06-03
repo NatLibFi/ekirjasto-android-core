@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":simplified-ui-accounts"))
     implementation(project(":simplified-accounts-registry-api"))
     implementation(project(":simplified-android-ktx"))
+    implementation(project(":simplified-taskrecorder-api"))
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.ktx)

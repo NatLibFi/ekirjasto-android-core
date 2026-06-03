@@ -1,14 +1,11 @@
 package org.nypl.simplified.books.audio
 
-import kotlinx.coroutines.runBlocking
 import org.librarysimplified.audiobook.api.PlayerResult
 import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfilled
 import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentErrorType
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
-import org.readium.r2.shared.fetcher.ArchiveFetcher
-import org.readium.r2.shared.publication.Link
-import org.readium.r2.shared.util.use
 import org.slf4j.LoggerFactory
+import java.util.zip.ZipFile
 
 /**
  * An audio book manifest strategy that extracts the manifest from a downloaded audio book file.
@@ -31,6 +28,12 @@ class PackagedAudioBookManifestStrategy(
 
   /**
    * Attempt to synchronously extract a manifest file from the audio book package.
+   *
+   * Audio book packages are ZIP archives in which the manifest entry is always stored
+   * in cleartext (only the audio resources may be LCP-encrypted). We open the archive
+   * with java.util.zip directly rather than via a Readium archive abstraction; the
+   * Readium 3.x equivalents (ArchiveOpener / ZipArchiveOpener) are heavier and would
+   * couple this strategy unnecessarily to the Readium asset retrieval pipeline.
    */
 
   private fun extractManifest(): PlayerResult<ManifestFulfilled, ManifestFulfillmentErrorType> {
@@ -38,16 +41,19 @@ class PackagedAudioBookManifestStrategy(
       return PlayerResult.Failure(ExtractFailed("No audio book file"))
     }
 
-    val manifestURI = this.request.targetURI
-    val manifestLink = Link(manifestURI.toString())
+    val manifestEntryPath = this.request.targetURI.toString().trimStart('/')
     val filePath = this.request.file.absolutePath
 
-    this.logger.debug("extractManifest: extracting {} from {}", manifestURI, filePath)
+    this.logger.debug("extractManifest: extracting {} from {}", manifestEntryPath, filePath)
 
-    val manifestBytes = runBlocking {
-      ArchiveFetcher.fromPath(filePath)?.use { archiveFetcher ->
-        archiveFetcher.get(manifestLink).read().getOrNull()
+    val manifestBytes = try {
+      ZipFile(filePath).use { zip ->
+        val entry = zip.getEntry(manifestEntryPath) ?: return@use null
+        zip.getInputStream(entry).use { it.readBytes() }
       }
+    } catch (e: Exception) {
+      this.logger.debug("extractManifest: failed to read manifest entry: ", e)
+      null
     }
 
     return if (manifestBytes == null) {
