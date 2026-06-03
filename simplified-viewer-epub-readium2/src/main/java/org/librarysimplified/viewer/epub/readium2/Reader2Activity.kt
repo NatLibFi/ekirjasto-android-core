@@ -54,7 +54,6 @@ import org.librarysimplified.r2.views.SR2TOCFragment
 import org.librarysimplified.r2.views.search.SR2SearchFragment
 import org.librarysimplified.services.api.Services
 import org.nypl.drm.core.AdobeAdeptFileAsset
-import org.nypl.drm.core.AxisNowFileAsset
 import org.nypl.drm.core.ContentProtectionProvider
 import org.nypl.simplified.accessibility.AccessibilityServiceType
 import org.nypl.simplified.accounts.database.api.AccountType
@@ -311,13 +310,6 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
           AdobeAdeptFileAsset(
             fileAsset = FileAsset(this.parameters.file),
             adobeRightsFile = drmInfo.rights?.first
-          )
-
-        is BookDRMInformation.AXIS ->
-          AxisNowFileAsset(
-            fileAsset = FileAsset(this.parameters.file),
-            axisLicense = drmInfo.license,
-            axisUserKey = drmInfo.userKey
           )
 
         else -> FileAsset(this.parameters.file)

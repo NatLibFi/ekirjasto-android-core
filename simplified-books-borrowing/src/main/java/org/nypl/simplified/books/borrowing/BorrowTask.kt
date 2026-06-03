@@ -4,7 +4,6 @@ import org.joda.time.Instant
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.drm.core.AdobeAdeptExecutorType
-import org.nypl.drm.core.AxisNowServiceType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.api.BookID
@@ -184,7 +183,6 @@ class BorrowTask private constructor(
       BorrowContext(
         account = this.account,
         adobeExecutor = this.requirements.adobeExecutor,
-        axisNowService = this.requirements.axisNowService,
         lcpService = this.requirements.lcpService,
         audioBookManifestStrategies = this.requirements.audioBookManifestStrategies,
         bookDatabaseEntry = this.databaseEntry!!,
@@ -440,7 +438,6 @@ class BorrowTask private constructor(
     private val temporaryDirectory: File,
     var currentOPDSAcquisitionPathElement: OPDSAcquisitionPathElement,
     override val adobeExecutor: AdobeAdeptExecutorType?,
-    override val axisNowService: AxisNowServiceType?,
     override val lcpService: LcpService?,
     override val services: ServiceDirectoryType,
     private val cacheDirectory: File,

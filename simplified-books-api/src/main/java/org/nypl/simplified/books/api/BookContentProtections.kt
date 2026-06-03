@@ -39,7 +39,6 @@ object BookContentProtections {
           }
 
           is BookDRMInformation.ACS,
-          is BookDRMInformation.AXIS,
           BookDRMInformation.None -> {
             // do nothing
           }
