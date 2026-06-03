@@ -198,8 +198,7 @@ class Simply3635Test {
           supportsPDF = false,
           supportsAdobeDRM = false,
           supportsLCP = false,
-          supportsAudioBooks = null,
-          supportsAxisNow = false
+          supportsAudioBooks = null
         )
       )
 
