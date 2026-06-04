@@ -1,5 +1,6 @@
 package org.nypl.simplified.books.book_database
 
+import android.app.Application
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.base.Preconditions
 import net.jcip.annotations.GuardedBy
@@ -221,7 +222,11 @@ internal class DatabaseFormatHandleAudioBook internal constructor(
               engine.engineProvider.version()
             )
 
-            when (val bookResult = engine.bookProvider.create(this.parameters.context)) {
+            when (
+              val bookResult = engine.bookProvider.create(
+                this.parameters.context.applicationContext as Application
+              )
+            ) {
               is PlayerResult.Success -> bookResult.result.wholeBookDownloadTask.delete()
               is PlayerResult.Failure -> throw bookResult.failure
             }

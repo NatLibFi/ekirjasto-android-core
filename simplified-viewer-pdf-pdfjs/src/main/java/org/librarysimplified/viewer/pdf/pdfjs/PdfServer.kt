@@ -16,6 +16,7 @@ import org.readium.r2.shared.publication.services.protectionError
 import org.readium.r2.shared.util.ErrorException
 import org.readium.r2.shared.util.Try
 import org.readium.r2.shared.util.asset.AssetRetriever
+import org.readium.r2.shared.util.format.FormatHints
 import org.readium.r2.shared.util.getOrDefault
 import org.readium.r2.shared.util.getOrElse
 import org.readium.r2.shared.util.http.DefaultHttpClient
@@ -48,7 +49,21 @@ class PdfServer private constructor(
       val httpClient = DefaultHttpClient()
       val assetRetriever = AssetRetriever(context.contentResolver, httpClient)
 
-      when (val assetRetrieval = assetRetriever.retrieve(pdfFile)) {
+      /*
+       * Tell the asset retriever the media type explicitly. For LCP-protected PDFs this is
+       * required so the LCP content protection engages; without it the encrypted PDF is parsed
+       * as-is and Pdfium reports "File not in PDF format or corrupted". This mirrors the Readium
+       * 2.x behaviour, where the FileAsset was constructed with MediaType.LCP_PROTECTED_PDF.
+       */
+
+      val formatHints = FormatHints(
+        mediaType = when (drmInfo) {
+          is BookDRMInformation.LCP -> MediaType.LCP_PROTECTED_PDF
+          else -> MediaType.PDF
+        }
+      )
+
+      when (val assetRetrieval = assetRetriever.retrieve(pdfFile, formatHints)) {
         is Try.Failure ->
           throw IOException("Failed to open PDF", ErrorException(assetRetrieval.value))
 

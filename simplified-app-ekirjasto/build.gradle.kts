@@ -343,6 +343,8 @@ afterEvaluate {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.android.desugaring)
+
     implementation(project(":simplified-accessibility"))
     implementation(project(":simplified-accounts-api"))
     implementation(project(":simplified-accounts-database"))
@@ -663,6 +665,8 @@ dependencies {
     implementation(libs.media3.extractor)
     implementation(libs.media3.session)
     implementation(libs.moznion.uribuildertiny)
+    implementation(libs.nano.httpd)
+    implementation(libs.nano.httpd.nanolets)
     implementation(libs.nypl.readium)
     implementation(libs.okhttp3)
     implementation(libs.okio)

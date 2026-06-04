@@ -487,7 +487,7 @@ class AudioBookPlayerActivity :
 
     val bookResult =
       engine.bookProvider.create(
-        context = this,
+        context = this.application,
         extensions = extensions
       )
 

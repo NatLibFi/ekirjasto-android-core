@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":simplified-opds-core"))
     implementation(project(":simplified-reader-api"))
     implementation(project(":simplified-services-api"))
+    implementation(project(":simplified-taskrecorder-api"))
     implementation(project(":simplified-ui-thread-api"))
     implementation(project(":simplified-webview"))
 
@@ -53,6 +54,7 @@ dependencies {
     implementation(libs.joda.time)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.palace.drm.core)
     implementation(libs.palace.readium2.api)
     implementation(libs.palace.readium2.vanilla)

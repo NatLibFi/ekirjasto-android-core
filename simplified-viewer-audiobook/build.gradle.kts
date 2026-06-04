@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.palace.http.api)
     implementation(libs.palace.readium2.api)
     implementation(libs.palace.theme)
+    implementation(libs.r2.shared)
     implementation(libs.rxjava)
     implementation(libs.slf4j)
     implementation(libs.transifex.sdk)

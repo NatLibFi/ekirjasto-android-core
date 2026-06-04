@@ -565,6 +565,7 @@ allprojects {
                 encoding = "UTF-8"
                 sourceCompatibility = JavaVersion.toVersion(jdkBytecodeTarget)
                 targetCompatibility = JavaVersion.toVersion(jdkBytecodeTarget)
+                isCoreLibraryDesugaringEnabled = true
             }
         }
 
@@ -744,6 +745,7 @@ allprojects {
         "androidTestReleaseImplementation",
         "androidTestReleaseImplementationDependenciesMetadata",
         "annotationProcessor",
+        "coreLibraryDesugaring",
         "debugAndroidTestCompilationImplementation",
         "debugAndroidTestImplementation",
         "debugAndroidTestImplementationDependenciesMetadata",
