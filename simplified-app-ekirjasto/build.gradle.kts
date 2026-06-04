@@ -658,6 +658,12 @@ dependencies {
     // Required at runtime by the audiobook manifest TOC builder (PlayerManifestTOCs); the
     // non-transitive build config means it must be declared explicitly to be packaged.
     implementation(libs.kabstand)
+    // NOTE: The audiobook 24 "persistence" module (player-position memory) is intentionally NOT
+    // wired up. It requires org.xerial:sqlite-jdbc, which extracts a native lib at runtime — modern
+    // Android forbids dlopen() outside the APK's lib/, so it fails with UnsatisfiedLinkError. Its
+    // trasco XML-migration stack also pulls in xerces:xercesImpl, which shadows the platform XML
+    // parser and breaks LCP EPUB unlocking. The persistence failure is non-fatal (audiobook
+    // playback works without it); position is simply not persisted across reopen.
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core.jvm)
     implementation(libs.kotlinx.coroutines.play.services)
