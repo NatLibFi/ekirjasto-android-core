@@ -5,20 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.base.Preconditions
 import net.jcip.annotations.GuardedBy
 import one.irradia.mime.api.MIMEType
-import org.librarysimplified.audiobook.api.PlayerAudioEngineRequest
-import org.librarysimplified.audiobook.api.PlayerAudioEngines
-import org.librarysimplified.audiobook.api.PlayerPositions
-import org.librarysimplified.audiobook.api.PlayerResult
-import org.librarysimplified.audiobook.api.PlayerUserAgent
-import org.librarysimplified.audiobook.manifest.api.PlayerManifest
-import org.librarysimplified.audiobook.manifest_parser.api.ManifestParsers
-import org.librarysimplified.audiobook.parser.api.ParseResult
 import org.nypl.simplified.books.api.BookDRMKind
 import org.nypl.simplified.books.api.BookDRMInformation
 import org.nypl.simplified.books.api.BookFormat
 import org.nypl.simplified.books.api.bookmark.Bookmark
 import org.nypl.simplified.books.api.bookmark.BookmarkJSON
 import org.nypl.simplified.books.api.bookmark.BookmarkKind
+import org.nypl.simplified.books.api.helper.AudiobookLocationJSON
 import org.nypl.simplified.books.book_database.api.BookDRMInformationHandle
 import org.nypl.simplified.books.book_database.api.BookDatabaseEntryFormatHandle.BookDatabaseEntryFormatHandleAudioBook
 import org.nypl.simplified.files.DirectoryUtilities
@@ -28,7 +21,6 @@ import org.nypl.simplified.json.core.JSONParserUtilities
 import org.nypl.simplified.json.core.JSONSerializerUtilities
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
 import java.lang.IllegalStateException
 import java.net.URI
@@ -162,83 +154,14 @@ internal class DatabaseFormatHandleAudioBook internal constructor(
 
     val briefID = this.parameters.bookID.brief()
 
-    this.log.debug("[{}]: deleting audio book data", briefID)
+    this.log.debug("[{}]: deleted audio book data", briefID)
 
     /*
-     * Parse the manifest, start up an audio engine, and then tell it to delete all and any
-     * downloaded parts.
+     * Note: e-kirjasto serves only LCP audiobooks, played by the Media3 engine. The downloaded
+     * audio data is contained entirely within the book file deleted above, so — unlike the
+     * upstream Palace app, which also supports Findaway/Overdrive whose data lives outside the
+     * book directory — there is no need to start an audio engine to delete out-of-band downloads.
      */
-
-    if (!this.fileManifest.isFile) {
-      this.log.debug("[{}]: no manifest available", briefID)
-      return
-    }
-
-    try {
-      FileInputStream(this.fileManifest).use { stream ->
-        this.log.debug("[{}]: parsing audio book manifest", briefID)
-
-        val manifestResult: ParseResult<PlayerManifest> =
-          ManifestParsers.parse(this.fileManifest.toURI(), stream.readBytes())
-
-        when (manifestResult) {
-          is ParseResult.Failure -> {
-            for (error in manifestResult.errors) {
-              this.log.debug(
-                "[{}]: parse error: {}:{}: {}",
-                briefID,
-                error.line,
-                error.column,
-                error.message
-              )
-            }
-            throw IOException("One or more manifest parse errors occurred")
-          }
-
-          is ParseResult.Success -> {
-            this.log.debug("[{}]: selecting audio engine", briefID)
-
-            val engine =
-              PlayerAudioEngines.findBestFor(
-                PlayerAudioEngineRequest(
-                  file = this.fileBook,
-                  manifest = manifestResult.result,
-                  filter = { true },
-                  downloadProvider = NullDownloadProvider(),
-                  userAgent = PlayerUserAgent("unused")
-                )
-              )
-
-            if (engine == null) {
-              throw UnsupportedOperationException(
-                "No audio engine is available to process the given request"
-              )
-            }
-
-            this.log.debug(
-              "[{}]: selected audio engine: {} {}",
-              briefID,
-              engine.engineProvider.name(),
-              engine.engineProvider.version()
-            )
-
-            when (
-              val bookResult = engine.bookProvider.create(
-                this.parameters.context.applicationContext as Application
-              )
-            ) {
-              is PlayerResult.Success -> bookResult.result.wholeBookDownloadTask.delete()
-              is PlayerResult.Failure -> throw bookResult.failure
-            }
-
-            this.log.debug("[{}]: deleted audio book data", briefID)
-          }
-        }
-      }
-    } catch (ex: Exception) {
-      this.log.error("[{}]: failed to delete audio book: ", briefID, ex)
-      throw ex
-    }
 
     this.parameters.onUpdated.invoke(newFormat)
   }
@@ -333,7 +256,7 @@ internal class DatabaseFormatHandleAudioBook internal constructor(
           this.filePosition,
           this.filePositionTmp,
           JSONSerializerUtilities.serializeToString(
-            PlayerPositions.serializeToObjectNode(bookmark.location)
+            AudiobookLocationJSON.serializeToJSON(this.parameters.objectMapper, bookmark.location)
           )
         )
       } else {

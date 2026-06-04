@@ -3,7 +3,6 @@ package org.nypl.simplified.books.borrowing.internal
 import com.io7m.junreachable.UnreachableCodeException
 import one.irradia.mime.api.MIMECompatibility
 import one.irradia.mime.api.MIMEType
-import org.librarysimplified.audiobook.api.PlayerUserAgent
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
 import org.nypl.simplified.accounts.api.AccountReadableType
 import org.nypl.simplified.books.audio.AudioBookCredentials
@@ -130,7 +129,6 @@ class BorrowAudioBook private constructor() : BorrowSubtaskType {
         AudioBookManifestRequest(
           targetURI = currentURI,
           contentType = context.currentAcquisitionPathElement.mimeType,
-          userAgent = PlayerUserAgent(context.httpClient.userAgent()),
           credentials = audioBookCredentials,
           services = context.services,
           cacheDirectory = context.cacheDirectory()
@@ -174,7 +172,7 @@ class BorrowAudioBook private constructor() : BorrowSubtaskType {
         }
       }
     } finally {
-      subscription.unsubscribe()
+      subscription.dispose()
     }
   }
 

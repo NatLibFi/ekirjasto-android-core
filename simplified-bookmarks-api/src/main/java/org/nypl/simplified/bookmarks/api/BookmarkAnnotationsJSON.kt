@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.io7m.jfunctional.OptionType
 import com.io7m.jfunctional.Some
 import org.librarysimplified.audiobook.api.PlayerPosition
+import org.librarysimplified.audiobook.manifest.api.PlayerManifestReadingOrderID
+import org.librarysimplified.audiobook.manifest.api.PlayerMillisecondsReadingOrderItem
 import org.nypl.simplified.books.api.BookChapterProgress
 import org.nypl.simplified.books.api.BookLocation
 import org.nypl.simplified.books.api.bookmark.Bookmark
@@ -380,17 +382,15 @@ object BookmarkAnnotationsJSON {
   ): ObjectNode {
     val objectNode = objectMapper.createObjectNode()
     objectNode.put("@type", "LocatorAudioBookTime")
-    objectNode.put("chapter", bookmark.location.chapter)
-    objectNode.put("startOffset", bookmark.location.startOffset)
+    objectNode.put("@version", 2)
+    objectNode.put("readingOrderItem", bookmark.location.readingOrderID.text)
     objectNode.put(
-      "time",
-      bookmark.location.startOffset + bookmark.location.currentOffset
+      "readingOrderItemOffsetMilliseconds",
+      bookmark.location.offsetMilliseconds.value
     )
-    objectNode.put("part", bookmark.location.part)
-    objectNode.put("title", bookmark.location.title.orEmpty())
 
     // these fields are required by the iOS app, so we're sending them but since we don't need them
-    // in the Android app, there's no need to parsing them back
+    // in the Android app, there's no need to parse them back
     objectNode.put("audiobookID", bookmark.opdsId)
     objectNode.put("duration", bookmark.duration)
 
@@ -407,15 +407,29 @@ object BookmarkAnnotationsJSON {
     val obj =
       JSONParserUtilities.checkObject(null, node)
 
-    val startOffset = JSONParserUtilities.getIntegerDefault(obj, "startOffset", 0).toLong()
+    return when (JSONParserUtilities.getIntegerOrNull(obj, "@version")) {
+      2 ->
+        PlayerPosition(
+          readingOrderID = PlayerManifestReadingOrderID(
+            text = JSONParserUtilities.getStringDefault(obj, "readingOrderItem", "")
+          ),
+          offsetMilliseconds = PlayerMillisecondsReadingOrderItem(
+            value = JSONParserUtilities.getIntegerDefault(
+              obj, "readingOrderItemOffsetMilliseconds", 0
+            ).toLong()
+          )
+        )
 
-    return PlayerPosition(
-      chapter = JSONParserUtilities.getIntegerDefault(obj, "chapter", 0),
-      startOffset = startOffset,
-      currentOffset = JSONParserUtilities.getInteger(obj, "time").toLong() - startOffset,
-      part = JSONParserUtilities.getIntegerDefault(obj, "part", 0),
-      title = JSONParserUtilities.getStringOrNull(obj, "title")
-    )
+      else ->
+        /*
+         * Legacy v1 (chapter/part/startOffset/time) locators cannot be mapped onto the
+         * Readium-3.x reading-order model, so they fall back to the start of the book.
+         */
+        PlayerPosition(
+          readingOrderID = PlayerManifestReadingOrderID(text = ""),
+          offsetMilliseconds = PlayerMillisecondsReadingOrderItem(value = 0L)
+        )
+    }
   }
 
   @Throws(JSONParseException::class)

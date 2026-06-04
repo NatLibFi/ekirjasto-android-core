@@ -2,7 +2,7 @@ package org.nypl.simplified.books.audio
 
 import org.librarysimplified.audiobook.api.PlayerResult
 import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfilled
-import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentErrorType
+import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentError
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
 import org.slf4j.LoggerFactory
 import java.util.zip.ZipFile
@@ -20,7 +20,7 @@ class PackagedAudioBookManifestStrategy(
 
   override fun fulfill(
     taskRecorder: TaskRecorderType
-  ): PlayerResult<ManifestFulfilled, ManifestFulfillmentErrorType> {
+  ): PlayerResult<ManifestFulfilled, ManifestFulfillmentError> {
     taskRecorder.beginNewStep("Extracting manifest…")
 
     return this.extractManifest()
@@ -36,9 +36,9 @@ class PackagedAudioBookManifestStrategy(
    * couple this strategy unnecessarily to the Readium asset retrieval pipeline.
    */
 
-  private fun extractManifest(): PlayerResult<ManifestFulfilled, ManifestFulfillmentErrorType> {
+  private fun extractManifest(): PlayerResult<ManifestFulfilled, ManifestFulfillmentError> {
     if (this.request.file == null) {
-      return PlayerResult.Failure(ExtractFailed("No audio book file"))
+      return PlayerResult.Failure(extractFailed("No audio book file"))
     }
 
     val manifestEntryPath = this.request.targetURI.toString().trimStart('/')
@@ -57,15 +57,26 @@ class PackagedAudioBookManifestStrategy(
     }
 
     return if (manifestBytes == null) {
-      PlayerResult.Failure(ExtractFailed("Unable to extract manifest from audio book file"))
+      PlayerResult.Failure(extractFailed("Unable to extract manifest from audio book file"))
     } else {
-      PlayerResult.unit(ManifestFulfilled(this.request.contentType, null, manifestBytes))
+      PlayerResult.unit(
+        ManifestFulfilled(
+          source = this.request.targetURI,
+          contentType = this.request.contentType,
+          authorization = null,
+          data = manifestBytes
+        )
+      )
     }
   }
 
-  private data class ExtractFailed(
-    override val message: String,
-    val exception: java.lang.Exception? = null,
-    override val serverData: ManifestFulfillmentErrorType.ServerData? = null
-  ) : ManifestFulfillmentErrorType
+  private fun extractFailed(
+    message: String
+  ): ManifestFulfillmentError {
+    return ManifestFulfillmentError(
+      message = message,
+      extraMessages = listOf(),
+      serverData = null
+    )
+  }
 }

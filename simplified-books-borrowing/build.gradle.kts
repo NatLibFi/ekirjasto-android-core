@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.r2.lcp)
     implementation(libs.r2.shared)
     implementation(libs.rxjava)
+    implementation(libs.rxjava2)
     implementation(libs.service.wight.core)
     implementation(libs.slf4j)
     implementation(libs.truecommons.key.disable)

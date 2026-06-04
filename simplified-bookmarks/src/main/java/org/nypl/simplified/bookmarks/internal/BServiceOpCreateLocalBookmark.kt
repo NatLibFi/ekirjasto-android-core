@@ -92,11 +92,9 @@ internal class BServiceOpCreateLocalBookmark(
               BookDatabaseEntryFormatHandle.BookDatabaseEntryFormatHandleAudioBook::class.java
             ) ?: throw this.errorNoFormatHandle()
 
-          val updatedBookmark = bookmark.copy(
-            location = bookmark.location.copy(
-              currentOffset = bookmark.location.startOffset + bookmark.location.currentOffset
-            )
-          )
+          // As of audiobook 24.0.0, PlayerPosition.offsetMilliseconds is already the absolute
+          // offset within the reading-order item; there is no separate startOffset to fold in.
+          val updatedBookmark = bookmark
 
           when (this.bookmark.kind) {
             BookmarkKind.BookmarkLastReadLocation ->

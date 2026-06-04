@@ -652,6 +652,12 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinx.coroutines)
+    // Required at runtime by palace.http 2.x (LSHTTPNetworkAccess) and the audiobook persistence
+    // module; the non-transitive build config means it must be declared explicitly to be packaged.
+    implementation(libs.io7m.jattribute.core)
+    // Required at runtime by the audiobook manifest TOC builder (PlayerManifestTOCs); the
+    // non-transitive build config means it must be declared explicitly to be packaged.
+    implementation(libs.kabstand)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core.jvm)
     implementation(libs.kotlinx.coroutines.play.services)
@@ -676,7 +682,7 @@ dependencies {
     implementation(libs.palace.audiobook.http)
     implementation(libs.palace.audiobook.json.canon)
     implementation(libs.palace.audiobook.json.web.token)
-    implementation(libs.palace.audiobook.lcp)
+    implementation(libs.palace.audiobook.lcp.downloads)
     implementation(libs.palace.audiobook.lcp.license.status)
     implementation(libs.palace.audiobook.license.check.api)
     implementation(libs.palace.audiobook.license.check.spi)
@@ -688,9 +694,10 @@ dependencies {
     implementation(libs.palace.audiobook.manifest.parser.api)
     implementation(libs.palace.audiobook.manifest.parser.extension.spi)
     implementation(libs.palace.audiobook.manifest.parser.webpub)
-    implementation(libs.palace.audiobook.open.access)
+    implementation(libs.palace.audiobook.media3)
     implementation(libs.palace.audiobook.parser.api)
-    implementation(libs.palace.audiobook.rbdigital)
+    implementation(libs.palace.audiobook.persistence)
+    implementation(libs.palace.audiobook.time.tracking)
     implementation(libs.palace.audiobook.views)
     implementation(libs.palace.drm.core)
     implementation(libs.palace.http.api)
