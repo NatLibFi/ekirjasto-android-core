@@ -14,12 +14,15 @@ import org.librarysimplified.audiobook.api.PlayerAuthorizationHandlerNoOp
 import org.librarysimplified.audiobook.api.PlayerBookID
 import org.librarysimplified.audiobook.api.PlayerBookmark
 import org.librarysimplified.audiobook.api.PlayerBookmarkKind
+import org.librarysimplified.audiobook.api.PlayerBookmarkMetadata
 import org.librarysimplified.audiobook.api.PlayerEvent
-import org.librarysimplified.audiobook.views.PlayerBaseFragment
+import org.librarysimplified.audiobook.api.PlayerReadingOrderItemType
+import org.librarysimplified.audiobook.manifest.api.PlayerManifestPositionMetadata
+import org.librarysimplified.audiobook.manifest.api.PlayerMillisecondsReadingOrderItem
 import org.librarysimplified.audiobook.views.PlayerBookmarkModel
-import org.librarysimplified.audiobook.views.PlayerFragment
 import org.librarysimplified.audiobook.views.PlayerModel
 import org.librarysimplified.audiobook.views.PlayerModelState
+import org.librarysimplified.audiobook.views.PlayerPlaybackRateFragment
 import org.librarysimplified.audiobook.views.PlayerSleepTimerFragment
 import org.librarysimplified.audiobook.views.PlayerTOCFragment
 import org.librarysimplified.audiobook.views.PlayerViewCommand
@@ -30,6 +33,8 @@ import org.librarysimplified.mdc.MDCKeys
 import org.librarysimplified.services.api.Services
 import org.nypl.simplified.bookmarks.api.BookmarkServiceType
 import org.nypl.simplified.books.api.bookmark.Bookmark
+import org.nypl.simplified.books.covers.BookCoverProviderType
+import org.nypl.simplified.feeds.api.FeedEntry
 import org.nypl.simplified.books.api.playerCredentials
 import org.nypl.simplified.books.time.tracking.TimeTrackingServiceType
 import org.nypl.simplified.opds.core.getOrNull
@@ -55,12 +60,22 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     LoggerFactory.getLogger(AudioBookPlayerActivity::class.java)
 
   private lateinit var bookmarkService: BookmarkServiceType
+  private lateinit var bookCoverProvider: BookCoverProviderType
   private lateinit var profiles: ProfilesControllerType
   private lateinit var timeTrackingService: TimeTrackingServiceType
   private lateinit var httpClient: LSHTTPClientType
 
   private var fragmentNow: Fragment = AudioBookLoadingFragment()
   private var subscriptions = CompositeDisposable()
+
+  /**
+   * The most recent playback position, cached from player events so it can be persisted as a
+   * last-read bookmark when the player is left. The player only emits last-read bookmarks
+   * periodically, so without this the resume point would be coarse.
+   */
+
+  @Volatile
+  private var lastReadPosition: PlayerBookmark? = null
 
   private var mAppCompatDelegate: AppCompatDelegate? = null
 
@@ -82,6 +97,8 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     val services = Services.serviceDirectory()
     this.bookmarkService =
       services.requireService(BookmarkServiceType::class.java)
+    this.bookCoverProvider =
+      services.requireService(BookCoverProviderType::class.java)
     this.profiles =
       services.requireService(ProfilesControllerType::class.java)
     this.timeTrackingService =
@@ -116,6 +133,7 @@ class AudioBookPlayerActivity : AppCompatActivity() {
 
   override fun onStop() {
     super.onStop()
+    this.saveLastReadPosition()
     this.subscriptions.dispose()
   }
 
@@ -135,13 +153,8 @@ class AudioBookPlayerActivity : AppCompatActivity() {
 
   @Deprecated("Deprecated in Java")
   override fun onBackPressed() {
-    return when (val f = this.fragmentNow) {
-      is PlayerBaseFragment -> {
-        when (f) {
-          is PlayerFragment -> this.close()
-          is PlayerTOCFragment -> this.switchFragment(PlayerFragment())
-        }
-      }
+    return when (this.fragmentNow) {
+      is PlayerTOCFragment -> this.switchFragment(EkirjaPlayerFragment())
       else -> this.close()
     }
   }
@@ -181,9 +194,10 @@ class AudioBookPlayerActivity : AppCompatActivity() {
       }
 
       is PlayerModelState.PlayerOpen -> {
+        this.loadCoverImage()
         this.restoreBookmarks(state)
         this.startTimeTracking(parameters)
-        this.switchFragment(PlayerFragment())
+        this.switchFragment(EkirjaPlayerFragment())
       }
 
       PlayerModelState.PlayerManifestInProgress -> {
@@ -218,6 +232,19 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     )
   }
 
+  private fun loadCoverImage() {
+    val parameters = AudioBookViewerModel.parameters ?: return
+    try {
+      this.bookCoverProvider.loadCoverAsBitmap(
+        FeedEntry.FeedEntryOPDS(parameters.accountID, parameters.opdsEntry),
+        { bitmap -> PlayerModel.setCoverImage(bitmap) },
+        R.drawable.main_icon
+      )
+    } catch (e: Exception) {
+      this.log.error("could not load cover image: ", e)
+    }
+  }
+
   private fun restoreBookmarks(state: PlayerModelState.PlayerOpen) {
     val parameters = AudioBookViewerModel.parameters ?: return
     try {
@@ -242,6 +269,7 @@ class AudioBookPlayerActivity : AppCompatActivity() {
 
   private fun onPlayerEvent(event: PlayerEvent) {
     this.timeTrackingService.onPlayerEventReceived(event)
+    this.rememberLastReadPosition(event)
 
     when (event) {
       is PlayerEvent.PlayerEventWithPosition.PlayerEventCreateBookmark ->
@@ -253,6 +281,66 @@ class AudioBookPlayerActivity : AppCompatActivity() {
       else -> {
         // Nothing to do
       }
+    }
+  }
+
+  /**
+   * Cache the most recent playback position from position-bearing player events.
+   */
+
+  private fun rememberLastReadPosition(event: PlayerEvent) {
+    val bookmark =
+      when (event) {
+        is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackProgressUpdate ->
+          this.lastReadBookmarkOf(event.readingOrderItem, event.offsetMilliseconds, event.positionMetadata)
+        is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackStarted ->
+          this.lastReadBookmarkOf(event.readingOrderItem, event.offsetMilliseconds, event.positionMetadata)
+        is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackPaused ->
+          this.lastReadBookmarkOf(event.readingOrderItem, event.readingOrderItemOffsetMilliseconds, event.positionMetadata)
+        is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackStopped ->
+          this.lastReadBookmarkOf(event.readingOrderItem, event.readingOrderItemOffsetMilliseconds, event.positionMetadata)
+        else ->
+          null
+      }
+    if (bookmark != null) {
+      this.lastReadPosition = bookmark
+    }
+  }
+
+  private fun lastReadBookmarkOf(
+    item: PlayerReadingOrderItemType,
+    offset: PlayerMillisecondsReadingOrderItem,
+    metadata: PlayerManifestPositionMetadata
+  ): PlayerBookmark {
+    return PlayerBookmark(
+      kind = PlayerBookmarkKind.LAST_READ,
+      readingOrderID = item.id,
+      offsetMilliseconds = offset,
+      metadata = PlayerBookmarkMetadata.fromPositionMetadata(metadata)
+    )
+  }
+
+  /**
+   * Persist the cached last-read position as a last-read bookmark. Called when the player screen
+   * is left so that reopening the book resumes at the exact stopping point rather than the last
+   * periodic bookmark.
+   */
+
+  private fun saveLastReadPosition() {
+    val parameters = AudioBookViewerModel.parameters ?: return
+    val position = this.lastReadPosition ?: return
+    try {
+      this.bookmarkService.bookmarkCreate(
+        accountID = parameters.accountID,
+        bookmark = AudioBookBookmarks.fromPlayerBookmark(
+          opdsId = parameters.opdsEntry.id,
+          deviceID = AudioBookDevices.deviceId(this.profiles, parameters.bookID),
+          source = position
+        ),
+        ignoreRemoteFailures = true
+      )
+    } catch (e: Exception) {
+      this.log.error("could not save last-read position: ", e)
     }
   }
 
@@ -338,15 +426,16 @@ class AudioBookPlayerActivity : AppCompatActivity() {
       PlayerViewCommand.PlayerViewNavigationTOCOpen ->
         this.switchFragment(PlayerTOCFragment())
       PlayerViewCommand.PlayerViewNavigationTOCClose ->
-        this.switchFragment(PlayerFragment())
+        this.switchFragment(EkirjaPlayerFragment())
       PlayerViewCommand.PlayerViewNavigationSleepMenuOpen ->
         this.popupFragment(PlayerSleepTimerFragment())
+      PlayerViewCommand.PlayerViewNavigationPlaybackRateMenuOpen ->
+        this.popupFragment(PlayerPlaybackRateFragment())
       PlayerViewCommand.PlayerViewNavigationCloseAll ->
         this.close()
       PlayerViewCommand.PlayerViewCoverImageChanged,
       PlayerViewCommand.PlayerViewErrorsDownloadOpen,
-      PlayerViewCommand.PlayerViewLoginOpen,
-      PlayerViewCommand.PlayerViewNavigationPlaybackRateMenuOpen -> {
+      PlayerViewCommand.PlayerViewLoginOpen -> {
         // Nothing to do
       }
     }

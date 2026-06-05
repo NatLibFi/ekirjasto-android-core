@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.joda.time)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
+    implementation(libs.kabstand)
     implementation(libs.palace.audiobook.api)
     implementation(libs.palace.audiobook.downloads)
     implementation(libs.palace.audiobook.feedbooks)
