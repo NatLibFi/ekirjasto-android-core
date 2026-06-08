@@ -100,6 +100,20 @@ interface BorrowContextType {
   fun receivedNewURI(uri: URI)
 
   /**
+   * Set the credentials to be used for the next subtask. Used by subtasks (such as bearer-token
+   * negotiation) that prepare credentials for the subtask that follows them.
+   */
+
+  fun setNextSubtaskCredentials(credentials: BorrowSubtaskCredentials)
+
+  /**
+   * Take the credentials to be used for the current subtask. This also resets the credentials
+   * back to [BorrowSubtaskCredentials.UseAccountCredentials] for any later subtask.
+   */
+
+  fun takeSubtaskCredentials(): BorrowSubtaskCredentials
+
+  /**
    * The current acquisition path element. This will be updated once for each subtask.
    */
 

@@ -547,6 +547,19 @@ class BorrowTask private constructor(
       this.currentURIField = uri
     }
 
+    private var subtaskCredentials: BorrowSubtaskCredentials =
+      BorrowSubtaskCredentials.UseAccountCredentials
+
+    override fun setNextSubtaskCredentials(credentials: BorrowSubtaskCredentials) {
+      this.subtaskCredentials = credentials
+    }
+
+    override fun takeSubtaskCredentials(): BorrowSubtaskCredentials {
+      val taken = this.subtaskCredentials
+      this.subtaskCredentials = BorrowSubtaskCredentials.UseAccountCredentials
+      return taken
+    }
+
     override val currentAcquisitionPathElement: OPDSAcquisitionPathElement
       get() = this.currentOPDSAcquisitionPathElement
 
