@@ -102,18 +102,38 @@ class BookSyncTask(
       account
     ) ?: return this.taskRecorder.finishSuccess(Unit)
 
-    //Get the selected stream
-    val selectedStream: InputStream? = fetchFeed(
-      provider.selectedURI,
-      credentials,
-      account
-    )
-    //If both fetches went fine, we combine the streams
-    //And update database and registry
+    //Get the selected stream.
+    //The "selected" feed is a secondary feature. A failure there (for example a 5xx from the
+    //selected_books endpoint) must NOT abort the whole sync: otherwise the user's actual loans
+    //are never persisted and the local library silently drifts from the server state. If the
+    //selected feed cannot be fetched, fall back to syncing the loans feed alone.
+    val selectedStream: InputStream? =
+      try {
+        fetchFeed(
+          provider.selectedURI,
+          credentials,
+          account
+        )
+      } catch (e: Exception) {
+        this.logger.warn("selected feed fetch failed; syncing loans only: ", e)
+        this.taskRecorder.beginNewStep("Selected feed unavailable; syncing loans only.")
+        null
+      }
+
     if (selectedStream != null) {
+      //If both fetches went fine, combine the streams and update the database and registry.
       this.onHTTPOKMultipleFeeds(
         loansStream = loansStream,
         selectedStream = selectedStream,
+        provider = provider,
+        account = account
+      )
+    } else {
+      //Selected feed unavailable: persist the loans feed on its own. This intentionally does not
+      //delete books missing from the loans feed, so that "selected"-but-not-loaned books are not
+      //pruned while the selected feed is down; a later successful dual-feed sync reconciles fully.
+      this.onHTTPOKLoansOnly(
+        loansStream = loansStream,
         provider = provider,
         account = account
       )
@@ -263,6 +283,37 @@ class BookSyncTask(
     account.updateBasicTokenCredentials(accessToken)
     stream.use { ok ->
       this.parseFeed(ok, provider, account)
+    }
+  }
+
+  /**
+   * Persist the loans feed on its own, used when the secondary "selected" feed is unavailable.
+   *
+   * Unlike the full reconciliation, this only adds/updates the books present in the loans feed and
+   * deliberately does NOT delete books absent from it. That avoids pruning "selected"-but-not-loaned
+   * books while the selected feed is down; a later successful dual-feed sync performs the full
+   * reconciliation (including deletions).
+   */
+  @Throws(OPDSParseException::class)
+  private fun onHTTPOKLoansOnly(
+    loansStream: InputStream,
+    provider: AccountProviderType,
+    account: AccountType
+  ) {
+    loansStream.use { stream ->
+      val feed = this.feedParser.parse(provider.loansURI, stream)
+      val bookDatabase = account.bookDatabase
+      for (opdsEntry in feed.feedEntries) {
+        val bookId = BookIDs.newFromOPDSEntry(opdsEntry)
+        this.logger.debug("[{}] updating (loans-only)", bookId.brief())
+        try {
+          val databaseEntry = bookDatabase.createOrUpdate(bookId, opdsEntry)
+          val book = databaseEntry.book
+          this.bookRegistry.update(BookWithStatus(book, BookStatus.fromBook(book)))
+        } catch (e: BookDatabaseException) {
+          this.logger.error("[{}] unable to update database entry: ", bookId.brief(), e)
+        }
+      }
     }
   }
 

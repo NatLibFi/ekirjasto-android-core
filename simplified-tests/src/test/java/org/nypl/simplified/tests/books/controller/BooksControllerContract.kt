@@ -683,6 +683,87 @@ abstract class BooksControllerContract {
   }
 
   /**
+   * If the secondary "selected" feed fails (for example a 5xx), the sync must still persist the
+   * user's loans rather than aborting the whole operation. Regression test for the loan-sync
+   * staleness caused by the selected_books endpoint returning 500: before the fix the loans were
+   * fetched but never written to the database, so the local library silently drifted from the
+   * server.
+   *
+   * @throws Exception On errors
+   */
+
+  @Test
+  @Timeout(value = 10L, unit = TimeUnit.SECONDS)
+  @Throws(Exception::class)
+  fun testBooksSyncSelectedFeedFailureSyncsLoans() {
+    val controller =
+      createController(
+        exec = this.executorBooks,
+        feedExecutor = this.executorFeeds,
+        accountEvents = this.accountEvents,
+        profileEvents = this.profileEvents,
+        http = this.lsHTTP,
+        books = this.bookRegistry,
+        profiles = this.profiles,
+        accountProviders = MockAccountProviders.fakeAccountProviders(),
+        patronUserProfileParsers = this.patronUserProfileParsers
+      )
+
+    val provider =
+      MockAccountProviders.fakeAuthProvider(
+        uri = "urn:fake-auth:0",
+        host = this.server.hostName,
+        port = this.server.port
+      )
+
+    val profile = this.profiles.createProfile(provider, "Kermit")
+    this.profiles.setProfileCurrent(profile.id)
+    val account = profile.accountsByProvider()[provider.id]!!
+    account.setLoginState(AccountLoggedIn(correctCredentials()))
+
+    //Patron user profile
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(this.simpleUserProfile())
+    )
+
+    //Loans feed: succeeds with three books.
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(Buffer().readFrom(resource("testBooksSyncNewEntries.xml")))
+    )
+
+    //Selected feed: fails with a server error. This must NOT abort the sync.
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(500)
+        .setBody("")
+    )
+
+    Assertions.assertEquals(0L, this.bookRegistry.books().size.toLong())
+
+    val result = controller.booksSync(account.id).get()
+
+    //Despite the selected feed failing, the sync succeeds and the loans are persisted.
+    Assertions.assertTrue(
+      result is TaskResult.Success,
+      "sync should succeed despite the selected feed returning 500"
+    )
+    Assertions.assertEquals(3L, this.bookRegistry.books().size.toLong())
+    this.bookRegistry.bookOrException(
+      BookID.create("39434e1c3ea5620fdcc2303c878da54cc421175eb09ce1a6709b54589eb8711f")
+    )
+    this.bookRegistry.bookOrException(
+      BookID.create("f9a7536a61caa60f870b3fbe9d4304b2d59ea03c71cbaee82609e3779d1e6e0f")
+    )
+    this.bookRegistry.bookOrException(
+      BookID.create("251cc5f69cd2a329bb6074b47a26062e59f5bb01d09d14626f41073f63690113")
+    )
+  }
+
+  /**
    * If the remote side returns few books than the account has, database entries are removed.
    *
    * @throws Exception On errors
