@@ -108,6 +108,7 @@ class ProfileAccountCreateCustomOPDSTest {
         .create(
           this.context,
           LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "test",
             applicationVersion = "1.0.0",
             tlsOverrides = null,

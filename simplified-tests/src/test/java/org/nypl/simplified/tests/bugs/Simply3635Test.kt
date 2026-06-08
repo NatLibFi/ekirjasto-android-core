@@ -134,6 +134,7 @@ class Simply3635Test {
         .create(
           this.context,
           LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-tests",
             applicationVersion = "99.99.0"
           )

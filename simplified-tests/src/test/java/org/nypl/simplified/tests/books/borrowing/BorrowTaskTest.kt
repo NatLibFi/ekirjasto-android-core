@@ -267,6 +267,7 @@ class BorrowTaskTest {
         .create(
           context = androidContext,
           configuration = LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-tests",
             applicationVersion = "999.999.0",
             tlsOverrides = null,
@@ -703,6 +704,7 @@ class BorrowTaskTest {
         AudioBookManifestData(
           manifest = playerManifest,
           fulfilled = ManifestFulfilled(
+            source = null,
             contentType = genericAudioBooks.first(),
             data = playerManifest.originalBytes
           )

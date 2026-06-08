@@ -322,6 +322,7 @@ abstract class BooksControllerContract {
         .create(
           context = Mockito.mock(Context::class.java),
           configuration = LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-test",
             applicationVersion = "1.0.0",
             tlsOverrides = null,

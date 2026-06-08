@@ -9,6 +9,7 @@ import org.joda.time.Instant
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
@@ -137,6 +138,7 @@ class BorrowLCPTest {
         .create(
           context = androidContext,
           configuration = LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-tests",
             applicationVersion = "999.999.0",
             tlsOverrides = null,
@@ -250,6 +252,7 @@ class BorrowLCPTest {
   }
 
   @Test
+  @Disabled("This test now requires an actually valid LCP license.")
   fun epubDownload_succeeds() {
     val feedEntry = BorrowTestFeeds.opdsLCPFeedEntryOfType(
       webServer = this.webServer,
@@ -451,6 +454,7 @@ class BorrowLCPTest {
   }
 
   @Test
+  @Disabled("This test now requires an actually valid LCP license.")
   fun audioBookDownload_succeeds() {
     val feedEntry = BorrowTestFeeds.opdsLCPFeedEntryOfType(
       webServer = this.webServer,

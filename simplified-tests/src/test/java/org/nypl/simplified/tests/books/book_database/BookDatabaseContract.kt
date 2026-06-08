@@ -8,6 +8,8 @@ import org.joda.time.DateTime
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.librarysimplified.audiobook.api.PlayerPosition
+import org.librarysimplified.audiobook.manifest.api.PlayerManifestReadingOrderID
+import org.librarysimplified.audiobook.manifest.api.PlayerMillisecondsReadingOrderItem
 import org.nypl.drm.core.AdobeAdeptLoan
 import org.nypl.drm.core.AdobeLoanID
 import org.nypl.simplified.books.api.Book
@@ -634,7 +636,7 @@ abstract class BookDatabaseContract {
       Bookmark.AudiobookBookmark.create(
         opdsId = feedEntry.id,
         kind = BookmarkKind.BookmarkLastReadLocation,
-        location = PlayerPosition(title = "Title", part = 0, chapter = 1, startOffset = 1000L, currentOffset = 230000L),
+        location = PlayerPosition(readingOrderID = PlayerManifestReadingOrderID("id-1"), offsetMilliseconds = PlayerMillisecondsReadingOrderItem(230000L)),
         deviceID = "",
         time = DateTime.now(),
         uri = null,
@@ -646,18 +648,15 @@ abstract class BookDatabaseContract {
       val book = databaseEntry.book
       val bookFormat = book.findFormat(BookFormatAudioBook::class.java)
       val lastReadLocation = bookFormat!!.lastReadLocation!!
-      Assertions.assertEquals("Title", lastReadLocation.location.title)
-      Assertions.assertEquals(0, lastReadLocation.location.part)
-      Assertions.assertEquals(1, lastReadLocation.location.chapter)
-      Assertions.assertEquals(1000, lastReadLocation.location.startOffset)
-      Assertions.assertEquals(230000, lastReadLocation.location.currentOffset)
+      Assertions.assertEquals("id-1", lastReadLocation.location.readingOrderID.text)
+      Assertions.assertEquals(230000L, lastReadLocation.location.offsetMilliseconds.value)
     }
 
     format.setLastReadLocation(
       Bookmark.AudiobookBookmark.create(
         opdsId = feedEntry.id,
         kind = BookmarkKind.BookmarkLastReadLocation,
-        location = PlayerPosition(title = "Title 2", part = 2, chapter = 3, currentOffset = 46000, startOffset = 0),
+        location = PlayerPosition(readingOrderID = PlayerManifestReadingOrderID("id-2"), offsetMilliseconds = PlayerMillisecondsReadingOrderItem(46000L)),
         deviceID = "",
         time = DateTime.now(),
         uri = null,
@@ -668,11 +667,8 @@ abstract class BookDatabaseContract {
       val book = databaseEntry.book
       val bookFormat = book.findFormat(BookFormatAudioBook::class.java)
       val lastReadLocation = bookFormat!!.lastReadLocation!!
-      Assertions.assertEquals("Title 2", lastReadLocation.location.title)
-      Assertions.assertEquals(2, lastReadLocation.location.part)
-      Assertions.assertEquals(3, lastReadLocation.location.chapter)
-      Assertions.assertEquals(0, lastReadLocation.location.startOffset)
-      Assertions.assertEquals(46000, lastReadLocation.location.currentOffset)
+      Assertions.assertEquals("id-2", lastReadLocation.location.readingOrderID.text)
+      Assertions.assertEquals(46000L, lastReadLocation.location.offsetMilliseconds.value)
     }
 
     format.setLastReadLocation(null)
