@@ -1,6 +1,7 @@
 package org.nypl.simplified.books.controller
 
 import com.io7m.jfunctional.None
+import com.io7m.jfunctional.Option
 import com.io7m.jfunctional.Some
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.http.api.LSHTTPResponseStatus
@@ -26,6 +27,8 @@ import org.nypl.simplified.books.controller.api.BooksControllerType
 import org.nypl.simplified.feeds.api.FeedLoaderType
 import org.nypl.simplified.feeds.api.FeedLoading
 import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
+import org.nypl.simplified.opds.core.OPDSAvailabilityHoldable
+import org.nypl.simplified.opds.core.OPDSAvailabilityLoanable
 import org.nypl.simplified.opds.core.OPDSAvailabilityRevoked
 import org.nypl.simplified.opds.core.OPDSFeedParserType
 import org.nypl.simplified.opds.core.OPDSParseException
@@ -518,12 +521,32 @@ class BookSyncTask(
        * book registry.
        */
 
-      dbEntry.writeOPDSEntry(entry.feedEntry)
-      val newBook = dbEntry.book.copy(formats = emptyList())
-      val status = BookStatus.fromBook(newBook)
+      // If we weren't able to get a new entry from the server, replace the value with
+      // the one we already have in the registry but set the availability as unavailable
+      if (entry == null) {
+        val oldEntry = dbEntry.book.entry
+        val emptyAvailability = OPDSAvailabilityHoldable.get( Option.of(0),Option.of(0), Option.of(0))
+        val emptyAcquisitionFeedEntry =
+          OPDSAcquisitionFeedEntry.newBuilderFrom(oldEntry)
+            .setAvailability(emptyAvailability)
+            .build()
 
-      this.logger.debug("book's new state is {}", status)
-      this.bookRegistry.update(BookWithStatus(newBook, status))
+        dbEntry.writeOPDSEntry(emptyAcquisitionFeedEntry)
+
+        val newBook = dbEntry.book.copy(formats = emptyList())
+        val status = BookStatus.fromBook(newBook)
+
+        this.logger.debug("book's new state is {}", status)
+        this.bookRegistry.update(BookWithStatus(newBook, status))
+      }
+      else {
+        dbEntry.writeOPDSEntry(entry.feedEntry)
+        val newBook = dbEntry.book.copy(formats = emptyList())
+        val status = BookStatus.fromBook(newBook)
+
+        this.logger.debug("book's new state is {}", status)
+        this.bookRegistry.update(BookWithStatus(newBook, status))
+      }
     } else {
       throw IOException("No alternate link is available")
     }

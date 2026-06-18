@@ -35,7 +35,7 @@ object FeedLoading {
     uri: URI,
     timeout: Pair<Long, TimeUnit>,
     method: String = "GET"
-  ): FeedEntryOPDS {
+  ): FeedEntryOPDS? {
     taskRecorder.beginNewStep("Fetching OPDS feed...")
 
     val feedResult =
@@ -52,8 +52,8 @@ object FeedLoading {
         throw feedResult.exception
       }
       is FeedLoaderFailedGeneral -> {
-        taskRecorder.currentStepFailed(feedResult.message, "feedFailed", feedResult.exception)
-        throw feedResult.exception
+        //If the loading fails, return null since the book is going to get deleted anyway
+        null
       }
       is FeedLoaderSuccess -> {
         taskRecorder.currentStepSucceeded("Feed retrieved and parsed.")

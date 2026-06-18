@@ -912,6 +912,17 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   ) {
     this.buttons.removeAllViews()
 
+      if (bookStatus.copiesTotal == 0) {
+        //If we don't have any copies, we have run out of licenses, and should not show any buttons
+        // but show info text informing of this
+        this.statusInProgress.visibility = View.INVISIBLE
+        this.statusIdle.visibility = View.VISIBLE
+        this.statusFailed.visibility = View.INVISIBLE
+        this.statusIdleText.text =
+          CatalogBookAvailabilityStrings.statusString(this.resources, bookStatus)
+        return
+      }
+
     this.buttons.addView(
       this.buttonCreator.createReserveButton(
         onClick = {
