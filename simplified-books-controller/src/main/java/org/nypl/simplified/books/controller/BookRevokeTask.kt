@@ -279,7 +279,7 @@ class BookRevokeTask(
     } else {
       // new entry is null, so the book has been removed from the collection, so just copy the old
       // book we have in database, and change the availability to "unavailable"
-      val emptyAvailability = OPDSAvailabilityHoldable.get(Option.of(0),,Option.of(0), Option.of(0))
+      val emptyAvailability = OPDSAvailabilityHoldable.get(Option.of(0),Option.of(0), Option.of(0))
       val entryWithEmptyAvailability = feedEntryWithAvailability(accountID, feedEntry, emptyAvailability)
       this.revokeNotifyServerSaveNewEntry(entryWithEmptyAvailability)
       this.onNewBookEntry(entryWithEmptyAvailability)
