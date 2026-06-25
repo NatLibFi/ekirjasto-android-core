@@ -146,6 +146,10 @@ object CatalogBookAvailabilityStrings {
       val queue = queueLengthOpt.get()
       val copiesAvailable = copiesAvailableOpt.get()
       val copiesTotal = copiesTotalOpt.get()
+      //If there are 0 copiesTotal, show that book is not available
+      if (copiesTotal == 0) {
+        return resources.getString(R.string.catalogBookAvailabilityNotAvailable)
+      }
       return resources.getString(R.string.catalogBookAvailabilityHoldableFull, queue, copiesAvailable, copiesTotal)
     }
     //Otherwise show a generic message

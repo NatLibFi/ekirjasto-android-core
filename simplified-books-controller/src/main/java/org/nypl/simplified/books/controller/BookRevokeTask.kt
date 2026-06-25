@@ -1,6 +1,6 @@
 package org.nypl.simplified.books.controller
 
-import com.io7m.jfunctional.None
+import com.io7m.jfunctional.Option
 import com.io7m.jfunctional.OptionType
 import com.io7m.jfunctional.Some
 import com.io7m.junreachable.UnreachableCodeException
@@ -273,9 +273,17 @@ class BookRevokeTask(
       else ->
         throw UnreachableCodeException()
     }
-
-    this.revokeNotifyServerSaveNewEntry(newEntry)
-    this.onNewBookEntry(newEntry)
+    if(newEntry != null) {
+      this.revokeNotifyServerSaveNewEntry(newEntry)
+      this.onNewBookEntry(newEntry)
+    } else {
+      // new entry is null, so the book has been removed from the collection, so just copy the old
+      // book we have in database, and change the availability to "unavailable"
+      val emptyAvailability = OPDSAvailabilityHoldable.get(Option.of(0),Option.of(0), Option.of(0))
+      val entryWithEmptyAvailability = feedEntryWithAvailability(accountID, feedEntry, emptyAvailability)
+      this.revokeNotifyServerSaveNewEntry(entryWithEmptyAvailability)
+      this.onNewBookEntry(entryWithEmptyAvailability)
+    }
   }
 
   private fun feedEntryWithAvailability(
@@ -295,17 +303,24 @@ class BookRevokeTask(
     targetURI: URI,
     revokeType: RevokeType,
     account: AccountType
-  ): FeedEntryOPDS {
+  ): FeedEntryOPDS? {
     this.debug("notifying server of {} revocation via {}", revokeType, targetURI)
     this.taskRecorder.beginNewStep(this.revokeStrings.revokeServerNotifyURI(targetURI))
     this.publishRequestingRevokeStatus()
 
     val feed =
       this.revokeNotifyServerURIFeed(targetURI, account)
-    val entry =
-      this.revokeNotifyServerURIProcessFeed(feed)
 
-    return entry
+    if (feed != null){
+      val entry =
+        this.revokeNotifyServerURIProcessFeed(feed)
+
+      return entry
+    }
+    else {
+      //There was 404 error and the book should just be removed so return null
+      return null
+    }
   }
 
   private fun revokeNotifyServerSaveNewEntry(entry: FeedEntryOPDS) {
@@ -335,7 +350,7 @@ class BookRevokeTask(
    * XXX: Use [FeedLoading.loadSingleEntryFeed]
    */
 
-  private fun revokeNotifyServerURIFeed(targetURI: URI, account: AccountType): Feed {
+  private fun revokeNotifyServerURIFeed(targetURI: URI, account: AccountType): Feed? {
     val credentials = this.getCredentialsFromAccount(account)
 
     /*
@@ -374,6 +389,12 @@ class BookRevokeTask(
       }
 
       is FeedLoaderFailedGeneral -> {
+        if(feedResult.problemReport?.status == 404) {
+          //This just means that there is no loan anymore for the book, so fetch the basic version of the book,
+          //and call it a success
+          logger.debug("404, no loan for the book, should be success")
+          return null
+        }
         val message = this.revokeStrings.revokeServerNotifyFeedFailed
         this.taskRecorder.addAttributesIfPresent(feedResult.problemReport?.toMap())
         this.taskRecorder.currentStepFailed(message, "feedLoaderFailed", feedResult.exception)
