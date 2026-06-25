@@ -34,6 +34,13 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: simplified-app-ekirjasto
+
       - name: Reveal secrets
         env:
           EKIRJASTO_LOCAL_PROPERTIES_BASE64: ${{ secrets.LOCAL_PROPERTIES }}
