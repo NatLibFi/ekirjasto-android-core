@@ -137,6 +137,7 @@ class EkirjaPlayerFragment : Fragment(R.layout.ekirjasto_audio_player_view) {
     this.waitingView.text = ""
     this.seekBar.isEnabled = false
 
+    this.backButton.findViewById<TextView>(R.id.backText).text = this.resources.getString(R.string.audiobook_accessibility_navigation_back)
     this.backButton.setOnClickListener {
       PlayerModel.submitViewCommand(PlayerViewCommand.PlayerViewNavigationCloseAll)
     }
@@ -207,6 +208,7 @@ class EkirjaPlayerFragment : Fragment(R.layout.ekirjasto_audio_player_view) {
     }
 
     this.menuPlaybackRate = this.bottomToolbar.menu.findItem(R.id.player_menu_playback_rate)
+    this.menuPlaybackRate.title = this.resources.getString(R.string.audiobook_player_menu_playback_rate_title)
     this.menuPlaybackRate.setOnMenuItemClickListener {
       PlayerModel.submitViewCommand(PlayerViewCommand.PlayerViewNavigationPlaybackRateMenuOpen)
       true
@@ -221,12 +223,14 @@ class EkirjaPlayerFragment : Fragment(R.layout.ekirjasto_audio_player_view) {
     }
 
     this.menuSleep = this.bottomToolbar.menu.findItem(R.id.player_menu_sleep)
+    this.menuSleep.title = this.resources.getString(org.librarysimplified.audiobook.views.R.string.audiobook_player_menu_sleep_title)
     this.menuSleep.setOnMenuItemClickListener {
       PlayerModel.submitViewCommand(PlayerViewCommand.PlayerViewNavigationSleepMenuOpen)
       true
     }
 
     this.menuAddBookmark = this.bottomToolbar.menu.findItem(R.id.player_menu_add_bookmark)
+    this.menuAddBookmark.title= this.resources.getString(R.string.audiobook_player_menu_add_bookmark_title)
     this.menuAddBookmark.setOnMenuItemClickListener {
       PlayerModel.bookmarkCreate()
       true
@@ -299,7 +303,7 @@ class EkirjaPlayerFragment : Fragment(R.layout.ekirjasto_audio_player_view) {
         this.onEventUpdateTimeRelatedUI(event.positionMetadata)
       }
       is PlayerEventError -> {
-        this.showWaiting(this.getString(R.string.audiobook_player_error, event.errorCodeName, event.errorCode))
+        this.showWaiting(this.getString(R.string.audiobook_player_error, event.errorCode))
       }
       is PlayerEvent.PlayerEventWithPosition.PlayerEventChapterCompleted,
       is PlayerEvent.PlayerEventWithPosition.PlayerEventCreateBookmark,
