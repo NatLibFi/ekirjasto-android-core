@@ -187,6 +187,7 @@ dependencies {
     implementation(libs.play.services.basement)
     implementation(libs.play.services.tasks)
     implementation(libs.r2.lcp)
+    implementation(libs.r2.shared)
     implementation(libs.rxandroid2)
     implementation(libs.rxjava2)
     implementation(libs.rxjava2.extensions)

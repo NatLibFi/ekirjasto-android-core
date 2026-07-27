@@ -8,18 +8,21 @@ import org.librarysimplified.audiobook.license_check.api.LicenseChecks
 import org.librarysimplified.audiobook.license_check.spi.SingleLicenseCheckResult
 import org.librarysimplified.audiobook.license_check.spi.SingleLicenseCheckStatus
 import org.librarysimplified.audiobook.manifest.api.PlayerManifest
+import org.librarysimplified.audiobook.manifest.api.PlayerPalaceID
 import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfilled
-import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentErrorType
+import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentError
 import org.librarysimplified.audiobook.parser.api.ParseError
 import org.librarysimplified.audiobook.parser.api.ParseResult
+import org.librarysimplified.audiobook.manifest_parser.api.ManifestUnparsed
 import org.librarysimplified.audiobook.parser.api.ParseWarning
 import org.librarysimplified.http.api.LSHTTPAuthorizationType
+import org.librarysimplified.http.api.LSHTTPClientType
 import org.nypl.simplified.taskrecorder.api.TaskRecorder
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
 import org.nypl.simplified.taskrecorder.api.TaskResult
 import org.slf4j.LoggerFactory
-import rx.Observable
-import rx.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import java.net.URI
 
 /**
@@ -49,7 +52,7 @@ abstract class AbstractAudioBookManifestStrategy(
 
   abstract fun fulfill(
     taskRecorder: TaskRecorderType
-  ): PlayerResult<ManifestFulfilled, ManifestFulfillmentErrorType>
+  ): PlayerResult<ManifestFulfilled, ManifestFulfillmentError>
 
   override fun execute(): TaskResult<AudioBookManifestData> {
     val taskRecorder = TaskRecorder.create()
@@ -69,7 +72,10 @@ abstract class AbstractAudioBookManifestStrategy(
       }
 
       taskRecorder.beginNewStep("Parsing manifest…")
-      val (contentType, authorization, downloadBytes) = (fulfillResult as PlayerResult.Success).result
+      val fulfilled = (fulfillResult as PlayerResult.Success).result
+      val contentType = fulfilled.contentType
+      val authorization = fulfilled.authorization
+      val downloadBytes = fulfilled.data
       val parseResult = this.parseManifest(this.request.targetURI, downloadBytes)
       if (parseResult is ParseResult.Failure) {
         taskRecorder.currentStepFailed(
@@ -155,7 +161,7 @@ abstract class AbstractAudioBookManifestStrategy(
 
   private fun formatServerData(
     message: String,
-    serverData: ManifestFulfillmentErrorType.ServerData?
+    serverData: ManifestFulfillmentError.ServerData?
   ): String {
     return buildString {
       this.append(message)
@@ -218,6 +224,7 @@ abstract class AbstractAudioBookManifestStrategy(
       AudioBookManifestData(
         manifest = parsedManifest,
         fulfilled = ManifestFulfilled(
+          source = null,
           contentType = contentType,
           authorization = authorization,
           data = downloadBytes
@@ -237,7 +244,10 @@ abstract class AbstractAudioBookManifestStrategy(
     this.logger.debug("parseManifest")
     return this.request.manifestParsers.parse(
       uri = source,
-      streams = data,
+      input = ManifestUnparsed(
+        palaceId = PlayerPalaceID(source.toString()),
+        data = data
+      ),
       extensions = this.request.extensions
     )
   }
@@ -255,7 +265,7 @@ abstract class AbstractAudioBookManifestStrategy(
       LicenseChecks.createLicenseCheck(
         LicenseCheckParameters(
           manifest = manifest,
-          userAgent = this.request.userAgent,
+          httpClient = this.request.services.requireService(LSHTTPClientType::class.java),
           checks = this.request.licenseChecks,
           cacheDirectory = this.request.cacheDirectory
         )
@@ -269,7 +279,7 @@ abstract class AbstractAudioBookManifestStrategy(
     try {
       return check.execute()
     } finally {
-      checkSubscription.unsubscribe()
+      checkSubscription.dispose()
     }
   }
 

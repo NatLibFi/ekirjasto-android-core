@@ -252,6 +252,15 @@
       "app_version_string" : {
          "string" : "E-kirjaston versio %1$s"
       },
+      "audio_book_manifest_download_error" : {
+         "string" : "Äänikirjaa ei voitu ladata."
+      },
+      "audio_book_manifest_license_error" : {
+         "string" : "Äänikirjan lisenssiä ei voitu varmentaa."
+      },
+      "audio_book_manifest_parse_error" : {
+         "string" : "Äänikirjaa ei voitu avata."
+      },
       "audio_book_player" : {
          "string" : "Äänikirjasoitin"
       },
@@ -500,6 +509,9 @@
       },
       "audiobook_player_remaining_time_minutes_only" : {
          "string" : "%d min jäljellä"
+      },
+      "audiobook_player_remaining_time_seconds_only" : {
+         "string" : "%d sekuntia jäljellä"
       },
       "audiobook_player_sleep_15" : {
          "string" : "15:00"
@@ -855,6 +867,9 @@
       "catalogBookAvailabilityLoanedTimed" : {
          "string" : "Sinulla on tämä kirja lainassa %1$s."
       },
+      "catalogBookAvailabilityNotAvailable" : {
+         "string" : "Tämä kirja ei ole saatavilla."
+      },
       "catalogBookAvailabilityOpenAccess" : {
          "string" : "Voit pitää tämän kirjan."
       },
@@ -1103,6 +1118,9 @@
       },
       "dialog_manual_passphrase_title" : {
          "string" : "Anna LCP-salasana"
+      },
+      "dismiss" : {
+         "string" : "Sulje"
       },
       "e_kirjasto_logo" : {
          "string" : "E-kirjaston logo"

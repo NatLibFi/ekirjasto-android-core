@@ -4,6 +4,7 @@
 
   <string name="audiobook_player_remaining_time">%1$d hr %2$d min remaining</string>
   <string name="audiobook_player_remaining_time_minutes_only">%d min remaining</string>
+  <string name="audiobook_player_remaining_time_seconds_only">%d seconds remaining</string>
 
   <string name="audiobook_part_download_stop_confirm">Stop downloading this book part?</string>
   <string name="audiobook_part_download_stop">Stop</string>

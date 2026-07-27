@@ -118,9 +118,6 @@ class SettingsDebugFragment : Fragment(R.layout.settings_debug) {
     this.drmTable.addView(
       this.createDrmSupportRow("Adobe Acs", this.viewModel.adeptSupported)
     )
-    this.drmTable.addView(
-      this.createDrmSupportRow("AxisNow", this.viewModel.axisNowSupported)
-    )
 
     this.viewModel.adeptActivations.observe(this.viewLifecycleOwner) { activations ->
       if (activations.isNotEmpty()) {

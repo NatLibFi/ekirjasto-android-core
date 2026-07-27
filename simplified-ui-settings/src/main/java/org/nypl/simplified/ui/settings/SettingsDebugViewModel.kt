@@ -10,7 +10,6 @@ import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
 import org.librarysimplified.services.api.Services
 import org.nypl.drm.core.AdobeAdeptExecutorType
-import org.nypl.drm.core.AxisNowServiceType
 import org.nypl.simplified.accounts.api.AccountProvider
 import org.nypl.simplified.accounts.api.AccountProviderAuthenticationDescription
 import org.nypl.simplified.accounts.registry.api.AccountProviderRegistryType
@@ -98,9 +97,6 @@ class SettingsDebugViewModel(application: Application) : AndroidViewModel(applic
 
   val supportEmailAddress: String =
     buildConfig.supportErrorReportEmailAddress
-
-  val axisNowSupported: Boolean =
-    services.optionalService(AxisNowServiceType::class.java) != null
 
   val adeptSupported: Boolean =
     this.adeptExecutor != null

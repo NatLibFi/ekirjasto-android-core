@@ -4,7 +4,6 @@ import org.joda.time.Instant
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.drm.core.AdobeAdeptExecutorType
-import org.nypl.drm.core.AxisNowServiceType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.audio.AudioBookManifestStrategiesType
@@ -30,7 +29,6 @@ import java.net.URI
 interface BorrowContextType {
   val account: AccountType
   val adobeExecutor: AdobeAdeptExecutorType?
-  val axisNowService: AxisNowServiceType?
   val audioBookManifestStrategies: AudioBookManifestStrategiesType
   val bundledContent: BundledContentResolverType
   val clock: () -> Instant
@@ -100,6 +98,20 @@ interface BorrowContextType {
    */
 
   fun receivedNewURI(uri: URI)
+
+  /**
+   * Set the credentials to be used for the next subtask. Used by subtasks (such as bearer-token
+   * negotiation) that prepare credentials for the subtask that follows them.
+   */
+
+  fun setNextSubtaskCredentials(credentials: BorrowSubtaskCredentials)
+
+  /**
+   * Take the credentials to be used for the current subtask. This also resets the credentials
+   * back to [BorrowSubtaskCredentials.UseAccountCredentials] for any later subtask.
+   */
+
+  fun takeSubtaskCredentials(): BorrowSubtaskCredentials
 
   /**
    * The current acquisition path element. This will be updated once for each subtask.

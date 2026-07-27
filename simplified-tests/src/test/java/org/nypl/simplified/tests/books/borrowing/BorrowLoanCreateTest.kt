@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientType
-import org.librarysimplified.http.bearer_token.LSHTTPBearerTokenInterceptors
 import org.librarysimplified.http.vanilla.LSHTTPClients
 import org.mockito.Mockito
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
@@ -143,6 +142,7 @@ class BorrowLoanCreateTest {
         .create(
           context = androidContext,
           configuration = LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-tests",
             applicationVersion = "999.999.0",
             tlsOverrides = null,
@@ -417,78 +417,15 @@ class BorrowLoanCreateTest {
     assertEquals("Basic c29tZW9uZTpub3QgYSBwYXNzd29yZA==", request0.getHeader("Authorization"))
   }
 
-  /**
-   * A file is downloaded even if it has to go through a bearer token.
+  /*
+   * NOTE (Readium 3.x / palace.http 2.x migration): The former `testLoanOkEPUBBearerToken` test
+   * was removed. Bearer-token handling used to be transparent inside the HTTP client (a
+   * ServiceLoader-registered interceptor in palace.http 1.x). palace.http 2.x removed that
+   * interceptor; bearer negotiation is now an explicit, separate subtask (BorrowBearerToken), so
+   * the loan-create subtask no longer transparently follows a bearer-token response. The bearer
+   * path is covered end-to-end by BorrowTaskTest.testBearerTokenEPUB. This mirrors upstream Palace,
+   * which likewise dropped the bearer case from this subtask's tests.
    */
-
-  @Test
-  fun testLoanOkEPUBBearerToken() {
-    val task = BorrowLoanCreate.createSubtask()
-
-    this.context.currentURIField =
-      this.webServer.url("/book.epub").toUri()
-    this.context.currentAcquisitionPathElement =
-      OPDSAcquisitionPathElement(opdsAcquisitionFeedEntry, null, emptyMap())
-    this.context.currentRemainingOPDSPathElements =
-      listOf(OPDSAcquisitionPathElement(genericEPUBFiles, null, emptyMap()))
-
-    val feedText = """
-<entry xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog">
-  <title>Example</title>
-  <updated>2020-09-17T16:48:51+0000</updated>
-  <id>7264f7f8-7bea-4ce6-906e-615406ca38cb</id>
-  <link href="${this.webServer.url("/next")}" rel="http://opds-spec.org/acquisition" type="application/epub+zip">
-    <opds:availability since="2020-09-17T16:48:51+0000" status="available" until="2020-09-17T16:48:51+0000" />
-    <opds:holds total="0" />
-    <opds:copies available="5" total="5" />
-  </link>
-</entry>
-    """.trimIndent()
-
-    val response0 =
-      MockResponse()
-        .setResponseCode(200)
-        .setHeader("Content-Type", LSHTTPBearerTokenInterceptors.bearerTokenContentType)
-        .setBody(
-          """{
-          "access_token": "abcd",
-          "expires_in": 1000,
-          "location": "${this.webServer.url("/book.epub")}"
-        }
-          """.trimIndent()
-        )
-
-    val response1 =
-      MockResponse()
-        .setResponseCode(200)
-        .setHeader("Content-Type", opdsAcquisitionFeedEntry)
-        .setBody(feedText)
-
-    this.webServer.enqueue(response0)
-    this.webServer.enqueue(response1)
-
-    try {
-      task.execute(this.context)
-      Assertions.fail()
-    } catch (e: BorrowSubtaskHaltedEarly) {
-      this.logger.debug("halted early: ", e)
-    } catch (e: Exception) {
-      this.logger.debug("error: ", e)
-      throw IllegalStateException(e)
-    }
-
-    val sent0 = this.webServer.takeRequest()
-    assertEquals("Basic c29tZW9uZTpub3QgYSBwYXNzd29yZA==", sent0.getHeader("Authorization"))
-    val sent1 = this.webServer.takeRequest()
-    assertEquals("Bearer abcd", sent1.getHeader("Authorization"))
-
-    this.verifyBookRegistryHasStatus(LoanedNotDownloaded::class.java)
-    assertEquals(1, this.bookDatabaseEntry.entryWrites)
-
-    assertEquals(RequestingLoan::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(LoanedNotDownloaded::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(0, this.bookStates.size)
-  }
 
   /**
    * A loan is created for an open access book.

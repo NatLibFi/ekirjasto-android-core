@@ -1,5 +1,6 @@
 package org.nypl.simplified.tests.mocking
 
+import android.app.Application
 import org.librarysimplified.audiobook.api.PlayerAudioBookProviderType
 import org.librarysimplified.audiobook.api.PlayerAudioEngineProviderType
 import org.librarysimplified.audiobook.api.PlayerAudioEngineRequest
@@ -34,6 +35,14 @@ class MockedAudioEngineProvider : PlayerAudioEngineProviderType {
 
   override fun version(): PlayerVersion {
     return PlayerVersion(100, 0, 0)
+  }
+
+  override fun tryDeleteRequest(
+    context: Application,
+    request: PlayerAudioEngineRequest
+  ): Boolean {
+    this.logger.debug("trying delete request: {}", request)
+    return false
   }
 
   companion object {

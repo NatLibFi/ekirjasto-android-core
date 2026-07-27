@@ -67,6 +67,7 @@ class TimeTrackingHttpCallsTest {
         .create(
           context = context,
           configuration = LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-tests",
             applicationVersion = "999.999.0",
             tlsOverrides = null,
