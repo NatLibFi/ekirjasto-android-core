@@ -1119,6 +1119,9 @@
       "dialog_manual_passphrase_title" : {
          "string" : "Enter LCP Passphrase"
       },
+      "dismiss" : {
+         "string" : "Dismiss"
+      },
       "e_kirjasto_logo" : {
          "string" : "E-kirjasto logo"
       },
