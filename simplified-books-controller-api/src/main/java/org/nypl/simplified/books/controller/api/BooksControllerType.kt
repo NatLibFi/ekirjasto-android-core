@@ -54,6 +54,18 @@ interface BooksControllerType {
   )
 
   /**
+   * Delete the downloaded book files from the database.
+   *
+   * @param accountID The account that has the book
+   * @param bookID The ID of the book
+   */
+
+  fun bookDeleteFiles(
+    accountID: AccountID,
+    bookID: BookID
+  )
+
+  /**
    * Submit a problem report for a book
    *
    * @param accountID The account that owns the book

@@ -751,6 +751,21 @@ class Controller private constructor(
     this.borrows[bookID]?.cancel()
   }
 
+  override fun bookDeleteFiles(
+    accountID: AccountID,
+    bookID: BookID
+  ) {
+    this.submitTask(
+      BookFileDeleteTask(
+        accountID = accountID,
+        profileID = this.profileCurrent().id,
+        profiles = this.profiles,
+        bookID = bookID,
+        bookRegistry = this.bookRegistry,
+      )
+    )
+  }
+
   override fun bookReport(
     accountID: AccountID,
     feedEntry: FeedEntry.FeedEntryOPDS,

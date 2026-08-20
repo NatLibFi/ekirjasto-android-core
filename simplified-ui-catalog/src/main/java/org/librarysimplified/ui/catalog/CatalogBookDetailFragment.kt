@@ -115,6 +115,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var buildConfig: BuildConfigurationServiceType
   private lateinit var buttonCreator: CatalogButtons
   private lateinit var buttons: LinearLayout
+  private lateinit var secondaryButtons: LinearLayout
   private lateinit var cover: ImageView
   private lateinit var covers: BookCoverProviderType
   private lateinit var debugStatus: TextView
@@ -216,6 +217,8 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       view.findViewById(R.id.bookDetailAccessibilityTable)
     this.buttons =
       view.findViewById(R.id.bookDetailButtons)
+    this.secondaryButtons =
+      view.findViewById(R.id.bookDetailSecondaryButtons)
     this.relatedBooksContainer =
       view.findViewById(R.id.bookDetailRelatedBooksContainer)
     this.relatedBooksList =
@@ -754,6 +757,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     }
 
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(
       this.buttonCreator.createDismissButton {
         this.viewModel.dismissBorrowError()
@@ -805,6 +809,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     bookStatus: BookStatus.Revoked
   ) {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(this.buttonCreator.createCenteredTextForButtons(R.string.catalogRequesting))
     this.checkButtonViewCount()
 
@@ -818,6 +823,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
   private fun onBookStatusRequestingLoan() {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(this.buttonCreator.createCenteredTextForButtons(R.string.catalogRequesting))
     this.checkButtonViewCount()
 
@@ -834,6 +840,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     bookPreviewStatus: BookPreviewStatus
   ) {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
 
     // Do not createPreviewButton button, regarless of statuses
     //val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
@@ -911,6 +918,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     bookPreviewStatus: BookPreviewStatus
   ) {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
 
       if (bookStatus.copiesTotal == 0) {
         //If we don't have any copies, we have run out of licenses, and should not show any buttons
@@ -948,6 +956,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     book: Book
   ) {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     
     //val createPreviewButton = bookPreviewStatus != BookPreviewStatus.None
     val createPreviewButton = false
@@ -1041,6 +1050,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     book: Book
   ) {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
 
     when (bookStatus) {
       is BookStatus.Loaned.LoanedNotDownloaded -> {
@@ -1085,6 +1095,13 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
             // do nothing
           }
         }
+        secondaryButtons.addView(
+          this.buttonCreator.createDeleteDownloadButton(
+            onClick = {
+              this.deleteDownloadPopup(book)
+            }
+          )
+        )
       }
     }
 
@@ -1131,6 +1148,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
      */
 
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(
       this.buttonCreator.createCancelDownloadButton(
         onClick = {
@@ -1314,8 +1332,35 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     dialog.show()
   }
 
+  /**
+   * Show user a popup requiring user to confirm the deleting of the download
+   */
+  private fun deleteDownloadPopup(book: Book) {
+    //Mark that a popup is currently shown
+    popUpShown = true
+    logger.debug("Showing delete download popup")
+    val builder = MaterialAlertDialogBuilder(this.requireContext())
+    builder
+      .setTitle(getString(R.string.bookConfirmDeleteDownloadTitle, book.entry.title))
+      .setMessage(R.string.bookConfirmDeleteDownloadMessage)
+      .setPositiveButton(R.string.bookConfirmDeleteDownloadConfirmButton) { dialog, which ->
+        //Set the popup as closed
+        //And start revoke
+        this.viewModel.deleteFiles()
+        popUpShown = false
+      }
+      .setNeutralButton(R.string.bookConfirmReturnCancelButton) { dialog, which ->
+        //Do nothing, don't revoke the book
+        popUpShown = false
+      }
+
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+  }
+
   private fun onBookStatusDownloadWaitingForExternalAuthentication() {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(this.buttonCreator.createCenteredTextForButtons(R.string.catalogLoginRequired))
     this.checkButtonViewCount()
 
@@ -1328,6 +1373,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
   private fun onBookStatusDownloadExternalAuthenticationInProgress() {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(this.buttonCreator.createCenteredTextForButtons(R.string.catalogLoginRequired))
     this.checkButtonViewCount()
 
@@ -1340,6 +1386,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
   private fun onBookStatusRequestingDownload() {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(this.buttonCreator.createCenteredTextForButtons(R.string.catalogRequesting))
     this.checkButtonViewCount()
 
@@ -1352,6 +1399,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
   private fun onBookStatusRequestingRevoke() {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(this.buttonCreator.createCenteredTextForButtons(R.string.catalogRequesting))
     this.checkButtonViewCount()
 
@@ -1366,6 +1414,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     bookStatus: BookStatus.FailedDownload,
   ) {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(
       this.buttonCreator.createDismissButton {
         this.viewModel.dismissBorrowError()
@@ -1395,6 +1444,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     bookStatus: BookStatus.FailedRevoke,
   ) {
     this.buttons.removeAllViews()
+    this.secondaryButtons.removeAllViews()
     this.buttons.addView(
       this.buttonCreator.createDismissButton {
         this.viewModel.dismissRevokeError()
