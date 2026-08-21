@@ -33,6 +33,11 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Configure bundler for CI
+        run: |
+          bundle config set cache_path /tmp/bundle_cache
+          bundle config set path vendor/bundle
+        
       - name: Reveal secrets
         env:
           EKIRJASTO_LOCAL_PROPERTIES_BASE64: ${{ secrets.LOCAL_PROPERTIES }}
