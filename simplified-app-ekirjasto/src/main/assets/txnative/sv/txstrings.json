@@ -252,6 +252,15 @@
       "app_version_string" : {
          "string" : "E-biblioteket version %1$s"
       },
+      "audio_book_manifest_download_error" : {
+         "string" : "Ljudboken kunde inte laddas."
+      },
+      "audio_book_manifest_license_error" : {
+         "string" : "Ljudbokens licens kunde inte verifieras."
+      },
+      "audio_book_manifest_parse_error" : {
+         "string" : "Ljudboken kunde inte öppnas."
+      },
       "audio_book_player" : {
          "string" : "Ljudboksspelare"
       },
@@ -500,6 +509,9 @@
       },
       "audiobook_player_remaining_time_minutes_only" : {
          "string" : "%d min återstår"
+      },
+      "audiobook_player_remaining_time_seconds_only" : {
+         "string" : "%d sekunder återstår"
       },
       "audiobook_player_sleep_15" : {
          "string" : "15:00"
@@ -855,6 +867,9 @@
       "catalogBookAvailabilityLoanedTimed" : {
          "string" : "Denna bok är lånad åt dig i %1$s."
       },
+      "catalogBookAvailabilityNotAvailable" : {
+         "string" : " Denna bok är inte tillgänglig."
+      },
       "catalogBookAvailabilityOpenAccess" : {
          "string" : "Du kan behålla denna bok."
       },
@@ -1103,6 +1118,9 @@
       },
       "dialog_manual_passphrase_title" : {
          "string" : "Ange LCP-lösenfras"
+      },
+      "dismiss" : {
+         "string" : "Avfärda"
       },
       "e_kirjasto_logo" : {
          "string" : "E-bibliotekets logotyp"
