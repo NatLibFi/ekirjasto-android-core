@@ -1,6 +1,5 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
-1.4.0
-- Added full Edge-to-Edge support
-- Added 16KB page size compliance
+1.4.2
+- Bumped SDK target to 36
 - Bug fixes

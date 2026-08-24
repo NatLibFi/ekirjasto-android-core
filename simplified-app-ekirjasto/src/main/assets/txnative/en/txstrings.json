@@ -252,6 +252,15 @@
       "app_version_string" : {
          "string" : "E-kirjasto version %1$s"
       },
+      "audio_book_manifest_download_error" : {
+         "string" : "The audiobook could not be downloaded."
+      },
+      "audio_book_manifest_license_error" : {
+         "string" : "The audiobook license could not be verified."
+      },
+      "audio_book_manifest_parse_error" : {
+         "string" : "The audiobook could not be read."
+      },
       "audio_book_player" : {
          "string" : "Audiobook Player"
       },
@@ -501,6 +510,9 @@
       "audiobook_player_remaining_time_minutes_only" : {
          "string" : "%d min remaining"
       },
+      "audiobook_player_remaining_time_seconds_only" : {
+         "string" : "%d seconds remaining"
+      },
       "audiobook_player_sleep_15" : {
          "string" : "15:00"
       },
@@ -548,6 +560,15 @@
       },
       "audiobook_player_waiting" : {
          "string" : "File %1$d must be downloaded to continue playback."
+      },
+      "bookConfirmDeleteDownloadConfirmButton" : {
+         "string" : "Delete"
+      },
+      "bookConfirmDeleteDownloadMessage" : {
+         "string" : "This will remove the book files and bookmarks associated with this title from your device. The title remains loaned. "
+      },
+      "bookConfirmDeleteDownloadTitle" : {
+         "string" : "Delete download for \"%1$s\" ?"
       },
       "bookConfirmReturnCancelButton" : {
          "string" : "Cancel"
@@ -735,6 +756,9 @@
       "catalogAccessibilityBookDelete" : {
          "string" : "Delete"
       },
+      "catalogAccessibilityBookDeleteDownload" : {
+         "string" : "Delete download"
+      },
       "catalogAccessibilityBookDownload" : {
          "string" : "Download"
       },
@@ -855,6 +879,9 @@
       "catalogBookAvailabilityLoanedTimed" : {
          "string" : "You have this book on loan for %1$s."
       },
+      "catalogBookAvailabilityNotAvailable" : {
+         "string" : "This book is unavailable."
+      },
       "catalogBookAvailabilityOpenAccess" : {
          "string" : "This book is yours to keep."
       },
@@ -920,6 +947,9 @@
       },
       "catalogCorrupted" : {
          "string" : "The metadata for this book is damaged and cannot be displayed. Reloading the feed or syncing your account might fix the problem."
+      },
+      "catalogDeleteDownload" : {
+         "string" : "Delete download"
       },
       "catalogDescription" : {
          "string" : "Description"
@@ -1103,6 +1133,9 @@
       },
       "dialog_manual_passphrase_title" : {
          "string" : "Enter LCP Passphrase"
+      },
+      "dismiss" : {
+         "string" : "Dismiss"
       },
       "e_kirjasto_logo" : {
          "string" : "E-kirjasto logo"

@@ -1,6 +1,5 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.4.0
-- Lade till full Edge-to-Edge-stöd
-- Lade till 16KB sidstorlekskompatibilitet
+1.4.2
+- Ökade SDKtarget till 36
 - Bugfixar
