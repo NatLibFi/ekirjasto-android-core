@@ -1345,12 +1345,12 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
       .setMessage(R.string.bookConfirmDeleteDownloadMessage)
       .setPositiveButton(R.string.bookConfirmDeleteDownloadConfirmButton) { dialog, which ->
         //Set the popup as closed
-        //And start revoke
+        //And start deleting the files
         this.viewModel.deleteFiles()
         popUpShown = false
       }
       .setNeutralButton(R.string.bookConfirmReturnCancelButton) { dialog, which ->
-        //Do nothing, don't revoke the book
+        //Do nothing, don't delete the files
         popUpShown = false
       }
 
