@@ -74,6 +74,15 @@ interface BookDatabaseEntryType {
   fun delete()
 
   /**
+  * Delete the data of an entry.
+  *
+  * @throws BookDatabaseException On errors
+  */
+
+  @Throws(BookDatabaseException::class)
+  fun deleteBookData()
+
+  /**
    * @return A temporary file that can be used to stage data to be copied into the database
    */
 

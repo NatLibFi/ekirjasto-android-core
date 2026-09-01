@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:gravity="start|bottom"
@@ -157,6 +157,30 @@
                     tools:visibility="visible" />
             </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/bookDetailSecondaryButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="start|bottom"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bookDetailButtons">
+
+            <!-- These views are removed at runtime and are just present for the sake of the UI editor preview -->
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone"
+                tools:text="@string/catalogDeleteDownload"
+                tools:visibility="visible" />
+        </LinearLayout>
 
         <include
             layout="@layout/book_detail_status"

@@ -102,6 +102,11 @@ class MockBookDatabaseEntry(private val bookInitial: Book) : BookDatabaseEntryTy
     this.deleted = true
   }
 
+  //Unused
+  override fun deleteBookData() {
+    this.deleted = true
+  }
+
   override fun temporaryFile(): File {
     throw UnimplementedCodeException()
   }

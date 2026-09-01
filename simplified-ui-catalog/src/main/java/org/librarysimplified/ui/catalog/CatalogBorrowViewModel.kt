@@ -294,6 +294,14 @@ class CatalogBorrowViewModel(
     this.booksController.bookCancelDownload(accountID, bookID)
   }
 
+  fun tryDeleteFiles(
+    accountID: AccountID,
+    bookID: BookID
+  ) {
+    this.logger.debug("remove files from: {}", bookID)
+    this.booksController.bookDeleteFiles(accountID, bookID)
+  }
+
   fun tryDelete(
     accountID: AccountID,
     bookID: BookID

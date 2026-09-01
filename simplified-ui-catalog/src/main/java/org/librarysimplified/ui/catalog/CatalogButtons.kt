@@ -216,6 +216,21 @@ class CatalogButtons(
   }
 
   @UiThread
+  fun createDeleteDownloadButton(
+    onClick: (Button) -> Unit,
+    heightMatchParent: Boolean = false
+  ): Button {
+    return this.createButtonWithStyle(
+      context = this.context,
+      text = R.string.catalogDeleteDownload,
+      description = R.string.catalogAccessibilityBookDeleteDownload,
+      style = R.style.SecondaryButton,
+      heightMatchParent = heightMatchParent,
+      onClick = onClick
+    )
+  }
+
+  @UiThread
   fun createRevokeHoldButton(
     onClick: (Button) -> Unit,
     heightMatchParent: Boolean = false
