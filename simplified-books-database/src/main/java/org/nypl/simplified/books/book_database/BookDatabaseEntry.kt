@@ -198,6 +198,39 @@ internal class BookDatabaseEntry internal constructor(
     }
   }
 
+   override fun deleteBookData() {
+    synchronized(this.bookLock) {
+      Preconditions.checkArgument(!this.deleted, "Entry must not have been deleted")
+
+      /*
+       * Delete all of the format handles individually.
+       */
+
+      val failures = mutableListOf<Exception>()
+      for (handle in this.formatHandles) {
+        try {
+          handle.deleteBookData()
+        } catch (e: Exception) {
+          failures.add(e)
+        }
+      }
+
+      /*
+       * If any of the format handles failed, abort the deletion.
+       */
+
+      if (!failures.isEmpty()) {
+        throw BookDatabaseException("Failed to delete one or more format handles", failures)
+      }
+
+      try {
+        DirectoryUtilities.directoryDelete(this.bookDir)
+      } catch (e: IOException) {
+        throw BookDatabaseException(e.message, listOf<Exception>(e))
+      }
+    }
+  }
+
   @Throws(IOException::class)
   override fun setCover(file: File) {
     synchronized(this.bookLock) {

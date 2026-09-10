@@ -561,6 +561,15 @@
       "audiobook_player_waiting" : {
          "string" : "File %1$d must be downloaded to continue playback."
       },
+      "bookConfirmDeleteDownloadConfirmButton" : {
+         "string" : "Delete"
+      },
+      "bookConfirmDeleteDownloadMessage" : {
+         "string" : "This will remove the book files and bookmarks associated with this title from your device. The title remains loaned. "
+      },
+      "bookConfirmDeleteDownloadTitle" : {
+         "string" : "Delete download for \"%1$s\" ?"
+      },
       "bookConfirmReturnCancelButton" : {
          "string" : "Cancel"
       },
@@ -746,6 +755,9 @@
       },
       "catalogAccessibilityBookDelete" : {
          "string" : "Delete"
+      },
+      "catalogAccessibilityBookDeleteDownload" : {
+         "string" : "Delete download"
       },
       "catalogAccessibilityBookDownload" : {
          "string" : "Download"
@@ -935,6 +947,9 @@
       },
       "catalogCorrupted" : {
          "string" : "The metadata for this book is damaged and cannot be displayed. Reloading the feed or syncing your account might fix the problem."
+      },
+      "catalogDeleteDownload" : {
+         "string" : "Delete download"
       },
       "catalogDescription" : {
          "string" : "Description"

@@ -116,7 +116,9 @@ sealed class BookFormat {
   ) : BookFormat() {
 
     /*
-     * Audio books are downloaded if there's a manifest or audio book file available.
+     * Audiobooks are downloaded if there's a manifest or audiobook file available. This
+     * is because a streaming book only has a manifest, whereas a book that is downloaded to the
+     * device has a manifest and a file.
      */
 
     override val isDownloaded: Boolean

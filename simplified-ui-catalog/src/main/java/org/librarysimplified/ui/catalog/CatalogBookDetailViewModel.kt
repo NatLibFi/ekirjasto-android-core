@@ -653,6 +653,13 @@ class CatalogBookDetailViewModel(
     )
   }
 
+  fun deleteFiles() {
+    this.borrowViewModel.tryDeleteFiles(
+      this.bookWithStatus.book.account,
+      this.bookWithStatus.book.id
+    )
+  }
+
   fun borrowMaybeAuthenticated() {
     this.openLoginDialogIfNecessary()
     this.borrowViewModel.tryBorrowMaybeAuthenticated(

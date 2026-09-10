@@ -561,6 +561,15 @@
       "audiobook_player_waiting" : {
          "string" : "Tiedosto %1$d on ladattava, jotta toistoa voidaan jatkaa."
       },
+      "bookConfirmDeleteDownloadConfirmButton" : {
+         "string" : "Poista"
+      },
+      "bookConfirmDeleteDownloadMessage" : {
+         "string" : "Tämä poistaa kirjan tiedostot ja kirjanmerkit laitteelta. Kirjan lainaa ei palauteta."
+      },
+      "bookConfirmDeleteDownloadTitle" : {
+         "string" : "Poista kirjan \"%1$s\" lataus ?"
+      },
       "bookConfirmReturnCancelButton" : {
          "string" : "Peruuta"
       },
@@ -746,6 +755,9 @@
       },
       "catalogAccessibilityBookDelete" : {
          "string" : "Poista"
+      },
+      "catalogAccessibilityBookDeleteDownload" : {
+         "string" : "Poista lataus"
       },
       "catalogAccessibilityBookDownload" : {
          "string" : "Lataa"
@@ -935,6 +947,9 @@
       },
       "catalogCorrupted" : {
          "string" : "Tämän kirjan metatiedot ovat vioittuneet, eikä niitä voida näyttää. Syötteen lataaminen uudelleen tai tilisi synkronointi saattaa korjata ongelman."
+      },
+      "catalogDeleteDownload" : {
+         "string" : "Poista lataus"
       },
       "catalogDescription" : {
          "string" : "Kuvaus"
