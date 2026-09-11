@@ -34,6 +34,7 @@
   <string name="tocAccessChapter">Open chapter %1$d: %2$s</string>
   <string name="publisherDefaults">Publisher defaults</string>
   <string name="emptyBookmarksMessage">There are no bookmarks for this book</string>
+  <string name="dismiss">Dismiss</string>
 
   <string name="settingsAccessibilityBack">Back</string>
   <string name="settingsAccessibilitySetPublisher">Show the publisher-specified fonts and layout choices.</string>

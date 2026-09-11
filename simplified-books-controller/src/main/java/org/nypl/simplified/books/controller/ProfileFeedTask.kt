@@ -375,9 +375,14 @@ internal class ProfileFeedTask(
       is BookStatus.FailedRevoke,
       is BookStatus.Loaned -> true
       is BookStatus.RequestingDownload,
-      is BookStatus.RequestingLoan,
-      is BookStatus.Selected -> false
-      is BookStatus.Unselected -> false
+      is BookStatus.RequestingLoan -> false
+      // Selected/Unselected are transient markers that carry the book's real status in
+      // `previousStatus`. Unwrap it so favoriting (or unfavoriting) a loaned book does not
+      // momentarily drop it out of the loans feed while the marker status is in effect.
+      is BookStatus.Selected ->
+        status.previousStatus?.let { usableForLoansFeed(it) } ?: false
+      is BookStatus.Unselected ->
+        status.previousStatus?.let { usableForLoansFeed(it) } ?: false
       is BookStatus.RequestingRevoke ->
         true
     }
@@ -399,9 +404,13 @@ internal class ProfileFeedTask(
       is BookStatus.ReachedLoanLimit,
       is BookStatus.RequestingDownload,
       is BookStatus.RequestingLoan,
-      is BookStatus.RequestingRevoke,
-      is BookStatus.Selected -> false
-      is BookStatus.Unselected -> false
+      is BookStatus.RequestingRevoke -> false
+      // Unwrap the transient favorite markers so favoriting a held book does not
+      // momentarily drop it out of the holds feed (see usableForLoansFeed).
+      is BookStatus.Selected ->
+        status.previousStatus?.let { usableForHoldsFeed(it) } ?: false
+      is BookStatus.Unselected ->
+        status.previousStatus?.let { usableForHoldsFeed(it) } ?: false
       is BookStatus.Revoked ->
         false
     }

@@ -15,7 +15,6 @@ object BookFormatsTesting {
           supportsFindawayAudioBooks = true,
           supportsOverdriveAudioBooks = true
         ),
-        supportsAxisNow = true,
         supportsPDF = true,
         supportsAdobeDRM = true
       )
@@ -26,7 +25,6 @@ object BookFormatsTesting {
       BookFormatSupportParameters(
         supportsLCP = false,
         supportsAudioBooks = null,
-        supportsAxisNow = false,
         supportsPDF = false,
         supportsAdobeDRM = false
       )

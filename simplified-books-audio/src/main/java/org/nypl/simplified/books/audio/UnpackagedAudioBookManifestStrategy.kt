@@ -1,18 +1,23 @@
 package org.nypl.simplified.books.audio
 
-import com.io7m.junreachable.UnimplementedCodeException
+import org.librarysimplified.audiobook.api.PlayerAuthorizationHandlerType
+import org.librarysimplified.audiobook.api.PlayerDownloadRequest
 import org.librarysimplified.audiobook.api.PlayerResult
-import org.librarysimplified.audiobook.manifest_fulfill.basic.ManifestFulfillmentBasicCredentials
+import org.librarysimplified.audiobook.manifest.api.PlayerManifestLink
 import org.librarysimplified.audiobook.manifest_fulfill.basic.ManifestFulfillmentBasicParameters
 import org.librarysimplified.audiobook.manifest_fulfill.basic.ManifestFulfillmentBasicType
 import org.librarysimplified.audiobook.manifest_fulfill.opa.OPAManifestFulfillmentStrategyProviderType
 import org.librarysimplified.audiobook.manifest_fulfill.opa.OPAManifestURI
 import org.librarysimplified.audiobook.manifest_fulfill.opa.OPAParameters
 import org.librarysimplified.audiobook.manifest_fulfill.opa.OPAPassword
+import org.librarysimplified.audiobook.manifest_fulfill.opa.OPAUsernamePassword
 import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfilled
-import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentErrorType
+import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentError
 import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentEvent
 import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfillmentStrategyType
+import org.librarysimplified.http.api.LSHTTPAuthorizationBasic
+import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
+import org.librarysimplified.http.api.LSHTTPAuthorizationType
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.nypl.simplified.books.book_database.api.BookFormats
 import org.nypl.simplified.taskrecorder.api.TaskRecorderType
@@ -32,7 +37,7 @@ class UnpackagedAudioBookManifestStrategy(
 
   override fun fulfill(
     taskRecorder: TaskRecorderType
-  ): PlayerResult<ManifestFulfilled, ManifestFulfillmentErrorType> {
+  ): PlayerResult<ManifestFulfilled, ManifestFulfillmentError> {
     return if (this.request.isNetworkAvailable()) {
       taskRecorder.beginNewStep("Downloading manifest…")
       this.downloadManifest()
@@ -42,24 +47,28 @@ class UnpackagedAudioBookManifestStrategy(
     }
   }
 
-  private data class DataLoadFailed(
-    override val message: String,
-    val exception: java.lang.Exception? = null,
-    override val serverData: ManifestFulfillmentErrorType.ServerData? = null
-  ) : ManifestFulfillmentErrorType
+  private fun dataLoadFailed(
+    message: String
+  ): ManifestFulfillmentError {
+    return ManifestFulfillmentError(
+      message = message,
+      extraMessages = listOf(),
+      serverData = null
+    )
+  }
 
-  private fun loadFallbackManifest(): PlayerResult<ManifestFulfilled, ManifestFulfillmentErrorType> {
+  private fun loadFallbackManifest(): PlayerResult<ManifestFulfilled, ManifestFulfillmentError> {
     this.logger.debug("loadFallbackManifest")
     return try {
       val data = this.request.loadFallbackData()
       if (data == null) {
-        PlayerResult.Failure(DataLoadFailed("No fallback manifest data is provided"))
+        PlayerResult.Failure(dataLoadFailed("No fallback manifest data is provided"))
       } else {
         PlayerResult.unit(data)
       }
     } catch (e: Exception) {
       this.logger.error("loadFallbackManifest: ", e)
-      PlayerResult.Failure(DataLoadFailed(e.message ?: e.javaClass.name, e))
+      PlayerResult.Failure(dataLoadFailed(e.message ?: e.javaClass.name))
     }
   }
 
@@ -78,7 +87,7 @@ class UnpackagedAudioBookManifestStrategy(
    * error details.
    */
 
-  private fun downloadManifest(): PlayerResult<ManifestFulfilled, ManifestFulfillmentErrorType> {
+  private fun downloadManifest(): PlayerResult<ManifestFulfilled, ManifestFulfillmentError> {
     this.logger.debug("downloadManifest")
 
     val strategy: ManifestFulfillmentStrategyType =
@@ -89,7 +98,7 @@ class UnpackagedAudioBookManifestStrategy(
     try {
       return strategy.execute()
     } finally {
-      fulfillSubscription.unsubscribe()
+      fulfillSubscription.dispose()
     }
   }
 
@@ -98,6 +107,11 @@ class UnpackagedAudioBookManifestStrategy(
    */
 
   private fun downloadStrategyForCredentials(): ManifestFulfillmentStrategyType {
+    val httpClient =
+      this.request.services.requireService(LSHTTPClientType::class.java)
+    val authorizationHandler =
+      this.authorizationHandlerFor(this.request.credentials)
+
     return if (this.isOverdrive()) {
       this.logger.debug("downloadStrategyForCredentials: trying an Overdrive strategy")
 
@@ -111,33 +125,15 @@ class UnpackagedAudioBookManifestStrategy(
           OPAManifestFulfillmentStrategyProviderType::class.java
         ) ?: throw UnsupportedOperationException("No Overdrive fulfillment strategy is available")
 
-      val parameters =
-        when (val credentials = this.request.credentials) {
-          is AudioBookCredentials.UsernamePassword ->
-            OPAParameters(
-              userName = credentials.userName,
-              password = OPAPassword.Password(credentials.password),
-              clientKey = secretService.clientKey.orEmpty(),
-              clientPass = secretService.clientPass.orEmpty(),
-              targetURI = OPAManifestURI.Indirect(this.request.targetURI),
-              userAgent = this.request.userAgent
-            )
-          is AudioBookCredentials.UsernameOnly ->
-            OPAParameters(
-              userName = credentials.userName,
-              password = OPAPassword.NotRequired,
-              clientKey = secretService.clientKey.orEmpty(),
-              clientPass = secretService.clientPass.orEmpty(),
-              targetURI = OPAManifestURI.Indirect(this.request.targetURI),
-              userAgent = this.request.userAgent
-            )
-          is AudioBookCredentials.BearerToken ->
-            throw UnsupportedOperationException("Can't use bearer tokens for Overdrive fulfillment")
-          null ->
-            throw UnimplementedCodeException()
-        }
-
-      strategies.create(parameters)
+      strategies.create(
+        OPAParameters(
+          authorizationHandler = authorizationHandler,
+          clientKey = secretService.clientKey,
+          clientPass = secretService.clientPass,
+          targetURI = OPAManifestURI.Indirect(this.request.targetURI),
+          httpClient = httpClient
+        )
+      )
     } else {
       this.logger.debug("downloadStrategyForCredentials: trying a Basic strategy")
 
@@ -146,35 +142,74 @@ class UnpackagedAudioBookManifestStrategy(
           ManifestFulfillmentBasicType::class.java
         ) ?: throw UnsupportedOperationException("No Basic fulfillment strategy is available")
 
-      val parameters =
+      strategies.create(
         ManifestFulfillmentBasicParameters(
           uri = this.request.targetURI,
-          credentials = this.request.credentials?.let { credentials ->
-            when (credentials) {
-              is AudioBookCredentials.UsernamePassword ->
-                ManifestFulfillmentBasicCredentials(
-                  userName = credentials.userName,
-                  password = credentials.password
-                )
-              is AudioBookCredentials.UsernameOnly ->
-                ManifestFulfillmentBasicCredentials(
-                  userName = credentials.userName,
-                  password = ""
-                )
-              is AudioBookCredentials.BearerToken ->
-                throw UnsupportedOperationException(
-                  "Can't use bearer tokens for direct audio book fulfillment"
-                  // NB: Indirect bearer token fulfillment is supported: If basic auth is used, and
-                  // the CM returns a bearer token document, the http client will automatically use
-                  // the bearer token to complete the download.
-                )
-            }
-          },
-          httpClient = this.request.services.requireService(LSHTTPClientType::class.java),
-          userAgent = this.request.userAgent
+          authorizationHandler = authorizationHandler,
+          httpClient = httpClient
         )
+      )
+    }
+  }
 
-      strategies.create(parameters)
+  /**
+   * As of audiobook 24.0.0, manifest fulfillment obtains credentials through a
+   * [PlayerAuthorizationHandlerType] rather than inline parameters. This adapts e-kirjasto's
+   * [AudioBookCredentials] onto that interface. Indirect bearer-token fulfillment (basic auth that
+   * yields a bearer-token document) continues to be handled automatically by the HTTP client.
+   */
+
+  private fun authorizationHandlerFor(
+    credentials: AudioBookCredentials?
+  ): PlayerAuthorizationHandlerType {
+    return object : PlayerAuthorizationHandlerType {
+      override fun onAuthorizationIsNoLongerInvalid(
+        source: PlayerManifestLink,
+        kind: PlayerDownloadRequest.Kind
+      ) = Unit
+
+      override fun onAuthorizationIsInvalid(
+        source: PlayerManifestLink,
+        kind: PlayerDownloadRequest.Kind
+      ) = Unit
+
+      override fun onConfigureAuthorizationFor(
+        source: PlayerManifestLink,
+        kind: PlayerDownloadRequest.Kind
+      ): LSHTTPAuthorizationType? {
+        return when (credentials) {
+          is AudioBookCredentials.UsernamePassword ->
+            LSHTTPAuthorizationBasic.ofUsernamePassword(credentials.userName, credentials.password)
+          is AudioBookCredentials.UsernameOnly ->
+            LSHTTPAuthorizationBasic.ofUsernamePassword(credentials.userName, "")
+          is AudioBookCredentials.BearerToken ->
+            LSHTTPAuthorizationBearerToken.ofToken(credentials.accessToken)
+          null ->
+            null
+        }
+      }
+
+      override fun <T : Any> onRequireCustomCredentialsFor(
+        providerName: String,
+        kind: PlayerDownloadRequest.Kind,
+        credentialsType: Class<T>
+      ): T {
+        if (credentialsType == OPAUsernamePassword::class.java) {
+          when (val c = credentials) {
+            is AudioBookCredentials.UsernamePassword ->
+              return credentialsType.cast(
+                OPAUsernamePassword(c.userName, OPAPassword.Password(c.password))
+              )
+            is AudioBookCredentials.UsernameOnly ->
+              return credentialsType.cast(
+                OPAUsernamePassword(c.userName, OPAPassword.NotRequired)
+              )
+            else ->
+              Unit
+          }
+        }
+        throw UnsupportedOperationException("No available credentials of type $credentialsType")
+      }
     }
   }
 

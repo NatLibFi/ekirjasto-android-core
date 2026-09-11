@@ -9,20 +9,21 @@ import org.nanohttpd.protocols.http.response.Response
 import org.nanohttpd.protocols.http.response.Status
 import org.nanohttpd.router.RouterNanoHTTPD
 import org.nypl.simplified.books.api.BookDRMInformation
-import org.readium.r2.shared.fetcher.Resource
-import org.readium.r2.shared.publication.ContentProtection
 import org.readium.r2.shared.publication.Publication
-import org.readium.r2.shared.publication.asset.FileAsset
+import org.readium.r2.shared.publication.protection.ContentProtection
 import org.readium.r2.shared.publication.services.isRestricted
 import org.readium.r2.shared.publication.services.protectionError
+import org.readium.r2.shared.util.ErrorException
+import org.readium.r2.shared.util.Try
+import org.readium.r2.shared.util.asset.AssetRetriever
+import org.readium.r2.shared.util.format.FormatHints
 import org.readium.r2.shared.util.getOrDefault
 import org.readium.r2.shared.util.getOrElse
 import org.readium.r2.shared.util.http.DefaultHttpClient
-import org.readium.r2.shared.util.logging.ConsoleWarningLogger
 import org.readium.r2.shared.util.mediatype.MediaType
-import org.readium.r2.streamer.Streamer
-import org.readium.r2.streamer.parser.pdf.PdfParser
-import org.readium.r2.streamer.parser.readium.ReadiumWebPubParser
+import org.readium.r2.shared.util.resource.Resource
+import org.readium.r2.streamer.PublicationOpener
+import org.readium.r2.streamer.parser.DefaultPublicationParser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
@@ -45,42 +46,54 @@ class PdfServer private constructor(
       pdfFile: File,
       port: Int
     ): PdfServer {
-      val streamer = Streamer(
-        context = context,
-        parsers = listOf(
-          ReadiumWebPubParser(
-            httpClient = DefaultHttpClient(),
-            pdfFactory = null
-          ),
-          PdfParser(
+      val httpClient = DefaultHttpClient()
+      val assetRetriever = AssetRetriever(context.contentResolver, httpClient)
+
+      /*
+       * Tell the asset retriever the media type explicitly. For LCP-protected PDFs this is
+       * required so the LCP content protection engages; without it the encrypted PDF is parsed
+       * as-is and Pdfium reports "File not in PDF format or corrupted". This mirrors the Readium
+       * 2.x behaviour, where the FileAsset was constructed with MediaType.LCP_PROTECTED_PDF.
+       */
+
+      val formatHints = FormatHints(
+        mediaType = when (drmInfo) {
+          is BookDRMInformation.LCP -> MediaType.LCP_PROTECTED_PDF
+          else -> MediaType.PDF
+        }
+      )
+
+      when (val assetRetrieval = assetRetriever.retrieve(pdfFile, formatHints)) {
+        is Try.Failure ->
+          throw IOException("Failed to open PDF", ErrorException(assetRetrieval.value))
+
+        is Try.Success -> {
+          val publicationParser = DefaultPublicationParser(
             context = context,
+            httpClient = httpClient,
+            assetRetriever = assetRetriever,
             pdfFactory = PdfDocumentFactory(context)
           )
-        ),
-        contentProtections = contentProtections,
-        ignoreDefaultParsers = true
-      )
-
-      val publication = streamer.open(
-        asset = FileAsset(
-          file = pdfFile,
-          mediaType = when (drmInfo) {
-            is BookDRMInformation.LCP -> MediaType.LCP_PROTECTED_PDF
-            else -> MediaType.PDF
+          val publicationOpener = PublicationOpener(
+            publicationParser = publicationParser,
+            contentProtections = contentProtections,
+            onCreatePublication = {}
+          )
+          val publication = publicationOpener.open(
+            asset = assetRetrieval.value,
+            credentials = null,
+            allowUserInteraction = false
+          ).getOrElse {
+            throw IOException("Failed to open PDF", ErrorException(it))
           }
-        ),
-        allowUserInteraction = false,
-        warnings = ConsoleWarningLogger()
-      )
-        .getOrElse {
-          throw IOException("Failed to open PDF", it)
-        }
 
-      return PdfServer(
-        port = port,
-        context = context,
-        publication = publication
-      )
+          return PdfServer(
+            port = port,
+            context = context,
+            publication = publication
+          )
+        }
+      }
     }
   }
 
@@ -88,7 +101,10 @@ class PdfServer private constructor(
 
   init {
     if (publication.isRestricted) {
-      throw IOException("Failed to unlock PDF", publication.protectionError)
+      throw IOException(
+        "Failed to unlock PDF",
+        publication.protectionError?.let { ErrorException(it) }
+      )
     }
 
     // We only support a single PDF file in the archive.
@@ -111,9 +127,8 @@ class PdfServer private constructor(
 
     runBlocking {
       this@PdfServer.pdfResource?.close()
+      this@PdfServer.publication.close()
     }
-
-    this.publication.close()
   }
 
   class NotFoundHandler : BaseHandler() {
@@ -126,6 +141,22 @@ class PdfServer private constructor(
   }
 
   class AssetHandler : BaseHandler() {
+
+    private fun guessMimeType(path: String): MediaType {
+      val upper = path.uppercase()
+      return when {
+        upper.endsWith(".CSS") -> MediaType.CSS
+        upper.endsWith(".JS") -> MediaType.JAVASCRIPT
+        upper.endsWith(".MJS") -> MediaType.JAVASCRIPT
+        upper.endsWith(".TTF") -> MediaType.TTF
+        upper.endsWith(".OTF") -> MediaType.OTF
+        upper.endsWith(".HTML") -> MediaType.HTML
+        upper.endsWith(".SVG") -> MediaType.SVG
+        upper.endsWith(".XHTML") -> MediaType.XHTML
+        else -> MediaType.BINARY
+      }
+    }
+
     override fun handle(
       resource: UriResource,
       uri: Uri,
@@ -135,10 +166,7 @@ class PdfServer private constructor(
       val filename = uri.pathSegments.drop(1).joinToString("/")
       val context = resource.initParameter(Context::class.java)
       val assetStream = context.assets.open(filename)
-
-      val mediaType = runBlocking {
-        MediaType.of(fileExtension = File(filename).extension) ?: MediaType.BINARY
-      }
+      val mediaType = guessMimeType(filename)
 
       return Response.newChunkedResponse(
         Status.OK,

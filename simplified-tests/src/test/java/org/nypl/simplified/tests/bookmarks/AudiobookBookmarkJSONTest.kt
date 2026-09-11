@@ -11,6 +11,14 @@ import org.junit.jupiter.api.Test
 import org.nypl.simplified.books.api.bookmark.BookmarkJSON
 import org.nypl.simplified.books.api.bookmark.BookmarkKind
 
+/*
+ * As of the Readium 3.x / audiobook 24.0.0 migration, an audiobook player position is identified
+ * by a reading-order item ID plus an offset in milliseconds within that item. The legacy
+ * chapter/part/startOffset/currentOffset representation is gone, and the location fields are now
+ * serialized flat onto the bookmark object (readingOrderID + offsetMilliseconds) rather than nested
+ * under a "location" key.
+ */
+
 class AudiobookBookmarkJSONTest {
 
   private lateinit var objectMapper: ObjectMapper
@@ -34,6 +42,42 @@ class AudiobookBookmarkJSONTest {
       kind = BookmarkKind.BookmarkLastReadLocation,
       serialized = """
         {
+          "readingOrderID" : "reading-order-1",
+          "offsetMilliseconds" : 100000,
+          "opdsId" : "urn:isbn:9781683609438",
+          "time" : "2022-06-27T14:51:46.238",
+          "deviceID" : "null"
+        }
+      """
+    )
+
+    assertEquals("reading-order-1", bookmark.location.readingOrderID.text)
+    assertEquals(100000L, bookmark.location.offsetMilliseconds.value)
+    assertEquals("urn:isbn:9781683609438", bookmark.opdsId)
+
+    val serializedText =
+      BookmarkJSON.serializeAudiobookBookmarkToString(this.objectMapper, bookmark)
+    val serialized =
+      BookmarkJSON.deserializeAudiobookBookmarkFromString(
+        objectMapper = this.objectMapper,
+        kind = bookmark.kind,
+        serialized = serializedText
+      )
+    assertEquals(bookmark, serialized)
+  }
+
+  /*
+   * Legacy bookmarks that lack the new reading-order/offset fields deserialize to the start of the
+   * book (empty reading-order ID, offset 0) rather than failing.
+   */
+
+  @Test
+  fun testDeserializeLegacyFallsBackToStart() {
+    val bookmark = BookmarkJSON.deserializeAudiobookBookmarkFromString(
+      objectMapper = this.objectMapper,
+      kind = BookmarkKind.BookmarkLastReadLocation,
+      serialized = """
+        {
           "@version" : 2,
           "opdsId" : "urn:isbn:9781683609438",
           "location" : {
@@ -49,59 +93,7 @@ class AudiobookBookmarkJSONTest {
       """
     )
 
-    assertEquals(100000, bookmark.location.startOffset)
-    assertEquals(1, bookmark.location.chapter)
-    assertEquals(2, bookmark.location.part)
-    assertEquals("Is That You, Walt Whitman?", bookmark.location.title)
-
-    val serializedText =
-      BookmarkJSON.serializeAudiobookBookmarkToString(bookmark)
-    val serialized =
-      BookmarkJSON.deserializeAudiobookBookmarkFromString(
-        objectMapper = this.objectMapper,
-        kind = bookmark.kind,
-        serialized = serializedText
-      )
-    assertEquals(bookmark, serialized)
-  }
-
-  @Test
-  fun testDeserializeJSONV3() {
-    val bookmark = BookmarkJSON.deserializeAudiobookBookmarkFromString(
-      objectMapper = this.objectMapper,
-      kind = BookmarkKind.BookmarkLastReadLocation,
-      serialized = """
-        {
-          "@version" : 3,
-          "opdsId" : "urn:isbn:9781683609438",
-          "location" : {
-            "chapter" : 1,
-            "part" : 2,
-            "title" : "Is That You, Walt Whitman?",
-            "startOffset" : 28000,
-            "time" : 100000
-          },
-          "time" : "2022-06-27T14:51:46.238",
-          "chapterTitle" : "Is That You, Walt Whitman?",
-          "deviceID" : "null"
-        }
-      """
-    )
-
-    assertEquals(28000, bookmark.location.startOffset)
-    assertEquals(100000, bookmark.location.currentOffset)
-    assertEquals(1, bookmark.location.chapter)
-    assertEquals(2, bookmark.location.part)
-    assertEquals("Is That You, Walt Whitman?", bookmark.location.title)
-
-    val serializedText =
-      BookmarkJSON.serializeAudiobookBookmarkToString(bookmark)
-    val serialized =
-      BookmarkJSON.deserializeAudiobookBookmarkFromString(
-        objectMapper = this.objectMapper,
-        kind = bookmark.kind,
-        serialized = serializedText
-      )
-    assertEquals(bookmark, serialized)
+    assertEquals("", bookmark.location.readingOrderID.text)
+    assertEquals(0L, bookmark.location.offsetMilliseconds.value)
   }
 }

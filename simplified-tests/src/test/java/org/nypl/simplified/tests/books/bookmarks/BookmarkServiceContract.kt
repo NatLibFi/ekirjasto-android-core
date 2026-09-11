@@ -149,6 +149,7 @@ abstract class BookmarkServiceContract {
         .create(
           context = Mockito.mock(Context::class.java),
           configuration = LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-test",
             applicationVersion = "0.0.1",
             tlsOverrides = null,

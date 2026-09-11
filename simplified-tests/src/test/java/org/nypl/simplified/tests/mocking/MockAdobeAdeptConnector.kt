@@ -44,6 +44,15 @@ class MockAdobeAdeptConnector(
   override fun getDeviceActivations(client: AdobeAdeptActivationReceiverType) {
   }
 
+  override fun setDeviceActivations(data: ByteArray) {
+  }
+
+  override fun deleteDeviceActivation(
+    vendor: AdobeVendorID,
+    user: AdobeUserID
+  ) {
+  }
+
   override fun joinAccount(
     listener: AdobeAdeptJoinAccountListenerType,
     user: AdobeUserID?

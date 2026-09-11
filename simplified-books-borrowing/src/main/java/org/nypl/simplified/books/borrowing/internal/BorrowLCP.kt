@@ -35,15 +35,13 @@ import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskType
 import org.nypl.simplified.books.formats.api.StandardFormatNames
 import org.nypl.simplified.opds.core.OPDSAcquisitionPaths
 import org.nypl.simplified.opds.core.OPDSFeedParserType
-import org.readium.r2.lcp.LcpException
 import org.readium.r2.lcp.license.model.LicenseDocument
-import org.readium.r2.shared.fetcher.ArchiveFetcher
-import org.readium.r2.shared.publication.Link
-import org.readium.r2.shared.util.use
+import org.readium.r2.shared.util.getOrElse
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.net.URI
+import java.util.zip.ZipFile
 
 /**
  * A task that downloads an LCP license and then fulfills a book.
@@ -292,15 +290,27 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
     val temporaryFile = context.temporaryFile("zip")
 
     try {
-      val license = LicenseDocument(licenseBytes)
-      val link = license.link(LicenseDocument.Rel.publication)
-      val url = link?.url
-        ?: throw LcpException.Parsing.Url(rel = LicenseDocument.Rel.publication.rawValue)
+      val license = LicenseDocument.fromBytes(licenseBytes).getOrElse {
+        context.taskRecorder.currentStepFailed(
+          message = "Unable to parse LCP license document.",
+          errorCode = BorrowErrorCodes.lcpFulfillmentFailed
+        )
+        throw BorrowSubtaskFailed()
+      }
+      val publicationLink = license.link(LicenseDocument.Rel.Publication)
+        ?: run {
+          context.taskRecorder.currentStepFailed(
+            message = "LCP license is missing a 'publication' link.",
+            errorCode = BorrowErrorCodes.lcpFulfillmentFailed
+          )
+          throw BorrowSubtaskFailed()
+        }
+      val publicationUrl = publicationLink.url()
 
       val downloadRequest =
         BorrowHTTP.createDownloadRequest(
           context = context,
-          target = url.toURI(),
+          target = URI(publicationUrl.toString()),
           outputFile = temporaryFile,
           requestModifier = { properties ->
             properties.copy(
@@ -445,29 +455,34 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
    * Returns a Manifest instance.
    */
   private fun extractManifest(bookFile: File, context: BorrowContextType): Manifest? {
-    //The location of the manifest in the zip audio file
+    // The location of the manifest in the zip audio file
     val manifestURI = URI("manifest.json")
-    val manifestLink = Link(manifestURI.toString())
-    //Path to temporary file, but it contains the same manifest
     val filePath = bookFile.absolutePath
 
     this.logger.debug("extractManifest: extracting {} from {}", manifestURI, filePath)
 
-    //Run the manifest extraction from the file
-    val manifestBytes = runBlocking {
-      ArchiveFetcher.fromPath(filePath)?.use { archiveFetcher ->
-        archiveFetcher.get(manifestLink).read().getOrNull()
+    // Audio book packages are ZIP archives; the manifest entry is always cleartext.
+    // We use java.util.zip directly rather than the Readium archive abstraction
+    // (whose 2.x ArchiveFetcher was removed in 3.x; the 3.x equivalent
+    // ArchiveOpener / ZipArchiveOpener would couple this code unnecessarily to
+    // the Readium asset retrieval pipeline).
+    val manifestBytes = try {
+      ZipFile(filePath).use { zip ->
+        val entry = zip.getEntry(manifestURI.toString()) ?: return@use null
+        zip.getInputStream(entry).use { it.readBytes() }
       }
+    } catch (e: Exception) {
+      this.logger.debug("extractManifest: failed to read manifest entry: ", e)
+      null
     }
-    //If no manifest is found, log error and return null
+
     return if (manifestBytes == null) {
-      logger.error("Unable to extract manifest from audio book file")
-      return null
+      this.logger.error("Unable to extract manifest from audio book file")
+      null
     } else {
-      //If all goes well, return a temporary manifest with the loaded data
       val outputFile = File.createTempFile("manifest", "data", context.cacheDirectory())
       outputFile.writeBytes(manifestBytes)
-      Manifest(outputFile,manifestURI)
+      Manifest(outputFile, manifestURI)
     }
   }
 

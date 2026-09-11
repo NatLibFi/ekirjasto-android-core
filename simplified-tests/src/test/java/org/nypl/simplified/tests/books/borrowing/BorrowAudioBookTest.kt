@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.librarysimplified.audiobook.manifest.api.PlayerPalaceID
 import org.librarysimplified.audiobook.manifest_fulfill.spi.ManifestFulfilled
 import org.librarysimplified.audiobook.manifest_parser.api.ManifestParsers
+import org.librarysimplified.audiobook.manifest_parser.api.ManifestUnparsed
 import org.librarysimplified.audiobook.parser.api.ParseResult
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientType
@@ -144,6 +146,7 @@ class BorrowAudioBookTest {
         .create(
           context = androidContext,
           configuration = LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-tests",
             applicationVersion = "999.999.0",
             tlsOverrides = null,
@@ -210,14 +213,21 @@ class BorrowAudioBookTest {
       )!!
         .readBytes()
     val manifestResult =
-      ManifestParsers.parse(URI.create("urn:basic-manifest.json"), data)
-        as ParseResult.Success
+      ManifestParsers.parse(
+        uri = URI.create("urn:basic-manifest.json"),
+        input = ManifestUnparsed(PlayerPalaceID("urn:basic-manifest.json"), data)
+      ) as ParseResult.Success
     val manifest =
       manifestResult.result
 
     return AudioBookManifestData(
       manifest = manifest,
-      fulfilled = ManifestFulfilled(genericAudioBooks.first(), null, data)
+      fulfilled = ManifestFulfilled(
+        source = null,
+        contentType = genericAudioBooks.first(),
+        authorization = null,
+        data = data
+      )
     )
   }
 

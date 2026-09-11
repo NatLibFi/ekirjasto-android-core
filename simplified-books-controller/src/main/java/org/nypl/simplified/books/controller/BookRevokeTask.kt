@@ -480,7 +480,6 @@ class BookRevokeTask(
         }
       }
       is BookDRMInformationHandle.LCPHandle,
-      is BookDRMInformationHandle.AxisHandle,
       is BookDRMInformationHandle.NoneHandle -> {
         // Nothing required
       }
@@ -607,7 +606,6 @@ class BookRevokeTask(
       when (val drm = handle.drmInformationHandle) {
         is BookDRMInformationHandle.ACSHandle ->
           drm.setAdobeRightsInformation(null)
-        is BookDRMInformationHandle.AxisHandle,
         is BookDRMInformationHandle.LCPHandle,
         is BookDRMInformationHandle.NoneHandle -> {
           // Nothing required

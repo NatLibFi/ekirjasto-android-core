@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.librarysimplified.audiobook.api.PlayerPosition
+import org.librarysimplified.audiobook.manifest.api.PlayerManifestReadingOrderID
+import org.librarysimplified.audiobook.manifest.api.PlayerMillisecondsReadingOrderItem
 import org.nypl.simplified.json.core.JSONParseException
 import org.nypl.simplified.json.core.JSONParserUtilities
 import org.nypl.simplified.json.core.JSONSerializerUtilities
@@ -12,12 +14,17 @@ import java.io.IOException
 
 /**
  * Functions to serialize audiobook locations to/from JSON.
+ *
+ * Note: As of the Readium 3.x / audiobook 24.0.0 migration, a player position is identified by a
+ * reading-order item ID plus an offset in milliseconds within that item. The legacy
+ * chapter/part/startOffset/currentOffset representation is gone. Legacy data that lacks the new
+ * fields deserializes to the start of the book (empty reading-order ID, offset 0).
  */
 
 object AudiobookLocationJSON {
 
   /**
-   * Deserialize audiobook player positions from the given JSON node.
+   * Deserialize an audiobook player position from the given JSON node.
    *
    * @param node A JSON node
    * @return A parsed player position
@@ -31,16 +38,17 @@ object AudiobookLocationJSON {
     val obj =
       JSONParserUtilities.checkObject(null, node)
     return PlayerPosition(
-      title = JSONParserUtilities.getStringOrNull(obj, "title"),
-      part = JSONParserUtilities.getIntegerDefault(obj, "part", 0),
-      chapter = JSONParserUtilities.getIntegerDefault(obj, "chapter", 0),
-      startOffset = JSONParserUtilities.getIntegerDefault(obj, "startOffset", 0).toLong(),
-      currentOffset = JSONParserUtilities.getIntegerDefault(obj, "time", 0).toLong()
+      readingOrderID = PlayerManifestReadingOrderID(
+        text = JSONParserUtilities.getStringDefault(obj, "readingOrderID", "")
+      ),
+      offsetMilliseconds = PlayerMillisecondsReadingOrderItem(
+        value = JSONParserUtilities.getIntegerDefault(obj, "offsetMilliseconds", 0).toLong()
+      )
     )
   }
 
   /**
-   * Serialize reader book locations to JSON.
+   * Serialize an audiobook player position to JSON.
    *
    * @param objectMapper A JSON object mapper
    * @param position The position of the audiobook
@@ -52,16 +60,13 @@ object AudiobookLocationJSON {
     position: PlayerPosition
   ): ObjectNode {
     val root = objectMapper.createObjectNode()
-    root.put("chapter", position.chapter)
-    root.put("startOffset", position.startOffset)
-    root.put("time", position.currentOffset)
-    root.put("part", position.part)
-    root.put("title", position.title)
+    root.put("readingOrderID", position.readingOrderID.text)
+    root.put("offsetMilliseconds", position.offsetMilliseconds.value)
     return root
   }
 
   /**
-   * Serialize reader book locations to a JSON string.
+   * Serialize an audiobook player position to a JSON string.
    *
    * @param objectMapper A JSON object mapper
    * @param position The position in the audiobook
@@ -81,7 +86,7 @@ object AudiobookLocationJSON {
   }
 
   /**
-   * Deserialize a reader book location from the given string.
+   * Deserialize an audiobook player position from the given string.
    *
    * @param objectMapper A JSON object mapper
    * @param text The text to map

@@ -4,7 +4,6 @@ import org.joda.time.Instant
 import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.services.api.ServiceDirectoryType
 import org.nypl.drm.core.AdobeAdeptExecutorType
-import org.nypl.drm.core.AxisNowServiceType
 import org.nypl.simplified.accounts.database.api.AccountType
 import org.nypl.simplified.books.api.Book
 import org.nypl.simplified.books.audio.AudioBookManifestStrategiesType
@@ -13,6 +12,7 @@ import org.nypl.simplified.books.book_registry.BookRegistryType
 import org.nypl.simplified.books.book_registry.BookStatus
 import org.nypl.simplified.books.book_registry.BookWithStatus
 import org.nypl.simplified.books.borrowing.BorrowContextType
+import org.nypl.simplified.books.borrowing.BorrowSubtaskCredentials
 import org.nypl.simplified.books.borrowing.BorrowTimeoutConfiguration
 import org.nypl.simplified.books.borrowing.SAMLDownloadContext
 import org.nypl.simplified.books.bundled.api.BundledContentResolverType
@@ -60,7 +60,6 @@ class MockBorrowContext(
     BorrowTimeoutConfiguration(2L, TimeUnit.SECONDS)
 
   override var adobeExecutor: AdobeAdeptExecutorType? = null
-  override var axisNowService: AxisNowServiceType? = null
   override lateinit var currentAcquisitionPathElement: OPDSAcquisitionPathElement
   override lateinit var opdsAcquisitionPath: OPDSAcquisitionPath
   override var bookCurrent: Book = bookInitial
@@ -168,6 +167,19 @@ class MockBorrowContext(
     this.logDebug("received new URI: {}", uri)
     this.receivedURIsData.add(uri)
     this.currentURIField = uri
+  }
+
+  private var subtaskCredentials: BorrowSubtaskCredentials =
+    BorrowSubtaskCredentials.UseAccountCredentials
+
+  override fun setNextSubtaskCredentials(credentials: BorrowSubtaskCredentials) {
+    this.subtaskCredentials = credentials
+  }
+
+  override fun takeSubtaskCredentials(): BorrowSubtaskCredentials {
+    val taken = this.subtaskCredentials
+    this.subtaskCredentials = BorrowSubtaskCredentials.UseAccountCredentials
+    return taken
   }
 
   private val bookIdBrief =

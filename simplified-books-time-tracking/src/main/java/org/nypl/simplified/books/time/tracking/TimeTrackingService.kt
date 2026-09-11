@@ -136,8 +136,8 @@ class TimeTrackingService(
     }
 
     when (playerEvent) {
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventPlaybackProgressUpdate,
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventPlaybackStarted -> {
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackStarted,
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackProgressUpdate -> {
         isPlaying = true
         if (audiobookPlayingDisposable == null) {
           createTimeTrackingEntry()
@@ -145,18 +145,22 @@ class TimeTrackingService(
         }
       }
 
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventPlaybackBuffering,
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventPlaybackWaitingForAction,
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventChapterWaiting,
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventPlaybackPaused,
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventPlaybackStopped,
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventChapterCompleted -> {
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackBuffering,
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackPreparing,
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackWaitingForAction,
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventChapterWaiting,
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackPaused,
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventPlaybackStopped,
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventChapterCompleted -> {
         isPlaying = false
       }
-      is PlayerEvent.PlayerEventWithSpineElement.PlayerEventCreateBookmark,
+
+      is PlayerEvent.PlayerEventWithPosition.PlayerEventCreateBookmark,
       is PlayerEvent.PlayerEventPlaybackRateChanged,
       is PlayerEvent.PlayerEventError,
-      PlayerEvent.PlayerEventManifestUpdated -> {
+      is PlayerEvent.PlayerEventDeleteBookmark,
+      is PlayerEvent.PlayerEventManifestUpdated,
+      is PlayerEvent.PlayerAccessibilityEvent -> {
         // do nothing
       }
     }

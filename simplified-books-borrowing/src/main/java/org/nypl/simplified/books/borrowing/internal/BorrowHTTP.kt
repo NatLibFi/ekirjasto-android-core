@@ -3,6 +3,7 @@ package org.nypl.simplified.books.borrowing.internal
 import com.io7m.junreachable.UnreachableCodeException
 import one.irradia.mime.api.MIMECompatibility
 import one.irradia.mime.api.MIMEType
+import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType.AllowRedirects.ALLOW_UNSAFE_REDIRECTS
 import org.librarysimplified.http.api.LSHTTPRequestProperties
 import org.librarysimplified.http.downloads.LSHTTPDownloadRequest
@@ -19,6 +20,7 @@ import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP
 import org.nypl.simplified.accounts.api.AccountAuthenticatedHTTP.addCredentialsToProperties
 import org.nypl.simplified.books.book_database.api.BookDatabaseEntryFormatHandle
 import org.nypl.simplified.books.borrowing.BorrowContextType
+import org.nypl.simplified.books.borrowing.BorrowSubtaskCredentials
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException
 import org.nypl.simplified.books.borrowing.subtasks.BorrowSubtaskException.BorrowSubtaskFailed
 import java.io.File
@@ -42,22 +44,37 @@ object BorrowHTTP {
     requestModifier: ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)? = null,
     expectedTypes: Set<MIMEType> = hashSetOf(context.currentAcquisitionPathElement.mimeType)
   ): LSHTTPDownloadRequest {
-    val credentials = context.account.loginState.credentials
-
-    val auth =
-      AccountAuthenticatedHTTP.createAuthorizationIfPresent(credentials)
-
-    val request =
+    val requestBuilder =
       context.httpClient.newRequest(target)
-        .setAuthorization(auth)
-        .addCredentialsToProperties(credentials)
         .allowRedirects(ALLOW_UNSAFE_REDIRECTS)
         .apply {
           if (requestModifier != null) {
             setRequestModifier(requestModifier)
           }
         }
-        .build()
+
+    /*
+     * Most subtasks use the current account's credentials. A preceding subtask (such as bearer
+     * token negotiation) can instead prepare bearer-token credentials for this download.
+     */
+
+    when (val useCredentials = context.takeSubtaskCredentials()) {
+      BorrowSubtaskCredentials.UseAccountCredentials -> {
+        val credentials = context.account.loginState.credentials
+        val auth = AccountAuthenticatedHTTP.createAuthorizationIfPresent(credentials)
+        requestBuilder
+          .setAuthorization(auth)
+          .addCredentialsToProperties(credentials)
+      }
+
+      is BorrowSubtaskCredentials.UseBearerToken -> {
+        requestBuilder.setAuthorization(
+          LSHTTPAuthorizationBearerToken.ofToken(useCredentials.token)
+        )
+      }
+    }
+
+    val request = requestBuilder.build()
 
     return LSHTTPDownloadRequest(
       request = request,

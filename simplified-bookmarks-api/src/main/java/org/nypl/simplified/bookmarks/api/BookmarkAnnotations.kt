@@ -168,7 +168,9 @@ object BookmarkAnnotations {
       BookmarkAnnotationBodyNode(
         timestamp = timestamp,
         device = bookmark.deviceID,
-        chapterTitle = bookmark.location.title.orEmpty(),
+        // The Readium-3.x reading-order position no longer carries a chapter title; the title is
+        // now part of PlayerBookmarkMetadata and is restored when mapping to/from PlayerBookmark.
+        chapterTitle = "",
         bookProgress = null
       )
 

@@ -9,10 +9,8 @@ import com.io7m.jfunctional.Some
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.ISODateTimeFormat
-import org.librarysimplified.audiobook.api.PlayerPosition
-import org.librarysimplified.audiobook.api.PlayerPositions
-import org.librarysimplified.audiobook.api.PlayerResult
 import org.nypl.simplified.books.api.BookLocation
+import org.nypl.simplified.books.api.helper.AudiobookLocationJSON
 import org.nypl.simplified.books.api.helper.ReaderLocationJSON
 import org.nypl.simplified.json.core.JSONParseException
 import org.nypl.simplified.json.core.JSONParserUtilities
@@ -170,15 +168,7 @@ object BookmarkJSON {
     kind: BookmarkKind,
     node: ObjectNode
   ): Bookmark.AudiobookBookmark {
-    val locationResult = PlayerPositions.parseFromObjectNode(node)
-    val location: PlayerPosition
-
-    when (locationResult) {
-      is PlayerResult.Success -> {
-        location = locationResult.result
-      }
-      is PlayerResult.Failure -> throw locationResult.failure
-    }
+    val location = AudiobookLocationJSON.deserializeFromJSON(node)
 
     val parsedTime = parseTime(
       JSONParserUtilities.getStringDefault(node, "time", dateFormatter.print(DateTime.now()))
@@ -549,9 +539,10 @@ object BookmarkJSON {
 
   @JvmStatic
   fun serializeAudiobookBookmarkToJSON(
+    objectMapper: ObjectMapper,
     bookmark: Bookmark.AudiobookBookmark
   ): ObjectNode {
-    val node = PlayerPositions.serializeToObjectNode(bookmark.location)
+    val node = AudiobookLocationJSON.serializeToJSON(objectMapper, bookmark.location)
     node.put("opdsId", bookmark.opdsId)
     node.put("time", dateFormatter.print(bookmark.time))
     bookmark.deviceID.let { device -> node.put("deviceID", device) }
@@ -575,6 +566,7 @@ object BookmarkJSON {
     bookmarks.forEach { bookmark ->
       node.add(
         serializeAudiobookBookmarkToJSON(
+          objectMapper,
           bookmark
         )
       )
@@ -593,9 +585,10 @@ object BookmarkJSON {
   @JvmStatic
   @Throws(IOException::class)
   fun serializeAudiobookBookmarkToString(
+    objectMapper: ObjectMapper,
     bookmark: Bookmark.AudiobookBookmark
   ): String {
-    val json = serializeAudiobookBookmarkToJSON(bookmark)
+    val json = serializeAudiobookBookmarkToJSON(objectMapper, bookmark)
     val output = ByteArrayOutputStream(1024)
     JSONSerializerUtilities.serialize(json, output)
     return output.toString("UTF-8")

@@ -1,5 +1,8 @@
 package org.nypl.simplified.books.api
 
+import org.librarysimplified.audiobook.api.PlayerBookCredentialsLCP
+import org.librarysimplified.audiobook.api.PlayerBookCredentialsNone
+import org.librarysimplified.audiobook.api.PlayerBookCredentialsType
 import org.nypl.drm.core.AdobeAdeptLoan
 import java.io.File
 import java.io.Serializable
@@ -54,33 +57,27 @@ sealed class BookDRMInformation : Serializable {
   }
 
   /**
-   * The AXIS information associated with a book.
-   */
-
-  data class AXIS(
-
-    /**
-     * The license file. This is only present if an attempt has been made to fulfill the book.
-     */
-
-    val license: File?,
-
-    /**
-     * The file containing the key used to fulfill the book. This is only present
-     * if an attempt has been made to fulfill the book.
-     */
-
-    val userKey: File?
-  ) : BookDRMInformation() {
-    override val kind: BookDRMKind = BookDRMKind.AXIS
-  }
-
-  /**
    * The book either has no DRM, or uses some kind of external DRM system that the book database
    * doesn't know about (such as proprietary AudioBook DRM).
    */
 
   object None : BookDRMInformation() {
     override val kind: BookDRMKind = BookDRMKind.NONE
+  }
+}
+
+/**
+ * Map the DRM information of a book onto the player credentials required by the audiobook engine
+ * (audiobook 24.0.0+). LCP audiobooks are decrypted using the book's hashed passphrase; everything
+ * else needs no player-level credentials.
+ */
+
+fun BookDRMInformation.playerCredentials(): PlayerBookCredentialsType {
+  return when (this) {
+    is BookDRMInformation.LCP ->
+      PlayerBookCredentialsLCP(passphrase = this.hashedPassphrase ?: "")
+    is BookDRMInformation.ACS,
+    BookDRMInformation.None ->
+      PlayerBookCredentialsNone
   }
 }

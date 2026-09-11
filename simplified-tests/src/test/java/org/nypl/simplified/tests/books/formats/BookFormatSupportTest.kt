@@ -21,7 +21,6 @@ class BookFormatSupportTest {
           supportsPDF = false,
           supportsLCP = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsAudioBooks = null
         )
       )
@@ -41,7 +40,6 @@ class BookFormatSupportTest {
           supportsPDF = true,
           supportsLCP = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsAudioBooks = null
         )
       )
@@ -51,7 +49,6 @@ class BookFormatSupportTest {
           supportsPDF = false,
           supportsLCP = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsAudioBooks = null
         )
       )
@@ -84,7 +81,6 @@ class BookFormatSupportTest {
           supportsPDF = false,
           supportsLCP = false,
           supportsAdobeDRM = true,
-          supportsAxisNow = false,
           supportsAudioBooks = null
         )
       )
@@ -94,7 +90,6 @@ class BookFormatSupportTest {
           supportsPDF = false,
           supportsLCP = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsAudioBooks = null
         )
       )
@@ -112,49 +107,6 @@ class BookFormatSupportTest {
         listOf(
           StandardFormatNames.adobeACSMFiles,
           StandardFormatNames.genericEPUBFiles
-        )
-      )
-    )
-  }
-
-  /**
-   * AxisNow DRM support is correctly handled.
-   */
-
-  @Test
-  fun testAxisNowSupportedUnsupported() {
-    val supportWith =
-      BookFormatSupport.create(
-        BookFormatSupportParameters(
-          supportsPDF = false,
-          supportsLCP = false,
-          supportsAdobeDRM = false,
-          supportsAxisNow = true,
-          supportsAudioBooks = null
-        )
-      )
-    val supportWithout =
-      BookFormatSupport.create(
-        BookFormatSupportParameters(
-          supportsPDF = false,
-          supportsLCP = false,
-          supportsAdobeDRM = false,
-          supportsAxisNow = false,
-          supportsAudioBooks = null
-        )
-      )
-
-    Assertions.assertTrue(
-      supportWith.isSupportedPath(
-        listOf(
-          StandardFormatNames.axisNow
-        )
-      )
-    )
-    Assertions.assertFalse(
-      supportWithout.isSupportedPath(
-        listOf(
-          StandardFormatNames.axisNow
         )
       )
     )
@@ -172,7 +124,6 @@ class BookFormatSupportTest {
           supportsPDF = false,
           supportsAdobeDRM = false,
           supportsLCP = false,
-          supportsAxisNow = false,
           supportsAudioBooks = BookFormatAudioSupportParameters(
             supportsFindawayAudioBooks = false,
             supportsOverdriveAudioBooks = false,
@@ -185,7 +136,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = null
         )
@@ -218,7 +168,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = BookFormatAudioSupportParameters(
             supportsFindawayAudioBooks = false,
@@ -233,7 +182,6 @@ class BookFormatSupportTest {
           supportsPDF = false,
           supportsAdobeDRM = false,
           supportsLCP = false,
-          supportsAxisNow = false,
           supportsAudioBooks = null
         )
       )
@@ -265,7 +213,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = BookFormatAudioSupportParameters(
             supportsFindawayAudioBooks = false,
@@ -279,7 +226,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = null
         )
@@ -312,7 +258,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = BookFormatAudioSupportParameters(
             supportsFindawayAudioBooks = true,
@@ -326,7 +271,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = null
         )
@@ -359,7 +303,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = null
         )
@@ -394,7 +337,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = true,
           supportsAdobeDRM = true,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = null
         )
@@ -421,7 +363,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = true,
           supportsAudioBooks = BookFormatAudioSupportParameters(
             supportsFindawayAudioBooks = false,
@@ -435,7 +376,6 @@ class BookFormatSupportTest {
         BookFormatSupportParameters(
           supportsPDF = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsLCP = false,
           supportsAudioBooks = null
         )

@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import com.shockwave.pdfium.PdfiumCore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.readium.r2.shared.PdfSupport
 import org.readium.r2.shared.util.pdf.PdfDocument
 import org.slf4j.LoggerFactory
 import com.shockwave.pdfium.PdfDocument as PdfiumDocument
@@ -19,6 +18,10 @@ class PdfReaderDocument(
 
   override val title: String?
     get() = metadata.title
+
+  override fun close() {
+    // Nothing required
+  }
 
   override val author: String?
     get() = metadata.author
@@ -45,10 +48,10 @@ class PdfReaderDocument(
         core.renderPageBitmap(document, bitmap, 0, 0, 0, width, height, false)
         bitmap
       } catch (e: Exception) {
-        logger.error("Error rendering page: ", e)
+        logger.debug("Error rendering page: ", e)
         null
       } catch (e: OutOfMemoryError) {
-        logger.error("Error rendering page: ", e)
+        logger.debug("Error rendering page: ", e)
         null
       }
     }
@@ -58,11 +61,6 @@ class PdfReaderDocument(
     core.getTableOfContents(document).map { it.toOutlineNode() }
   }
 
-  override suspend fun close() {
-    // do nothing
-  }
-
-  @OptIn(PdfSupport::class)
   private fun PdfiumDocument.Bookmark.toOutlineNode(): PdfDocument.OutlineNode {
     return PdfDocument.OutlineNode(
       title = title,

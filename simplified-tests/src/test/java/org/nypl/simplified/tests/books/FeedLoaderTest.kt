@@ -41,7 +41,6 @@ class FeedLoaderTest : FeedLoaderContract() {
           supportsPDF = false,
           supportsLCP = false,
           supportsAdobeDRM = false,
-          supportsAxisNow = false,
           supportsAudioBooks = null
         )
       )

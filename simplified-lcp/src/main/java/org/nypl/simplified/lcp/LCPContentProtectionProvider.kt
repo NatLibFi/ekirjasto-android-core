@@ -1,5 +1,6 @@
 package org.nypl.simplified.lcp
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.TextView
@@ -10,7 +11,9 @@ import org.librarysimplified.lcp.R
 import org.nypl.drm.core.ContentProtectionProvider
 import org.readium.r2.lcp.LcpAuthenticating
 import org.readium.r2.lcp.LcpService
-import org.readium.r2.shared.publication.ContentProtection
+import org.readium.r2.shared.publication.protection.ContentProtection
+import org.readium.r2.shared.util.asset.AssetRetriever
+import org.readium.r2.shared.util.http.DefaultHttpClient
 import org.slf4j.LoggerFactory
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -103,9 +106,13 @@ class LCPContentProtectionProvider : ContentProtectionProvider {
   }
 
   override fun create(
-    context: Context
+    context: Activity
   ): ContentProtection? {
-    val lcpService = LcpService(context)
+    val assetRetriever = AssetRetriever(
+      contentResolver = context.contentResolver,
+      httpClient = DefaultHttpClient()
+    )
+    val lcpService = LcpService(context, assetRetriever)
     return if (lcpService == null) {
       this.logger.debug("LCP service is unavailable")
       return null
@@ -115,8 +122,7 @@ class LCPContentProtectionProvider : ContentProtectionProvider {
           override suspend fun retrievePassphrase(
             license: LcpAuthenticating.AuthenticatedLicense,
             reason: LcpAuthenticating.AuthenticationReason,
-            allowUserInteraction: Boolean,
-            sender: Any?
+            allowUserInteraction: Boolean
           ): String? {
             return if (!isManualPassphraseEnabled) {
               this@LCPContentProtectionProvider.passphrase()

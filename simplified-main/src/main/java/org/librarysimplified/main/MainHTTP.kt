@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientType
+import org.librarysimplified.http.api.LSHTTPNetworkAccess
 import org.librarysimplified.http.vanilla.LSHTTPClients
 import org.librarysimplified.http.vanilla.LSHTTPProblemReportParsers
 import org.librarysimplified.http.vanilla.extensions.LSHTTPInterceptorFactoryType
@@ -31,7 +32,10 @@ object MainHTTP {
         // TODO: The 15 minute timeout is for download of large LCP audiobooks (in BorrowLCP).
         // Otherwise, the default of 1 minute would be sufficient. In the future we might want to
         // allow per-request timeouts.
-        timeout = Pair(15L, TimeUnit.MINUTES)
+        timeout = Pair(15L, TimeUnit.MINUTES),
+        // palace.http 2.x requires an explicit network-access policy; the default permits all
+        // access, preserving the previous (ungated) behaviour.
+        networkAccess = LSHTTPNetworkAccess
       )
 
     // Add Accept-Language interceptor to the list of auto-discovered interceptors

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientType
-import org.librarysimplified.http.bearer_token.LSHTTPBearerTokenInterceptors
 import org.librarysimplified.http.vanilla.LSHTTPClients
 import org.mockito.Mockito
 import org.nypl.simplified.accounts.api.AccountAuthenticationCredentials
@@ -140,6 +139,7 @@ class BorrowDirectDownloadTest {
         .create(
           context = androidContext,
           configuration = LSHTTPClientConfiguration(
+            networkAccess = org.librarysimplified.http.api.LSHTTPNetworkAccess,
             applicationName = "simplified-tests",
             applicationVersion = "999.999.0",
             tlsOverrides = null,
@@ -405,61 +405,13 @@ class BorrowDirectDownloadTest {
     assertEquals(0, this.bookStates.size)
   }
 
-  /**
-   * A file is downloaded even if it has to go through a bearer token.
+  /*
+   * NOTE (Readium 3.x / palace.http 2.x migration): The former `testDownloadOkEPUBBearerToken`
+   * test was removed. Bearer-token handling used to be transparent inside the HTTP client (a
+   * ServiceLoader-registered interceptor in palace.http 1.x), so the direct-download subtask could
+   * receive a bearer-token response and follow it itself. palace.http 2.x removed that interceptor;
+   * bearer negotiation is now an explicit, separate subtask (BorrowBearerToken). The bearer path is
+   * therefore covered end-to-end by BorrowTaskTest.testBearerTokenEPUB. This mirrors upstream
+   * Palace, which likewise dropped the bearer case from this subtask's tests.
    */
-
-  @Test
-  fun testDownloadOkEPUBBearerToken() {
-    val task = BorrowDirectDownload.createSubtask()
-
-    this.context.currentURIField =
-      this.webServer.url("/book.epub").toUri()
-    this.context.currentAcquisitionPathElement =
-      OPDSAcquisitionPathElement(genericEPUBFiles, null, emptyMap())
-
-    this.bookDatabaseEntry.formatHandlesField.clear()
-    this.bookDatabaseEntry.formatHandlesField.add(this.epubHandle)
-    check(this.bookDatabaseEntry.formatHandlesField.size == 1)
-    check(BookStatus.fromBook(this.bookDatabaseEntry.book) is Loaned)
-
-    val response0 =
-      MockResponse()
-        .setResponseCode(200)
-        .setHeader("Content-Type", LSHTTPBearerTokenInterceptors.bearerTokenContentType)
-        .setBody(
-          """{
-          "access_token": "abcd",
-          "expires_in": 1000,
-          "location": "http://localhost:20000/book.epub"
-        }
-          """.trimIndent()
-        )
-
-    val response1 =
-      MockResponse()
-        .setResponseCode(200)
-        .setHeader("Content-Type", "application/epub+zip")
-        .setBody("EPUB!")
-
-    this.webServer.enqueue(response0)
-    this.webServer.enqueue(response1)
-
-    task.execute(this.context)
-
-    val sent0 = this.webServer.takeRequest()
-    assertEquals("Basic c29tZW9uZTpub3QgYSBwYXNzd29yZA==", sent0.getHeader("Authorization"))
-    val sent1 = this.webServer.takeRequest()
-    assertEquals("Bearer abcd", sent1.getHeader("Authorization"))
-
-    this.verifyBookRegistryHasStatus(LoanedDownloaded::class.java)
-    assertEquals("EPUB!", this.epubHandle.bookData)
-    assertEquals(0, this.bookDatabaseEntry.entryWrites)
-
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(Downloading::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(LoanedDownloaded::class.java, this.bookStates.removeAt(0).javaClass)
-    assertEquals(0, this.bookStates.size)
-  }
 }
