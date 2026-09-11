@@ -663,7 +663,6 @@ dependencies {
     implementation(libs.media3.extractor)
     implementation(libs.media3.session)
     implementation(libs.moznion.uribuildertiny)
-    implementation(libs.nypl.readium)
     implementation(libs.okhttp3)
     implementation(libs.okio)
     implementation(libs.palace.audiobook.api)

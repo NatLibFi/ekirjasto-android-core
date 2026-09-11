@@ -211,7 +211,6 @@ val dependencyObjects = listOf(
     libs.mockito.kotlin,
     libs.nano.httpd,
     libs.nano.httpd.nanolets,
-    libs.nypl.readium,
     libs.objenesis,
     libs.okhttp3,
     libs.okhttp3.mockwebserver,
