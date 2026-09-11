@@ -679,7 +679,6 @@ dependencies {
     implementation(libs.moznion.uribuildertiny)
     implementation(libs.nano.httpd)
     implementation(libs.nano.httpd.nanolets)
-    implementation(libs.nypl.readium)
     implementation(libs.okhttp3)
     implementation(libs.okio)
     implementation(libs.palace.audiobook.api)
