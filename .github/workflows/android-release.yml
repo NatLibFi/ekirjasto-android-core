@@ -1,28 +1,61 @@
 name: android-release
 
-#
-# This workflow is run for all commits in release/* branches.
-#
-
 on:
-  push:
-    branches: [ release/* ]
+  release:
+    types: [published]
+
+concurrency:
+  group: android-release-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   TARGET_BRANCH_NAME: ${{ github.base_ref || github.ref_name }}
-  # Join all secrets, so that they're "used", and will be masked in logs
-  MASKED_SECRETS: ${{ join(secrets, '\n') }}
 
 jobs:
   build:
+    name: Build and publish Android release
     runs-on: ubuntu-22.04
+
     steps:
-      - name: Checkout repository
+      - name: Validate release
+        shell: bash
+        env:
+          RELEASE_NAME: ${{ github.event.release.tag_name }}
+          RELEASE_TARGET: ${{ github.event.release.target_commitish }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "${RELEASE_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Release tag must match vX.Y.Z. Got: ${RELEASE_NAME}" >&2
+            exit 1
+          fi
+
+          EXPECTED_TARGET="release/${RELEASE_NAME}"
+
+          if [[ "${RELEASE_TARGET}" != "${EXPECTED_TARGET}" ]]; then
+            echo "Release target must be ${EXPECTED_TARGET}" >&2
+            echo "Got: ${RELEASE_TARGET}" >&2
+            exit 1
+          fi
+
+      - name: Checkout release tag
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+
       - name: Checkout submodules
+        shell: bash
         run: git submodule update --init --recursive
+
       - name: Show build info
+        shell: bash
         env:
           TEST_SECRET: ${{ secrets.MASK_TEST }}
         run: scripts/show-ci-info.sh
@@ -30,50 +63,111 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v5.6.0
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: 17
 
       - name: Configure bundler for CI
+        shell: bash
         run: |
+          set -euo pipefail
+
           bundle config set cache_path /tmp/bundle_cache
           bundle config set path vendor/bundle
-        
+
       - name: Reveal secrets
+        shell: bash
         env:
           EKIRJASTO_LOCAL_PROPERTIES_BASE64: ${{ secrets.LOCAL_PROPERTIES }}
           EKIRJASTO_RELEASE_JKS_BASE64: ${{ secrets.RELEASE_JKS }}
         run: scripts/reveal-secrets.sh --overwrite
 
       - name: Upload and download Transifex localizations
+        shell: bash
         run: scripts/transifex.sh --append-tags=release
 
       - name: Debug build
+        shell: bash
         run: scripts/build.sh debug
+
       - name: Release build
+        shell: bash
         run: scripts/build.sh release
 
       - name: Run tests
         if: ${{ !cancelled() }}
+        shell: bash
         run: scripts/run-tests.sh
+
       - name: Upload test report
-        uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
         with:
           name: junit-test-report
           path: ./simplified-tests/build/reports/tests/testDebugUnitTest/
 
       - name: Run release checks
+        shell: bash
         run: scripts/release-checks.sh
 
-      - name: Upload production build to the Google Play Console closed-beta track
+      - name: Upload production build to Google Play closed-beta
+        shell: bash
         env:
           EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
         run: scripts/fastlane.sh deploy_closed_beta flavor:production
-      - name: Upload beta build to the Google Play Console alpha track
+
+      - name: Upload beta build to Google Play alpha
+        shell: bash
         env:
           EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
         run: scripts/fastlane.sh deploy_alpha flavor:beta
-      - name: Upload dev build to the Google Play Console internal track
+
+      - name: Upload dev build to Google Play internal
+        shell: bash
         env:
           EKIRJASTO_FASTLANE_SERVICE_ACCOUNT_JSON: ${{ secrets.FASTLANE_SERVICE_ACCOUNT_JSON }}
         run: scripts/fastlane.sh deploy_internal flavor:dev
+
+      - name: Mark PRs as released
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+
+          RELEASE_LABEL="release:${RELEASE_NAME}"
+
+          if ! gh label list \
+            --limit 1000 \
+            --json name \
+            --jq '.[].name' |
+            grep -Fxq "released"
+          then
+            echo "Creating label released"
+
+            gh label create "released" \
+              --color "0E8A16" \
+              --description "Published in a release"
+          fi
+
+          gh pr list \
+            --state merged \
+            --label "${RELEASE_LABEL}" \
+            --base main \
+            --limit 100 \
+            --json number,title \
+            --jq '.[] | [.number, .title] | @tsv' \
+            > prs.txt
+
+          if [[ ! -s prs.txt ]]; then
+            echo "No PRs found with label ${RELEASE_LABEL}" >&2
+            exit 1
+          fi
+
+          while IFS=$'\t' read -r pr title
+          do
+            echo "Marking PR #${pr} as released: ${title}"
+
+            gh pr edit "${pr}" \
+              --add-label "released"
+          done < prs.txt
