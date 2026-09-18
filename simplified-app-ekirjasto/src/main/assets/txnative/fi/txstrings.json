@@ -828,6 +828,15 @@
       "catalogAccounts" : {
          "string" : "Valitse toinen kirjaston luettelo…"
       },
+      "catalogApplyFilter" : {
+         "string" : "Käytä"
+      },
+      "catalogFilterLabel" : {
+         "string" : "Suodatus"
+      },
+      "catalogSortLabel" : {
+         "string" : "Lajittelu"
+      },
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "Jonotat tätä kirjaa."
       },

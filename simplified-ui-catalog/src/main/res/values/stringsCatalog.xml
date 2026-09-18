@@ -24,6 +24,9 @@
   <string name="catalogAccessibilityCoverPdf">%1$s, pdf, by %2$s. Activate to show book detail page.</string>
   <string name="catalogAccessibilityCoverUnknownFormat">%1$s, by %2$s. Activate to show book detail page.</string>
   <string name="catalogAccounts">Choose another library catalog…</string>
+  <string name="catalogApplyFilter">Apply</string>
+  <string name="catalogFilterLabel">Filter</string>
+  <string name="catalogSortLabel">Sort by</string>
   <string name="catalogBookAvailabilityHeldIndefinite">You have this book on hold.</string>
   <string name="catalogBookAvailabilityHeldQueue">You have this book on hold. \nHold position: %1$d</string>
   <string name="catalogBookAvailabilityHeldQueueWithFullInfo">You have this book on hold. \nHold position: %1$d/%2$d, available: %3$d/%4$d</string>
