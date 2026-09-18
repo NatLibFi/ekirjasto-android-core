@@ -21,7 +21,6 @@ import org.nypl.simplified.profiles.controller.api.ProfileFeedRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.slf4j.LoggerFactory
 import java.util.ArrayList
-import java.text.Collator
 import java.util.Locale
 import java.util.Collections
 import java.util.concurrent.Callable
@@ -183,9 +182,7 @@ internal class ProfileFeedTask(
       val title =
         when (sortingFacet) {
           SortBy.SORT_BY_AUTHOR -> this.request.facetTitleProvider.sortByAuthor
-          SortBy.SORT_BY_AUTHOR_REVERSE -> "${this.request.facetTitleProvider.sortByAuthor} (reverse)"
           SortBy.SORT_BY_TITLE -> this.request.facetTitleProvider.sortByTitle
-          SortBy.SORT_BY_TITLE_REVERSE -> "${this.request.facetTitleProvider.sortByTitle} (reverse)"
         }
       facets.add(Sorting(title, active, sortingFacet))
     }
@@ -262,27 +259,19 @@ internal class ProfileFeedTask(
   ) {
     when (sortBy) {
       SortBy.SORT_BY_AUTHOR -> this.sortBooksByAuthor(books)
-      SortBy.SORT_BY_AUTHOR_REVERSE -> this.sortBooksByAuthor(books, reverse = true)
       SortBy.SORT_BY_TITLE -> this.sortBooksByTitle(books)
-      SortBy.SORT_BY_TITLE_REVERSE -> this.sortBooksByTitle(books, reverse = true)
     }
   }
 
-  private fun sortBooksByTitle(books: ArrayList<BookWithStatus>, reverse: Boolean = false) {
-    val finnishCollator = Collator.getInstance(Locale("fi", "FI")).apply {
-      strength = Collator.PRIMARY
-    }
+  private fun sortBooksByTitle(books: ArrayList<BookWithStatus>) {
     books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
-      finnishCollator.compare(entry0.title, entry1.title) * if (reverse) -1 else 1
+      entry0.title.compareTo(entry1.title)
     }
   }
 
-  private fun sortBooksByAuthor(books: ArrayList<BookWithStatus>, reverse: Boolean = false) {
-    val finnishCollator = Collator.getInstance(Locale("fi", "FI")).apply {
-      strength = Collator.PRIMARY
-    }
+  private fun sortBooksByAuthor(books: ArrayList<BookWithStatus>) {
     books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
@@ -299,7 +288,7 @@ internal class ProfileFeedTask(
       } else {
         val author1 = authors1[0]!!
         val author2 = authors2[0]!!
-        finnishCollator.compare(author1, author2) * if (reverse) -1 else 1
+        author1.compareTo(author2)
       }
     }
   }
