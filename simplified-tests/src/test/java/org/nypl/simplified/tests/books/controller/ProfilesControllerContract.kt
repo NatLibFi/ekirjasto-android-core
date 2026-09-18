@@ -482,6 +482,17 @@ abstract class ProfilesControllerContract {
       ).get()
 
     Assertions.assertEquals(0L, feed.size.toLong())
+    val sortingFacets = feed.facetsByGroup["Sort By"]
+    Assertions.assertNotNull(sortingFacets)
+    Assertions.assertEquals(
+      listOf(
+        "Author",
+        "Author (reverse)",
+        "Title",
+        "Title (reverse)"
+      ),
+      sortingFacets!!.map { it.title }
+    )
   }
 
   @Throws(ProfileDatabaseException::class)

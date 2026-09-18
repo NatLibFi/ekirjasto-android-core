@@ -90,12 +90,14 @@ sealed class FeedFacet : Serializable {
          */
 
         SORT_BY_AUTHOR,
+        SORT_BY_AUTHOR_REVERSE,
 
         /**
          * Sort the feed in question by book title.
          */
 
-        SORT_BY_TITLE
+        SORT_BY_TITLE,
+        SORT_BY_TITLE_REVERSE
       }
     }
   }

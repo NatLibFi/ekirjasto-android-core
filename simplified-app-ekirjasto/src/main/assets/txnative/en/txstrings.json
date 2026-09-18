@@ -828,6 +828,15 @@
       "catalogAccounts" : {
          "string" : "Choose another library catalog…"
       },
+      "catalogApplyFilter" : {
+         "string" : "Apply"
+      },
+      "catalogFilterLabel" : {
+         "string" : "Filter"
+      },
+      "catalogSortLabel" : {
+         "string" : "Sort by"
+      },
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "You have this book on hold."
       },

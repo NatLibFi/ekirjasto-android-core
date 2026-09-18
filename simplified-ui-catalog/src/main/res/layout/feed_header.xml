@@ -17,23 +17,21 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-  <HorizontalScrollView
+  <ScrollView
     android:id="@+id/feedHeaderFacetsScroll"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:scrollbarAlwaysDrawHorizontalTrack="false"
-    android:scrollbarAlwaysDrawVerticalTrack="false"
-    android:scrollbars="none"
+    android:fillViewport="true"
+    android:scrollbars="vertical"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/feedHeaderTabs">
 
     <LinearLayout
       android:id="@+id/feedHeaderFacets"
-      android:layout_width="wrap_content"
-      android:layout_height="48dp"
-      android:layout_gravity="start"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
       android:gravity="start|center_vertical"
       android:orientation="horizontal">
 
@@ -80,7 +78,7 @@
         tools:text="Placeholder"
         tools:visibility="visible" />
     </LinearLayout>
-  </HorizontalScrollView>
+  </ScrollView>
 
   <View
     android:id="@+id/feedDivider"
