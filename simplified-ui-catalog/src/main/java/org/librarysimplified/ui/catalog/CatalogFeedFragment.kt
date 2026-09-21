@@ -18,9 +18,6 @@ import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Space
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.AppCompatTextView
@@ -814,7 +811,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     val filterGroup = entryPointGroup
       ?: remainingGroups.entries.firstOrNull { it !== sortGroupEntry }?.value
 
-    fun addFacetSpinner(label: String, group: List<FeedFacet>?) {
+    fun addFacetSelector(label: String, group: List<FeedFacet>?) {
       if (group.isNullOrEmpty()) return
       val choices = group.sortedBy { it.title }
       val initialIndex = choices.indexOfFirst { it.isActive }.coerceAtLeast(0)
@@ -827,37 +824,30 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         text = label
         gravity = Gravity.START
       }
-      val spinner = Spinner(context).apply {
+      val selector = Button(context).apply {
         id = View.generateViewId()
-        prompt = label
-        adapter = ArrayAdapter(
-          context,
-          android.R.layout.simple_spinner_item,
-          choices.map { it.title }
-        ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-        setSelection(initialIndex)
+        text = choices[initialIndex].title
+        contentDescription = "$label: ${choices[initialIndex].title}"
       }
-      labelView.labelFor = spinner.id
-      spinner.setOnTouchListener { _, event ->
-        if (event.action == android.view.MotionEvent.ACTION_UP) {
-          this@CatalogFeedFragment.showFacetCheckboxDialog(
-            title = label,
-            choices = choices,
-            initialIndex = selectedIndex
-          ) { index ->
-            selectedIndex = index
-            spinner.setSelection(index)
-          }
+      labelView.labelFor = selector.id
+      selector.setOnClickListener {
+        this@CatalogFeedFragment.showFacetCheckboxDialog(
+          title = label,
+          choices = choices,
+          initialIndex = selectedIndex
+        ) { index ->
+          selectedIndex = index
+          selector.text = choices[index].title
+          selector.contentDescription = "$label: ${choices[index].title}"
         }
-        true
       }
       container.addView(labelView)
-      container.addView(spinner)
+      container.addView(selector)
       feedContentFacets.addView(container)
     }
 
-    addFacetSpinner(this.getString(R.string.catalogFilterLabel), filterGroup)
-    addFacetSpinner(this.getString(R.string.catalogSortLabel), sortGroup)
+    addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
+    addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
 
     feedContentFacetsScroll.scrollTo(0, 0)
   }
