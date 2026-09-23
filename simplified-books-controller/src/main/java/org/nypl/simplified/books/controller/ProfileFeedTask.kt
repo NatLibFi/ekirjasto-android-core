@@ -20,9 +20,10 @@ import org.nypl.simplified.feeds.api.FeedSearch
 import org.nypl.simplified.profiles.controller.api.ProfileFeedRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.slf4j.LoggerFactory
+import java.text.Collator
 import java.util.ArrayList
-import java.util.Locale
 import java.util.Collections
+import java.util.Locale
 import java.util.concurrent.Callable
 
 internal class ProfileFeedTask(
@@ -264,14 +265,20 @@ internal class ProfileFeedTask(
   }
 
   private fun sortBooksByTitle(books: ArrayList<BookWithStatus>) {
+    val finnishCollator = Collator.getInstance(Locale("fi", "FI")).apply {
+      strength = Collator.PRIMARY
+    }
     books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
-      entry0.title.compareTo(entry1.title)
+      finnishCollator.compare(entry0.title, entry1.title)
     }
   }
 
   private fun sortBooksByAuthor(books: ArrayList<BookWithStatus>) {
+    val finnishCollator = Collator.getInstance(Locale("fi", "FI")).apply {
+      strength = Collator.PRIMARY
+    }
     books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
@@ -288,7 +295,7 @@ internal class ProfileFeedTask(
       } else {
         val author1 = authors1[0]!!
         val author2 = authors2[0]!!
-        author1.compareTo(author2)
+        finnishCollator.compare(author1, author2)
       }
     }
   }
