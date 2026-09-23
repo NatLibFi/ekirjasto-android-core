@@ -267,7 +267,7 @@ internal class ProfileFeedTask(
     books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
-      entry0.title.compareTo(entry1.title)
+      this.finnishSortKey(entry0.title).compareTo(this.finnishSortKey(entry1.title))
     }
   }
 
@@ -288,10 +288,16 @@ internal class ProfileFeedTask(
       } else {
         val author1 = authors1[0]!!
         val author2 = authors2[0]!!
-        author1.compareTo(author2)
+        this.finnishSortKey(author1).compareTo(this.finnishSortKey(author2))
       }
     }
   }
+
+  private fun finnishSortKey(value: String): String =
+    value.lowercase(Locale.ROOT)
+      .replace('å', '{')
+      .replace('ä', '|')
+      .replace('ö', '}')
 
   /**
    * Filter the list of books with the given filter.

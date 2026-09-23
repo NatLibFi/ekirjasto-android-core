@@ -15,7 +15,8 @@ class CatalogPagedDataSourceFactory(
   private val feedLoader: FeedLoaderType,
   private val initialFeed: FeedWithoutGroups,
   private val ownership: CatalogFeedOwnership,
-  private val profilesController: ProfilesControllerType
+  private val profilesController: ProfilesControllerType,
+  private val sortByTitle: Boolean = false
 ) : DataSource.Factory<URI, FeedEntry>() {
 
   override fun create(): DataSource<URI, FeedEntry> {
@@ -23,7 +24,8 @@ class CatalogPagedDataSourceFactory(
       feedLoader = this.feedLoader,
       initialFeed = this.initialFeed,
       ownership = this.ownership,
-      profilesController = this.profilesController
+      profilesController = this.profilesController,
+      sortByTitle = this.sortByTitle
     )
   }
 }

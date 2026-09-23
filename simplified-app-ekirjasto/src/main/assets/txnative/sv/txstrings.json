@@ -816,6 +816,15 @@
       "catalogAccounts" : {
          "string" : "Välj en annan bibliotekskatalog..."
       },
+      "catalogApplyFilter" : {
+         "string" : "Använd"
+      },
+      "catalogFilterLabel" : {
+         "string" : "Filtrering"
+      },
+      "catalogSortLabel" : {
+         "string" : "Sortering"
+      },
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "Du har reserverat denna bok."
       },

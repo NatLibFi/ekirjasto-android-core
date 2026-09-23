@@ -12,6 +12,7 @@ import org.nypl.simplified.futures.FluentFutureExtensions.map
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.slf4j.LoggerFactory
 import java.net.URI
+import java.util.Locale
 
 /**
  * A data source used for infinitely-scrolling feeds without groups. The data source
@@ -23,7 +24,8 @@ class CatalogPagedDataSource(
   private val feedLoader: FeedLoaderType,
   private val initialFeed: Feed.FeedWithoutGroups,
   private val ownership: CatalogFeedOwnership,
-  private val profilesController: ProfilesControllerType
+  private val profilesController: ProfilesControllerType,
+  private val sortByTitle: Boolean
 ) : PageKeyedDataSource<URI, FeedEntry>() {
 
   private val logger =
@@ -39,7 +41,7 @@ class CatalogPagedDataSource(
     )
 
     callback.onResult(
-      this.initialFeed.entriesInOrder,
+      this.sortEntries(this.initialFeed.entriesInOrder),
       null,
       this.initialFeed.feedNext
     )
@@ -99,7 +101,7 @@ class CatalogPagedDataSource(
             is Feed.FeedWithoutGroups -> {
               this.logger.debug("loadAfter: {}: received feed without groups", params.key)
               callback.onResult(
-                feed.entriesInOrder,
+                this.sortEntries(feed.entriesInOrder),
                 feed.feedNext
               )
             }
@@ -122,6 +124,21 @@ class CatalogPagedDataSource(
       }
     }
   }
+
+  private fun sortEntries(entries: List<FeedEntry>): List<FeedEntry> {
+    if (!this.sortByTitle) return entries
+    return entries.sortedWith { first, second ->
+      val firstTitle = (first as? FeedEntry.FeedEntryOPDS)?.feedEntry?.title.orEmpty()
+      val secondTitle = (second as? FeedEntry.FeedEntryOPDS)?.feedEntry?.title.orEmpty()
+      this.finnishSortKey(firstTitle).compareTo(this.finnishSortKey(secondTitle))
+    }
+  }
+
+  private fun finnishSortKey(value: String): String =
+    value.lowercase(Locale.ROOT)
+      .replace('å', '{')
+      .replace('ä', '|')
+      .replace('ö', '}')
 
   override fun loadBefore(
     params: LoadParams<URI>,
@@ -152,7 +169,7 @@ class CatalogPagedDataSource(
             is Feed.FeedWithoutGroups -> {
               this.logger.debug("loadBefore: {}: received feed without groups", params.key)
               callback.onResult(
-                feed.entriesInOrder,
+                this.sortEntries(feed.entriesInOrder),
                 feed.feedNext
               )
             }

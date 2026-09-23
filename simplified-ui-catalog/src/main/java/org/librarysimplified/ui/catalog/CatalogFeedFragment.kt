@@ -31,7 +31,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.button.MaterialButton
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership.CollectedFromAccounts
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership.OwnedByAccount
@@ -62,7 +61,6 @@ import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceTabButtons
 import org.thepalaceproject.theme.core.PalaceToolbar
-import kotlin.math.roundToInt
 
 /**
  * A fragment displaying an OPDS feed.
@@ -797,81 +795,86 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       return
     }
 
-    val buttonLayoutParams =
-      LinearLayout.LayoutParams(
-        LinearLayout.LayoutParams.WRAP_CONTENT,
-        LinearLayout.LayoutParams.WRAP_CONTENT
-      )
-
-    val textLayoutParams =
-      LinearLayout.LayoutParams(
-        LinearLayout.LayoutParams.WRAP_CONTENT,
-        LinearLayout.LayoutParams.WRAP_CONTENT
-      )
-
-    textLayoutParams.gravity = Gravity.END or Gravity.CENTER_VERTICAL
-
-    val spacerLayoutParams =
-      LinearLayout.LayoutParams(
-        this.screenInformation.dpToPixels(8).toInt(),
-        LinearLayout.LayoutParams.MATCH_PARENT
-      )
-
-    val sortedNames = if (sortFacets) {
-      remainingGroups.keys.sorted()
-    } else {
-      remainingGroups.keys
-    }
     val context = this.requireContext()
 
     feedContentFacets.removeAllViews()
-    sortedNames.forEach { groupName ->
-      val group = remainingGroups.getValue(groupName)
-      if (FeedFacets.facetGroupIsEntryPointTyped(group)) {
-        return@forEach
+    val entryPointGroup = FeedFacets.findEntryPointFacetGroup(remainingGroups)
+    if (entryPointGroup != null) {
+      feedContentTabs.visibility = View.GONE
+    }
+    val sortGroupName = this.resources.getString(R.string.feedSortBy)
+    val sortGroupEntry = remainingGroups.entries.firstOrNull { entry ->
+      entry.key == sortGroupName || entry.key.contains("sort", ignoreCase = true) ||
+        entry.key.contains("lajittel", ignoreCase = true)
+    }
+    val sortGroup = sortGroupEntry?.value
+    val filterGroup = entryPointGroup
+      ?: remainingGroups.entries.firstOrNull { it !== sortGroupEntry }?.value
+
+    fun addFacetSelector(label: String, group: List<FeedFacet>?) {
+      if (group.isNullOrEmpty()) return
+      val choices = group.sortedBy { it.title }
+      val initialIndex = choices.indexOfFirst { it.isActive }.coerceAtLeast(0)
+      var selectedIndex = initialIndex
+      val container = LinearLayout(context).apply {
+        orientation = LinearLayout.VERTICAL
+        layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
       }
-
-      val button = MaterialButton(context)
-      val buttonLabel = AppCompatTextView(context)
-      val spaceStart = Space(context)
-      val spaceMiddle = Space(context)
-      val spaceEnd = Space(context)
-
-      val active =
-        group.find { facet -> facet.isActive }
-          ?: group.firstOrNull()
-
-      button.id = View.generateViewId()
-      //ellibs dev TODO: Refactor?
-      button.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.catalog_facet_button_icon,0)
-      button.compoundDrawablePadding = resources.getDimension(R.dimen.catalogFacetButtonIconPadding).roundToInt();
-      button.layoutParams = buttonLayoutParams
-      button.text = active?.title
-      button.ellipsize = TextUtils.TruncateAt.END
-      button.setOnClickListener {
-        this.showFacetSelectDialog(groupName, group)
+      val labelView = AppCompatTextView(context).apply {
+        text = label
+        gravity = Gravity.START
       }
-
-      spaceStart.layoutParams = spacerLayoutParams
-      spaceMiddle.layoutParams = spacerLayoutParams
-      spaceEnd.layoutParams = spacerLayoutParams
-
-      buttonLabel.layoutParams = textLayoutParams
-      buttonLabel.text = "$groupName: "
-      buttonLabel.labelFor = button.id
-      buttonLabel.maxLines = 1
-      buttonLabel.ellipsize = TextUtils.TruncateAt.END
-      buttonLabel.textAlignment = TEXT_ALIGNMENT_TEXT_END
-      buttonLabel.gravity = Gravity.END or Gravity.CENTER_VERTICAL
-
-      feedContentFacets.addView(spaceStart)
-      feedContentFacets.addView(buttonLabel)
-      feedContentFacets.addView(spaceMiddle)
-      feedContentFacets.addView(button)
-      feedContentFacets.addView(spaceEnd)
+      val selector = Button(context).apply {
+        id = View.generateViewId()
+        text = choices[initialIndex].title
+        contentDescription = "$label: ${choices[initialIndex].title}"
+      }
+      labelView.labelFor = selector.id
+      selector.setOnClickListener {
+        this@CatalogFeedFragment.showFacetCheckboxDialog(
+          title = label,
+          choices = choices,
+          initialIndex = selectedIndex
+        ) { index ->
+          selectedIndex = index
+          selector.text = choices[index].title
+          selector.contentDescription = "$label: ${choices[index].title}"
+        }
+      }
+      container.addView(labelView)
+      container.addView(selector)
+      feedContentFacets.addView(container)
     }
 
+    addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
+    addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+
     feedContentFacetsScroll.scrollTo(0, 0)
+  }
+
+  private fun showFacetCheckboxDialog(
+    title: String,
+    choices: List<FeedFacet>,
+    initialIndex: Int,
+    onApplied: (Int) -> Unit
+  ) {
+    var checkedIndex = initialIndex
+    val choiceTitles = choices.map { it.title }.toTypedArray()
+
+    MaterialAlertDialogBuilder(this.requireContext())
+      .setTitle(title)
+      .setSingleChoiceItems(choiceTitles, checkedIndex) { _, which ->
+        checkedIndex = which
+      }
+      .setPositiveButton(R.string.catalogApplyFilter) { dialog, _ ->
+        val selected = choices[checkedIndex]
+        this.logger.debug("applying facet: {}", selected)
+        onApplied(checkedIndex)
+        this.viewModel.openFacet(selected)
+        dialog.dismiss()
+      }
+      .setNegativeButton(R.string.catalogCancel, null)
+      .show()
   }
 
   private fun configureFacetTabs(
