@@ -794,7 +794,17 @@ class CatalogFeedViewModel(
         feedLoader = this.feedLoader,
         initialFeed = feed,
         ownership = this.feedArguments.ownership,
-        profilesController = this.profilesController
+        profilesController = this.profilesController,
+        sortByTitle = feed.facetsByGroup.any { (groupName, facets) ->
+          (groupName.contains("sort", ignoreCase = true) ||
+            groupName.contains("lajittel", ignoreCase = true)) &&
+            facets.any {
+              it.isActive && it.title.contains(
+                this.resources.getString(R.string.feedByTitle),
+                ignoreCase = true
+              )
+            }
+        }
       )
 
     val pagedListConfig =

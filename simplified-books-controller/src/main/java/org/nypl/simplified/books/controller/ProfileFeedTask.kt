@@ -20,7 +20,6 @@ import org.nypl.simplified.feeds.api.FeedSearch
 import org.nypl.simplified.profiles.controller.api.ProfileFeedRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.slf4j.LoggerFactory
-import java.text.Collator
 import java.util.ArrayList
 import java.util.Collections
 import java.util.Locale
@@ -265,20 +264,14 @@ internal class ProfileFeedTask(
   }
 
   private fun sortBooksByTitle(books: ArrayList<BookWithStatus>) {
-    val finnishCollator = Collator.getInstance(Locale("fi", "FI")).apply {
-      strength = Collator.PRIMARY
-    }
     books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
-      finnishCollator.compare(entry0.title, entry1.title)
+      this.finnishSortKey(entry0.title).compareTo(this.finnishSortKey(entry1.title))
     }
   }
 
   private fun sortBooksByAuthor(books: ArrayList<BookWithStatus>) {
-    val finnishCollator = Collator.getInstance(Locale("fi", "FI")).apply {
-      strength = Collator.PRIMARY
-    }
     books.sortWith { book0, book1 ->
       val entry0 = book0.book.entry
       val entry1 = book1.book.entry
@@ -295,10 +288,16 @@ internal class ProfileFeedTask(
       } else {
         val author1 = authors1[0]!!
         val author2 = authors2[0]!!
-        finnishCollator.compare(author1, author2)
+        this.finnishSortKey(author1).compareTo(this.finnishSortKey(author2))
       }
     }
   }
+
+  private fun finnishSortKey(value: String): String =
+    value.lowercase(Locale.ROOT)
+      .replace('å', '{')
+      .replace('ä', '|')
+      .replace('ö', '}')
 
   /**
    * Filter the list of books with the given filter.
