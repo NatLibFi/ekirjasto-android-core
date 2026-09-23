@@ -831,12 +831,6 @@
       "catalogApplyFilter" : {
          "string" : "Apply"
       },
-      "catalogFilterLabel" : {
-         "string" : "Filter"
-      },
-      "catalogSortLabel" : {
-         "string" : "Sort by"
-      },
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "You have this book on hold."
       },
@@ -990,6 +984,9 @@
       "catalogFeedLoading" : {
          "string" : "Loading feed…"
       },
+      "catalogFilterLabel" : {
+         "string" : "Filter"
+      },
       "catalogGet" : {
          "string" : "Get"
       },
@@ -1085,6 +1082,9 @@
       },
       "catalogSearch" : {
          "string" : "Search for book or author"
+      },
+      "catalogSortLabel" : {
+         "string" : "Sort by"
       },
       "close_tutorial" : {
          "string" : "Close tutorial"
