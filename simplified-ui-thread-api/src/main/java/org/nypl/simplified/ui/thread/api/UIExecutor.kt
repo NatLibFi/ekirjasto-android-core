@@ -47,7 +47,7 @@ class UIExecutor : Executor {
     synchronized(this.lock) {
       this.isDisposed = true
       while (this.callbacks.isNotEmpty()) {
-        val callback = this.callbacks.removeFirst()
+        val callback = this.callbacks.removeAt(0)
         this.handler.removeCallbacks(callback)
       }
     }
