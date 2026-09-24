@@ -2,6 +2,9 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.Properties
+import com.android.build.api.artifact.SingleArtifact
+import org.gradle.api.file.Directory
+import org.gradle.api.provider.Provider
 
 fun calculateVersionCode(): Int {
     val now = LocalDateTime.now(ZoneId.of("UTC"))
@@ -75,16 +78,19 @@ fun createRequiredAssetsFile(file: File): Task {
  */
 
 fun createRequiredAssetsTask(
-    checkFile: File,
+    taskName: String,
+    checkFile: Provider<Directory>,
     assetList: File,
 ): Task {
-    return task("CheckReleaseRequiredAssets_${checkFile.name}", Exec::class) {
-        commandLine = arrayListOf(
-            "java",
-            "$rootDir/org.thepalaceproject.android.platform/ZipCheck.java",
-            "$checkFile",
-            "$assetList",
-        )
+    return task(taskName, Exec::class) {
+        doFirst {
+            commandLine = listOf(
+                "java",
+                "$rootDir/org.thepalaceproject.android.platform/ZipCheck.java",
+                checkFile.get().asFile.absolutePath,
+                assetList.absolutePath,
+            )
+        }
     }
 }
 
@@ -122,7 +128,6 @@ android {
         versionCode = calculateVersionCode()
         resourceConfigurations.add("en")
         resourceConfigurations.add("es")
-        setProperty("archivesBaseName", "palace")
     }
 
     /*
@@ -194,8 +199,8 @@ android {
      * Release builds need extra checking.
      */
 
-    applicationVariants.all {
-        if (this.buildType.name == "release") {
+    androidComponents {
+        onVariants(selector().withBuildType("release")) { variant ->
             val preBuildTask = tasks.findByName("preReleaseBuild")
             preBuildTask?.dependsOn?.add(requiredSigningTask)
 
@@ -204,19 +209,20 @@ android {
              * required assets.
              */
 
-            this.outputs.forEach {
-                val outputFile = it.outputFile
-                val assetFile = File("${project.projectDir}/build/required-assets.conf")
-                val fileTask =
-                    createRequiredAssetsFile(assetFile)
-                val checkTask =
-                    createRequiredAssetsTask(checkFile = outputFile, assetList = assetFile)
+            val outputFile = variant.artifacts.get(SingleArtifact.APK)
+            val assetFile = File("${project.projectDir}/build/required-assets.conf")
+            val fileTask = createRequiredAssetsFile(assetFile)
+            val checkTask = createRequiredAssetsTask(
+                taskName = "CheckReleaseRequiredAssets_${variant.name}",
+                checkFile = outputFile,
+                assetList = assetFile,
+            )
 
-                checkTask.dependsOn.add(fileTask)
-                this.assembleProvider.configure {
+            checkTask.dependsOn.add(fileTask)
+            tasks.matching { it.name == "assemble${variant.name.replaceFirstChar { it.uppercase() }}" }
+                .configureEach {
                     finalizedBy(checkTask)
                 }
-            }
         }
     }
 }
@@ -226,8 +232,9 @@ android {
  */
 
 afterEvaluate {
-    tasks.findByName("assemble")
-        ?.dependsOn?.add(tasks.findByName("bundle"))
+    tasks.findByName("bundle")?.let { bundleTask ->
+        tasks.findByName("assemble")?.dependsOn(bundleTask)
+    }
 }
 
 dependencies {
