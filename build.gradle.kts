@@ -1,12 +1,12 @@
 import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import de.undercouch.gradle.tasks.download.Download
 import de.undercouch.gradle.tasks.download.Verify
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
-val gradleVersionRequired = "8.14.3"
+val gradleVersionRequired = "9.6.0"
 val gradleVersionReceived = gradle.gradleVersion
 
 if (gradleVersionRequired != gradleVersionReceived) {
@@ -514,8 +514,6 @@ allprojects {
             logger.info("Configuring ${this.project} $version as an apk project")
 
             apply(plugin = "com.android.application")
-            apply(plugin = "org.jetbrains.kotlin.android")
-
             /*
              * Configure the JVM toolchain version that we want to use for Kotlin.
              */
@@ -539,6 +537,9 @@ allprojects {
                 property(this, "POM_ARTIFACT_ID")
             android.compileSdk =
                 propertyInt(this, "org.thepalaceproject.build.androidSDKCompile")
+            android.publishing {
+                singleVariant("release")
+            }
 
             android.defaultConfig {
                 multiDexEnabled = true
@@ -573,8 +574,10 @@ allprojects {
             logger.info("Configuring ${this.project} $version as an aar project")
 
             apply(plugin = "com.android.library")
-            apply(plugin = "org.jetbrains.kotlin.android")
             apply(plugin = "de.mannodermaus.android-junit5")
+            if (name == "simplified-ui-settings") {
+                apply(plugin = "androidx.navigation.safeargs.kotlin")
+            }
 
             /*
              * Configure the JVM toolchain version that we want to use for Kotlin.
@@ -599,6 +602,9 @@ allprojects {
                 property(this, "POM_ARTIFACT_ID")
             android.compileSdk =
                 propertyInt(this, "org.thepalaceproject.build.androidSDKCompile")
+            android.publishing {
+                singleVariant("release")
+            }
 
             android.defaultConfig {
                 multiDexEnabled = true
