@@ -36,7 +36,7 @@ plugins {
      *
      * https://github.com/mannodermaus/android-junit5
      */
-    alias(libs.plugins.mannodermaus.android.junit5).apply(false)
+    alias(libs.plugins.mannodermaus.android.junit).apply(false)
 
     /*
      * Download plugin. Used to fetch artifacts such as Scando during the build.
@@ -574,7 +574,7 @@ allprojects {
             logger.info("Configuring ${this.project} $version as an aar project")
 
             apply(plugin = "com.android.library")
-            apply(plugin = "de.mannodermaus.android-junit5")
+            apply(plugin = "de.mannodermaus.android-junit")
             if (name == "simplified-ui-settings") {
                 apply(plugin = "androidx.navigation.safeargs.kotlin")
             }

@@ -202,6 +202,7 @@ val dependencyObjects = listOf(
     libs.junit.jupiter.vintage,
     libs.junit.platform.commons,
     libs.junit.platform.engine,
+    libs.junit.platform.launcher,
     libs.kotlin.reflect,
     libs.kotlin.stdlib,
     libs.kotlinx.coroutines,
