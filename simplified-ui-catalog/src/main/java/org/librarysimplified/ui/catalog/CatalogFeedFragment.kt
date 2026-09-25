@@ -823,11 +823,22 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       val labelView = AppCompatTextView(context).apply {
         text = label
         gravity = Gravity.CENTER_HORIZONTAL
+        layoutParams = LinearLayout.LayoutParams(
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+          val spacing = (4f * context.resources.displayMetrics.density).toInt()
+          topMargin = -spacing
+          bottomMargin = spacing
+        }
       }
       val selector = Button(context).apply {
         id = View.generateViewId()
         text = choices[initialIndex].title
         contentDescription = "$label: ${choices[initialIndex].title}"
+        gravity = Gravity.CENTER
+        setBackgroundResource(R.drawable.catalog_facet_selector_button_background)
+        backgroundTintList = null
       }
       labelView.labelFor = selector.id
       selector.setOnClickListener {
