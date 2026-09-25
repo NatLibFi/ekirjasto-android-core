@@ -820,14 +820,25 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         orientation = LinearLayout.VERTICAL
         layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
       }
+      val spacing = (4f * context.resources.displayMetrics.density).toInt()
       val labelView = AppCompatTextView(context).apply {
         text = label
-        gravity = Gravity.START
+        gravity = Gravity.CENTER_HORIZONTAL
+        layoutParams = LinearLayout.LayoutParams(
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+          topMargin = -spacing
+          bottomMargin = spacing
+        }
       }
       val selector = Button(context).apply {
         id = View.generateViewId()
         text = choices[initialIndex].title
         contentDescription = "$label: ${choices[initialIndex].title}"
+        gravity = Gravity.CENTER
+        setBackgroundResource(R.drawable.catalog_facet_selector_button_background)
+        backgroundTintList = null
       }
       labelView.labelFor = selector.id
       selector.setOnClickListener {
@@ -846,8 +857,19 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       feedContentFacets.addView(container)
     }
 
-    addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
-    addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+    if (this.parameters.isLocallyGenerated && filterGroup.isNullOrEmpty()) {
+      addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+      if (!sortGroup.isNullOrEmpty()) {
+        feedContentFacets.addView(
+          Space(context).apply {
+            layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
+          }
+        )
+      }
+    } else {
+      addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
+      addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+    }
 
     feedContentFacetsScroll.scrollTo(0, 0)
   }
