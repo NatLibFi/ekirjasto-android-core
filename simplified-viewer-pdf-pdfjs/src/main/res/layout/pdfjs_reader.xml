@@ -26,7 +26,8 @@
             android:layout_width="128dp"
             android:layout_height="32dp"
             android:layout_gravity="center"
-            android:indeterminate="true" />
+            android:indeterminate="true"
+            android:contentDescription="@string/pdfLoadingDescription" />
 
     </FrameLayout>
 

@@ -236,7 +236,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="E-kirjasto version 1.0.28 (167)" />
+                android:text="" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

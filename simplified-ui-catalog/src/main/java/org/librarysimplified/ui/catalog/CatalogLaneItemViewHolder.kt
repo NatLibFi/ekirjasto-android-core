@@ -1,6 +1,7 @@
 package org.librarysimplified.ui.catalog
 
 import android.view.View
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.common.util.concurrent.FluentFuture
@@ -26,6 +27,18 @@ class CatalogLaneItemViewHolder(
       org.librarysimplified.books.covers.R.dimen.cover_thumbnail_height)
 
   fun bindTo(entry: FeedEntry.FeedEntryOPDS) {
+    // The whole cover card opens the book details. Expose it as a button-like
+    // navigation control instead of leaving the role as a generic CardView.
+    view.accessibilityDelegate = object : View.AccessibilityDelegate() {
+      override fun onInitializeAccessibilityNodeInfo(
+        host: View,
+        info: AccessibilityNodeInfo
+      ) {
+        super.onInitializeAccessibilityNodeInfo(host, info)
+        info.className = android.widget.Button::class.java.name
+        info.isClickable = true
+      }
+    }
     view.contentDescription =
       CatalogBookAccessibilityStrings.coverDescription(view.resources, entry)
 
@@ -46,5 +59,6 @@ class CatalogLaneItemViewHolder(
 
     view.contentDescription = null
     view.setOnClickListener(null)
+    view.accessibilityDelegate = null
   }
 }

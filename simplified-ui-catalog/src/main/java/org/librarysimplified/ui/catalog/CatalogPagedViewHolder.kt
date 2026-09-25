@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -84,7 +85,7 @@ class CatalogPagedViewHolder(
   private val idleButtons =
     this.idle.findViewById<ViewGroup>(R.id.bookCellIdleButtons)!!
   private val idleSelectedButton =
-    this.idle.findViewById<ImageView>(R.id.bookCellIdleSelect)!!
+    this.idle.findViewById<ImageButton>(R.id.bookCellIdleSelect)!!
 
   private val progressProgress =
     this.parent.findViewById<ProgressBar>(R.id.bookCellInProgressBar)!!
@@ -163,8 +164,6 @@ class CatalogPagedViewHolder(
         context.getString(R.string.catalogBookFormatPDF)
       null -> ""
     }
-    //Add audio description
-    this.idleWindow.contentDescription = CatalogBookAccessibilityStrings.coverDescription(idleWindow.resources, item)
     //If there is a selected date, the book is selected
     if (book.entry.selected is Some<DateTime>) {
       //Set the drawable as the "checked" version

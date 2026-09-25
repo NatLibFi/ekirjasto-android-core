@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/BookWindow"
-            android:focusable="true"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -56,20 +55,21 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="The Modern Prometheus" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/bookDetailSelect"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:padding="2dp"
                 android:gravity="right"
+                android:background="@null"
                 android:src="@drawable/round_add_circle_outline_24"
                 app:layout_constraintStart_toEndOf="@id/bookDetailTitle"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:contentDescription="Add to your list" />
+                android:contentDescription="@string/catalogAccessibilityBookSelectGeneric" />
 
             <TextView
                 android:id="@+id/bookDetailAuthors"
@@ -194,7 +194,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:focusable="true">
+            >
 
             <TextView
                 android:id="@+id/bookDetailDescriptionTitle"
@@ -215,18 +215,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Placeholder" />
+                android:text="" />
         </LinearLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/seeMoreText"
-            style="@style/MoreTextStyle"
+            style="@style/SecondaryButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="end"
             android:gravity="center_vertical|right"
             android:layout_marginEnd="16dp"
-            android:contentDescription="@string/catalogDetailsAccessibilityMore"
             android:text="@string/catalogDetailsMore" />
 
         <View
@@ -241,7 +240,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:focusable="true">
+            >
         <TextView
             android:id="@+id/bookDetailMetadataTitle"
             android:layout_width="wrap_content"
@@ -269,7 +268,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:focusable="true">
+            >
             <TextView
                 android:id="@+id/bookDetailAccessibilityText"
                 android:background="@drawable/description_heading_background"
@@ -359,7 +358,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Placeholder"
+            android:text=""
             android:typeface="monospace" />
 
     </LinearLayout>

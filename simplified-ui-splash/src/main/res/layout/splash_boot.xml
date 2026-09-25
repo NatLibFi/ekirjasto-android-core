@@ -42,10 +42,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/splashProgress" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/splashImage"
         android:layout_width="240dp"
         android:layout_height="240dp"
+        android:background="@null"
         android:contentDescription="@string/e_kirjasto_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

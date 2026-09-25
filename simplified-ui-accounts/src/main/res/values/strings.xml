@@ -61,6 +61,8 @@
   <string name="accountMenuSearch">Search</string>
   <string name="accountMenuRefresh">Reload</string>
   <string name="accountEkirjastoSuomiFiLabel">Suomi.fi login</string>
+  <string name="accountSuomiFiWebViewDescription">Suomi.fi sign-in page</string>
+  <string name="accountSuomiFiLoadingDescription">Loading Suomi.fi sign-in page</string>
   <string name="accountEkirjastoPassKeyLabel">Passkey login</string>
   <string name="accountEmail">E-mail address</string>
   <string name="accountEkirjastoLoggingInLabel">Signing in with %1$s</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="splashMigrationProgressDescription">Migration in progress</string>
 
   <!-- EULA strings -->
   <string name="eula_disagree">Disagree</string>
