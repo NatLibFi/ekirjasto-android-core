@@ -822,7 +822,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       }
       val labelView = AppCompatTextView(context).apply {
         text = label
-        gravity = Gravity.START
+        gravity = Gravity.CENTER_HORIZONTAL
       }
       val selector = Button(context).apply {
         id = View.generateViewId()
@@ -846,8 +846,19 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       feedContentFacets.addView(container)
     }
 
-    addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
-    addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+    if (this.parameters.isLocallyGenerated && filterGroup.isNullOrEmpty()) {
+      addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+      if (!sortGroup.isNullOrEmpty()) {
+        feedContentFacets.addView(
+          Space(context).apply {
+            layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
+          }
+        )
+      }
+    } else {
+      addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
+      addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+    }
 
     feedContentFacetsScroll.scrollTo(0, 0)
   }
