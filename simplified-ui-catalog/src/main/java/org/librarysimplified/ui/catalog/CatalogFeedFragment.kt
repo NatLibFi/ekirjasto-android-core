@@ -820,6 +820,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         orientation = LinearLayout.VERTICAL
         layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
       }
+      val spacing = (4f * context.resources.displayMetrics.density).toInt()
       val labelView = AppCompatTextView(context).apply {
         text = label
         gravity = Gravity.CENTER_HORIZONTAL
@@ -827,7 +828,6 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
           LinearLayout.LayoutParams.MATCH_PARENT,
           LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-          val spacing = (4f * context.resources.displayMetrics.density).toInt()
           topMargin = -spacing
           bottomMargin = spacing
         }
