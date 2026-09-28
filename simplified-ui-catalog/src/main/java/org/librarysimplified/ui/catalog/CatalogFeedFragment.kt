@@ -859,9 +859,18 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       feedContentFacets.addView(container)
     }
 
+    val spaceMiddle = Space(context)
+    val spacerLayoutParams =
+      LinearLayout.LayoutParams(
+        this.screenInformation.dpToPixels(16).toInt(),
+        LinearLayout.LayoutParams.MATCH_PARENT
+      )
+    spaceMiddle.layoutParams = spacerLayoutParams
+
     if (this.parameters.isLocallyGenerated && filterGroup.isNullOrEmpty()) {
       addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
       if (!sortGroup.isNullOrEmpty()) {
+        feedContentFacets.addView(spaceMiddle)
         feedContentFacets.addView(
           Space(context).apply {
             layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
@@ -870,14 +879,6 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       }
     } else {
       addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
-      val spaceMiddle = Space(context)
-      val spacerLayoutParams =
-        LinearLayout.LayoutParams(
-          this.screenInformation.dpToPixels(16).toInt(),
-          LinearLayout.LayoutParams.MATCH_PARENT
-        )
-
-      spaceMiddle.layoutParams = spacerLayoutParams
       feedContentFacets.addView(spaceMiddle)
       addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
     }
