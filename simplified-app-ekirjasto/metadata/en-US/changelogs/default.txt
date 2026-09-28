@@ -1,5 +1,8 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
-1.4.2
-- Bumped SDK target to 36
+1.5.2
+- Added a button to delete downloaded files of a book
+- Audiobook player update
+- Ebook reader update
+- Important background updates
 - Bug fixes

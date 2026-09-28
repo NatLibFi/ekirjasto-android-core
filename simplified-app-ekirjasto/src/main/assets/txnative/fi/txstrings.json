@@ -565,7 +565,7 @@
          "string" : "Poista"
       },
       "bookConfirmDeleteDownloadMessage" : {
-         "string" : "Tämä poistaa kirjan tiedostot ja kirjanmerkit laitteelta. Kirjan lainaa ei palauteta."
+         "string" : "Tämä poistaa kirjan tiedostot ja kirjanmerkit laitteelta. Kirjaa ei palauteta."
       },
       "bookConfirmDeleteDownloadTitle" : {
          "string" : "Poista kirjan \"%1$s\" lataus ?"
@@ -831,12 +831,6 @@
       "catalogApplyFilter" : {
          "string" : "Käytä"
       },
-      "catalogFilterLabel" : {
-         "string" : "Suodatus"
-      },
-      "catalogSortLabel" : {
-         "string" : "Lajittelu"
-      },
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "Jonotat tätä kirjaa."
       },
@@ -990,6 +984,9 @@
       "catalogFeedLoading" : {
          "string" : "Ladataan syötettä…"
       },
+      "catalogFilterLabel" : {
+         "string" : "Suodatus"
+      },
       "catalogGet" : {
          "string" : "Lainaa"
       },
@@ -1085,6 +1082,9 @@
       },
       "catalogSearch" : {
          "string" : "Hae kirjan tai kirjailijan nimellä"
+      },
+      "catalogSortLabel" : {
+         "string" : "Lajittelu"
       },
       "close_tutorial" : {
          "string" : "Sulje ohjesivut"
