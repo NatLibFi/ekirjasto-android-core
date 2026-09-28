@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.button.MaterialButton
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership.CollectedFromAccounts
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership.OwnedByAccount
@@ -61,6 +62,7 @@ import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceTabButtons
 import org.thepalaceproject.theme.core.PalaceToolbar
+import kotlin.math.roundToInt
 
 /**
  * A fragment displaying an OPDS feed.
@@ -832,13 +834,13 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
           bottomMargin = spacing
         }
       }
-      val selector = Button(context).apply {
+      val selector = MaterialButton(context).apply {
         id = View.generateViewId()
         text = choices[initialIndex].title
         contentDescription = "$label: ${choices[initialIndex].title}"
+        setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.catalog_facet_button_icon,0)
+        compoundDrawablePadding = resources.getDimension(R.dimen.catalogFacetButtonIconPadding).roundToInt();
         gravity = Gravity.CENTER
-        setBackgroundResource(R.drawable.catalog_facet_selector_button_background)
-        backgroundTintList = null
       }
       labelView.labelFor = selector.id
       selector.setOnClickListener {
@@ -868,6 +870,15 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       }
     } else {
       addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
+      val spaceMiddle = Space(context)
+      val spacerLayoutParams =
+        LinearLayout.LayoutParams(
+          this.screenInformation.dpToPixels(16).toInt(),
+          LinearLayout.LayoutParams.MATCH_PARENT
+        )
+
+      spaceMiddle.layoutParams = spacerLayoutParams
+      feedContentFacets.addView(spaceMiddle)
       addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
     }
 
