@@ -33,6 +33,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="start|center_vertical"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
       android:orientation="horizontal">
 
       <!-- These views are removed at runtime and are just present for the sake of the UI editor preview -->
