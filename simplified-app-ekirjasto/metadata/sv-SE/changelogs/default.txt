@@ -1,6 +1,6 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.5.2
+1.5.4
 - Lade till en knapp för att ta ta bort nedladdade filer för en bok
 - Uppdatering av ljudboksspelaren
 - Uppdatering av e-boksläsaren

@@ -1,6 +1,6 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.5.2
+1.5.4
 - Lisättiin painike yhden kirjan tiedostojen poistamiselle
 - Äänikirjanlukijan päivitys
 - E-kirjanlukijan päivitys
