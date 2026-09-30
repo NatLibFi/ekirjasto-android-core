@@ -67,7 +67,7 @@ basename "$0"
 
 info "Executing '$buildType' build"
 
-jvmArguments="-Xmx4096m -XX:+PrintGC -XX:+PrintGCDetails -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+jvmArguments="-Xmx6144m -XX:+PrintGC -XX:+PrintGCDetails -XX:MaxMetaspaceSize=1536m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
 
 info "Gradle JVM arguments: ${jvmArguments}"
 
