@@ -6,6 +6,9 @@
   android:id="@+id/feedLogoContainer"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:clickable="true"
+  android:contentDescription="@string/feedLibraryLogoDescription"
+  android:focusable="true"
   android:orientation="horizontal"
   android:gravity="center">
 
@@ -20,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginHorizontal="80dp"
-        android:contentDescription="@string/feedLibraryLogoDescription"
+        android:importantForAccessibility="no"
         app:srcCompat="@drawable/account_default" />
 
     <TextView

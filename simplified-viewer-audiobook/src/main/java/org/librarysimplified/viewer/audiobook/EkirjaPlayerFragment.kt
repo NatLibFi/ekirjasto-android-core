@@ -326,6 +326,7 @@ class EkirjaPlayerFragment : Fragment(R.layout.ekirjasto_audio_player_view) {
     this.downloadingView.visibility = VISIBLE
     this.commandsView.visibility = INVISIBLE
     this.waitingView.text = message
+    this.waitingView.announceForAccessibility(message)
   }
 
   private fun handleTouchOnSeekbar(event: MotionEvent?): Boolean {

@@ -57,6 +57,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:accessibilityLiveRegion="polite"
         android:gravity="center"
         android:text="@string/feedEmpty"
         android:textAlignment="center"
