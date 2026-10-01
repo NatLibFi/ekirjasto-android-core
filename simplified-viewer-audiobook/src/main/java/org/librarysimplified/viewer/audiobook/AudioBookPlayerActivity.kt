@@ -69,6 +69,14 @@ class AudioBookPlayerActivity : AppCompatActivity() {
   private var subscriptions = CompositeDisposable()
 
   /**
+   * [PlayerModel.stateEvents] replays the open state whenever this activity resubscribes in
+   * [onStart]. Restore remote bookmarks only for the initial open, not when returning from the
+   * background.
+   */
+
+  private var bookmarksRestored = false
+
+  /**
    * The most recent playback position, cached from player events so it can be persisted as a
    * last-read bookmark when the player is left. The player only emits last-read bookmarks
    * periodically, so without this the resume point would be coarse.
@@ -195,7 +203,10 @@ class AudioBookPlayerActivity : AppCompatActivity() {
 
       is PlayerModelState.PlayerOpen -> {
         this.loadCoverImage()
-        this.restoreBookmarks(state)
+        if (!this.bookmarksRestored) {
+          this.bookmarksRestored = true
+          this.restoreBookmarks(state)
+        }
         this.startTimeTracking(parameters)
         this.switchFragment(EkirjaPlayerFragment())
       }

@@ -1,5 +1,8 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.4.2
-- Nostettiin SDKtarget versiota versioon 36
+1.5.2
+- Lisättiin painike yhden kirjan tiedostojen poistamiselle
+- Äänikirjanlukijan päivitys
+- E-kirjanlukijan päivitys
+- Tärkeitä taustapäivityksiä
 - Bugi korjauksia
