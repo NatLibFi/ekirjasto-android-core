@@ -243,7 +243,7 @@ class MagazinesFragment : Fragment(R.layout.magazines) {
       else {
         try {
           isEnabled = false
-          activity.onBackPressed()
+          activity.finish()
         }
         finally {
           isEnabled = true

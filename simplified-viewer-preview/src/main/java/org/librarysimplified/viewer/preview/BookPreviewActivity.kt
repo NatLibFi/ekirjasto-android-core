@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -73,6 +74,13 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
 
   private val logger = LoggerFactory.getLogger(BookPreviewActivity::class.java)
 
+  private val backCallback =
+    object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
+        handleBackPressed()
+      }
+    }
+
   private val services =
     Services.serviceDirectory()
   private val accessibilityService =
@@ -125,6 +133,11 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
     this.viewModel.previewStatusLive.observe(this, this::onNewBookPreviewStatus)
 
     this.handleFeedEntry()
+
+    this.onBackPressedDispatcher.addCallback(
+      this,
+      this.backCallback
+    )
   }
 
   private var mAppCompatDelegate: AppCompatDelegate? = null
@@ -141,8 +154,7 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
     this.subscriptions.dispose()
   }
 
-  @Deprecated("Deprecated in Java")
-  override fun onBackPressed() {
+  fun handleBackPressed() {
     when (this.fragmentNow) {
       is SR2TOCFragment ->
         this.switchFragment(SR2ReaderFragment())
@@ -154,7 +166,7 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
         if (this.file?.exists() == true) {
           this.file?.delete()
         }
-        super.onBackPressed()
+        this.finish()
       }
     }
   }
@@ -191,7 +203,7 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
 
     return when (command) {
       SR2ReaderViewNavigationReaderClose ->
-        this.onBackPressed()
+        this.finish()
 
       SR2ReaderViewNavigationSearchClose ->
         this.switchFragment(SR2ReaderFragment())
@@ -253,7 +265,7 @@ class BookPreviewActivity : AppCompatActivity(R.layout.activity_book_preview) {
     MaterialAlertDialogBuilder(this)
       .setTitle(R.string.bookPreviewFailedTitle)
       .setMessage(R.string.bookPreviewFailedMessage)
-      .setOnDismissListener { this.onBackPressed() }
+      .setOnDismissListener { this.finish() }
       .create()
       .show()
   }

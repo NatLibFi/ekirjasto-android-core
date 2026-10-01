@@ -2,6 +2,7 @@ package org.librarysimplified.viewer.audiobook
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -58,6 +59,13 @@ class AudioBookPlayerActivity : AppCompatActivity() {
 
   private val log: Logger =
     LoggerFactory.getLogger(AudioBookPlayerActivity::class.java)
+
+  private val backCallback =
+    object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
+        handleBackPressed()
+      }
+    }
 
   private lateinit var bookmarkService: BookmarkServiceType
   private lateinit var bookCoverProvider: BookCoverProviderType
@@ -137,6 +145,11 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     this.subscriptions.add(PlayerModel.stateEvents.subscribe(this::onModelStateEvent))
     this.subscriptions.add(PlayerModel.viewCommands.subscribe(this::onPlayerViewCommand))
     this.subscriptions.add(PlayerModel.playerEvents.subscribe(this::onPlayerEvent))
+
+    this.onBackPressedDispatcher.addCallback(
+      this,
+      this.backCallback
+    )
   }
 
   override fun onStop() {
@@ -159,8 +172,7 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     this.finish()
   }
 
-  @Deprecated("Deprecated in Java")
-  override fun onBackPressed() {
+  fun handleBackPressed() {
     return when (this.fragmentNow) {
       is PlayerTOCFragment -> this.switchFragment(EkirjaPlayerFragment())
       else -> this.close()

@@ -94,7 +94,7 @@ internal class MainFragmentListenerDelegate(
 
       try {
         isEnabled = false
-        activity.onBackPressed()
+        activity.finish()
       } finally {
         isEnabled = true
       }
