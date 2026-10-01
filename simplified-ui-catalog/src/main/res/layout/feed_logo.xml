@@ -12,13 +12,7 @@
   android:orientation="horizontal"
   android:gravity="center">
 
-  <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center">
-
-    <ImageView
+  <ImageView
         android:id="@+id/feedLibraryLogo"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
@@ -26,7 +20,7 @@
         android:importantForAccessibility="no"
         app:srcCompat="@drawable/account_default" />
 
-    <TextView
+  <TextView
       android:id="@+id/feedLibraryText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -39,5 +33,4 @@
       android:textSize="18sp"
       android:textStyle="bold"
       tools:text="Placeholder" />
-  </LinearLayout>
 </LinearLayout>
