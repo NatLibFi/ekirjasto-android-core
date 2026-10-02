@@ -12,6 +12,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -72,6 +73,12 @@ class PdfReaderActivity : AppCompatActivity() {
 
   private val log: Logger = LoggerFactory.getLogger(PdfReaderActivity::class.java)
 
+  private val backCallback =
+    object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
+        handleBackPressed()
+      }
+    }
   private val services =
     Services.serviceDirectory()
   private val bookmarkService =
@@ -140,6 +147,10 @@ class PdfReaderActivity : AppCompatActivity() {
         isSavedInstanceStateNull = savedInstanceState == null
       )
     }
+    this.onBackPressedDispatcher.addCallback(
+      this,
+      this.backCallback
+    )
   }
 
   private fun completeReaderSetup(params: PdfReaderParameters, isSavedInstanceStateNull: Boolean) {
@@ -376,17 +387,17 @@ class PdfReaderActivity : AppCompatActivity() {
     super.onDestroy()
   }
 
-  override fun onBackPressed() {
+  private fun handleBackPressed() {
     if (this.isSidebarOpen) {
       this.toggleSidebar()
     } else {
-      super.onBackPressed()
+      this.finish()
     }
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == android.R.id.home) {
-      onBackPressed()
+      handleBackPressed()
     }
 
     return super.onOptionsItemSelected(item)
