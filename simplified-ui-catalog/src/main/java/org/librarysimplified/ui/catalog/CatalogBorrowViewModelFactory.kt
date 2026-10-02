@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory
  */
 
 class CatalogBorrowViewModelFactory(
-  private val services: ServiceDirectoryType
+  private val services: ServiceDirectoryType,
+  private val context: android.content.Context
 ) : ViewModelProvider.Factory {
 
   private val logger =
@@ -31,7 +32,7 @@ class CatalogBorrowViewModelFactory(
         val bookRegistry =
           services.requireService(BookRegistryType::class.java)
 
-        CatalogBorrowViewModel(profilesController, booksController, bookRegistry) as T
+        CatalogBorrowViewModel(context.applicationContext, profilesController, booksController, bookRegistry) as T
       }
       else ->
         throw IllegalArgumentException(
