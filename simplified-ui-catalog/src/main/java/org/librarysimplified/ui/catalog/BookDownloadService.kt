@@ -18,7 +18,7 @@ import org.nypl.simplified.books.controller.api.BooksControllerType
 import org.nypl.simplified.books.book_registry.BookRegistryType
 import org.nypl.simplified.books.book_registry.BookStatus
 import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
-import java.util.concurrent.Executor
+import com.google.common.util.concurrent.MoreExecutors
 
 class BookDownloadService : Service() {
   private var statusSubscription: Disposable? = null
@@ -56,7 +56,7 @@ class BookDownloadService : Service() {
       }
     controller
       .bookBorrow(accountID, bookID, entry)
-      .addListener({ stopSelf(startId) }, Executor { it.run() })
+      .addListener({ stopSelf(startId) }, MoreExecutors.directExecutor())
     return START_NOT_STICKY
   }
 

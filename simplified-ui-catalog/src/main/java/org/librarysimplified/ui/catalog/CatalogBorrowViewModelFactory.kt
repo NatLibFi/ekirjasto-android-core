@@ -32,7 +32,12 @@ class CatalogBorrowViewModelFactory(
         val bookRegistry =
           services.requireService(BookRegistryType::class.java)
 
-        CatalogBorrowViewModel(context.applicationContext, profilesController, booksController, bookRegistry) as T
+        CatalogBorrowViewModel(
+          context.applicationContext as android.app.Application,
+          profilesController,
+          booksController,
+          bookRegistry
+        ) as T
       }
       else ->
         throw IllegalArgumentException(
