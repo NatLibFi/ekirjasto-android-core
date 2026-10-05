@@ -21,7 +21,15 @@ import org.nypl.simplified.opds.core.OPDSAcquisitionFeedEntry
 import com.google.common.util.concurrent.MoreExecutors
 
 class BookDownloadService : Service() {
-  private var statusSubscription: Disposable? = null
+  private data class Download(
+    val accountID: AccountID,
+    val bookID: BookID,
+    val title: String,
+    val notificationID: Int,
+    var statusSubscription: Disposable? = null
+  )
+
+  private val downloads = mutableMapOf<BookID, Download>()
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     val accountID = intent?.serializableExtra<AccountID>(EXTRA_ACCOUNT_ID)
@@ -36,7 +44,7 @@ class BookDownloadService : Service() {
     val controller = services.requireService(BooksControllerType::class.java)
     if (intent.action == ACTION_CANCEL) {
       controller.bookCancelDownload(accountID, bookID)
-      stopSelf(startId)
+      finishDownload(bookID, startId)
       return START_NOT_STICKY
     }
     if (entry == null) {
@@ -44,27 +52,33 @@ class BookDownloadService : Service() {
       return START_NOT_STICKY
     }
 
-    startForeground(NOTIFICATION_ID, createNotification(entry.title, accountID, bookID))
-    statusSubscription?.dispose()
-    statusSubscription = services.requireService(BookRegistryType::class.java).bookEvents()
+    val notificationID = notificationID(bookID)
+    downloads[bookID]?.let { existing ->
+      existing.statusSubscription?.dispose()
+      notificationManager().cancel(existing.notificationID)
+    }
+    val download = Download(accountID, bookID, entry.title, notificationID)
+    downloads[bookID] = download
+    startForeground(notificationID, createNotification(entry.title, accountID, bookID))
+    download.statusSubscription = services.requireService(BookRegistryType::class.java).bookEvents()
       .filter { it.bookId == bookID }
       .subscribe { event ->
         val status = event.statusNow
         if (status is BookStatus.Downloading) {
-          updateNotification(entry.title, accountID, bookID, status)
+          updateNotification(download, status)
         }
       }
     controller
       .bookBorrow(accountID, bookID, entry)
-      .addListener({ stopSelf(startId) }, MoreExecutors.directExecutor())
+      .addListener({ finishDownload(bookID, startId) }, MoreExecutors.directExecutor())
     return START_NOT_STICKY
   }
 
   override fun onBind(intent: Intent?): IBinder? = null
 
   override fun onDestroy() {
-    statusSubscription?.dispose()
-    statusSubscription = null
+    downloads.values.forEach { it.statusSubscription?.dispose() }
+    downloads.clear()
     super.onDestroy()
   }
 
@@ -85,26 +99,43 @@ class BookDownloadService : Service() {
   }
 
   private fun updateNotification(
-    title: String,
-    accountID: AccountID,
-    bookID: BookID,
+    download: Download,
     status: BookStatus.Downloading
   ) {
     val progress = status.progressPercent?.toInt()
     val notification = NotificationCompat.Builder(this, CHANNEL_ID)
       .setSmallIcon(android.R.drawable.stat_sys_download)
       .setContentTitle(getString(R.string.catalogDownloading))
-      .setContentText(title)
+      .setContentText(download.title)
       .setOngoing(true)
-      .addAction(cancelAction(accountID, bookID))
+      .addAction(cancelAction(download.accountID, download.bookID))
       .setCategory(NotificationCompat.CATEGORY_PROGRESS)
       .apply {
         if (progress == null) setProgress(0, 0, true)
         else setProgress(100, progress.coerceIn(0, 100), false)
       }
       .build()
-    getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, notification)
+    notificationManager().notify(download.notificationID, notification)
   }
+
+  private fun finishDownload(bookID: BookID, startId: Int) {
+    val download = downloads.remove(bookID) ?: return
+    download.statusSubscription?.dispose()
+    notificationManager().cancel(download.notificationID)
+    if (downloads.isEmpty()) {
+      stopForeground(STOP_FOREGROUND_REMOVE)
+      stopSelf(startId)
+    } else {
+      val next = downloads.values.first()
+      startForeground(next.notificationID, createNotification(next.title, next.accountID, next.bookID))
+    }
+  }
+
+  private fun notificationManager(): NotificationManager =
+    getSystemService(NotificationManager::class.java)
+
+  private fun notificationID(bookID: BookID): Int =
+    NOTIFICATION_ID_BASE + (bookID.hashCode() and 0x0FFFFFFF)
 
   private fun cancelAction(accountID: AccountID, bookID: BookID): NotificationCompat.Action {
     val intent = Intent(this, BookDownloadService::class.java).apply {
@@ -136,7 +167,7 @@ class BookDownloadService : Service() {
 
   companion object {
     private const val CHANNEL_ID = "book_downloads"
-    private const val NOTIFICATION_ID = 1001
+    private const val NOTIFICATION_ID_BASE = 1001
     private const val ACTION_CANCEL = "book_download.cancel"
     const val EXTRA_ACCOUNT_ID = "book_download.account_id"
     const val EXTRA_BOOK_ID = "book_download.book_id"
