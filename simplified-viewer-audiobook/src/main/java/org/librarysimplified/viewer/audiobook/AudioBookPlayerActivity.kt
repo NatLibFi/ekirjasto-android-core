@@ -16,6 +16,7 @@ import org.librarysimplified.audiobook.api.PlayerBookmark
 import org.librarysimplified.audiobook.api.PlayerBookmarkKind
 import org.librarysimplified.audiobook.api.PlayerBookmarkMetadata
 import org.librarysimplified.audiobook.api.PlayerEvent
+import org.librarysimplified.audiobook.api.PlayerPlaybackRate
 import org.librarysimplified.audiobook.api.PlayerReadingOrderItemType
 import org.librarysimplified.audiobook.manifest.api.PlayerManifestPositionMetadata
 import org.librarysimplified.audiobook.manifest.api.PlayerMillisecondsReadingOrderItem
@@ -75,6 +76,14 @@ class AudioBookPlayerActivity : AppCompatActivity() {
    */
 
   private var bookmarksRestored = false
+
+  /**
+   * As with [bookmarksRestored], the replayed open state must not re-apply the saved playback
+   * rate on every return from the background: doing so would discard a rate the user changed
+   * during this session.
+   */
+
+  private var playbackRateRestored = false
 
   /**
    * The most recent playback position, cached from player events so it can be persisted as a
@@ -206,6 +215,10 @@ class AudioBookPlayerActivity : AppCompatActivity() {
         if (!this.bookmarksRestored) {
           this.bookmarksRestored = true
           this.restoreBookmarks(state)
+        }
+        if (!this.playbackRateRestored) {
+          this.playbackRateRestored = true
+          this.restorePlaybackRate(parameters)
         }
         this.startTimeTracking(parameters)
         this.switchFragment(EkirjaPlayerFragment())
@@ -415,6 +428,32 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     newBookmarks.addAll(PlayerBookmarkModel.bookmarks())
     newBookmarks.remove(event.bookmark)
     PlayerBookmarkModel.setBookmarks(newBookmarks.toList())
+  }
+
+  /**
+   * Apply the playback rate the user last chose for this book.
+   *
+   * The rate is persisted per book by [onPlaybackRateChanged], but audiobook 24.0.0 opens every
+   * book at the default rate, so without this the saved value is written and never read.
+   */
+
+  private fun restorePlaybackRate(
+    parameters: AudioBookPlayerParameters
+  ) {
+    try {
+      val bookID = parameters.bookID.value()
+      val savedRate: PlayerPlaybackRate? =
+        this.profiles.profileCurrent()
+          .preferences()
+          .playbackRates[bookID]
+
+      if (savedRate != null) {
+        this.log.debug("restoring playback rate {} for book {}", savedRate, bookID)
+        PlayerModel.setPlaybackRate(savedRate)
+      }
+    } catch (e: Exception) {
+      this.log.warn("could not restore playback rate: ", e)
+    }
   }
 
   private fun onPlaybackRateChanged(
