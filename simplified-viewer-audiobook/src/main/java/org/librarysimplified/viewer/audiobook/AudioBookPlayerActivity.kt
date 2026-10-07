@@ -111,6 +111,20 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     this.log.debug("onCreate")
     super.onCreate(null)
 
+    /*
+     * The book parameters live in an in-memory singleton, as does the player itself
+     * ([PlayerModel]). Android routinely kills backgrounded app processes, and both are lost when
+     * it does. The activity is still restored from the task afterwards, but there is no open book
+     * to show and no player event will ever arrive, so it would sit on the loading fragment
+     * indefinitely. Finish instead, returning the user to the book so they can open it again.
+     */
+
+    if (AudioBookViewerModel.parameters == null) {
+      this.log.warn("no player parameters; the process was recreated. Finishing.")
+      this.finish()
+      return
+    }
+
     val services = Services.serviceDirectory()
     this.bookmarkService =
       services.requireService(BookmarkServiceType::class.java)
