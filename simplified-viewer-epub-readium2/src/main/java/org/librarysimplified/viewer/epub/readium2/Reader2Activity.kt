@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -103,6 +104,13 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
 
   private val logger =
     LoggerFactory.getLogger(Reader2Activity::class.java)
+
+  private val backCallback =
+    object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
+        handleBackPressed()
+      }
+    }
 
   private val services =
     Services.serviceDirectory()
@@ -220,6 +228,11 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
 
     this.switchFragment(Reader2LoadingFragment())
     this.startReader()
+
+    this.onBackPressedDispatcher.addCallback(
+      this,
+      this.backCallback
+    )
   }
 
   override fun onStop() {
@@ -600,13 +613,12 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
     )
   }
 
-  @Deprecated("Deprecated in Java")
-  override fun onBackPressed() {
+  fun handleBackPressed() {
     return when (val f = this.fragmentNow) {
       is SR2Fragment -> {
         when (f) {
           is SR2ReaderFragment ->
-            super.onBackPressed()
+            this.finish()
 
           is SR2SearchFragment ->
             this.switchFragment(SR2ReaderFragment())
@@ -617,7 +629,7 @@ class Reader2Activity : AppCompatActivity(R.layout.reader2) {
       }
 
       else ->
-        super.onBackPressed()
+        this.finish()
     }
   }
 

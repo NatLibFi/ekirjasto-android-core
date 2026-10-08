@@ -85,7 +85,7 @@ class LoginMainFragment : Fragment(R.layout.login_main_fragment) {
 
       try {
         isEnabled = false
-        activity.onBackPressed()
+        activity.finish()
       } finally {
         isEnabled = true
       }
