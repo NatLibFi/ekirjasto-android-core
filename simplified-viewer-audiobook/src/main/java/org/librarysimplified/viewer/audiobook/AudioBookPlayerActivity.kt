@@ -17,6 +17,7 @@ import org.librarysimplified.audiobook.api.PlayerBookmark
 import org.librarysimplified.audiobook.api.PlayerBookmarkKind
 import org.librarysimplified.audiobook.api.PlayerBookmarkMetadata
 import org.librarysimplified.audiobook.api.PlayerEvent
+import org.librarysimplified.audiobook.api.PlayerPlaybackRate
 import org.librarysimplified.audiobook.api.PlayerReadingOrderItemType
 import org.librarysimplified.audiobook.manifest.api.PlayerManifestPositionMetadata
 import org.librarysimplified.audiobook.manifest.api.PlayerMillisecondsReadingOrderItem
@@ -85,6 +86,14 @@ class AudioBookPlayerActivity : AppCompatActivity() {
   private var bookmarksRestored = false
 
   /**
+   * As with [bookmarksRestored], the replayed open state must not re-apply the saved playback
+   * rate on every return from the background: doing so would discard a rate the user changed
+   * during this session.
+   */
+
+  private var playbackRateRestored = false
+
+  /**
    * The most recent playback position, cached from player events so it can be persisted as a
    * last-read bookmark when the player is left. The player only emits last-read bookmarks
    * periodically, so without this the resume point would be coarse.
@@ -109,6 +118,20 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     enableEdgeToEdge()
     this.log.debug("onCreate")
     super.onCreate(null)
+
+    /*
+     * The book parameters live in an in-memory singleton, as does the player itself
+     * ([PlayerModel]). Android routinely kills backgrounded app processes, and both are lost when
+     * it does. The activity is still restored from the task afterwards, but there is no open book
+     * to show and no player event will ever arrive, so it would sit on the loading fragment
+     * indefinitely. Finish instead, returning the user to the book so they can open it again.
+     */
+
+    if (AudioBookViewerModel.parameters == null) {
+      this.log.warn("no player parameters; the process was recreated. Finishing.")
+      this.finish()
+      return
+    }
 
     val services = Services.serviceDirectory()
     this.bookmarkService =
@@ -218,6 +241,10 @@ class AudioBookPlayerActivity : AppCompatActivity() {
         if (!this.bookmarksRestored) {
           this.bookmarksRestored = true
           this.restoreBookmarks(state)
+        }
+        if (!this.playbackRateRestored) {
+          this.playbackRateRestored = true
+          this.restorePlaybackRate(parameters)
         }
         this.startTimeTracking(parameters)
         this.switchFragment(EkirjaPlayerFragment())
@@ -427,6 +454,32 @@ class AudioBookPlayerActivity : AppCompatActivity() {
     newBookmarks.addAll(PlayerBookmarkModel.bookmarks())
     newBookmarks.remove(event.bookmark)
     PlayerBookmarkModel.setBookmarks(newBookmarks.toList())
+  }
+
+  /**
+   * Apply the playback rate the user last chose for this book.
+   *
+   * The rate is persisted per book by [onPlaybackRateChanged], but audiobook 24.0.0 opens every
+   * book at the default rate, so without this the saved value is written and never read.
+   */
+
+  private fun restorePlaybackRate(
+    parameters: AudioBookPlayerParameters
+  ) {
+    try {
+      val bookID = parameters.bookID.value()
+      val savedRate: PlayerPlaybackRate? =
+        this.profiles.profileCurrent()
+          .preferences()
+          .playbackRates[bookID]
+
+      if (savedRate != null) {
+        this.log.debug("restoring playback rate {} for book {}", savedRate, bookID)
+        PlayerModel.setPlaybackRate(savedRate)
+      }
+    } catch (e: Exception) {
+      this.log.warn("could not restore playback rate: ", e)
+    }
   }
 
   private fun onPlaybackRateChanged(
