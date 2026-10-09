@@ -30,6 +30,7 @@ class BookDownloadService : Service() {
   )
 
   private val downloads = mutableMapOf<BookID, Download>()
+  private var foregroundBookID: BookID? = null
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     val accountID = intent?.serializableExtra<AccountID>(EXTRA_ACCOUNT_ID)
@@ -63,7 +64,12 @@ class BookDownloadService : Service() {
     }
     val download = Download(accountID, bookID, entry.title, notificationID)
     downloads[bookID] = download
-    startForeground(notificationID, createNotification(entry.title, accountID, bookID))
+    if (foregroundBookID == null) {
+      foregroundBookID = bookID
+      startForeground(notificationID, createNotification(entry.title, accountID, bookID))
+    } else {
+      notificationManager().notify(notificationID, createNotification(entry.title, accountID, bookID))
+    }
     download.statusSubscription = services.requireService(BookRegistryType::class.java).bookEvents()
       .filter { it.bookId == bookID }
       .subscribe { event ->
@@ -83,6 +89,7 @@ class BookDownloadService : Service() {
   override fun onDestroy() {
     downloads.values.forEach { it.statusSubscription?.dispose() }
     downloads.clear()
+    foregroundBookID = null
     super.onDestroy()
   }
 
@@ -127,10 +134,12 @@ class BookDownloadService : Service() {
     download.statusSubscription?.dispose()
     notificationManager().cancel(download.notificationID)
     if (downloads.isEmpty()) {
+      foregroundBookID = null
       stopForeground(STOP_FOREGROUND_REMOVE)
       stopSelf(startId)
-    } else {
+    } else if (foregroundBookID == bookID) {
       val next = downloads.values.first()
+      foregroundBookID = next.bookID
       startForeground(next.notificationID, createNotification(next.title, next.accountID, next.bookID))
     }
   }
