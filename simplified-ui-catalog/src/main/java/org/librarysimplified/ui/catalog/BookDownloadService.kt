@@ -52,6 +52,10 @@ class BookDownloadService : Service() {
       return START_NOT_STICKY
     }
 
+    if (!downloads.containsKey(bookID) && downloads.size >= MAX_DOWNLOADS) {
+      return START_NOT_STICKY
+    }
+
     val notificationID = notificationID(bookID)
     downloads[bookID]?.let { existing ->
       existing.statusSubscription?.dispose()
@@ -168,6 +172,7 @@ class BookDownloadService : Service() {
   companion object {
     private const val CHANNEL_ID = "book_downloads"
     private const val NOTIFICATION_ID_BASE = 1001
+    private const val MAX_DOWNLOADS = 5
     private const val ACTION_CANCEL = "book_download.cancel"
     const val EXTRA_ACCOUNT_ID = "book_download.account_id"
     const val EXTRA_BOOK_ID = "book_download.book_id"
