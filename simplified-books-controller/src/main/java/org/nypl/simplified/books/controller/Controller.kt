@@ -85,6 +85,8 @@ import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfileFeedRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskResult
+import org.nypl.simplified.taskrecorder.api.TaskRecorder
+import org.nypl.simplified.taskrecorder.api.TaskStepResolution.TaskStepSucceeded
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URI
@@ -682,7 +684,10 @@ class Controller private constructor(
         val borrowTask = BorrowTask.createBorrowTask(this.borrowRequirements, request)
         borrows[bookID] = borrowTask
         if (cancelledBorrows.remove(bookID)) {
-          borrowTask.cancel()
+          val recorder = TaskRecorder.create()
+          recorder.beginNewStep("Download cancelled before starting").resolution =
+            TaskStepSucceeded("Download cancelled before starting")
+          return@Callable recorder.finishSuccess(Unit)
         }
         borrowTask.execute()
       }
