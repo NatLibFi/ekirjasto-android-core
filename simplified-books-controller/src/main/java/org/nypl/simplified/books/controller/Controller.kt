@@ -112,6 +112,7 @@ class Controller private constructor(
     BehaviorSubject.create()
 
   private val borrows: ConcurrentHashMap<BookID, BorrowTaskType>
+  private val cancelledBorrows: MutableSet<BookID> = ConcurrentHashMap.newKeySet()
 
   private val borrowRequirements: BorrowRequirements
   private val accountLoginStringResources =
@@ -680,6 +681,9 @@ class Controller private constructor(
 
         val borrowTask = BorrowTask.createBorrowTask(this.borrowRequirements, request)
         borrows[bookID] = borrowTask
+        if (cancelledBorrows.remove(bookID)) {
+          borrowTask.cancel()
+        }
         borrowTask.execute()
       }
     ).transformAsync(AsyncFunction { taskResult ->
@@ -748,7 +752,12 @@ class Controller private constructor(
     accountID: AccountID,
     bookID: BookID
   ){
-    this.borrows[bookID]?.cancel()
+    val borrowTask = this.borrows[bookID]
+    if (borrowTask == null) {
+      cancelledBorrows.add(bookID)
+    } else {
+      borrowTask.cancel()
+    }
   }
 
   override fun bookDeleteFiles(
