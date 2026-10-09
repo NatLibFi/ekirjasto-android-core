@@ -94,7 +94,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
 
   private val borrowViewModel: CatalogBorrowViewModel by viewModels(
     factoryProducer = {
-      CatalogBorrowViewModelFactory(services)
+      CatalogBorrowViewModelFactory(services, requireContext().applicationContext)
     }
   )
 

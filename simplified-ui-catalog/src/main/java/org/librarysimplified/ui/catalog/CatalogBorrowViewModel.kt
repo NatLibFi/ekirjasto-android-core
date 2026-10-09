@@ -1,5 +1,6 @@
 package org.librarysimplified.ui.catalog
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.Disposable
 import org.nypl.simplified.accounts.api.AccountEventLoginStateChanged
@@ -28,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 
 class CatalogBorrowViewModel(
+  private val application: Application,
   private val profilesController: ProfilesControllerType,
   private val booksController: BooksControllerType,
   private val bookRegistry: BookRegistryType
@@ -236,11 +238,7 @@ class CatalogBorrowViewModel(
     book: Book
   ) {
     this.logger.debug("reserving: {}", book.id)
-    this.booksController.bookBorrow(
-      accountID = book.account,
-      bookID = book.id,
-      entry = book.entry
-    )
+    BookDownloadService.start(application, book.account, book.id, book.entry)
   }
 
   private fun tryRevokeAuthenticated(
@@ -259,11 +257,7 @@ class CatalogBorrowViewModel(
     book: Book
   ) {
     this.logger.debug("borrowing: {}", book.id)
-    this.booksController.bookBorrow(
-      accountID = book.account,
-      bookID = book.id,
-      entry = book.entry
-    )
+    BookDownloadService.start(application, book.account, book.id, book.entry)
   }
 
   fun tryDismissBorrowError(
