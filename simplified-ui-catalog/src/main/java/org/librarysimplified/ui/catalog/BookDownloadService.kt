@@ -45,7 +45,8 @@ class BookDownloadService : Service() {
     val controller = services.requireService(BooksControllerType::class.java)
     if (intent.action == ACTION_CANCEL) {
       controller.bookCancelDownload(accountID, bookID)
-      finishDownload(bookID, startId)
+      // Keep the notification and foreground service alive until the borrow future
+      // completes. Cancellation is cooperative and is not necessarily immediate.
       return START_NOT_STICKY
     }
     if (entry == null) {

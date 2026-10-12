@@ -115,6 +115,7 @@ class Controller private constructor(
 
   private val borrows: ConcurrentHashMap<BookID, BorrowTaskType>
   private val cancelledBorrows: MutableSet<BookID> = ConcurrentHashMap.newKeySet()
+  private val borrowsLock = Any()
 
   private val borrowRequirements: BorrowRequirements
   private val accountLoginStringResources =
@@ -671,7 +672,8 @@ class Controller private constructor(
     entry: OPDSAcquisitionFeedEntry,
     samlDownloadContext: SAMLDownloadContext?
   ): FluentFuture<TaskResult<*>> {
-    return this.submitTask(
+    var activeBorrowTask: BorrowTaskType? = null
+    val borrowFuture = this.submitTask(
       Callable<TaskResult<*>> {
         val request =
           BorrowRequest.Start(
@@ -681,10 +683,13 @@ class Controller private constructor(
             samlDownloadContext = samlDownloadContext
           )
 
-        borrows.remove(bookID)
         val borrowTask = BorrowTask.createBorrowTask(this.borrowRequirements, request)
-        borrows[bookID] = borrowTask
-        if (cancelledBorrows.remove(bookID)) {
+        synchronized(this.borrowsLock) {
+          borrows.remove(bookID)?.cancel()
+          borrows[bookID] = borrowTask
+          activeBorrowTask = borrowTask
+        }
+        if (synchronized(this.borrowsLock) { cancelledBorrows.remove(bookID) }) {
           val recorder = TaskRecorder.create()
           recorder.beginNewStep("Download cancelled before starting").resolution =
             TaskStepSucceeded("Download cancelled before starting")
@@ -702,7 +707,7 @@ class Controller private constructor(
           //Try to take the loan again if the accessToken refresh is successful
           if (tokenResult is TaskResult.Success) {
             logger.debug("Attempt to execute borrow again")
-            val borrowTask = borrows[bookID]!!
+            val borrowTask = synchronized(this.borrowsLock) { borrows[bookID]!! }
             submitTask(Callable { borrowTask.execute() })
           } else {
             //If token lookup fails, return the need to show the login popup
@@ -714,6 +719,15 @@ class Controller private constructor(
         Futures.immediateFuture(taskResult)
       }
     }, MoreExecutors.directExecutor())
+
+    borrowFuture.addListener({
+      synchronized(this.borrowsLock) {
+        if (borrows[bookID] === activeBorrowTask) {
+          borrows.remove(bookID)
+        }
+      }
+    }, MoreExecutors.directExecutor())
+    return borrowFuture
   }
 
   /**
@@ -758,11 +772,13 @@ class Controller private constructor(
     accountID: AccountID,
     bookID: BookID
   ){
-    val borrowTask = this.borrows[bookID]
-    if (borrowTask == null) {
-      cancelledBorrows.add(bookID)
-    } else {
-      borrowTask.cancel()
+    synchronized(this.borrowsLock) {
+      val borrowTask = this.borrows[bookID]
+      if (borrowTask == null) {
+        cancelledBorrows.add(bookID)
+      } else {
+        borrowTask.cancel()
+      }
     }
   }
 
