@@ -164,7 +164,7 @@ class BookDownloadService : Service() {
     )
     return NotificationCompat.Action(
       0,
-      getString(R.string.catalogAccessibilityBookDownloadCancel),
+      getString(R.string.catalogCancel),
       pendingIntent
     )
   }

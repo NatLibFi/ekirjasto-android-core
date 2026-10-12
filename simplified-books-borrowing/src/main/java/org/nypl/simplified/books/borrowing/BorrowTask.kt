@@ -107,6 +107,11 @@ class BorrowTask private constructor(
     this.debug("starting")
 
     return try {
+      if (this.cancelled.get()) {
+        this.taskRecorder.currentStepSucceeded("Task was cancelled before starting.")
+        return this.taskRecorder.finishSuccess(Unit)
+      }
+
       return when (val start = this.request) {
         is BorrowRequest.Start -> this.executeStart(start)
       }

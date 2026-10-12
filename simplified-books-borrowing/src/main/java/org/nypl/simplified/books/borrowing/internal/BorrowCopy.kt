@@ -155,6 +155,7 @@ class BorrowCopy private constructor() : BorrowSubtaskType {
     context: BorrowContextType,
     file: File
   ) {
+    context.checkCancelled()
     context.taskRecorder.beginNewStep("Saving book...")
 
     return when (val formatHandle = context.bookDatabaseEntry.findFormatHandleForContentType(context.currentAcquisitionPathElement.mimeType)) {

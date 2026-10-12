@@ -49,6 +49,7 @@ class BorrowAudioBook private constructor() : BorrowSubtaskType {
   }
 
   override fun execute(context: BorrowContextType) {
+    context.checkCancelled()
     context.taskRecorder.beginNewStep("Downloading audio book...")
     context.bookDownloadIsRunning(
       "Requesting download...",
@@ -63,6 +64,7 @@ class BorrowAudioBook private constructor() : BorrowSubtaskType {
 
       val downloaded = this.runStrategy(context, currentURI)
       try {
+        context.checkCancelled()
         this.saveDownloadedContent(context, downloaded)
       } finally {
         downloaded.file.delete()
@@ -180,6 +182,7 @@ class BorrowAudioBook private constructor() : BorrowSubtaskType {
     context: BorrowContextType,
     data: DownloadedManifest
   ) {
+    context.checkCancelled()
     context.taskRecorder.beginNewStep("Saving book...")
     val formatHandle = context.bookDatabaseEntry.findFormatHandleForContentType(
       contentType = context.currentAcquisitionPathElement.mimeType

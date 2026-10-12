@@ -389,6 +389,7 @@ class BorrowACSM private constructor() : BorrowSubtaskType {
     context: BorrowContextType,
     fulfillment: AdobeDRMExtensions.Fulfillment
   ) {
+    context.checkCancelled()
     context.taskRecorder.beginNewStep("Saving fulfilled book...")
     val formatHandle = this.findFormatHandle(context)
 
