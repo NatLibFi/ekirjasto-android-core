@@ -108,6 +108,7 @@ class BorrowTask private constructor(
 
     return try {
       if (this.cancelled.get()) {
+        this.taskRecorder.beginNewStep("Download cancelled before starting.")
         this.taskRecorder.currentStepSucceeded("Task was cancelled before starting.")
         return this.taskRecorder.finishSuccess(Unit)
       }
@@ -119,9 +120,21 @@ class BorrowTask private constructor(
       this.warn("accessToken expired")
       this.taskRecorder.finishSuccess("accessToken refresh needed")
     } catch (e: BorrowFailedHandled) {
+      if (this.cancelled.get()) {
+        this.taskRecorder.beginNewStep("Download cancelled.")
+        this.taskRecorder.currentStepSucceeded("Download cancelled.")
+        return this.taskRecorder.finishSuccess(Unit)
+      }
+
       this.warn("handled: ", e)
       this.taskRecorder.finishFailure<Unit>()
     } catch (e: Throwable) {
+      if (this.cancelled.get()) {
+        this.taskRecorder.beginNewStep("Download cancelled.")
+        this.taskRecorder.currentStepSucceeded("Download cancelled.")
+        return this.taskRecorder.finishSuccess(Unit)
+      }
+
       this.error("unhandled exception during borrowing: ", e)
       this.taskRecorder.currentStepFailedAppending(this.messageOrName(e), unexpectedException, e)
       this.taskRecorder.finishFailure<Unit>()
@@ -270,6 +283,12 @@ class BorrowTask private constructor(
       )
       throw e
     } catch (e: Exception) {
+      if (context.isCancelled || e is InterruptedException) {
+        step.resolution = TaskStepSucceeded("Download cancelled.")
+        context.bookDownloadCancelled()
+        throw BorrowSubtaskCancelled()
+      }
+
       step.resolution = TaskStepFailed(
         message = "Subtask '$name' raised an unexpected exception",
         exception = e,

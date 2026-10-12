@@ -26,7 +26,8 @@ class BookDownloadService : Service() {
     val bookID: BookID,
     val title: String,
     val notificationID: Int,
-    var statusSubscription: Disposable? = null
+    var statusSubscription: Disposable? = null,
+    var cancelled: Boolean = false
   )
 
   private val downloads = mutableMapOf<BookID, Download>()
@@ -45,6 +46,13 @@ class BookDownloadService : Service() {
     val controller = services.requireService(BooksControllerType::class.java)
     if (intent.action == ACTION_CANCEL) {
       controller.bookCancelDownload(accountID, bookID)
+      downloads[bookID]?.let { download ->
+        download.cancelled = true
+        notificationManager().notify(
+          download.notificationID,
+          createCancelledNotification(download.title)
+        )
+      }
       // Keep the notification and foreground service alive until the borrow future
       // completes. Cancellation is cooperative and is not necessarily immediate.
       return START_NOT_STICKY
@@ -114,6 +122,8 @@ class BookDownloadService : Service() {
     download: Download,
     status: BookStatus.Downloading
   ) {
+    if (download.cancelled) return
+
     val progress = status.progressPercent?.toInt()
     val notification = NotificationCompat.Builder(this, CHANNEL_ID)
       .setSmallIcon(android.R.drawable.stat_sys_download)
@@ -129,6 +139,15 @@ class BookDownloadService : Service() {
       .build()
     notificationManager().notify(download.notificationID, notification)
   }
+
+  private fun createCancelledNotification(title: String): Notification =
+    NotificationCompat.Builder(this, CHANNEL_ID)
+      .setSmallIcon(android.R.drawable.stat_sys_download_done)
+      .setContentTitle(getString(R.string.catalogCancelled))
+      .setContentText(title)
+      .setOngoing(true)
+      .setCategory(NotificationCompat.CATEGORY_STATUS)
+      .build()
 
   private fun finishDownload(bookID: BookID, startId: Int) {
     val download = downloads.remove(bookID) ?: return

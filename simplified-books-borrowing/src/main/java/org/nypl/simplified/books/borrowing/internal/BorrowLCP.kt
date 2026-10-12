@@ -89,6 +89,8 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
         // manually input it and if the exception isn't caught, the download will immediately fail.
         try {
           this.findPassphrase(context)
+        } catch (e: BorrowSubtaskCancelled) {
+          throw e
         } catch (e: Exception) {
           ""
         }
@@ -230,6 +232,7 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
     }
 
     if (entryFound == null) {
+      context.checkCancelled()
       context.taskRecorder.currentStepFailed(
         message = "Unable to locate the current book in the user's loans feed.",
         errorCode = "lcpMissingEntryInLoansFeed",
