@@ -75,6 +75,9 @@ class BorrowTask private constructor(
   private val cancelled =
     AtomicBoolean(false)
 
+  @Volatile
+  private var executingThread: Thread? = null
+
   private val bookId by lazy {
     BookIDs.newFromOPDSEntry(this.request.opdsAcquisitionFeedEntry)
   }
@@ -99,6 +102,7 @@ class BorrowTask private constructor(
     this.logger.warn("[{}] $message", this.bookIdBrief, *arguments)
 
   override fun execute(): TaskResult<*> {
+    this.executingThread = Thread.currentThread()
     this.taskRecorder = TaskRecorder.create()
     this.debug("starting")
 
@@ -116,6 +120,8 @@ class BorrowTask private constructor(
       this.error("unhandled exception during borrowing: ", e)
       this.taskRecorder.currentStepFailedAppending(this.messageOrName(e), unexpectedException, e)
       this.taskRecorder.finishFailure<Unit>()
+    } finally {
+      this.executingThread = null
     }
   }
 
@@ -132,6 +138,7 @@ class BorrowTask private constructor(
 
   override fun cancel() {
     this.cancelled.set(true)
+    this.executingThread?.interrupt()
   }
 
   private fun messageOrName(e: Throwable) =

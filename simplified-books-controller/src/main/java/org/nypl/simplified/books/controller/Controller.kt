@@ -681,6 +681,7 @@ class Controller private constructor(
             samlDownloadContext = samlDownloadContext
           )
 
+        borrows.remove(bookID)
         val borrowTask = BorrowTask.createBorrowTask(this.borrowRequirements, request)
         borrows[bookID] = borrowTask
         if (cancelledBorrows.remove(bookID)) {

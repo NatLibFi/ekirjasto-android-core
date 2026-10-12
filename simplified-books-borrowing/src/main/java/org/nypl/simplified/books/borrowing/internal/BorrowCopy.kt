@@ -128,6 +128,7 @@ class BorrowCopy private constructor() : BorrowSubtaskType {
 
         val perSecond = BorrowUnitsPerSecond(context.clock)
         while (true) {
+          context.checkCancelled()
           val r = input.read(buffer)
           if (r == -1) {
             break
