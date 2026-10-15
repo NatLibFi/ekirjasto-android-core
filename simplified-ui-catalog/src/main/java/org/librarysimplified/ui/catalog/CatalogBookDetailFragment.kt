@@ -6,8 +6,10 @@ import android.os.StatFs
 import android.text.Html
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -128,7 +130,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var relatedBooksLoading: ViewGroup
   private lateinit var report: TextView
   private lateinit var screenSize: ScreenSizeInformationType
-  private lateinit var seeMore: TextView
+  private lateinit var seeMore: Button
   private lateinit var status: ViewGroup
   private lateinit var statusFailed: ViewGroup
   private lateinit var statusFailedText: TextView
@@ -140,7 +142,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
   private lateinit var summary: TextView
   private lateinit var title: TextView
   private lateinit var type: TextView
-  private lateinit var selected: ImageView
+  private lateinit var selected: ImageButton
   private lateinit var toolbar: PalaceToolbar
 
   private val dateYearFormatter =

@@ -15,7 +15,7 @@
         android:layout_margin="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Placeholder"
+        android:text=""
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
