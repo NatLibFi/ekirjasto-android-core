@@ -75,6 +75,9 @@ class BorrowTask private constructor(
   private val cancelled =
     AtomicBoolean(false)
 
+  @Volatile
+  private var executingThread: Thread? = null
+
   private val bookId by lazy {
     BookIDs.newFromOPDSEntry(this.request.opdsAcquisitionFeedEntry)
   }
@@ -99,10 +102,17 @@ class BorrowTask private constructor(
     this.logger.warn("[{}] $message", this.bookIdBrief, *arguments)
 
   override fun execute(): TaskResult<*> {
+    this.executingThread = Thread.currentThread()
     this.taskRecorder = TaskRecorder.create()
     this.debug("starting")
 
     return try {
+      if (this.cancelled.get()) {
+        this.taskRecorder.beginNewStep("Download cancelled before starting.")
+        this.taskRecorder.currentStepSucceeded("Task was cancelled before starting.")
+        return this.taskRecorder.finishSuccess(Unit)
+      }
+
       return when (val start = this.request) {
         is BorrowRequest.Start -> this.executeStart(start)
       }
@@ -110,12 +120,26 @@ class BorrowTask private constructor(
       this.warn("accessToken expired")
       this.taskRecorder.finishSuccess("accessToken refresh needed")
     } catch (e: BorrowFailedHandled) {
+      if (this.cancelled.get()) {
+        this.taskRecorder.beginNewStep("Download cancelled.")
+        this.taskRecorder.currentStepSucceeded("Download cancelled.")
+        return this.taskRecorder.finishSuccess(Unit)
+      }
+
       this.warn("handled: ", e)
       this.taskRecorder.finishFailure<Unit>()
     } catch (e: Throwable) {
+      if (this.cancelled.get()) {
+        this.taskRecorder.beginNewStep("Download cancelled.")
+        this.taskRecorder.currentStepSucceeded("Download cancelled.")
+        return this.taskRecorder.finishSuccess(Unit)
+      }
+
       this.error("unhandled exception during borrowing: ", e)
       this.taskRecorder.currentStepFailedAppending(this.messageOrName(e), unexpectedException, e)
       this.taskRecorder.finishFailure<Unit>()
+    } finally {
+      this.executingThread = null
     }
   }
 
@@ -132,6 +156,7 @@ class BorrowTask private constructor(
 
   override fun cancel() {
     this.cancelled.set(true)
+    this.executingThread?.interrupt()
   }
 
   private fun messageOrName(e: Throwable) =
@@ -258,6 +283,12 @@ class BorrowTask private constructor(
       )
       throw e
     } catch (e: Exception) {
+      if (context.isCancelled || e is InterruptedException) {
+        step.resolution = TaskStepSucceeded("Download cancelled.")
+        context.bookDownloadCancelled()
+        throw BorrowSubtaskCancelled()
+      }
+
       step.resolution = TaskStepFailed(
         message = "Subtask '$name' raised an unexpected exception",
         exception = e,
