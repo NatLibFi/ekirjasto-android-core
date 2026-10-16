@@ -703,7 +703,6 @@ dependencies {
     implementation(libs.palace.audiobook.manifest.parser.webpub)
     implementation(libs.palace.audiobook.media3)
     implementation(libs.palace.audiobook.parser.api)
-    implementation(libs.palace.audiobook.persistence)
     implementation(libs.palace.audiobook.time.tracking)
     implementation(libs.palace.audiobook.views)
     implementation(libs.palace.drm.core)
