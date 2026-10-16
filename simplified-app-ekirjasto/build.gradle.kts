@@ -290,6 +290,8 @@ android {
                 abiFilters.add("armeabi-v7a")
             }
             this.signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 // Includes the default ProGuard rules files that are packaged with
                 // the Android Gradle plugin. To learn more, go to the section about
