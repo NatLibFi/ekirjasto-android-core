@@ -33,17 +33,14 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/SecondaryButton"
-        android:id="@+id/feedLaneMore"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="0dp"
-        android:layout_weight="0"
-        android:text="@string/catalogMore"
-        android:gravity="center_vertical"
-        android:textSize="14sp"
-        app:strokeWidth="0dp" />
+      <com.google.android.material.button.MaterialButton
+          android:id="@+id/feedLaneMore"
+          style="@style/MoreButtonStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_marginEnd="0dp"
+          android:text="@string/catalogMore"
+          android:textSize="14sp" />
 
   </LinearLayout>
 

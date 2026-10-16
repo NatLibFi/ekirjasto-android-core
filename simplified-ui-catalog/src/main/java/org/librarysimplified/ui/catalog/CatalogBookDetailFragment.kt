@@ -208,7 +208,7 @@ class CatalogBookDetailFragment : Fragment(R.layout.book_detail) {
     this.authors =
       view.findViewById(R.id.bookDetailAuthors)
     this.seeMore =
-      view.findViewById(R.id.seeMoreText)
+      view.findViewById(R.id.seeMoreButton)
     this.status =
       view.findViewById(R.id.bookDetailStatus)
     this.summary =

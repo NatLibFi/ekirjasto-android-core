@@ -60,7 +60,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
                 android:padding="2dp"
                 android:gravity="right"
@@ -218,14 +218,11 @@
                 android:text="" />
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/seeMoreText"
-            style="@style/SecondaryButton"
+        <Button
+            android:id="@+id/seeMoreButton"
+            style="@style/MoreButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:gravity="center_vertical|right"
-            android:layout_marginEnd="16dp"
             android:text="@string/catalogDetailsMore" />
 
         <View
