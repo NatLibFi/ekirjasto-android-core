@@ -342,6 +342,21 @@ android {
 afterEvaluate {
     tasks.findByName("assemble")
         ?.dependsOn?.add(tasks.findByName("bundle"))
+
+    /*
+     * The Google Services plugin writes the shared gmpAppId.txt file while
+     * processing each flavor. Crashlytics' mapping upload task reads that
+     * file, so declare the dependency explicitly for Gradle task validation.
+     */
+    tasks.matching { it.name.startsWith("uploadCrashlyticsMappingFile") }
+        .configureEach {
+            dependsOn(
+                tasks.matching {
+                    it.name.startsWith("process") &&
+                        it.name.endsWith("GoogleServices")
+                }
+            )
+        }
 }
 
 dependencies {
