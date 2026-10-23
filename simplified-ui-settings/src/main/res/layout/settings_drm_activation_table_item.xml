@@ -10,7 +10,7 @@
     android:layout_height="match_parent"
     android:layout_marginRight="16dp"
     android:textSize="11sp"
-    android:text="A Large placeholder"/>
+    android:text=""/>
 
   <TextView
     android:id="@+id/vendor"
@@ -18,7 +18,7 @@
     android:layout_height="match_parent"
     android:layout_marginRight="16dp"
     android:textSize="11sp"
-    android:text="A Large placeholder"/>
+    android:text=""/>
 
   <TextView
     android:id="@+id/device"
@@ -26,7 +26,7 @@
     android:layout_height="match_parent"
     android:layout_marginRight="16dp"
     android:textSize="11sp"
-    android:text="A Large placeholder"/>
+    android:text=""/>
 
   <TextView
     android:id="@+id/userName"
@@ -34,7 +34,7 @@
     android:layout_height="match_parent"
     android:layout_marginRight="16dp"
     android:textSize="11sp"
-    android:text="A Large placeholder"/>
+    android:text=""/>
 
   <TextView
     android:id="@+id/userId"
@@ -42,7 +42,7 @@
     android:layout_height="match_parent"
     android:layout_marginRight="16dp"
     android:textSize="11sp"
-    android:text="A Large placeholder"/>
+    android:text=""/>
 
   <TextView
     android:id="@+id/expiry"
@@ -50,6 +50,6 @@
     android:layout_height="match_parent"
     android:layout_marginRight="16dp"
     android:textSize="11sp"
-    android:text="A Large placeholder"/>
+    android:text=""/>
 
 </TableRow>

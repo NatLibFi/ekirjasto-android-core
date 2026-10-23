@@ -185,6 +185,9 @@ class AccountListRegistryFragment : Fragment(R.layout.account_list_registry) {
     searchView.imeOptions = EditorInfo.IME_ACTION_DONE
     searchView.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
     searchView.queryHint = getString(R.string.accountSearchHint)
+    searchView.contentDescription = getString(R.string.accountSearchHint)
+    searchView.findViewById<android.widget.EditText>(androidx.appcompat.R.id.search_src_text)
+      ?.contentDescription = getString(R.string.accountSearchHint)
     searchView.maxWidth = toolbar.getAvailableWidthForSearchView()
 
     searchView.setOnQueryTextListener(object : OnQueryTextListener {

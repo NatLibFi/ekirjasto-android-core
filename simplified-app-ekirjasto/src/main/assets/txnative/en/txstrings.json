@@ -174,6 +174,12 @@
       "accountSearchHint" : {
          "string" : "Search accounts…"
       },
+      "accountSuomiFiLoadingDescription" : {
+         "string" : "Loading Suomi.fi sign-in page"
+      },
+      "accountSuomiFiWebViewDescription" : {
+         "string" : "Suomi.fi sign-in page"
+      },
       "accountSyncBookmarks" : {
          "string" : "Sync bookmarks"
       },
@@ -309,11 +315,17 @@
       "audiobook_accessibility_backward_15" : {
          "string" : "Rewind 15 seconds"
       },
+      "audiobook_accessibility_backward_30" : {
+         "string" : "Rewind 30 seconds"
+      },
       "audiobook_accessibility_book_cover" : {
          "string" : "Book cover"
       },
       "audiobook_accessibility_forward_15" : {
          "string" : "Fast forward 15 seconds"
+      },
+      "audiobook_accessibility_forward_30" : {
+         "string" : "Fast forward 30 seconds"
       },
       "audiobook_accessibility_hour" : {
          "string" : "Hour"
@@ -798,6 +810,9 @@
       "catalogAccessibilityBookSelect" : {
          "string" : "Add %1$s to favorites"
       },
+      "catalogAccessibilityBookSelectGeneric" : {
+         "string" : "Add book to favorites"
+      },
       "catalogAccessibilityBookSync" : {
          "string" : "Sync"
       },
@@ -1227,6 +1242,12 @@
       "feedFacetSelected" : {
          "string" : "Favorites"
       },
+      "feedLibraryLogoDescription" : {
+         "string" : "E-Kirjasto logo"
+      },
+      "feedLoadingDescription" : {
+         "string" : "Loading catalog"
+      },
       "feedLoadingError" : {
          "string" : "An error occurred while loading the catalog."
       },
@@ -1413,8 +1434,14 @@
       "logoutUpdatingOpdsEntry" : {
          "string" : "Updating OPDS entry for book %1$s…"
       },
+      "magazinesBrowserDescription" : {
+         "string" : "Magazine browser"
+      },
       "magazinesHeader" : {
          "string" : "Magazines"
+      },
+      "magazinesLoadingDescription" : {
+         "string" : "Loading magazines"
       },
       "magazinesSessionExpiredButton" : {
          "string" : "Confirm"
@@ -1487,6 +1514,9 @@
       },
       "passkeyRegisterSuccessful" : {
          "string" : "Passkey registered successfully"
+      },
+      "pdfLoadingDescription" : {
+         "string" : "Loading document"
       },
       "profileAccountCreatingAnAccountProviderDescription" : {
          "string" : "Creating an account provider description…"
@@ -1565,6 +1595,9 @@
       },
       "readerAddBookmark" : {
          "string" : "Add a bookmark"
+      },
+      "readerLoadingDescription" : {
+         "string" : "Loading book"
       },
       "readerSearch" : {
          "string" : "Search"
@@ -2048,6 +2081,9 @@
       },
       "skip_login" : {
          "string" : "Continue without signing in"
+      },
+      "splashMigrationProgressDescription" : {
+         "string" : "Migration in progress"
       },
       "tabBooks" : {
          "string" : "My Books"

@@ -1,6 +1,7 @@
 package org.librarysimplified.ui.catalog
 
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +27,7 @@ class CatalogFeedWithGroupsLaneViewHolder(
   private val title =
     this.parent.findViewById<TextView>(R.id.feedLaneTitle)
   private val more =
-    this.parent.findViewById<TextView>(R.id.feedLaneMore)
+    this.parent.findViewById<Button>(R.id.feedLaneMore)
   private val scrollView =
     this.parent.findViewById<RecyclerView>(R.id.feedLaneCoversScroll)
 

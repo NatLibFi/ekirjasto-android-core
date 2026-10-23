@@ -6,24 +6,21 @@
   android:id="@+id/feedLogoContainer"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:clickable="true"
+  android:contentDescription="@string/feedLibraryLogoDescription"
+  android:focusable="true"
   android:orientation="horizontal"
   android:gravity="center">
 
-  <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center">
-
-    <ImageView
+  <ImageView
         android:id="@+id/feedLibraryLogo"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginHorizontal="80dp"
-        android:contentDescription="E-Kirjasto logo"
+        android:importantForAccessibility="no"
         app:srcCompat="@drawable/account_default" />
 
-    <TextView
+  <TextView
       android:id="@+id/feedLibraryText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -36,5 +33,4 @@
       android:textSize="18sp"
       android:textStyle="bold"
       tools:text="Placeholder" />
-  </LinearLayout>
 </LinearLayout>

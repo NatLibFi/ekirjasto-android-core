@@ -4,6 +4,7 @@
   <string name="android_app_name">E-library</string>
   <string name="bookOpenFailedTitle">Book loading failed</string>
   <string name="bookOpenFailedMessage">There was an error opening the book: (%1$s): %2$s.</string>
+  <string name="readerLoadingDescription">Loading book</string>
 
   <string name="reader_bookmark_added">Bookmark added</string>
   <string name="reader_bookmark_adding">Adding bookmark…</string>

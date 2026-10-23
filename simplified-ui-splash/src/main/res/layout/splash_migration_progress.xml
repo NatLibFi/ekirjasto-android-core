@@ -11,6 +11,7 @@
     android:layout_marginBottom="16dp"
     android:layout_centerInParent="true"
     android:layout_above="@+id/splashMigrationProgress"
+    android:contentDescription="@null"
     app:srcCompat="@drawable/migration_icon" />
 
   <ProgressBar
@@ -19,6 +20,7 @@
     android:layout_width="128dp"
     android:layout_height="32dp"
     android:indeterminate="true"
+    android:contentDescription="@string/splashMigrationProgressDescription"
     android:layout_centerInParent="true" />
 
   <TextView
