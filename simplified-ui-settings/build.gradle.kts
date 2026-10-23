@@ -1,5 +1,3 @@
-apply(plugin = "androidx.navigation.safeargs.kotlin")
-
 android {
     buildFeatures {
         dataBinding = true
