@@ -22,7 +22,6 @@ import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -34,7 +33,6 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.button.MaterialButton
 import org.librarysimplified.services.api.Services
-import org.librarysimplified.services.api.ServiceDirectoryType
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership.CollectedFromAccounts
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership.OwnedByAccount
 import org.librarysimplified.ui.catalog.CatalogFeedState.CatalogFeedAgeGate
@@ -97,8 +95,8 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     this.requireArguments()[PARAMETERS_ID] as CatalogFeedArguments
   }
 
-  private lateinit var services: ServiceDirectoryType
-  private var servicesReady = false
+  private val services =
+    Services.serviceDirectory()
 
   private val listener: FragmentListenerType<CatalogFeedEvent> by fragmentListeners()
 
@@ -114,7 +112,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     factoryProducer = {
       CatalogFeedViewModelFactory(
         resources = this.requireActivity().resources,
-        services = services,
+        services = Services.serviceDirectory(),
         borrowViewModel = borrowViewModel,
         feedArguments = this.parameters,
         listener = this.listener
@@ -122,11 +120,16 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     }
   )
 
-  private lateinit var bookCovers: BookCoverProviderType
-  private lateinit var screenInformation: ScreenSizeInformationType
-  private lateinit var configurationService: BuildConfigurationServiceType
-  private lateinit var profilesController: ProfilesControllerType
-  private lateinit var imageLoader: ImageLoaderType
+  private val bookCovers =
+    services.requireService(BookCoverProviderType::class.java)
+  private val screenInformation =
+    services.requireService(ScreenSizeInformationType::class.java)
+  private val configurationService =
+    services.requireService(BuildConfigurationServiceType::class.java)
+  private val profilesController =
+    services.requireService(ProfilesControllerType::class.java)
+  private val imageLoader =
+    services.requireService(ImageLoaderType::class.java)
 
   private lateinit var buttonCreator: CatalogButtons
   private lateinit var feedContent: ViewGroup
@@ -167,46 +170,21 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    initializeViews(view)
-
-    Services.serviceDirectoryFuture().addListener(
-      {
-        try {
-          initializeServices(Services.serviceDirectory())
-          servicesReady = true
-          initializeCatalog()
-        } catch (exception: Exception) {
-          logger.error("Unable to initialize catalog services", exception)
-          showInitializationError()
-        }
-      },
-      ContextCompat.getMainExecutor(requireContext())
-    )
-  }
-
-  private fun initializeServices(directory: ServiceDirectoryType) {
-    services = directory
-    bookCovers = directory.requireService(BookCoverProviderType::class.java)
-    screenInformation = directory.requireService(ScreenSizeInformationType::class.java)
-    configurationService = directory.requireService(BuildConfigurationServiceType::class.java)
-    profilesController = directory.requireService(ProfilesControllerType::class.java)
-    imageLoader = directory.requireService(ImageLoaderType::class.java)
-  }
-
-  private fun initializeViews(view: View) {
-
     // Initialize the notificationViewModel
     refreshViewModel = ViewModelProvider(requireActivity()).get(CatalogRefreshViewModel::class.java)
 
     // Observe the LiveData
     refreshViewModel.refreshMessage.observe(viewLifecycleOwner) { message ->
-      if (servicesReady) {
-        syncBooks(message)
-      }
+      syncBooks(message)
     }
 
     this.toolbar =
       view.rootView.findViewWithTag(PalaceToolbar.palaceToolbarName)
+
+    this.viewModel.stateLive.observe(this.viewLifecycleOwner, this::reconfigureUI)
+
+    this.buttonCreator =
+      CatalogButtons(this.requireContext(), this.screenInformation)
 
     this.feedError =
       view.findViewById(R.id.feedError)
@@ -252,6 +230,18 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     this.feedWithGroupsList.setItemViewCacheSize(32)
     this.feedWithGroupsList.layoutManager = LinearLayoutManager(this.context)
     (this.feedWithGroupsList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+    this.feedWithGroupsList.addItemDecoration(
+      CatalogFeedWithGroupsDecorator(this.screenInformation.dpToPixels(16).toInt())
+    )
+
+    this.feedWithGroupsAdapter =
+      CatalogFeedWithGroupsAdapter(
+        groups = this.feedWithGroupsData,
+        coverLoader = this.bookCovers,
+        onFeedSelected = this.viewModel::openFeed,
+        onBookSelected = this.viewModel::openBookDetail
+      )
+    this.feedWithGroupsList.adapter = this.feedWithGroupsAdapter
     this.feedWithoutGroupsList = this.feedContent.findViewById(R.id.feedWithoutGroupsList)
     this.feedWithoutGroupsList.setHasFixedSize(true)
     this.feedWithoutGroupsList.setItemViewCacheSize(32)
@@ -277,37 +267,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       this.openLogoLink()
     }
 
-  }
-
-  private fun initializeCatalog() {
-    buttonCreator = CatalogButtons(requireContext(), screenInformation)
-
-    viewModel.stateLive.observe(viewLifecycleOwner, this::reconfigureUI)
-
-    feedWithGroupsList.addItemDecoration(
-      CatalogFeedWithGroupsDecorator(screenInformation.dpToPixels(16).toInt())
-    )
-
-    feedWithGroupsAdapter = CatalogFeedWithGroupsAdapter(
-      groups = feedWithGroupsData,
-      coverLoader = bookCovers,
-      onFeedSelected = viewModel::openFeed,
-      onBookSelected = viewModel::openBookDetail
-    )
-    feedWithGroupsList.adapter = feedWithGroupsAdapter
-
-    reconfigureCatalogUI()
-  }
-
-  private fun showInitializationError() {
-    if (!::feedError.isInitialized) {
-      return
-    }
-
-    feedContent.visibility = View.INVISIBLE
-    feedLoading.visibility = View.INVISIBLE
-    feedNavigation.visibility = View.INVISIBLE
-    feedError.visibility = View.VISIBLE
+    this.reconfigureCatalogUI()
   }
 
   /*
@@ -318,7 +278,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
   private fun reconfigureCatalogUI() {
     //Get the current account's login state from viewModel
     val loginState = this.viewModel.account.loginState
-    //Ask to log in when not logged in or in between, and info about loans and reservations when logged in
+    //Ask to login when not logged in or in between, and info about loans and reservations when logged in
     when (loginState){
       is AccountLoginState.AccountNotLoggedIn -> this.showLoginText()
       is AccountLoginState.AccountLoggedIn -> this.showInfoWhenLoggedIn()
@@ -409,10 +369,6 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
   override fun onStart() {
     super.onStart()
-
-    if (!servicesReady) {
-      return
-    }
 
     this.feedWithoutGroupsScrollListener = CatalogScrollListener(this.bookCovers)
     this.feedWithoutGroupsList.addOnScrollListener(this.feedWithoutGroupsScrollListener)
@@ -522,9 +478,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
      * of views from the book registry.
      */
 
-    if (::feedWithoutGroupsScrollListener.isInitialized) {
-      this.feedWithoutGroupsList.removeOnScrollListener(this.feedWithoutGroupsScrollListener)
-    }
+    this.feedWithoutGroupsList.removeOnScrollListener(this.feedWithoutGroupsScrollListener)
   }
 
   override fun onDestroyView() {
