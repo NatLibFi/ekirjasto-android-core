@@ -14,7 +14,8 @@ import java.util.concurrent.TimeUnit
 object MainHTTP {
 
   fun create(
-    context: Context
+    context: Context,
+    timeout: Pair<Long, TimeUnit> = Pair(15L, TimeUnit.MINUTES)
   ): LSHTTPClientType {
     val (name, version) =
       try {
@@ -29,10 +30,7 @@ object MainHTTP {
       LSHTTPClientConfiguration(
         applicationName = name,
         applicationVersion = version,
-        // TODO: The 15 minute timeout is for download of large LCP audiobooks (in BorrowLCP).
-        // Otherwise, the default of 1 minute would be sufficient. In the future we might want to
-        // allow per-request timeouts.
-        timeout = Pair(15L, TimeUnit.MINUTES),
+        timeout = timeout,
         // palace.http 2.x requires an explicit network-access policy; the default permits all
         // access, preserving the previous (ungated) behaviour.
         networkAccess = LSHTTPNetworkAccess
