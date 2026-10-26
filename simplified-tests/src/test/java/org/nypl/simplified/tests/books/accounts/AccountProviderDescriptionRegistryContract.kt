@@ -81,7 +81,7 @@ abstract class AccountProviderDescriptionRegistryContract {
     registry.refresh(true)
 
     Assertions.assertEquals(Idle, registry.status)
-    Assertions.assertEquals(3, this.events.size)
+    Assertions.assertEquals(4, this.events.size)
 
     run {
       this.events.removeAt(0) as StatusChanged
@@ -90,6 +90,11 @@ abstract class AccountProviderDescriptionRegistryContract {
     run {
       val event = this.events.removeAt(0) as SourceFailed
       Assertions.assertEquals(CrashingSource::class.java, event.clazz)
+    }
+
+    run {
+      val event = this.events.removeAt(0) as Updated
+      Assertions.assertEquals(URI.create("urn:fake:0"), event.id)
     }
 
     run {
