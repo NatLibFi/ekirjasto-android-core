@@ -104,7 +104,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
   private val borrowViewModel: CatalogBorrowViewModel by viewModels(
     factoryProducer = {
-      CatalogBorrowViewModelFactory(services)
+      CatalogBorrowViewModelFactory(services, requireContext().applicationContext)
     }
   )
 
@@ -385,6 +385,9 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     searchView.imeOptions = EditorInfo.IME_ACTION_DONE
     searchView.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
     searchView.queryHint = getString(R.string.catalogSearch)
+    searchView.contentDescription = getString(R.string.catalogSearch)
+    searchView.findViewById<android.widget.EditText>(androidx.appcompat.R.id.search_src_text)
+      ?.contentDescription = getString(R.string.catalogSearch)
     searchView.maxWidth = toolbar.getAvailableWidthForSearchView()
 
     val currentQuery = when (parameters) {
@@ -893,12 +896,18 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     onApplied: (Int) -> Unit
   ) {
     var checkedIndex = initialIndex
-    val choiceTitles = choices.map { it.title }.toTypedArray()
+    val adapter = CatalogFacetAdapter(
+      this.requireContext(),
+      title,
+      choices,
+      checkedIndex
+    )
 
     MaterialAlertDialogBuilder(this.requireContext())
       .setTitle(title)
-      .setSingleChoiceItems(choiceTitles, checkedIndex) { _, which ->
+      .setSingleChoiceItems(adapter, checkedIndex) { _, which ->
         checkedIndex = which
+        adapter.setSelectedIndex(which)
       }
       .setPositiveButton(R.string.catalogApplyFilter) { dialog, _ ->
         val selected = choices[checkedIndex]
@@ -932,6 +941,10 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         this.logger.debug("selected entry point facet: {}", facet.title)
         this.viewModel.openFacet(facet)
         updateSelectedFacet(facetTabs = facetTabs, index = index)
+        button.post {
+          button.requestFocus()
+          button.announceForAccessibility(button.text)
+        }
       }
     }
 
@@ -971,10 +984,16 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     alertBuilder.setTitle(groupName)
 
     //Get adaptor to add the contentDescriptions to the choices
-    val adapter = CatalogFacetAdapter(this.requireContext(), groupName, choices)
+    val adapter = CatalogFacetAdapter(
+      this.requireContext(),
+      groupName,
+      choices,
+      checkedItem
+    )
     alertBuilder.setSingleChoiceItems(adapter, checkedItem) { dialog, checked ->
       val selected = choices[checked]
       this.logger.debug("selected facet: {}", selected)
+      adapter.setSelectedIndex(checked)
       this.viewModel.openFacet(selected)
       dialog.dismiss()
     }

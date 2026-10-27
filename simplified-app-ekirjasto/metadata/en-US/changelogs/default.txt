@@ -1,8 +1,5 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
-1.5.2
-- Added a button to delete downloaded files of a book
-- Audiobook player update
-- Ebook reader update
-- Important background updates
+1.5.6
+- HOTFIX: Fixed a bug where audiobook would jump back when returning the app from background
 - Bug fixes

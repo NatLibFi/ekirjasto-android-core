@@ -15,7 +15,7 @@ object MainHTTP {
 
   fun create(
     context: Context,
-    timeout: Pair<Long, TimeUnit> = Pair(15L, TimeUnit.MINUTES)
+    timeout: Pair<Long, TimeUnit> = Pair(30L, TimeUnit.MINUTES)
   ): LSHTTPClientType {
     val (name, version) =
       try {
@@ -30,6 +30,8 @@ object MainHTTP {
       LSHTTPClientConfiguration(
         applicationName = name,
         applicationVersion = version,
+        // The global timeout accommodates long-running LCP audiobook downloads. Per-request
+        // timeout support should be used when palace.http provides it.
         timeout = timeout,
         // palace.http 2.x requires an explicit network-access policy; the default permits all
         // access, preserving the previous (ungated) behaviour.

@@ -6,6 +6,7 @@
   <string name="catalogAccessibilityBookDownload">Download</string>
   <string name="catalogAccessibilityBookDeleteDownload">Delete download</string>
   <string name="catalogAccessibilityBookSelect">Add %1$s to favorites</string>
+  <string name="catalogAccessibilityBookSelectGeneric">Add book to favorites</string>
   <string name="catalogAccessibilityBookUnselect">Remove %1$s from favorites</string>
   <string name="catalogAccessibilityBookDownloadCancel">Cancel download</string>
   <string name="catalogAccessibilityBookErrorDetails">Details</string>
@@ -63,6 +64,7 @@
   <string name="catalogBookPreviewAudioBook">Play Sample</string>
   <string name="catalogBookPreviewBook">Read Sample</string>
   <string name="catalogCancel">Cancel</string>
+  <string name="catalogCancelled">Cancelled</string>
   <string name="catalogDone">Done</string>
   <string name="catalogCancelHold">Remove</string>
   <string name="catalogCancelling">Cancelling…</string>
