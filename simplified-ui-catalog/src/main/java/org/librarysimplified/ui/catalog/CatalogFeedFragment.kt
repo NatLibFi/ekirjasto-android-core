@@ -104,7 +104,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
   private val borrowViewModel: CatalogBorrowViewModel by viewModels(
     factoryProducer = {
-      CatalogBorrowViewModelFactory(services)
+      CatalogBorrowViewModelFactory(services, requireContext().applicationContext)
     }
   )
 
