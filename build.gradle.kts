@@ -744,6 +744,7 @@ allprojects {
      */
 
     val transitiveConfigurations = setOf(
+        "androidLintTool",
         "androidTestDebugImplementation",
         "androidTestDebugImplementationDependenciesMetadata",
         "androidTestImplementation",
