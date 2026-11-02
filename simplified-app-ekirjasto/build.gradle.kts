@@ -295,6 +295,8 @@ android {
                 abiFilters.add("armeabi-v7a")
             }
             this.signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 // Includes the default ProGuard rules files that are packaged with
                 // the Android Gradle plugin. To learn more, go to the section about
@@ -345,6 +347,21 @@ android {
 afterEvaluate {
     tasks.findByName("bundle")?.let { bundleTask ->
         tasks.findByName("assemble")?.dependsOn(bundleTask)
+    }
+
+    /*
+     * The Google Services plugin writes the shared gmpAppId.txt file while
+     * processing each flavor. Crashlytics' mapping upload task reads that
+     * file, so declare the dependency explicitly for Gradle task validation.
+     */
+    tasks.matching { it.name.startsWith("uploadCrashlyticsMappingFile") }
+        .configureEach {
+            dependsOn(
+                tasks.matching {
+                    it.name.startsWith("process") &&
+                        it.name.endsWith("GoogleServices")
+                }
+            )
     }
 }
 
@@ -707,7 +724,6 @@ dependencies {
     implementation(libs.palace.audiobook.manifest.parser.webpub)
     implementation(libs.palace.audiobook.media3)
     implementation(libs.palace.audiobook.parser.api)
-    implementation(libs.palace.audiobook.persistence)
     implementation(libs.palace.audiobook.time.tracking)
     implementation(libs.palace.audiobook.views)
     implementation(libs.palace.drm.core)

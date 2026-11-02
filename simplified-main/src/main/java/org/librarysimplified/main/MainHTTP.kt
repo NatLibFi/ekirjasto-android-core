@@ -29,10 +29,9 @@ object MainHTTP {
       LSHTTPClientConfiguration(
         applicationName = name,
         applicationVersion = version,
-        // TODO: The 15 minute timeout is for download of large LCP audiobooks (in BorrowLCP).
-        // Otherwise, the default of 1 minute would be sufficient. In the future we might want to
-        // allow per-request timeouts.
-        timeout = Pair(15L, TimeUnit.MINUTES),
+        // The global timeout accommodates long-running LCP audiobook downloads. Per-request
+        // timeout support should be used when palace.http provides it.
+        timeout = Pair(30L, TimeUnit.MINUTES),
         // palace.http 2.x requires an explicit network-access policy; the default permits all
         // access, preserving the previous (ungated) behaviour.
         networkAccess = LSHTTPNetworkAccess

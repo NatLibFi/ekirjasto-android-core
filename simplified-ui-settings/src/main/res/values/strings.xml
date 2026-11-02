@@ -35,9 +35,9 @@
   <string name="settingsDevEnableHiddenLibraries">Enable Hidden Libraries</string>
   <string name="settingsDevEnableManualLCPPassphrase">Enable Manual LCP Passphrase</string>
   <string name="settingsDevEnableTimeTracking">Enable Time Tracking</string>
+  <string name="settingsDevPlaceholder">Not available</string>
   <string name="settingsDevFailNextStartup">Cause the next application startup to fail</string>
   <string name="settingsDevForgetAllAnnouncements">Forget All Announcements</string>
-  <string name="settingsDevPlaceholder">Placeholder</string>
   <string name="settingsDevSendAnalytics">Send Analytics</string>
   <string name="settingsDevSendErrorLogs">Send Error Logs</string>
   <string name="settingsDevShowErrorPage">Show Error Page</string>

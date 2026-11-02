@@ -1,5 +1,5 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.4.2
-- Nostettiin SDKtarget versiota versioon 36
+1.5.6
+- HOTFIX: Korjattiin virhe, jossa äänikirja hyppäsi taaksepäin, kun sovellus palautettiin taustalta
 - Bugi korjauksia

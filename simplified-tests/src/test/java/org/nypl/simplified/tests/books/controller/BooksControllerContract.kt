@@ -1051,6 +1051,74 @@ abstract class BooksControllerContract {
   }
 
   /**
+   * Cancelling five concurrent downloads through the notification action leaves no downloaded
+   * book files behind.
+   */
+  @Test
+  @Timeout(value = 3L, unit = TimeUnit.SECONDS)
+  @Throws(Exception::class)
+  fun testBooksCancelFiveConcurrentDownloads() {
+    val controller =
+      createController(
+        exec = this.executorBooks,
+        feedExecutor = this.executorFeeds,
+        accountEvents = this.accountEvents,
+        profileEvents = this.profileEvents,
+        http = this.lsHTTP,
+        books = this.bookRegistry,
+        profiles = this.profiles,
+        accountProviders = MockAccountProviders.fakeAccountProviders(),
+        patronUserProfileParsers = this.patronUserProfileParsers
+      )
+
+    val provider =
+      MockAccountProviders.fakeAuthProvider(
+        uri = "urn:fake-auth:0",
+        host = this.server.hostName,
+        port = this.server.port
+      )
+    val profile = this.profiles.createProfile(provider, "Kermit")
+    this.profiles.setProfileCurrent(profile.id)
+    val account = profile.accounts().values.first()
+    account.setLoginState(AccountLoggedIn(correctCredentials()))
+
+    val bookIDs = (0 until 5).map { index ->
+      BookID.create("cancelledbook$index")
+    }
+    val borrowFutures = bookIDs.mapIndexed { index, bookID ->
+      val acquisition =
+        OPDSAcquisition(
+          OPDSAcquisition.Relation.ACQUISITION_OPEN_ACCESS,
+          this.server.url("/book$index.epub").toUri(),
+          StandardFormatNames.genericEPUBFiles,
+          listOf(),
+          mapOf()
+        )
+      val entry =
+        OPDSAcquisitionFeedEntry.newBuilder(
+          "cancelled-book-$index",
+          "Cancelled book $index",
+          DateTime.now(),
+          OPDSAvailabilityOpenAccess[Option.none()]
+        ).addAcquisition(acquisition).build()
+
+      val future = controller.bookBorrow(account.id, bookID, entry)
+      // This is the same controller call made by the notification PendingIntent.
+      controller.bookCancelDownload(account.id, bookID)
+      future
+    }
+
+    borrowFutures.forEach { it.get() }
+    bookIDs.forEach { bookID ->
+      val book = this.bookRegistry.bookOrNull(bookID)
+      Assertions.assertTrue(
+        book == null || !book.book.isDownloaded,
+        "Cancelled book must not have downloaded files: $bookID"
+      )
+    }
+  }
+
+  /**
    * Dismissing a failed revocation that didn't actually fail does nothing.
    *
    * @throws Exception On errors

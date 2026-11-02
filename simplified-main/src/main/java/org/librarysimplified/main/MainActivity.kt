@@ -82,7 +82,9 @@ class MainActivity : AppCompatActivity(R.layout.main_host) {
     //Create a new configuration based on the font size that has been set
     this.fontSizeManager = FontSizeUtil(newBase!!)
     val newConfig = Configuration(newBase.resources.configuration)
-    newConfig.fontScale = fontSizeManager.getFontSize()
+    if (fontSizeManager.hasCustomFontSize()) {
+      newConfig.fontScale = fontSizeManager.getFontSize()
+    }
 
     //Create a new context based on newBase,but with the changed configuration
     //This method doesn't break Transifex

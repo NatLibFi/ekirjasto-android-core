@@ -15,7 +15,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/accountSAML20LoginLabel"
-        android:text="Placeholder" />
+        android:text="@string/accountSAML20LoginLabel" />
 
     <TextView
         android:id="@+id/resetPasswordLabel"

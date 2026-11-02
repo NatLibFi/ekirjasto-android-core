@@ -20,6 +20,13 @@ class FontSizeUtil (private val sharedPreferences: SharedPreferences) {
   }
 
   /**
+   * Returns true if the user has explicitly selected an app-specific font size.
+   */
+  fun hasCustomFontSize(): Boolean {
+    return sharedPreferences.contains(KEY_TEXT_SIZE)
+  }
+
+  /**
    * Set the given font size to SharedPreferences
    */
   fun setFontSize(size: Float) {

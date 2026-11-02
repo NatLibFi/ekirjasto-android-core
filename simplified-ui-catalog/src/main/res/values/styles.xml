@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MoreTextStyle">
+    <style name="MoreButtonStyle" parent="Palace.Button.Outlined.Medium">
         <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:gravity">end|center_vertical</item>
+        <item name="icon">@drawable/catalog_more_arrow</item>
+        <item name="iconGravity">textEnd</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconTint">@color/PalaceTextColor</item>
+        <item name="strokeWidth">0dp</item>
         <item name="android:padding">8dp</item>
         <item name="android:textSize">12sp</item>
     </style>

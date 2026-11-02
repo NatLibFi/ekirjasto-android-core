@@ -713,6 +713,68 @@ class BorrowLCPTest {
   }
 
   @Test
+  fun download_cancellation_is_not_reported_as_missing_loans_entry() {
+    val feedEntry = BorrowTestFeeds.opdsLCPFeedEntryOfType(
+      webServer = this.webServer,
+      mime = "application/epub+zip",
+      id = "urn:isbn:123456789",
+      hashedPassphrase = ""
+    )
+
+    val acquisitionPath = OPDSAcquisitionPath(
+      source = Mockito.mock(OPDSAcquisition::class.java),
+      elements = listOf(
+        OPDSAcquisitionPathElement(
+          mimeType = lcpLicenseFiles,
+          target = webServer.url("/license").toUri(),
+          properties = mapOf()
+        ),
+        OPDSAcquisitionPathElement(
+          mimeType = genericEPUBFiles,
+          target = null,
+          properties = mapOf()
+        )
+      )
+    )
+
+    this.webServer.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setHeader("Content-Type", "application/atom+xml;profile=opds-catalog;kind=acquisition")
+        .setBody(
+          """
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:schema="http://schema.org/" xmlns:lcp="http://readium.org/lcp-specs/ns">
+            <id>https://example.com/library/loans/</id>
+            <title>Loans</title>
+            <updated>2022-03-10T00:53:24+00:00</updated>
+            <entry schema:additionalType="http://schema.org/EBook">
+              <title>Another book</title>
+              <id>urn:isbn:987654321</id>
+              <updated>2022-03-07T22:07:34+00:00</updated>
+              <link type="application/vnd.readium.lcp.license.v1.0+json" rel="http://opds-spec.org/acquisition" />
+            </entry>
+          </feed>
+          """
+        )
+    )
+    this.webServer.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setHeader("Content-Type", "application/vnd.readium.lcp.license.v1.0+json")
+        .setBody("{}")
+    )
+
+    val context = createContext(feedEntry, acquisitionPath) as MockBorrowContext
+    context.isCancelled = true
+
+    Assertions.assertThrows(BorrowSubtaskException.BorrowSubtaskCancelled::class.java) {
+      BorrowLCP.createSubtask().execute(context)
+    }
+
+    Assertions.assertEquals(1, this.webServer.requestCount)
+  }
+
+  @Test
   fun download_fails_whenHashedPassphraseIsNotFoundInLoansFeed() {
     val feedEntry = BorrowTestFeeds.opdsLCPFeedEntryOfType(
       webServer = this.webServer,

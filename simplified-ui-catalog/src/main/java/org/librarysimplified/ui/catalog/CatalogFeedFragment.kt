@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.button.MaterialButton
 import org.librarysimplified.services.api.Services
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership.CollectedFromAccounts
 import org.librarysimplified.ui.catalog.CatalogFeedOwnership.OwnedByAccount
@@ -61,6 +62,7 @@ import org.nypl.simplified.ui.screen.ScreenSizeInformationType
 import org.slf4j.LoggerFactory
 import org.thepalaceproject.theme.core.PalaceTabButtons
 import org.thepalaceproject.theme.core.PalaceToolbar
+import kotlin.math.roundToInt
 
 /**
  * A fragment displaying an OPDS feed.
@@ -102,7 +104,7 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
 
   private val borrowViewModel: CatalogBorrowViewModel by viewModels(
     factoryProducer = {
-      CatalogBorrowViewModelFactory(services)
+      CatalogBorrowViewModelFactory(services, requireContext().applicationContext)
     }
   )
 
@@ -383,6 +385,9 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     searchView.imeOptions = EditorInfo.IME_ACTION_DONE
     searchView.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
     searchView.queryHint = getString(R.string.catalogSearch)
+    searchView.contentDescription = getString(R.string.catalogSearch)
+    searchView.findViewById<android.widget.EditText>(androidx.appcompat.R.id.search_src_text)
+      ?.contentDescription = getString(R.string.catalogSearch)
     searchView.maxWidth = toolbar.getAvailableWidthForSearchView()
 
     val currentQuery = when (parameters) {
@@ -820,14 +825,25 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         orientation = LinearLayout.VERTICAL
         layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
       }
+      val spacing = (4f * context.resources.displayMetrics.density).toInt()
       val labelView = AppCompatTextView(context).apply {
         text = label
-        gravity = Gravity.START
+        gravity = Gravity.CENTER_HORIZONTAL
+        layoutParams = LinearLayout.LayoutParams(
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+          topMargin = -spacing
+          bottomMargin = spacing
+        }
       }
-      val selector = Button(context).apply {
+      val selector = MaterialButton(context).apply {
         id = View.generateViewId()
         text = choices[initialIndex].title
         contentDescription = "$label: ${choices[initialIndex].title}"
+        setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.catalog_facet_button_icon,0)
+        compoundDrawablePadding = resources.getDimension(R.dimen.catalogFacetButtonIconPadding).roundToInt();
+        gravity = Gravity.CENTER
       }
       labelView.labelFor = selector.id
       selector.setOnClickListener {
@@ -846,8 +862,29 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
       feedContentFacets.addView(container)
     }
 
-    addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
-    addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+    val spaceMiddle = Space(context)
+    val spacerLayoutParams =
+      LinearLayout.LayoutParams(
+        this.screenInformation.dpToPixels(16).toInt(),
+        LinearLayout.LayoutParams.MATCH_PARENT
+      )
+    spaceMiddle.layoutParams = spacerLayoutParams
+
+    if (this.parameters.isLocallyGenerated && filterGroup.isNullOrEmpty()) {
+      addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+      if (!sortGroup.isNullOrEmpty()) {
+        feedContentFacets.addView(spaceMiddle)
+        feedContentFacets.addView(
+          Space(context).apply {
+            layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
+          }
+        )
+      }
+    } else {
+      addFacetSelector(this.getString(R.string.catalogFilterLabel), filterGroup)
+      feedContentFacets.addView(spaceMiddle)
+      addFacetSelector(this.getString(R.string.catalogSortLabel), sortGroup)
+    }
 
     feedContentFacetsScroll.scrollTo(0, 0)
   }
@@ -859,12 +896,18 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     onApplied: (Int) -> Unit
   ) {
     var checkedIndex = initialIndex
-    val choiceTitles = choices.map { it.title }.toTypedArray()
+    val adapter = CatalogFacetAdapter(
+      this.requireContext(),
+      title,
+      choices,
+      checkedIndex
+    )
 
     MaterialAlertDialogBuilder(this.requireContext())
       .setTitle(title)
-      .setSingleChoiceItems(choiceTitles, checkedIndex) { _, which ->
+      .setSingleChoiceItems(adapter, checkedIndex) { _, which ->
         checkedIndex = which
+        adapter.setSelectedIndex(which)
       }
       .setPositiveButton(R.string.catalogApplyFilter) { dialog, _ ->
         val selected = choices[checkedIndex]
@@ -898,6 +941,10 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
         this.logger.debug("selected entry point facet: {}", facet.title)
         this.viewModel.openFacet(facet)
         updateSelectedFacet(facetTabs = facetTabs, index = index)
+        button.post {
+          button.requestFocus()
+          button.announceForAccessibility(button.text)
+        }
       }
     }
 
@@ -937,10 +984,16 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     alertBuilder.setTitle(groupName)
 
     //Get adaptor to add the contentDescriptions to the choices
-    val adapter = CatalogFacetAdapter(this.requireContext(), groupName, choices)
+    val adapter = CatalogFacetAdapter(
+      this.requireContext(),
+      groupName,
+      choices,
+      checkedItem
+    )
     alertBuilder.setSingleChoiceItems(adapter, checkedItem) { dialog, checked ->
       val selected = choices[checked]
       this.logger.debug("selected facet: {}", selected)
+      adapter.setSelectedIndex(checked)
       this.viewModel.openFacet(selected)
       dialog.dismiss()
     }

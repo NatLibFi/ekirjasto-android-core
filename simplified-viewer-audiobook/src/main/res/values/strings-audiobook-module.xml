@@ -91,6 +91,8 @@
 
   <string name="audiobook_accessibility_forward_15">Fast forward 15 seconds</string>
   <string name="audiobook_accessibility_backward_15">Rewind 15 seconds</string>
+  <string name="audiobook_accessibility_forward_30">Fast forward 30 seconds</string>
+  <string name="audiobook_accessibility_backward_30">Rewind 30 seconds</string>
   <string name="audiobook_accessibility_play">Play</string>
   <string name="audiobook_accessibility_pause">Pause</string>
   <string name="audiobook_accessibility_book_cover">Book cover</string>

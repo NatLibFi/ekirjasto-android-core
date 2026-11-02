@@ -89,6 +89,8 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
         // manually input it and if the exception isn't caught, the download will immediately fail.
         try {
           this.findPassphrase(context)
+        } catch (e: BorrowSubtaskCancelled) {
+          throw e
         } catch (e: Exception) {
           ""
         }
@@ -230,6 +232,7 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
     }
 
     if (entryFound == null) {
+      context.checkCancelled()
       context.taskRecorder.currentStepFailed(
         message = "Unable to locate the current book in the user's loans feed.",
         errorCode = "lcpMissingEntryInLoansFeed",
@@ -336,6 +339,7 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
         is DownloadFailedExceptionally ->
           throw BorrowHTTP.onDownloadFailedExceptionally(context, result)
         is DownloadCompletedSuccessfully -> {
+          context.checkCancelled()
           this.installLicense(context, fulfillmentMimeType, temporaryFile, licenseBytes)
           this.saveFulfilledBook(context, temporaryFile, passphrase)
 
@@ -407,6 +411,7 @@ class BorrowLCP private constructor() : BorrowSubtaskType {
     bookFile: File,
     passphrase: String
   ) {
+    context.checkCancelled()
     context.taskRecorder.beginNewStep("Saving fulfilled book...")
 
     val formatHandle = this.findFormatHandle(context)

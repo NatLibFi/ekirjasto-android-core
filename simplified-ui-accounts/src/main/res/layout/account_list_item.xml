@@ -100,7 +100,6 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="16dp"
         android:paddingVertical="2dp"
-        android:text="TODO"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="12sp"

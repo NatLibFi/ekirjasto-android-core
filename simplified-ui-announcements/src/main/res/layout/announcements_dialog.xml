@@ -13,6 +13,8 @@
         android:layout_margin="16dp"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:accessibilityHeading="true"
+        android:accessibilityLiveRegion="polite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

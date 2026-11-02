@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <resources>
+  <string name="feedLibraryLogoDescription">E-Kirjasto logo</string>
+  <string name="feedLoadingDescription">Loading catalog</string>
   <string name="catalogFeedLoading">Loading feed…</string>
   <string name="feedByAuthor">Author</string>
   <string name="feedByTitle">Title</string>

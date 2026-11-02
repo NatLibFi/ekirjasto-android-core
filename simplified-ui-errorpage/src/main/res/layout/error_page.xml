@@ -21,6 +21,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/errorTitle"
+        android:accessibilityHeading="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -40,6 +41,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/errorStepsTitle"
+        android:accessibilityHeading="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold" />
 
@@ -63,4 +65,3 @@
     android:layout_marginBottom="16dp"
     android:text="@string/errorSendReport" />
 </LinearLayout>
-

@@ -63,7 +63,7 @@ class OnboardingFragment :
 
       try {
         isEnabled = false
-        requireActivity().onBackPressed()
+        requireActivity().finish()
       } finally {
         isEnabled = true
       }

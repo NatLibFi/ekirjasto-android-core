@@ -284,6 +284,7 @@ object BorrowHTTP {
     context: BorrowContextType,
     temporaryFile: File
   ) {
+    context.checkCancelled()
     context.taskRecorder.beginNewStep("Saving book...")
 
     val formatHandle =

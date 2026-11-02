@@ -128,6 +128,7 @@ class BorrowCopy private constructor() : BorrowSubtaskType {
 
         val perSecond = BorrowUnitsPerSecond(context.clock)
         while (true) {
+          context.checkCancelled()
           val r = input.read(buffer)
           if (r == -1) {
             break
@@ -154,6 +155,7 @@ class BorrowCopy private constructor() : BorrowSubtaskType {
     context: BorrowContextType,
     file: File
   ) {
+    context.checkCancelled()
     context.taskRecorder.beginNewStep("Saving book...")
 
     return when (val formatHandle = context.bookDatabaseEntry.findFormatHandleForContentType(context.currentAcquisitionPathElement.mimeType)) {

@@ -431,6 +431,18 @@ public final class OPDSJSONSerializer implements OPDSJSONSerializerType {
       }
       je.set("translators", ja);
     }
+    {
+      final ArrayNode ja = jom.createArrayNode();
+      for (final String a : e.getNarrators()) {
+        ja.add(a);
+      }
+      je.set("narrators", ja);
+    }
+
+    e.getDuration().map(c -> {
+      je.put("duration", c);
+      return Unit.unit();
+    });
 
     je.put("distribution", e.getDistribution());
     je.put("summary", e.getSummary());

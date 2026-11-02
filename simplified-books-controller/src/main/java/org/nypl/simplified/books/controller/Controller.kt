@@ -85,6 +85,8 @@ import org.nypl.simplified.profiles.controller.api.ProfileAccountLoginRequest
 import org.nypl.simplified.profiles.controller.api.ProfileFeedRequest
 import org.nypl.simplified.profiles.controller.api.ProfilesControllerType
 import org.nypl.simplified.taskrecorder.api.TaskResult
+import org.nypl.simplified.taskrecorder.api.TaskRecorder
+import org.nypl.simplified.taskrecorder.api.TaskStepResolution.TaskStepSucceeded
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URI
@@ -112,6 +114,8 @@ class Controller private constructor(
     BehaviorSubject.create()
 
   private val borrows: ConcurrentHashMap<BookID, BorrowTaskType>
+  private val cancelledBorrows: MutableSet<BookID> = ConcurrentHashMap.newKeySet()
+  private val borrowsLock = Any()
 
   private val borrowRequirements: BorrowRequirements
   private val accountLoginStringResources =
@@ -668,7 +672,8 @@ class Controller private constructor(
     entry: OPDSAcquisitionFeedEntry,
     samlDownloadContext: SAMLDownloadContext?
   ): FluentFuture<TaskResult<*>> {
-    return this.submitTask(
+    var activeBorrowTask: BorrowTaskType? = null
+    val borrowFuture = this.submitTask(
       Callable<TaskResult<*>> {
         val request =
           BorrowRequest.Start(
@@ -679,7 +684,17 @@ class Controller private constructor(
           )
 
         val borrowTask = BorrowTask.createBorrowTask(this.borrowRequirements, request)
-        borrows[bookID] = borrowTask
+        synchronized(this.borrowsLock) {
+          borrows.remove(bookID)?.cancel()
+          borrows[bookID] = borrowTask
+          activeBorrowTask = borrowTask
+        }
+        if (synchronized(this.borrowsLock) { cancelledBorrows.remove(bookID) }) {
+          val recorder = TaskRecorder.create()
+          recorder.beginNewStep("Download cancelled before starting").resolution =
+            TaskStepSucceeded("Download cancelled before starting")
+          return@Callable recorder.finishSuccess(Unit)
+        }
         borrowTask.execute()
       }
     ).transformAsync(AsyncFunction { taskResult ->
@@ -692,7 +707,7 @@ class Controller private constructor(
           //Try to take the loan again if the accessToken refresh is successful
           if (tokenResult is TaskResult.Success) {
             logger.debug("Attempt to execute borrow again")
-            val borrowTask = borrows[bookID]!!
+            val borrowTask = synchronized(this.borrowsLock) { borrows[bookID]!! }
             submitTask(Callable { borrowTask.execute() })
           } else {
             //If token lookup fails, return the need to show the login popup
@@ -704,6 +719,15 @@ class Controller private constructor(
         Futures.immediateFuture(taskResult)
       }
     }, MoreExecutors.directExecutor())
+
+    borrowFuture.addListener({
+      synchronized(this.borrowsLock) {
+        if (borrows[bookID] === activeBorrowTask) {
+          borrows.remove(bookID)
+        }
+      }
+    }, MoreExecutors.directExecutor())
+    return borrowFuture
   }
 
   /**
@@ -748,7 +772,14 @@ class Controller private constructor(
     accountID: AccountID,
     bookID: BookID
   ){
-    this.borrows[bookID]?.cancel()
+    synchronized(this.borrowsLock) {
+      val borrowTask = this.borrows[bookID]
+      if (borrowTask == null) {
+        cancelledBorrows.add(bookID)
+      } else {
+        borrowTask.cancel()
+      }
+    }
   }
 
   override fun bookDeleteFiles(

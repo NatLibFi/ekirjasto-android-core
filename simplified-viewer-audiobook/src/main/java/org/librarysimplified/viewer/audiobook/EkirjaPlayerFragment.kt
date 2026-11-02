@@ -1,6 +1,5 @@
 package org.librarysimplified.viewer.audiobook
 
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -214,14 +213,6 @@ class EkirjaPlayerFragment : Fragment(R.layout.ekirjasto_audio_player_view) {
       true
     }
 
-    /*
-     * Playback rate changes have no effect below API 23.
-     */
-
-    if (Build.VERSION.SDK_INT < 23) {
-      this.menuPlaybackRate.isVisible = false
-    }
-
     this.menuSleep = this.bottomToolbar.menu.findItem(R.id.player_menu_sleep)
     this.menuSleep.title = this.resources.getString(org.librarysimplified.audiobook.views.R.string.audiobook_player_menu_sleep_title)
     this.menuSleep.setOnMenuItemClickListener {
@@ -342,6 +333,7 @@ class EkirjaPlayerFragment : Fragment(R.layout.ekirjasto_audio_player_view) {
           PlayerModel.movePlayheadToAbsoluteTime(newOffset)
         }
         this.seekBar.onTouchEvent(event)
+        this.seekBar.performClick()
       }
       MotionEvent.ACTION_CANCEL -> {
         this.seekDragging = false

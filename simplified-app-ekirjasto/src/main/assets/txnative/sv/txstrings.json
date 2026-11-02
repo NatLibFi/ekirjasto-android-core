@@ -561,6 +561,15 @@
       "audiobook_player_waiting" : {
          "string" : "Filen %1$d måste laddas ner för att uppspelningen ska fortsätta."
       },
+      "bookConfirmDeleteDownloadConfirmButton" : {
+         "string" : "Radera"
+      },
+      "bookConfirmDeleteDownloadMessage" : {
+         "string" : "Detta tar bort bokfilerna och bokmärkena som hör till denna titel från din enhet. Titeln förblir utlånad."
+      },
+      "bookConfirmDeleteDownloadTitle" : {
+         "string" : "Radera nedladdningen för \"%1$s\" ?"
+      },
       "bookConfirmReturnCancelButton" : {
          "string" : "Annullera"
       },
@@ -747,6 +756,9 @@
       "catalogAccessibilityBookDelete" : {
          "string" : "Radera"
       },
+      "catalogAccessibilityBookDeleteDownload" : {
+         "string" : "Radera nedladdningen"
+      },
       "catalogAccessibilityBookDownload" : {
          "string" : "Ladda ner"
       },
@@ -818,12 +830,6 @@
       },
       "catalogApplyFilter" : {
          "string" : "Använd"
-      },
-      "catalogFilterLabel" : {
-         "string" : "Filtrering"
-      },
-      "catalogSortLabel" : {
-         "string" : "Sortering"
       },
       "catalogBookAvailabilityHeldIndefinite" : {
          "string" : "Du har reserverat denna bok."
@@ -945,6 +951,9 @@
       "catalogCorrupted" : {
          "string" : "Metadata för denna bok är skadade och kan inte visas. Problemet kan åtgärdas genom att ladda flödet på nytt eller synkronisera ditt konto."
       },
+      "catalogDeleteDownload" : {
+         "string" : "Radera nedladdningen"
+      },
       "catalogDescription" : {
          "string" : "Beskrivning"
       },
@@ -974,6 +983,9 @@
       },
       "catalogFeedLoading" : {
          "string" : "Laddar flöde..."
+      },
+      "catalogFilterLabel" : {
+         "string" : "Filtrering"
       },
       "catalogGet" : {
          "string" : "Hämta"
@@ -1070,6 +1082,9 @@
       },
       "catalogSearch" : {
          "string" : "Sök efter bok eller författare"
+      },
+      "catalogSortLabel" : {
+         "string" : "Sortering"
       },
       "close_tutorial" : {
          "string" : "Stäng handledningen"
