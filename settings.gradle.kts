@@ -246,11 +246,6 @@ dependencyResolutionManagement {
             }
         }
 
-        /*
-         * Obsolete dependencies.
-         */
-
-        jcenter()
     }
 }
 
