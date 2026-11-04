@@ -88,12 +88,28 @@ class AccountProviderRegistry private constructor(
               }
             }
             is AccountProviderSourceType.SourceResult.SourceFailed -> {
+              /*
+               * Sources may return stale cached descriptions together with a failure
+               * when their remote registry is unavailable. Keep those descriptions
+               * usable while still reporting the source failure to observers.
+               */
+              for (key in result.results.keys) {
+                this.updateDescription(result.results[key]!!)
+              }
               this.eventsActual.onNext(SourceFailed(source.javaClass, result.exception))
             }
           }
         } catch (e: Exception) {
           this.eventsActual.onNext(SourceFailed(source.javaClass, e))
         }
+      }
+
+      /*
+       * The bundled provider is always available and gives the application a
+       * usable provider when every remote source failed without cached data.
+       */
+      if (this.descriptions.isEmpty()) {
+        this.updateDescription(this.defaultProvider.toDescription())
       }
     } finally {
       this.initialized = true
@@ -119,12 +135,19 @@ class AccountProviderRegistry private constructor(
               }
             }
             is AccountProviderSourceType.SourceResult.SourceFailed -> {
+              for (key in result.results.keys) {
+                this.updateDescription(result.results[key]!!)
+              }
               this.eventsActual.onNext(SourceFailed(source.javaClass, result.exception))
             }
           }
         } catch (e: Exception) {
           this.eventsActual.onNext(SourceFailed(source.javaClass, e))
         }
+      }
+
+      if (this.descriptions.isEmpty()) {
+        this.updateDescription(this.defaultProvider.toDescription())
       }
     } finally {
       this.initialized = true
