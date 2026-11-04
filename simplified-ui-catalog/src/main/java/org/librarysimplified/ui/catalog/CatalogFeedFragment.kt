@@ -899,15 +899,13 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     val adapter = CatalogFacetAdapter(
       this.requireContext(),
       title,
-      choices,
-      checkedIndex
+      choices
     )
 
     MaterialAlertDialogBuilder(this.requireContext())
       .setTitle(title)
       .setSingleChoiceItems(adapter, checkedIndex) { _, which ->
         checkedIndex = which
-        adapter.setSelectedIndex(which)
       }
       .setPositiveButton(R.string.catalogApplyFilter) { dialog, _ ->
         val selected = choices[checkedIndex]
@@ -987,13 +985,11 @@ class CatalogFeedFragment : Fragment(R.layout.feed), AgeGateDialog.BirthYearSele
     val adapter = CatalogFacetAdapter(
       this.requireContext(),
       groupName,
-      choices,
-      checkedItem
+      choices
     )
     alertBuilder.setSingleChoiceItems(adapter, checkedItem) { dialog, checked ->
       val selected = choices[checked]
       this.logger.debug("selected facet: {}", selected)
-      adapter.setSelectedIndex(checked)
       this.viewModel.openFacet(selected)
       dialog.dismiss()
     }
