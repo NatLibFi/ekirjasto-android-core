@@ -36,7 +36,7 @@ plugins {
      *
      * https://github.com/mannodermaus/android-junit5
      */
-    alias(libs.plugins.mannodermaus.android.junit).apply(false)
+    id("de.mannodermaus.android-junit") version "2.0.1" apply false
 
     /*
      * Download plugin. Used to fetch artifacts such as Scando during the build.
