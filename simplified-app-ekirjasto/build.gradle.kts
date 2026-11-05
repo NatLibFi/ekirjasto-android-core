@@ -349,6 +349,21 @@ afterEvaluate {
         tasks.findByName("assemble")?.dependsOn(bundleTask)
     }
 
+    tasks.matching {
+        it.name.startsWith("bundle") && it.name.endsWith("Release")
+    }.configureEach {
+        doLast {
+            val variantName = name.removePrefix("bundle")
+            val flavor = variantName.removeSuffix("Release").replaceFirstChar { it.lowercase() }
+            val outputDirectory = layout.buildDirectory.dir("outputs/bundle/${flavor}Release").get().asFile
+            val sourceFile = File(outputDirectory, "${project.name}-${flavor}-release.aab")
+            val targetFile = File(outputDirectory, "ekirjasto-${flavor}-release.aab")
+            if (sourceFile.exists() && sourceFile != targetFile) {
+                sourceFile.renameTo(targetFile)
+            }
+        }
+    }
+
     /*
      * The Google Services plugin writes the shared gmpAppId.txt file while
      * processing each flavor. Crashlytics' mapping upload task reads that
