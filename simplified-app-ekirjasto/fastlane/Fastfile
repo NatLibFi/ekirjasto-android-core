@@ -17,7 +17,15 @@ def get_aab_path_for_flavor(flavor)
   unless is_flavor_valid(flavor)
     UI.user_error!("ERROR: Invalid flavor: #{flavor}")
   end
-  return "build/outputs/bundle/#{flavor}Release/ekirjasto-#{flavor}-release.aab"
+  bundle_dir = File.expand_path("../build/outputs/bundle/#{flavor}Release", __dir__)
+  bundles = Dir.glob(File.join(bundle_dir, "*.aab")).select { |path| File.file?(path) }
+  unless bundles.length == 1
+    UI.user_error!(
+      "ERROR: Expected exactly one AAB file in #{bundle_dir}, found #{bundles.length}. " \
+      "Run a clean release build for #{flavor}."
+    )
+  end
+  return bundles.first
 end
 
 #
