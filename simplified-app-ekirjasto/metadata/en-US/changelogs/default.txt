@@ -1,5 +1,9 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
-1.5.6
-- HOTFIX: Fixed a bug where audiobook would jump back when returning the app from background
+1.5.8
+- Audiobooks now remember your selected playback speed
+- Books can continue downloading in the background, with progress notifications and an option to cancel
+- Improved accessibility for catalog browsing, book details, filters, accounts, and readers
+- Fixed an issue where catalog filters could show incorrect results
+- Improved back navigation in book readers
 - Bug fixes

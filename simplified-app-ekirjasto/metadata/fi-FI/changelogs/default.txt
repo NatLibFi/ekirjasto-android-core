@@ -1,5 +1,9 @@
 Kehitämme sovellusta ja korjaamme bugeja jatkuvasti. Tarkistathan, että sinulla on aina käytössäsi sovelluksen uusin versio.
 
-1.5.6
-- HOTFIX: Korjattiin virhe, jossa äänikirja hyppäsi taaksepäin, kun sovellus palautettiin taustalta
-- Bugi korjauksia
+1.5.8
+- Äänikirjat muistavat nyt valitun toistonopeuden
+- Kirjojen lataukset voivat jatkua taustalla. Latausten eteneminen näkyy ilmoituksissa, ja latauksen voi peruuttaa
+- Luetteloiden, kirjan tietojen, suodattimien, tilien ja lukutoimintojen saavutettavuutta parannettu
+- Korjattiin virhe, jossa luettelon suodattimet saattoivat näyttää vääriä tuloksia
+- Lukijoiden takaisin siirtymistä parannettu
+- Bugikorjauksia
