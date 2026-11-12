@@ -1,9 +1,9 @@
 We are continually developing the app and fixing bugs. Please make sure that you are always using the latest version.
 
 1.5.8
-- Audiobooks now remember your selected playback speed
-- Books can continue downloading in the background, with progress notifications and an option to cancel
-- Improved accessibility for catalog browsing, book details, filters, accounts, and readers
-- Fixed an issue where catalog filters could show incorrect results
-- Improved back navigation in book readers
+- Audiobooks remember playback speed
+- Audiobooks can now be downloaded in the background and downloads can be cancelled
+- Improved accessibility across the app
+- Fixed catalog filter functionality
+- Improved reader navigation
 - Bug fixes
