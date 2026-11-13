@@ -960,6 +960,9 @@
       "catalogCancelHold" : {
          "string" : "Remove"
       },
+      "catalogCancelled" : {
+         "string" : "Cancelled"
+      },
       "catalogCancelling" : {
          "string" : "Cancelling…"
       },
@@ -1437,8 +1440,17 @@
       "magazinesBrowserDescription" : {
          "string" : "Magazine browser"
       },
+      "magazinesCarouselContentDescription" : {
+         "string" : "Horizontally scrolling magazine list"
+      },
+      "magazinesEmpty" : {
+         "string" : "No magazines found"
+      },
       "magazinesHeader" : {
          "string" : "Magazines"
+      },
+      "magazinesLatestIssues" : {
+         "string" : "Latest Magazines"
       },
       "magazinesLoadingDescription" : {
          "string" : "Loading magazines"
@@ -1451,6 +1463,12 @@
       },
       "magazinesSessionExpiredTitle" : {
          "string" : "Session expired!"
+      },
+      "magazinesShowAll" : {
+         "string" : "Show all"
+      },
+      "magazinesShowAllFor" : {
+         "string" : "Show all: %1$s"
       },
       "magazinesSignInRequiredSubtitle" : {
          "string" : "Visit the settings to sign in"
@@ -1978,7 +1996,7 @@
          "string" : "Forget All Announcements"
       },
       "settingsDevPlaceholder" : {
-         "string" : "Placeholder"
+         "string" : "Not available"
       },
       "settingsDevSendAnalytics" : {
          "string" : "Send Analytics"
