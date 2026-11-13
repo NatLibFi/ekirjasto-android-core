@@ -3,6 +3,11 @@
   *;
 }
 
+# Firebase Sessions accesses these entry points from its background handler.
+-keep class com.google.firebase.Firebase { *; }
+-keep class com.google.firebase.FirebaseApp { *; }
+
+
 # These libraries contain optional JVM-only integrations that are referenced by
 # shared artifacts but are not used by the Android application. Keep R8 from
 # treating those optional paths as required classes.
