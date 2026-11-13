@@ -1,5 +1,9 @@
 Vi utvecklar appen och åtgärdar buggar kontinuerligt. Kom ihåg att kontrollera att du alltid använder den nyaste versionen av appen.
 
-1.5.6
-- HOTFIX: Åtgärdade en bugg där ljudboken hoppade tillbaka när appen återupptogs från bakgrunden
+1.5.10
+- Ljudböcker kommer ihåg uppspelningshastigheten
+- Ljudböcker kan nu laddas ner i bakgrunden och nedladdningen kan avbrytas
+- Förbättrad tillgänglighet i appen
+- Katalogfiltrens funktion har korrigerats
+- Förbättrad navigering i läsare
 - Bugfixar
