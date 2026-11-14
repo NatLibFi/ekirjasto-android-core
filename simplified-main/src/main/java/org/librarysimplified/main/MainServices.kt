@@ -123,6 +123,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.ServiceLoader
+import java.util.concurrent.TimeUnit
 
 internal object MainServices {
 
@@ -262,13 +263,24 @@ internal object MainServices {
   }
 
   private fun createAccountProviderRegistry(
-    context: Context,
-    http: LSHTTPClientType
+    context: Context
   ): AccountProviderRegistryType {
     val defaultAccountProvider =
       this.loadDefaultAccountProvider()
+
+    /*
+     * Registry refresh happens during boot and must not inherit the long
+     * timeout required for audiobook downloads. A bounded client allows the
+     * registry source to return cached or bundled provider data when the
+     * registry cannot be reached.
+     */
+    val registryHTTP =
+      MainHTTP.create(
+        context = context,
+        timeout = Pair(20L, TimeUnit.SECONDS)
+      )
     val accountProviders =
-      AccountProviderRegistry.createFromServiceLoader(context, http, defaultAccountProvider)
+      AccountProviderRegistry.createFromServiceLoader(context, registryHTTP, defaultAccountProvider)
     for (id in accountProviders.accountProviderDescriptions().keys) {
       this.logger.debug("loaded account provider: {}", id)
     }
@@ -708,7 +720,7 @@ internal object MainServices {
       addService(
         message = strings.bootingGeneral("account providers"),
         interfaceType = AccountProviderRegistryType::class.java,
-        serviceConstructor = { this.createAccountProviderRegistry(context, lsHTTP) }
+        serviceConstructor = { this.createAccountProviderRegistry(context) }
       )
 
     val accountBundledCredentials =
