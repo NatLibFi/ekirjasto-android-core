@@ -1,11 +1,8 @@
 package org.nypl.simplified.ui.accounts
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
@@ -13,15 +10,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SwitchCompat
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.io7m.junreachable.UnimplementedCodeException
 import com.io7m.junreachable.UnreachableCodeException
@@ -68,6 +60,7 @@ import java.net.URI
 
 /**
  * A fragment that shows settings for a single account.
+ * NOT SHOWN ANYWHERE IN EKIRJASTO
  */
 
 class AccountDetailFragment : Fragment(R.layout.account) {
@@ -95,26 +88,8 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     }
   )
 
-  private val fusedLocationClient by lazy {
-    LocationServices.getFusedLocationProviderClient(requireActivity())
-  }
-
   private val imageLoader: ImageLoaderType =
     services.requireService(ImageLoaderType::class.java)
-
-  private val locationPermissions = arrayOf(
-    Manifest.permission.ACCESS_FINE_LOCATION,
-    Manifest.permission.ACCESS_COARSE_LOCATION,
-  )
-
-  private val locationPermissionCallback =
-    registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
-      if (results.values.all { it }) {
-        openCardCreatorWebView()
-      } else if (!shouldShowRationale()) {
-        showSettingsDialog()
-      }
-    }
 
   private lateinit var accountCustomOPDS: ViewGroup
   private lateinit var accountCustomOPDSField: TextView
@@ -139,7 +114,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
   private lateinit var reportIssueEmail: TextView
   private lateinit var reportIssueGroup: ViewGroup
   private lateinit var reportIssueItem: View
-  private lateinit var settingsCardCreator: ConstraintLayout
   private lateinit var signUpButton: Button
   private lateinit var signUpLabel: TextView
   private lateinit var toolbar: PalaceToolbar
@@ -211,9 +185,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       view.findViewById(R.id.accountCardCreatorSignUp)
     this.signUpLabel =
       view.findViewById(R.id.accountCardCreatorLabel)
-    this.settingsCardCreator =
-      view.findViewById(R.id.accountCardCreator)
-
     this.accountCustomOPDS =
       view.findViewById(R.id.accountCustomOPDS)
     this.accountCustomOPDSField =
@@ -331,14 +302,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     }
   }
 
-  /**
-   * If there's any card creator URI, the button should be enabled...
-   */
-
-  private fun shouldSignUpBeEnabled(): Boolean {
-    return viewModel.account.provider.cardCreatorURI != null
-  }
-
   override fun onStart() {
     super.onStart()
 
@@ -353,22 +316,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       isOver13 = this.viewModel.isOver13,
       onAgeCheckboxClicked = this.onAgeCheckboxClicked()
     )
-
-    /*
-     * Launch Card Creator
-     */
-
-    this.signUpButton.setOnClickListener {
-      if (!isLocationPermissionGranted()) {
-        if (shouldShowRationale()) {
-          showLocationDisclaimerDialog()
-        } else {
-          requestLocationPermissions()
-        }
-      } else {
-        openCardCreatorWebView()
-      }
-    }
 
     /*
      * Configure the bookmark syncing switch to enable/disable syncing permissions.
@@ -720,10 +667,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     logger.debug("account authentication type: ${viewModel.account.provider.authentication.description}")
     this.authenticationViews.showFor(this.viewModel.account.provider.authentication)
 
-    if (this.viewModel.account.provider.cardCreatorURI != null) {
-      this.settingsCardCreator.visibility = View.VISIBLE
-    }
-
     this.accountTitle.text =
       this.viewModel.account.provider.displayName
     this.accountSubtitle.text =
@@ -782,14 +725,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     } else {
       this.accountLicenses.visibility = View.GONE
     }
-
-    /*
-     * Conditionally enable sign up button
-     */
-
-    val signUpEnabled = this.shouldSignUpBeEnabled()
-    this.signUpButton.isEnabled = signUpEnabled
-    this.signUpLabel.isEnabled = signUpEnabled
 
     /*
      * Show/hide the custom OPDS feed section.
@@ -1057,25 +992,19 @@ class AccountDetailFragment : Fragment(R.layout.account) {
 
     return when (status) {
       is AsLoginButtonEnabled -> {
-        this.signUpLabel.setText(R.string.accountCardCreatorLabel)
       }
 
       is AsLoginButtonDisabled -> {
         logger.debug("LoginButtonDisable 2")
-        this.signUpLabel.setText(R.string.accountCardCreatorLabel)
         this.signUpLabel.isEnabled = true
       }
 
       is AsLogoutButtonEnabled -> {
-        this.signUpLabel.setText(R.string.accountWantChildCard)
-        val enableSignup = shouldSignUpBeEnabled()
         this.signUpLabel.isEnabled = false
         this.signUpButton.isEnabled = false
-        this.signUpLabel.setText(R.string.accountCardCreatorLabel)
       }
 
       is AsLogoutButtonDisabled -> {
-        this.signUpLabel.setText(R.string.accountCardCreatorLabel)
       }
 
       is AsCancelButtonEnabled,
@@ -1136,10 +1065,6 @@ class AccountDetailFragment : Fragment(R.layout.account) {
     val loginSatisfied = this.determineLoginIsSatisfied()
     this.setLoginButtonStatus(loginSatisfied)
     this.authenticationAlternativesShow()
-    if (shouldSignUpBeEnabled()) {
-      this.signUpButton.isEnabled = true
-      this.signUpLabel.isEnabled = true
-    }
   }
 
   private fun authenticationAlternativesMake() {
@@ -1210,86 +1135,4 @@ class AccountDetailFragment : Fragment(R.layout.account) {
       .show()
   }
 
-  private fun isLocationPermissionGranted(): Boolean {
-    return locationPermissions.all { permission ->
-      ContextCompat.checkSelfPermission(requireContext(), permission) ==
-        PackageManager.PERMISSION_GRANTED
-    }
-  }
-
-  private fun shouldShowRationale(): Boolean {
-    return locationPermissions.all { permission ->
-      ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)
-    }
-  }
-
-  private fun openAppSettings() {
-    startActivity(
-      Intent().apply {
-        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        data = Uri.fromParts("package", requireContext().packageName, null)
-      }
-    )
-  }
-
-  private fun openCardCreatorWebView() {
-    val cardCreatorURI = this.viewModel.account.provider.cardCreatorURI
-
-    try {
-      fusedLocationClient.lastLocation
-        .addOnSuccessListener { location ->
-          if (location != null) {
-            listener.post(
-              AccountDetailEvent.OpenWebView(
-                AccountCardCreatorParameters(
-                  url = cardCreatorURI.toString(),
-                  lat = location.latitude,
-                  long = location.longitude
-                )
-              )
-            )
-          } else {
-            showErrorGettingLocationDialog()
-          }
-        }
-        .addOnFailureListener {
-          showErrorGettingLocationDialog()
-        }
-    } catch (exception: SecurityException) {
-      this.logger.error("Error handling fusedLocationClient permissions")
-    }
-  }
-
-  private fun showErrorGettingLocationDialog() {
-    MaterialAlertDialogBuilder(requireContext())
-      .setMessage(getString(R.string.accountCardCreatorLocationFailed))
-      .create()
-      .show()
-  }
-
-  private fun showLocationDisclaimerDialog() {
-    MaterialAlertDialogBuilder(requireContext())
-      .setMessage(R.string.accountCardCreatorDialogPermissionsMessage)
-      .setPositiveButton(android.R.string.ok) { _, _ -> requestLocationPermissions() }
-      .setNegativeButton(R.string.accountCardCreatorDialogCancel) { dialog, _ -> dialog?.dismiss() }
-      .create()
-      .show()
-  }
-
-  private fun showSettingsDialog() {
-    MaterialAlertDialogBuilder(requireContext())
-      .setMessage(R.string.accountCardCreatorDialogOpenSettingsMessage)
-      .setPositiveButton(R.string.accountCardCreatorDialogOpenSettings) { _, _ ->
-        openAppSettings()
-      }
-      .setNegativeButton(R.string.accountCardCreatorDialogCancel) { dialog, _ ->
-        dialog.dismiss()
-      }
-      .create()
-      .show()
-  }
-
-  private fun requestLocationPermissions() {
-    locationPermissionCallback.launch(locationPermissions)
-  }
 }
