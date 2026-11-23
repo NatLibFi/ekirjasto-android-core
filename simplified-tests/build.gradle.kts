@@ -262,7 +262,6 @@ val dependencyObjects = listOf(
     libs.play.services.base,
     libs.play.services.basement,
     libs.play.services.cloud.messaging,
-    libs.play.services.location,
     libs.play.services.measurement.api,
     libs.play.services.tasks,
     libs.r2.lcp,

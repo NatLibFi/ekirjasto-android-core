@@ -66,7 +66,6 @@ dependencies {
     implementation(libs.palace.http.api)
     implementation(libs.play.services.base)
     implementation(libs.play.services.basement)
-    implementation(libs.play.services.location)
     implementation(libs.play.services.tasks)
     implementation(libs.io7m.junreachable)
     implementation(libs.irradia.mime.api)
